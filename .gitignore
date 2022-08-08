@@ -92,9 +92,7 @@ StyleCopReport.xml
 *.svclog
 *.scc
 *.bak
-*.dll
-*.png
-*.ico
+
 
 # Chutzpah Test files
 _Chutzpah*
