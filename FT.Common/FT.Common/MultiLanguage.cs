@@ -10,17 +10,17 @@ namespace RsLib.Common
         // recource base name = NoSew.Recipe.LangPack
         // 設定名稱 跟 值
         // Get text (設定名稱) 回傳對應值
-        static ResourceManager resourceMar;
-        public  Lang(string resourceBaseName)
-        {
-            resourceMar = new ResourceManager(resourceBaseName, Assembly.GetExecutingAssembly());
-
-        }
-
-        public static string GetText(string Key)
-        {
-            return resourceMar.GetString(Key);
-        }
+        //static ResourceManager resourceMgr;
+        //public static void SetResource(string resourceBaseName)
+        //{
+        //    resourceMgr = new ResourceManager(resourceBaseName, Assembly.GetExecutingAssembly());
+        //}
+        
+        //public static string GetText(string Key)
+        //{
+        //    if (resourceMgr != null) return resourceMgr.GetString(Key);
+        //    else return Key;
+        //}
 
         public static void SetUILang(LangCode lang)
         {

@@ -102,6 +102,9 @@
     <EmbeddedResource Include="FolderWatchControl.resx">
       <DependentUpon>FolderWatchControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FolderWatchControl.zh-TW.resx">
+      <DependentUpon>FolderWatchControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -147,6 +150,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
-</PostBuildEvent>
+copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

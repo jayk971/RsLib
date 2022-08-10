@@ -117,124 +117,89 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvSystemInfoColumn2.Width" type="System.Int32, mscorlib">
-    <value>90</value>
-  </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn2.Name" xml:space="preserve">
-    <value>dgvSystemInfoColumn2</value>
-  </data>
-  <data name="dgvSystemInfoColumn3.Width" type="System.Int32, mscorlib">
-    <value>250</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
+  <data name="toolStripDropDownButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIDSURBVDhPpZLrS5NhGMb3j4SWh0oRQVExD4gonkDpg4hG
+        YKxG6WBogkMZKgPNCEVJFBGdGETEvgwyO9DJE5syZw3PIlPEE9pgBCLZ5XvdMB8Ew8gXbl54nuf63dd9
+        0OGSnwCahxbPRNPAPMw9Xpg6ZmF46kZZ0xSKzJPIrhpDWsVnpBhGkKx3nAX8Pv7z1zg8OoY/cITdn4fw
+        bf/C0kYAN3Ma/w3gWfZL5kzTKBxjWyK2DftwI9tyMYCZKXbNHaD91bLYJrDXsYbrWfUKwJrPE9M2M1Oc
+        VzOOpHI7Jr376Hi9ogHqFIANO0/MmmmbmSmm9a8ze+I4MrNWAdjtoJgWcx+PSzg166yZZ8xM8XvXDix9
+        c4jIqFYAjoriBV9AhEPv1mH/sonogha0afbZMMZz+yreTGyhpusHwtNNCsA5U1zS4BLxzJIfg299qO32
+        Ir7UJtZfftyATqeT+8o2D8JSjQrAJblrncYL7ZJ2+bfaFnC/1S1NjL3diRat7qrO7wLRP3HjWsojBeCo
+        mDEo5mNjuweFGvjWg2EBhCbpkW78htSHHwRyNdmgAFzPEee2iFkzayy2OLXzT4gr6UdUnlXrullsxxQ+
+        kx0g8BTA3aZlButjSTyjODq/WcQcW/B/Je4OQhLvKQDnzN1mp0nnkvAhR8VuMzNrpm1mpjgkoVwB/v8D
+        TgDQASA1MVpwzwAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn4.Name" xml:space="preserve">
-    <value>dgvSystemInfoColumn4</value>
+  <data name="toolStripDropDownButton1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 27</value>
   </data>
-  <data name="&gt;&gt;dgvAlarmBriefInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="toolStripDropDownButton1.Text" xml:space="preserve">
+    <value>選項</value>
   </data>
-  <data name="dgvSystemInfoColumn3.HeaderText" xml:space="preserve">
-    <value>Description</value>
+  <data name="mim_Reset.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;Column1.Name" xml:space="preserve">
-    <value>Column1</value>
+  <data name="mim_Reset.Text" xml:space="preserve">
+    <value>重置</value>
   </data>
-  <data name="dgvSystemInfoColumn1.Width" type="System.Int32, mscorlib">
-    <value>140</value>
+  <data name="mim_Reboot.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="mim_Reboot.Text" xml:space="preserve">
+    <value>重開機</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvAlarmBriefInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="mim_ClearError.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="mim_ClearError.Text" xml:space="preserve">
+    <value>清除錯誤</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>AlarmBriefInfoControl</value>
+  <data name="mim_SaveScreenPrint.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="dgvSystemInfoColumn4.HeaderText" xml:space="preserve">
-    <value>Reason</value>
+  <data name="mim_SaveScreenPrint.Text" xml:space="preserve">
+    <value>儲存截圖</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="mim_X8kVersion.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="dgvAlarmBriefInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="mim_X8kVersion.Text" xml:space="preserve">
+    <value>X8000 版本</value>
   </data>
-  <data name="dgvSystemInfoColumn1.HeaderText" xml:space="preserve">
-    <value>Time</value>
+  <data name="mim_ReadX8000Time.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="dgvAlarmBriefInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>894, 160</value>
+  <data name="mim_ReadX8000Time.Text" xml:space="preserve">
+    <value>讀取 X8000 時間</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="setX8000TimeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;dgvAlarmBriefInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="setX8000TimeToolStripMenuItem.Text" xml:space="preserve">
+    <value>設定 X8000 時間</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn3.Name" xml:space="preserve">
-    <value>dgvSystemInfoColumn3</value>
+  <data name="btn_Trigger.Text" xml:space="preserve">
+    <value>觸發</value>
   </data>
-  <data name="dgvAlarmBriefInfo.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>61</value>
+  <data name="chbx_TriggerEnable.Text" xml:space="preserve">
+    <value>觸發啟用</value>
   </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="rbn_SetMode.Text" xml:space="preserve">
+    <value>設定模式</value>
   </data>
-  <data name="dgvSystemInfoColumn2.HeaderText" xml:space="preserve">
-    <value>Level</value>
+  <data name="rbn_RunMode.Text" xml:space="preserve">
+    <value>運轉模式</value>
   </data>
-  <data name="&gt;&gt;dgvAlarmBriefInfo.Name" xml:space="preserve">
-    <value>dgvAlarmBriefInfo</value>
+  <data name="label1.Text" xml:space="preserve">
+    <value>x8000 設定編號 #</value>
   </data>
-  <data name="&gt;&gt;Column1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="btn_ReadX8000SettingNum.Text" xml:space="preserve">
+    <value>讀取</value>
   </data>
-  <data name="dgvAlarmBriefInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="btn_WriteX8000SettingNum.Text" xml:space="preserve">
+    <value>更改</value>
   </data>
-  <data name="Column1.HeaderText" xml:space="preserve">
-    <value>Code</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmBriefInfo.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="dgvSystemInfoColumn4.Width" type="System.Int32, mscorlib">
-    <value>400</value>
-  </data>
-  <data name="dgvAlarmBriefInfo.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;dgvSystemInfoColumn1.Name" xml:space="preserve">
-    <value>dgvSystemInfoColumn1</value>
-  </data>
-  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>894, 160</value>
-  </data>
-  <metadata name="dgvSystemInfoColumn4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvSystemInfoColumn3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvSystemInfoColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvSystemInfoColumn1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Column1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
 </root>

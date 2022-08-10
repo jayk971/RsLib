@@ -29,17 +29,19 @@ namespace RsLib.LogMgr
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btn_ClearMsg = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cmb_LevelFilter = new System.Windows.Forms.ToolStripComboBox();
             this.rtbx_Log = new System.Windows.Forms.RichTextBox();
+            this.btn_ClearMsg = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -47,65 +49,50 @@ namespace RsLib.LogMgr
             this.toolStripSeparator1,
             this.toolStripLabel1,
             this.cmb_LevelFilter});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(459, 38);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btn_ClearMsg
-            // 
-            this.btn_ClearMsg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btn_ClearMsg.Image = global::RsLib.LogMgr.Properties.Resources.icons8_broom_64;
-            this.btn_ClearMsg.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_ClearMsg.Name = "btn_ClearMsg";
-            this.btn_ClearMsg.Size = new System.Drawing.Size(34, 33);
-            this.btn_ClearMsg.Text = "Clear Log";
-            this.btn_ClearMsg.Click += new System.EventHandler(this.btn_ClearMsg_Click);
             // 
             // toolStripSeparator1
             // 
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
             // toolStripLabel1
             // 
+            resources.ApplyResources(this.toolStripLabel1, "toolStripLabel1");
             this.toolStripLabel1.BackColor = System.Drawing.Color.Silver;
             this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(101, 33);
-            this.toolStripLabel1.Text = "Level Filter";
             // 
             // cmb_LevelFilter
             // 
+            resources.ApplyResources(this.cmb_LevelFilter, "cmb_LevelFilter");
             this.cmb_LevelFilter.BackColor = System.Drawing.Color.PeachPuff;
             this.cmb_LevelFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_LevelFilter.Name = "cmb_LevelFilter";
-            this.cmb_LevelFilter.Size = new System.Drawing.Size(180, 38);
             this.cmb_LevelFilter.Click += new System.EventHandler(this.cmb_LevelFilter_Click);
             // 
             // rtbx_Log
             // 
+            resources.ApplyResources(this.rtbx_Log, "rtbx_Log");
             this.rtbx_Log.BackColor = System.Drawing.Color.White;
-            this.rtbx_Log.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbx_Log.Location = new System.Drawing.Point(0, 38);
-            this.rtbx_Log.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.rtbx_Log.Name = "rtbx_Log";
             this.rtbx_Log.ReadOnly = true;
-            this.rtbx_Log.Size = new System.Drawing.Size(459, 294);
-            this.rtbx_Log.TabIndex = 1;
-            this.rtbx_Log.Text = "";
+            // 
+            // btn_ClearMsg
+            // 
+            resources.ApplyResources(this.btn_ClearMsg, "btn_ClearMsg");
+            this.btn_ClearMsg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btn_ClearMsg.Image = global::RsLib.LogMgr.Properties.Resources.icons8_broom_64;
+            this.btn_ClearMsg.Name = "btn_ClearMsg";
+            this.btn_ClearMsg.Click += new System.EventHandler(this.btn_ClearMsg_Click);
             // 
             // LogControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rtbx_Log);
             this.Controls.Add(this.toolStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "LogControl";
-            this.Size = new System.Drawing.Size(459, 332);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
