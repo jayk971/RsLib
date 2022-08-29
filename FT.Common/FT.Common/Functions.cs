@@ -754,6 +754,28 @@ namespace RsLib.Common
             }
         }
 
+        public static bool IsSignalRemain(Func<bool> func, bool signalRemainStatus,double continuedTimems)
+        {
+            FT_StopWatch stopWatch = new FT_StopWatch();
+            stopWatch.Start();
+            bool isSignalRemain = false;
+            while(stopWatch.Elapsed.TotalMilliseconds <= continuedTimems)
+            {
+                bool temp = func();
+                if(temp == signalRemainStatus)
+                {
+                    isSignalRemain = true;
+                }
+                else
+                {
+                    isSignalRemain = false;
+                    break;
+                }
+                SpinWait.SpinUntil(() => false, 100);
+            }
+            stopWatch.Stop();
+            return isSignalRemain;
+        }
         public static void DeleteOutOfDateFile(string folder,string filePattern,int days)
         {
             Log.Add($"Delete out of date files. limit {days} days", MsgLevel.Trace);
