@@ -149,6 +149,11 @@ namespace RsLib.AlarmMgr
             object[] objs = new object[] { time.ToString("MM/dd HH:mm:ss"), level, code, name, reason, remedy, note };
             return objs;
         }
+        public object[] ToBriefObj()
+        {
+            object[] objs = new object[] { time.ToString("HH:mm:ss"), level, code, name, reason,note };
+            return objs;
+        }
         public object[] ToShortObj()
         {
             object[] objs = new object[] { time.ToString("HH:mm:ss"), level, code, name, reason };

@@ -71,7 +71,7 @@
   <ItemGroup>
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\OpenLib\Lib\NLog.dll</HintPath>
+      <HintPath>D:\RLib\Lib\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

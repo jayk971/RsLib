@@ -30,19 +30,17 @@ namespace RsLib.AlarmMgr
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlarmControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvAlarmRealTime = new System.Windows.Forms.DataGridView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.dgvAlarmRealTimeColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvAlarmRealTimeColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvAlarmRealTimeColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,7 +48,9 @@ namespace RsLib.AlarmMgr
             this.dgvAlarmRealTimeColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvAlarmRealTimeColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvAlarmRealTimeColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_ResetAlarm = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlarmRealTime)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -65,20 +65,19 @@ namespace RsLib.AlarmMgr
             // 
             // dgvAlarmRealTime
             // 
-            resources.ApplyResources(this.dgvAlarmRealTime, "dgvAlarmRealTime");
             this.dgvAlarmRealTime.AllowUserToAddRows = false;
             this.dgvAlarmRealTime.AllowUserToDeleteRows = false;
             this.dgvAlarmRealTime.AllowUserToResizeRows = false;
             this.dgvAlarmRealTime.BackgroundColor = System.Drawing.Color.White;
             this.dgvAlarmRealTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvAlarmRealTime.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvAlarmRealTime.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAlarmRealTime.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAlarmRealTime.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dgvAlarmRealTimeColumn1,
@@ -88,14 +87,15 @@ namespace RsLib.AlarmMgr
             this.dgvAlarmRealTimeColumn4,
             this.dgvAlarmRealTimeColumn5,
             this.dgvAlarmRealTimeColumn7});
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAlarmRealTime.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAlarmRealTime.DefaultCellStyle = dataGridViewCellStyle9;
+            resources.ApplyResources(this.dgvAlarmRealTime, "dgvAlarmRealTime");
             this.dgvAlarmRealTime.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvAlarmRealTime.Name = "dgvAlarmRealTime";
             this.dgvAlarmRealTime.ReadOnly = true;
@@ -103,84 +103,84 @@ namespace RsLib.AlarmMgr
             this.dgvAlarmRealTime.RowTemplate.Height = 24;
             this.dgvAlarmRealTime.TabStop = false;
             // 
-            // toolStrip1
-            // 
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_ResetAlarm,
-            this.toolStripSeparator1});
-            this.toolStrip1.Name = "toolStrip1";
-            // 
-            // toolStripSeparator1
-            // 
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            // 
             // dgvAlarmRealTimeColumn1
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvAlarmRealTimeColumn1.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvAlarmRealTimeColumn1.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn1, "dgvAlarmRealTimeColumn1");
             this.dgvAlarmRealTimeColumn1.Name = "dgvAlarmRealTimeColumn1";
             this.dgvAlarmRealTimeColumn1.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn2
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvAlarmRealTimeColumn2.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvAlarmRealTimeColumn2.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn2, "dgvAlarmRealTimeColumn2");
             this.dgvAlarmRealTimeColumn2.Name = "dgvAlarmRealTimeColumn2";
             this.dgvAlarmRealTimeColumn2.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn6
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvAlarmRealTimeColumn6.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvAlarmRealTimeColumn6.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn6, "dgvAlarmRealTimeColumn6");
             this.dgvAlarmRealTimeColumn6.Name = "dgvAlarmRealTimeColumn6";
             this.dgvAlarmRealTimeColumn6.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn3
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvAlarmRealTimeColumn3.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvAlarmRealTimeColumn3.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn3, "dgvAlarmRealTimeColumn3");
             this.dgvAlarmRealTimeColumn3.Name = "dgvAlarmRealTimeColumn3";
             this.dgvAlarmRealTimeColumn3.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn4
             // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dgvAlarmRealTimeColumn4.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dgvAlarmRealTimeColumn4.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn4, "dgvAlarmRealTimeColumn4");
             this.dgvAlarmRealTimeColumn4.Name = "dgvAlarmRealTimeColumn4";
             this.dgvAlarmRealTimeColumn4.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn5
             // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dgvAlarmRealTimeColumn5.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dgvAlarmRealTimeColumn5.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn5, "dgvAlarmRealTimeColumn5");
             this.dgvAlarmRealTimeColumn5.Name = "dgvAlarmRealTimeColumn5";
             this.dgvAlarmRealTimeColumn5.ReadOnly = true;
             // 
             // dgvAlarmRealTimeColumn7
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dgvAlarmRealTimeColumn7.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dgvAlarmRealTimeColumn7.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(this.dgvAlarmRealTimeColumn7, "dgvAlarmRealTimeColumn7");
             this.dgvAlarmRealTimeColumn7.Name = "dgvAlarmRealTimeColumn7";
             this.dgvAlarmRealTimeColumn7.ReadOnly = true;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btn_ResetAlarm,
+            this.toolStripSeparator1});
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.Name = "toolStrip1";
+            // 
             // btn_ResetAlarm
             // 
-            resources.ApplyResources(this.btn_ResetAlarm, "btn_ResetAlarm");
             this.btn_ResetAlarm.BackgroundImage = global::RsLib.AlarmMgr.Properties.Resources.icons8_broom_64;
+            resources.ApplyResources(this.btn_ResetAlarm, "btn_ResetAlarm");
             this.btn_ResetAlarm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_ResetAlarm.Name = "btn_ResetAlarm";
             this.btn_ResetAlarm.Click += new System.EventHandler(this.btn_ResetAlarm_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // AlarmControl
             // 

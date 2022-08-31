@@ -37,7 +37,7 @@ namespace RsLib.AlarmMgr
                 for (int i = 0; i < ErrorList.Count; i++)
                 {
                     AlarmItem item = ErrorList[i];
-                    dgvAlarmBriefInfo.Rows.Add(item.ToShortObj());
+                    dgvAlarmBriefInfo.Rows.Add(item.ToBriefObj());
                 }
             }
         }

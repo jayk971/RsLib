@@ -155,10 +155,21 @@ namespace RsLib.X8000TCP
 
         private void mim_Reset_Click(object sender, EventArgs e)
         {
+            Reset();
+        }
+        public void Reset()
+        {
             if (x8k == null) return;
             x8k.Reset();
         }
+        public bool SyncTimeWithPC()
+        {
+            if (x8k == null) return false;
 
+            DateTime dt = DateTime.Now;
+            bool result = x8k.WriteX8000Time(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
+            return result;
+        }
         private void mim_Reboot_Click(object sender, EventArgs e)
         {
             if (x8k == null) return;
@@ -216,8 +227,8 @@ namespace RsLib.X8000TCP
             if (x8k == null) return;
 
             DateTime dt = DateTime.Now;
-            bool result = x8k.WriteX8000Time(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
-            if(result) MessageBox.Show($"Write {dt:yyyy-MM-dd HH:mm:ss}", "X8000 DateTime", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            bool result = SyncTimeWithPC();
+            if (result) MessageBox.Show($"Write {dt:yyyy-MM-dd HH:mm:ss}", "X8000 DateTime", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

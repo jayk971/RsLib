@@ -1,35 +1,35 @@
-ï»¿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
-// çµ„ä»¶çš„ä¸€èˆ¬è³‡è¨Šæ˜¯ç”±ä¸‹åˆ—çš„å±¬æ€§é›†æ§åˆ¶ã€‚
-// è®Šæ›´é€™äº›å±¬æ€§çš„å€¼å³å¯ä¿®æ”¹çµ„ä»¶çš„ç›¸é—œ
-// è³‡è¨Šã€‚
+// ²Õ¥óªº¤@¯ë¸ê°T¬O¥Ñ¤U¦CªºÄİ©Ê¶°±±¨î¡C
+// ÅÜ§ó³o¨ÇÄİ©Êªº­È§Y¥i­×§ï²Õ¥óªº¬ÛÃö
+// ¸ê°T¡C
 [assembly: AssemblyTitle("FT.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FT.Common")]
-[assembly: AssemblyCopyright("Copyright Â©  2021")]
+[assembly: AssemblyCopyright("Copyright c  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// å°‡ ComVisible è¨­ç‚º false å¯å° COM å…ƒä»¶éš±è—
-// çµ„ä»¶ä¸­çš„é¡å‹ã€‚è‹¥å¿…é ˆå¾ COM å­˜å–æ­¤çµ„ä»¶ä¸­çš„é¡å‹ï¼Œ
-// çš„é¡å‹ï¼Œè«‹åœ¨è©²é¡å‹ä¸Šå°‡ ComVisible å±¬æ€§è¨­å®šç‚º trueã€‚
+// ±N ComVisible ³]¬° false ¥i¹ï COM ¤¸¥óÁôÂÃ
+// ²Õ¥ó¤¤ªºÃş«¬¡C­Y¥²¶·±q COM ¦s¨ú¦¹²Õ¥ó¤¤ªºÃş«¬¡A
+// ªºÃş«¬¡A½Ğ¦b¸ÓÃş«¬¤W±N ComVisible Äİ©Ê³]©w¬° true¡C
 [assembly: ComVisible(false)]
 
-// ä¸‹åˆ— GUID ç‚ºå°ˆæ¡ˆå…¬é–‹ (Expose) è‡³ COM æ™‚æ‰€è¦ä½¿ç”¨çš„ typelib ID
+// ¤U¦C GUID ¬°±M®×¤½¶} (Expose) ¦Ü COM ®É©Ò­n¨Ï¥Îªº typelib ID
 [assembly: Guid("17f62326-eca7-428b-80bc-216f77c54394")]
 
-// çµ„ä»¶çš„ç‰ˆæœ¬è³‡è¨Šç”±ä¸‹åˆ—å››å€‹å€¼æ‰€çµ„æˆ: 
+// ²Õ¥óªºª©¥»¸ê°T¥Ñ¤U¦C¥|­Ó­È©Ò²Õ¦¨: 
 //
-//      ä¸»è¦ç‰ˆæœ¬
-//      æ¬¡è¦ç‰ˆæœ¬
-//      çµ„å»ºç·¨è™Ÿ
-//      ä¿®è¨‚ç·¨è™Ÿ
+//      ¥D­nª©¥»
+//      ¦¸­nª©¥»
+//      ²Õ«Ø½s¸¹
+//      ­×­q½s¸¹
 //
-// æ‚¨å¯ä»¥æŒ‡å®šæ‰€æœ‰çš„å€¼ï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨ '*' å°‡çµ„å»ºå’Œä¿®è¨‚ç·¨è™Ÿ
-// è¨­ç‚ºé è¨­ï¼Œå¦‚ä¸‹æ‰€ç¤º:
+// ±z¥i¥H«ü©w©Ò¦³ªº­È¡A¤]¥i¥H¨Ï¥Î '*' ±N²Õ«Ø©M­×­q½s¸¹
+// ³]¬°¹w³]¡A¦p¤U©Ò¥Ü:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.2.22241.0")]
+[assembly: AssemblyFileVersion("1.2.22243.0")]

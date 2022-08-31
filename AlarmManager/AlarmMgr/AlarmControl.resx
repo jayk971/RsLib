@@ -117,265 +117,265 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;dgvAlarmRealTime.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvAlarmRealTimeColumn4.Width" type="System.Int32, mscorlib">
-    <value>200</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn7.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn4.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn7.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn7</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTime.Name" xml:space="preserve">
-    <value>dgvAlarmRealTime</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn1.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn1</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn5.HeaderText" xml:space="preserve">
-    <value>Remedy</value>
-  </data>
-  <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn7.HeaderText" xml:space="preserve">
-    <value>Note</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn6.Width" type="System.Int32, mscorlib">
-    <value>70</value>
-  </data>
-  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn7.Width" type="System.Int32, mscorlib">
-    <value>470</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn2.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn2</value>
-  </data>
-  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1000, 465</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAlarmRealTime.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn6.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn6</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;toolStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn5.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="dgvAlarmRealTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 33</value>
-  </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="dgvAlarmRealTimeColumn5.Width" type="System.Int32, mscorlib">
-    <value>300</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="toolStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 2, 0</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStrip1.Name" xml:space="preserve">
-    <value>toolStrip1</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn3.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 25</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="btn_ResetAlarm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 22</value>
-  </data>
-  <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1000, 25</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn1.Width" type="System.Int32, mscorlib">
-    <value>150</value>
-  </data>
-  <data name="&gt;&gt;btn_ResetAlarm.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn6.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="btn_ResetAlarm.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn2.HeaderText" xml:space="preserve">
-    <value>Level</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn3.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn3</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn3.Width" type="System.Int32, mscorlib">
-    <value>200</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
-  </data>
-  <data name="btn_ResetAlarm.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTime.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn5.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn5</value>
+  <metadata name="dgvAlarmRealTimeColumn1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="dgvAlarmRealTimeColumn1.HeaderText" xml:space="preserve">
+    <value>Time</value>
   </data>
   <data name="dgvAlarmRealTimeColumn1.MinimumWidth" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn1.HeaderText" xml:space="preserve">
-    <value>Time</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn3.HeaderText" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="dgvAlarmRealTime.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1000, 465</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn6.HeaderText" xml:space="preserve">
-    <value>Code</value>
-  </data>
-  <data name="&gt;&gt;btn_ResetAlarm.Name" xml:space="preserve">
-    <value>btn_ResetAlarm</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn2.Width" type="System.Int32, mscorlib">
+  <data name="dgvAlarmRealTimeColumn1.Width" type="System.Int32, mscorlib">
     <value>150</value>
   </data>
-  <data name="toolStrip1.Text" xml:space="preserve">
-    <value>toolStrip1</value>
-  </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAlarmRealTime" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="toolStrip1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,91.79936" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn4.Name" xml:space="preserve">
-    <value>dgvAlarmRealTimeColumn4</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTime.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="dgvAlarmRealTime.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="&gt;&gt;toolStrip1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="dgvAlarmRealTimeColumn4.HeaderText" xml:space="preserve">
-    <value>Reason</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStrip1.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;dgvAlarmRealTimeColumn5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <metadata name="dgvAlarmRealTimeColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="dgvAlarmRealTimeColumn2.HeaderText" xml:space="preserve">
+    <value>Level</value>
   </data>
   <data name="dgvAlarmRealTimeColumn2.MinimumWidth" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>AlarmControl</value>
+  <data name="dgvAlarmRealTimeColumn2.Width" type="System.Int32, mscorlib">
+    <value>150</value>
   </data>
-  <data name="dgvAlarmRealTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>994, 429</value>
+  <metadata name="dgvAlarmRealTimeColumn6.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="dgvAlarmRealTimeColumn6.HeaderText" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn6.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn6.Width" type="System.Int32, mscorlib">
+    <value>70</value>
+  </data>
+  <metadata name="dgvAlarmRealTimeColumn3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="dgvAlarmRealTimeColumn3.HeaderText" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn3.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn3.Width" type="System.Int32, mscorlib">
+    <value>200</value>
   </data>
   <metadata name="dgvAlarmRealTimeColumn4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvAlarmRealTimeColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvAlarmRealTimeColumn3.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="dgvAlarmRealTimeColumn1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="dgvAlarmRealTimeColumn4.HeaderText" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn4.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn4.Width" type="System.Int32, mscorlib">
+    <value>200</value>
+  </data>
   <metadata name="dgvAlarmRealTimeColumn5.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="dgvAlarmRealTimeColumn5.HeaderText" xml:space="preserve">
+    <value>Remedy</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn5.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn5.Width" type="System.Int32, mscorlib">
+    <value>300</value>
+  </data>
   <metadata name="dgvAlarmRealTimeColumn7.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="dgvAlarmRealTimeColumn7.HeaderText" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn7.MinimumWidth" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="dgvAlarmRealTimeColumn7.Width" type="System.Int32, mscorlib">
+    <value>470</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="dgvAlarmRealTime.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="dgvAlarmRealTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 33</value>
+  </data>
+  <data name="dgvAlarmRealTime.RowHeadersWidth" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="dgvAlarmRealTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1504, 345</value>
+  </data>
+  <data name="dgvAlarmRealTime.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTime.Name" xml:space="preserve">
+    <value>dgvAlarmRealTime</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTime.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTime.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="dgvAlarmRealTimeColumn6.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="btn_ResetAlarm.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="btn_ResetAlarm.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="btn_ResetAlarm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 22</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="toolStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 2, 0</value>
+  </data>
+  <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1510, 25</value>
+  </data>
+  <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="toolStrip1.Text" xml:space="preserve">
+    <value>toolStrip1</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Name" xml:space="preserve">
+    <value>toolStrip1</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 4</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1510, 381</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAlarmRealTime" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="toolStrip1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,91.79936" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 12</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1510, 381</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn1.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn1</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn2.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn2</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn6.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn6</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn3.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn3</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn4.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn4</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn5.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn5</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn7.Name" xml:space="preserve">
+    <value>dgvAlarmRealTimeColumn7</value>
+  </data>
+  <data name="&gt;&gt;dgvAlarmRealTimeColumn7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btn_ResetAlarm.Name" xml:space="preserve">
+    <value>btn_ResetAlarm</value>
+  </data>
+  <data name="&gt;&gt;btn_ResetAlarm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>AlarmControl</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

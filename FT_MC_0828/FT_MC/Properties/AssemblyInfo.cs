@@ -1,36 +1,36 @@
-ï»¿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// çµ„ä»¶çš„ä¸€èˆ¬è³‡è¨Šæ˜¯ç”±ä¸‹åˆ—çš„å±¬æ€§é›†æ§åˆ¶ã€‚
-// è®Šæ›´é€™äº›å±¬æ€§çš„å€¼å³å¯ä¿®æ”¹çµ„ä»¶çš„ç›¸é—œ
-// è³‡è¨Šã€‚
+// ²Õ¥óªº¤@¯ë¸ê°T¬O¥Ñ¤U¦CªºÄİ©Ê¶°±±¨î¡C
+// ÅÜ§ó³o¨ÇÄİ©Êªº­È§Y¥i­×§ï²Õ¥óªº¬ÛÃö
+// ¸ê°T¡C
 [assembly: AssemblyTitle("FT_MC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("FengTay")]
 [assembly: AssemblyProduct("FT_MC")]
-[assembly: AssemblyCopyright("Copyright Â©  2018")]
+[assembly: AssemblyCopyright("Copyright c  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// å°‡ ComVisible è¨­å®šç‚º false æœƒä½¿å¾—é€™å€‹çµ„ä»¶ä¸­çš„å‹åˆ¥
-// å° COM å…ƒä»¶è€Œè¨€ç‚ºä¸å¯è¦‹ã€‚å¦‚æœæ‚¨éœ€è¦å¾ COM å­˜å–é€™å€‹çµ„ä»¶ä¸­
-// çš„å‹åˆ¥ï¼Œè«‹åœ¨è©²å‹åˆ¥ä¸Šå°‡ ComVisible å±¬æ€§è¨­å®šç‚º trueã€‚
+// ±N ComVisible ³]©w¬° false ·|¨Ï±o³o­Ó²Õ¥ó¤¤ªº«¬§O
+// ¹ï COM ¤¸¥ó¦Ó¨¥¬°¤£¥i¨£¡C¦pªG±z»İ­n±q COM ¦s¨ú³o­Ó²Õ¥ó¤¤
+// ªº«¬§O¡A½Ğ¦b¸Ó«¬§O¤W±N ComVisible Äİ©Ê³]©w¬° true¡C
 [assembly: ComVisible(false)]
 
-// ä¸‹åˆ— GUID ç‚ºå°ˆæ¡ˆå…¬é–‹ (Expose) è‡³ COM æ™‚æ‰€è¦ä½¿ç”¨çš„ typelib ID
+// ¤U¦C GUID ¬°±M®×¤½¶} (Expose) ¦Ü COM ®É©Ò­n¨Ï¥Îªº typelib ID
 [assembly: Guid("1c3ca190-3321-410f-8cb8-e025221158b6")]
 
-// çµ„ä»¶çš„ç‰ˆæœ¬è³‡è¨Šæ˜¯ç”±ä¸‹åˆ—å››é …å€¼æ§‹æˆ:
+// ²Õ¥óªºª©¥»¸ê°T¬O¥Ñ¤U¦C¥|¶µ­Èºc¦¨:
 //
-//      ä¸»è¦ç‰ˆæœ¬
-//      æ¬¡è¦ç‰ˆæœ¬ 
-//      çµ„å»ºç·¨è™Ÿ
-//      ä¿®è¨‚ç·¨è™Ÿ
+//      ¥D­nª©¥»
+//      ¦¸­nª©¥» 
+//      ²Õ«Ø½s¸¹
+//      ­×­q½s¸¹
 //
-// æ‚¨å¯ä»¥æŒ‡å®šæ‰€æœ‰çš„å€¼ï¼Œä¹Ÿå¯ä»¥ä¾ç…§ä»¥ä¸‹çš„æ–¹å¼ï¼Œä½¿ç”¨ '*' å°‡çµ„å»ºå’Œä¿®è¨‚ç·¨è™Ÿ
-// æŒ‡å®šç‚ºé è¨­å€¼:
+// ±z¥i¥H«ü©w©Ò¦³ªº­È¡A¤]¥i¥H¨Ì·Ó¥H¤Uªº¤è¦¡¡A¨Ï¥Î '*' ±N²Õ«Ø©M­×­q½s¸¹
+// «ü©w¬°¹w³]­È:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.2")]
-[assembly: AssemblyFileVersion("1.0.0.2")]
+[assembly: AssemblyFileVersion("1.0.22243.0")]

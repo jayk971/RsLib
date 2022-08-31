@@ -43,6 +43,7 @@ namespace RsLib.AlarmMgr
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvSystemInfoColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvSystemInfoColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlarmBriefInfo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,7 +69,8 @@ namespace RsLib.AlarmMgr
             this.dgvSystemInfoColumn2,
             this.Column1,
             this.dgvSystemInfoColumn3,
-            this.dgvSystemInfoColumn4});
+            this.dgvSystemInfoColumn4,
+            this.Column2});
             dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle13.Font = new System.Drawing.Font("微軟正黑體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -132,6 +134,12 @@ namespace RsLib.AlarmMgr
             this.dgvSystemInfoColumn4.Name = "dgvSystemInfoColumn4";
             this.dgvSystemInfoColumn4.ReadOnly = true;
             // 
+            // Column2
+            // 
+            resources.ApplyResources(this.Column2, "Column2");
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
             // AlarmBriefInfoControl
             // 
             resources.ApplyResources(this, "$this");
@@ -152,5 +160,6 @@ namespace RsLib.AlarmMgr
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvSystemInfoColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvSystemInfoColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
     }
 }

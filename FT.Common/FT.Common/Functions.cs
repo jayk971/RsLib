@@ -483,6 +483,45 @@ namespace RsLib.Common
             stopwatch.Reset();
             return timeOutResult;
         }
+        public static bool IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition,bool waitStatus)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            bool timeOutResult = true;
+            while (stopwatch.ElapsedMilliseconds <= elapsedMilliSecond)
+            {
+                bool isOK = waitCondition();
+                if (isOK == waitStatus)
+                {
+                    timeOutResult = false;
+                    break;
+                }
+                SpinWait.SpinUntil(() => false, 10);
+            }
+            stopwatch.Reset();
+            return timeOutResult;
+        }
+        public static bool IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus,Func<bool> breakCondition)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            bool timeOutResult = true;
+            while (stopwatch.ElapsedMilliseconds <= elapsedMilliSecond)
+            {
+                bool isOK = waitCondition();
+                if (isOK == waitStatus)
+                {
+                    timeOutResult = false;
+                    break;
+                }
+                if (breakCondition())
+                {
+                    timeOutResult = true;
+                    break;
+                }
+                SpinWait.SpinUntil(() => false, 10);
+            }
+            stopwatch.Reset();
+            return timeOutResult;
+        }
 
         /// <summary>
         /// 唯一序號 enum 轉成 鞋子尺寸 enum
@@ -756,8 +795,7 @@ namespace RsLib.Common
 
         public static bool IsSignalRemain(Func<bool> func, bool signalRemainStatus,double continuedTimems)
         {
-            FT_StopWatch stopWatch = new FT_StopWatch();
-            stopWatch.Start();
+            Stopwatch stopWatch = Stopwatch.StartNew();
             bool isSignalRemain = false;
             while(stopWatch.Elapsed.TotalMilliseconds <= continuedTimems)
             {
@@ -771,7 +809,7 @@ namespace RsLib.Common
                     isSignalRemain = false;
                     break;
                 }
-                SpinWait.SpinUntil(() => false, 100);
+                SpinWait.SpinUntil(() => false, 50);
             }
             stopWatch.Stop();
             return isSignalRemain;
