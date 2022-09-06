@@ -784,7 +784,7 @@ namespace RsLib.Common
             catch (IOException exception)
             {
                 var errorCode = Marshal.GetHRForException(exception) & 65535;
-                Log.Add($"{file} locked", MsgLevel.Trace);
+                //Log.Add($"{file} locked", MsgLevel.Trace);
                 return errorCode == 32 || errorCode == 33;
             }
             catch (Exception)

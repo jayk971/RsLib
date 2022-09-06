@@ -109,6 +109,9 @@
     <EmbeddedResource Include="X8000Control.zh-TW.resx">
       <DependentUpon>X8000Control.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="X8000Control.en.resx">
+      <DependentUpon>X8000Control.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconfinder_control-play-triangle-launch-start_3209257.png" />
@@ -125,6 +128,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
-copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y</PostBuildEvent>
+copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
+copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

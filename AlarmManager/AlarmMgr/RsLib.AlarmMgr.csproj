@@ -105,10 +105,16 @@
     <EmbeddedResource Include="AlarmBriefInfoControl.zh-TW.resx">
       <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AlarmBriefInfoControl.en.resx">
+      <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AlarmControl.resx">
       <DependentUpon>AlarmControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AlarmControl.zh-TW.resx">
+      <DependentUpon>AlarmControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlarmControl.en.resx">
       <DependentUpon>AlarmControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -137,6 +143,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
-copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y</PostBuildEvent>
+copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
+copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

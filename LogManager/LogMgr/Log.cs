@@ -67,10 +67,11 @@ namespace RsLib.LogMgr
 
                     break;
             }
-            if (UiUpdated != null)
-            {
-                UiUpdated(msg);
-            }
+            UiUpdated?.Invoke(msg);
+            //if (UiUpdated != null)
+            //{
+            //    UiUpdated(msg);
+            //}
         }
 
     }

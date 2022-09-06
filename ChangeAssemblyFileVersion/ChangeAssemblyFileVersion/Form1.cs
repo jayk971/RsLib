@@ -7,33 +7,43 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using ChangeAssemblyFileVersion.Properties;
 using System.IO;
+using YamlDotNet.Serialization;
 namespace ChangeAssemblyFileVersion
 {
     public partial class Form1 : Form
     {
         string currentSlnFile = "";
         string selectName = "";
-
         string currentSlnFolder => Path.GetDirectoryName(currentSlnFile);
         Dictionary<string,AssemblyVersion> assembly = new Dictionary<string,AssemblyVersion>();
         Form2 f2 = new Form2();
+        SystemConfig config = new SystemConfig();
+
         public Form1()
         {
             InitializeComponent();
             f2.VersionUpdated += F2_VersionUpdated;
-            if (File.Exists(Settings.Default.LastSLNFile))
-            {
-                currentSlnFile = Settings.Default.LastSLNFile;
-                parseSolutionFile();
-            }
-            else
-            {
-                currentSlnFile = "";
-            }
-            lbl_SlnFile.Text = currentSlnFile;
+            config.FileLoaded += Config_FileLoaded;
+            config.LoadYaml();
 
+        }
+
+        private void Config_FileLoaded()
+        {
+            comboBox1.Items.Clear();
+
+            if (config.slnFiles.Count >0)
+            {
+                for(int i = 0; i < config.slnFiles.Count; i++)
+                {
+                    comboBox1.Items.Add(config.slnFiles[i]);
+                }
+                comboBox1.SelectedIndex = 0;
+                currentSlnFile = comboBox1.SelectedItem.ToString();
+                parseSolutionFile();
+
+            }
         }
 
         private void F2_VersionUpdated(string name ,int arg1, int arg2, int arg3, int arg4)
@@ -56,13 +66,13 @@ namespace ChangeAssemblyFileVersion
                 op.Filter = "Visual Studio Solution|*.sln";
                 if (op.ShowDialog() == DialogResult.OK)
                 {
-                    lbl_SlnFile.Text = op.FileName;
                     if (File.Exists(op.FileName))
                     {
-                        currentSlnFile = op.FileName;
-                        Settings.Default.LastSLNFile = op.FileName;
-                        Settings.Default.Save();
-                        parseSolutionFile();
+                        if(!config.slnFiles.Contains(op.FileName))
+                        {
+                            config.SlnAdd(op.FileName);
+                        }
+
                     }
                 }
             }
@@ -248,6 +258,25 @@ namespace ChangeAssemblyFileVersion
                 f2.ShowDialog();
             }
         }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == -1) return;
+
+            currentSlnFile = comboBox1.SelectedItem.ToString();
+            parseSolutionFile();
+        }
+
+        private void btn_DeleteSln_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == -1) return;
+            config.SlnDelete(comboBox1.SelectedIndex);
+        }
+
+        private void btn_ClearSln_Click(object sender, EventArgs e)
+        {
+            config.SlnClear();
+        }
     }
     internal class AssemblyVersion
     {
@@ -311,4 +340,79 @@ namespace ChangeAssemblyFileVersion
             }
         }
     }
+    [Serializable]
+    internal class SystemConfig
+    {
+        static readonly string folderApp = System.Environment.CurrentDirectory;
+        static readonly string folderConfig = folderApp + "\\Config";
+        static readonly string fileConfig = folderConfig + "\\system.yaml";
+
+        public List<string> slnFiles = new List<string>();
+        public event Action FileLoaded;
+        public SystemConfig()
+        {
+            checkFolder();
+        }
+        public void SlnAdd(string filePath)
+        {
+            if(!slnFiles.Contains(filePath))
+            {
+                slnFiles.Add(filePath);
+                SaveYaml();
+                LoadYaml();
+            }
+        }
+        public void SlnDelete(int index)
+        {
+            if(slnFiles.Count > index)
+            {
+                slnFiles.RemoveAt(index);
+                SaveYaml();
+                LoadYaml();
+            }
+        }
+        public void SlnClear()
+        {
+            slnFiles.Clear();
+            SaveYaml();
+            LoadYaml();
+        }
+        public void LoadYaml()
+        {
+            if (!File.Exists(fileConfig))
+            {
+                SaveYaml();
+            }
+            string ReadData = "";
+            using (StreamReader sr = new StreamReader(fileConfig, Encoding.Default))
+            {
+                ReadData = sr.ReadToEnd();
+            }
+            var deserializer = new DeserializerBuilder()
+                .Build();
+
+            //yml contains a string containing your YAML
+            var p = deserializer.Deserialize<SystemConfig>(ReadData);
+
+            slnFiles = p.slnFiles;
+            FileLoaded?.Invoke();
+        }
+        public void SaveYaml()
+        {
+            using (StreamWriter sw = new StreamWriter(fileConfig, false, Encoding.Default))
+            {
+                var serializer = new SerializerBuilder()
+                    .Build();
+                var yaml = serializer.Serialize(this);
+                sw.WriteLine(yaml);
+                sw.Flush();
+            }
+        }
+        void checkFolder()
+        {
+            if (!Directory.Exists(folderConfig)) Directory.CreateDirectory(folderConfig);
+        }
+
+    }
+
 }

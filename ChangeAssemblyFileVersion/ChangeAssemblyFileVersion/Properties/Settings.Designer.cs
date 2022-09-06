@@ -22,17 +22,5 @@ namespace ChangeAssemblyFileVersion.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastSLNFile {
-            get {
-                return ((string)(this["LastSLNFile"]));
-            }
-            set {
-                this["LastSLNFile"] = value;
-            }
-        }
     }
 }

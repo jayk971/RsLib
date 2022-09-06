@@ -67,6 +67,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RsLib.LogMgr">
+      <HintPath>..\..\..\..\..\RLib\bin\Release\RsLib.LogMgr.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

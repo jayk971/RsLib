@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.IO;
 namespace RsLib.LogMgr
 {
     public partial class LogControl : UserControl
@@ -99,30 +99,43 @@ namespace RsLib.LogMgr
             }
             else
             {
-                LogMsg[] lines = logQ.ToArray();
-                int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
+                try
+                {
+                    List<LogMsg> lines = logQ.ToList();
+                    int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
 
-                if (!clearAll)
-                {
-                    LogMsg lastMsg = lines[lines.Length - 1];
-                    if ((int)lastMsg.Level >= levelFilterIndex || levelFilterIndex == 4)
+                    if (!clearAll)
                     {
-                        renderRichTexyBox(lastMsg.ToString(), lastMsg.Level);
-                    }
-                }
-                else
-                {
-                    rtbx_Log.Clear();
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        LogMsg msg = lines[i];
-                        if ((int)msg.Level >= levelFilterIndex || levelFilterIndex == 4)
+                        LogMsg lastMsg = lines[lines.Count - 1];
+                        if ((int)lastMsg.Level >= levelFilterIndex || levelFilterIndex == 4)
                         {
-                            renderRichTexyBox(msg.ToString(), msg.Level);
+                            renderRichTexyBox(lastMsg.ToString(), lastMsg.Level);
                         }
                     }
+                    else
+                    {
+                        rtbx_Log.Clear();
+                        for (int i = 0; i < lines.Count; i++)
+                        {
+                            LogMsg msg = lines[i];
+                            if ((int)msg.Level >= levelFilterIndex || levelFilterIndex == 4)
+                            {
+                                renderRichTexyBox(msg.ToString(), msg.Level);
+                            }
+                        }
+                    }
+                    rtbx_Log.ScrollToCaret();
                 }
-                rtbx_Log.ScrollToCaret();
+                catch(Exception ex)
+                {
+                    string logErrorFile = $"d:\\{DateTime.Now:yyyy_MM_dd_HHmmss}_LogError.txt";
+                    using (StreamWriter sw = new StreamWriter(logErrorFile))
+                    {
+                        sw.WriteLine(ex.Message);
+                        sw.WriteLine(ex.StackTrace);
+                        sw.Flush();
+                    }
+                }
             }
         }
 

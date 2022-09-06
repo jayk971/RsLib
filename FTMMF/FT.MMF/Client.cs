@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Text;
 using System.Threading;
-
+using RsLib.LogMgr;
 namespace RsLib.MMF
 {
     public class MMFClient
@@ -30,14 +30,11 @@ namespace RsLib.MMF
         private bool IsStop = true;
         private bool IsTdStop = true;
 
-        public delegate void DICallBack(int DI);
-        public event DICallBack GetDiValue;
+        public event Action<int> DiValueUpdated;
 
-        public delegate void DOCallBack(int DO);
-        public event DOCallBack GetDOValue;
+        public event Action<int> DoValueUpdated;
 
-        public delegate void MsgCallBack(string Msg);
-        public event MsgCallBack GetMsg;
+        public event Action<string> MsgUpdated;
 
         public int LoopInterval = 500;
 
@@ -46,18 +43,12 @@ namespace RsLib.MMF
             MemoryCapacity = l_MemoryCapacity;
             mmfW = MemoryMappedFile.CreateOrOpen(WriteMapName, MemoryCapacity, MemoryMappedFileAccess.ReadWrite);
             mmfR = MemoryMappedFile.CreateOrOpen(ReadMapName, MemoryCapacity, MemoryMappedFileAccess.ReadWrite);
-            GetDOValue += new DOCallBack(MMFClient_GetDOValue);
-            GetDiValue += new DICallBack(MMFClient_GetDiValue);
-            GetMsg += new MsgCallBack(MMFClient_GetMsg);
         }
 
         public MMFClient()
         {
             mmfW = MemoryMappedFile.CreateOrOpen(Common.str_Client2Server, MemoryCapacity, MemoryMappedFileAccess.ReadWrite);
             mmfR = MemoryMappedFile.CreateOrOpen(Common.str_Server2Client, MemoryCapacity, MemoryMappedFileAccess.ReadWrite);
-            GetDOValue += new DOCallBack(MMFClient_GetDOValue);
-            GetDiValue += new DICallBack(MMFClient_GetDiValue);
-            GetMsg += new MsgCallBack(MMFClient_GetMsg);
         }
         public void Start()
         {
@@ -73,10 +64,10 @@ namespace RsLib.MMF
         public void Stop()
         {
             DO = 0;
-            GetDOValue(DO);
+            DoValueUpdated?.Invoke(DO);
 
             DI = 0;
-            GetDiValue(DI);
+            DiValueUpdated?.Invoke(DI);
 
             IsStop = true;
 
@@ -92,6 +83,7 @@ namespace RsLib.MMF
             IsRun = true;
             try
             {
+                Log.Add("MMF client thread running.", MsgLevel.Info);
                 while (!IsStop)
                 {
                     if (LastDo != DO || LastSendMsg != SendMsg)
@@ -108,8 +100,10 @@ namespace RsLib.MMF
                                 bw.Write(msg);
 
                                 LastDo = DO;
-                                GetDOValue(DO);
+                                DoValueUpdated?.Invoke(DO);
                                 LastSendMsg = SendMsg;
+                                Log.Add($"MMF client send {DO} & {SendMsg}.", MsgLevel.Trace);
+
                             }
                         }
                         mmvsW.Close();
@@ -128,49 +122,42 @@ namespace RsLib.MMF
                             if (LastDi != DI)
                             {
                                 LastDi = DI;
-                                GetDiValue(DI);
+                                DiValueUpdated?.Invoke(DI);
+                                Log.Add($"MMF client receive int {DI}.", MsgLevel.Trace);
                             }
                             if (ReceiveMsg != "")
                             {
                                 if (ReceiveMsg != LastRMsg)
                                 {
                                     LastRMsg = ReceiveMsg;
-                                    GetMsg(ReceiveMsg);
+                                    MsgUpdated?.Invoke(ReceiveMsg);
+                                    Log.Add($"MMF client receive string {ReceiveMsg}.", MsgLevel.Trace);
                                 }
                             }
                         }
 
-                        mmvsR.Close();
                         ReceiveMsg = "";
 
                     }
+                    mmvsR.Close();
                     SpinWait.SpinUntil(() => false, LoopInterval);
                 }//end while
+                Log.Add("MMF client thread stopped.", MsgLevel.Info);
             }
             catch (Exception ex)
             {
-                IsRun = false;
+                Log.Add("MMF client exception", MsgLevel.Alarm, ex);
             }
-            IsRun = false;
-            IsTdStop = true;
+            finally
+            {
+                IsRun = false;
+                IsTdStop = true;
+            }
         }
         public void SendMessage(string Text)
         {
             SendMsg = Text;
         }
-        private void MMFClient_GetDOValue(int Do)
-        {
-
-        }
-        private void MMFClient_GetDiValue(int Di)
-        {
-
-        }
-        private void MMFClient_GetMsg(string Msg)
-        {
-
-        }
-
     }
 
 }
