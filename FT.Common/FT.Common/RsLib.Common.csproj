@@ -78,7 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="MultiLanguage.cs" />
     <Compile Include="ShoeEnum.cs" />

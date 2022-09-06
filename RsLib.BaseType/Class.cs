@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RsLib.Common
+namespace RsLib.BaseType
 {
-    public class LockQueue<T>:Queue<T>
+    public class LockQueue<T> : Queue<T>
     {
         private readonly object _lock = new object();
         public new int Count
@@ -31,7 +31,7 @@ namespace RsLib.Common
 
         public new void Enqueue(T obj)
         {
-            lock(_lock)
+            lock (_lock)
             {
                 base.Enqueue(obj);
             }
@@ -40,10 +40,10 @@ namespace RsLib.Common
         {
             lock (_lock)
             {
-               return base.Dequeue();
+                return base.Dequeue();
             }
         }
-        public  T ElementAt(int index)
+        public T ElementAt(int index)
         {
             lock (_lock)
             {
@@ -57,24 +57,32 @@ namespace RsLib.Common
         }
         public new T Peek()
         {
-            lock(_lock)
+            lock (_lock)
             {
                 return base.Peek();
             }
         }
         public new void Clear()
         {
-            lock(_lock)
+            lock (_lock)
             {
                 base.Clear();
             }
         }
         public new bool Contains(T obj)
         {
-            lock(_lock)
+            lock (_lock)
             {
                 return base.Contains(obj);
             }
         }
+        public new T[] ToArray()
+        {
+            lock(_lock)
+            {
+                return base.ToArray();
+            }    
+        }
     }
+
 }

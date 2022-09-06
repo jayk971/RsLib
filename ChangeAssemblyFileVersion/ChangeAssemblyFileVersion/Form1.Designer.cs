@@ -60,7 +60,7 @@ namespace ChangeAssemblyFileVersion
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(614, 472);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(724, 671);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -78,9 +78,10 @@ namespace ChangeAssemblyFileVersion
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.treeView1, 2);
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.treeView1.Location = new System.Drawing.Point(3, 33);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(508, 436);
+            this.treeView1.Size = new System.Drawing.Size(618, 635);
             this.treeView1.TabIndex = 3;
             this.treeView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDoubleClick);
             // 
@@ -92,7 +93,7 @@ namespace ChangeAssemblyFileVersion
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(103, 3);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(408, 23);
+            this.comboBox1.Size = new System.Drawing.Size(518, 23);
             this.comboBox1.TabIndex = 6;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -106,7 +107,7 @@ namespace ChangeAssemblyFileVersion
             this.tableLayoutPanel2.Controls.Add(this.btn_UpdateAll, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.btn_Update, 0, 4);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(517, 3);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(627, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 6;
             this.tableLayoutPanel1.SetRowSpan(this.tableLayoutPanel2, 2);
@@ -117,13 +118,13 @@ namespace ChangeAssemblyFileVersion
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(94, 466);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(94, 665);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
             // btn_ClearSln
             // 
             this.btn_ClearSln.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_ClearSln.Location = new System.Drawing.Point(3, 157);
+            this.btn_ClearSln.Location = new System.Drawing.Point(3, 223);
             this.btn_ClearSln.Name = "btn_ClearSln";
             this.btn_ClearSln.Size = new System.Drawing.Size(88, 24);
             this.btn_ClearSln.TabIndex = 7;
@@ -145,7 +146,7 @@ namespace ChangeAssemblyFileVersion
             // btn_DeleteSln
             // 
             this.btn_DeleteSln.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_DeleteSln.Location = new System.Drawing.Point(3, 80);
+            this.btn_DeleteSln.Location = new System.Drawing.Point(3, 113);
             this.btn_DeleteSln.Name = "btn_DeleteSln";
             this.btn_DeleteSln.Size = new System.Drawing.Size(88, 24);
             this.btn_DeleteSln.TabIndex = 6;
@@ -156,7 +157,7 @@ namespace ChangeAssemblyFileVersion
             // btn_UpdateAll
             // 
             this.btn_UpdateAll.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_UpdateAll.Location = new System.Drawing.Point(3, 388);
+            this.btn_UpdateAll.Location = new System.Drawing.Point(3, 553);
             this.btn_UpdateAll.Name = "btn_UpdateAll";
             this.btn_UpdateAll.Size = new System.Drawing.Size(88, 29);
             this.btn_UpdateAll.TabIndex = 5;
@@ -167,7 +168,7 @@ namespace ChangeAssemblyFileVersion
             // btn_Update
             // 
             this.btn_Update.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_Update.Location = new System.Drawing.Point(3, 311);
+            this.btn_Update.Location = new System.Drawing.Point(3, 443);
             this.btn_Update.Name = "btn_Update";
             this.btn_Update.Size = new System.Drawing.Size(88, 29);
             this.btn_Update.TabIndex = 4;
@@ -179,7 +180,7 @@ namespace ChangeAssemblyFileVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 472);
+            this.ClientSize = new System.Drawing.Size(724, 671);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";

@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using RsLib.BaseType;
 namespace RsLib.LogMgr
 {
     public partial class LogControl : UserControl
     {
-        Queue<LogMsg> logQ = new Queue<LogMsg>();
+        //Queue<LogMsg> logQ = new Queue<LogMsg>();
+        LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
 
         public LogControl()
         {
@@ -101,12 +103,12 @@ namespace RsLib.LogMgr
             {
                 try
                 {
-                    List<LogMsg> lines = logQ.ToList();
+                    LogMsg[] lines = logQ.ToArray();
                     int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
 
                     if (!clearAll)
                     {
-                        LogMsg lastMsg = lines[lines.Count - 1];
+                        LogMsg lastMsg = lines[lines.Length - 1];
                         if ((int)lastMsg.Level >= levelFilterIndex || levelFilterIndex == 4)
                         {
                             renderRichTexyBox(lastMsg.ToString(), lastMsg.Level);
@@ -115,7 +117,7 @@ namespace RsLib.LogMgr
                     else
                     {
                         rtbx_Log.Clear();
-                        for (int i = 0; i < lines.Count; i++)
+                        for (int i = 0; i < lines.Length; i++)
                         {
                             LogMsg msg = lines[i];
                             if ((int)msg.Level >= levelFilterIndex || levelFilterIndex == 4)

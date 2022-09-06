@@ -196,6 +196,8 @@ namespace ChangeAssemblyFileVersion
             {
                 TreeNode nameNode = new TreeNode(kvp.Value.Name);
                 nameNode.Name = kvp.Value.Name;
+                nameNode.BackColor = Color.YellowGreen;
+
                 TreeNode versionNode = new TreeNode(kvp.Value.VersionString);
                 nameNode.Nodes.Add(versionNode);
                 treeView1.Nodes.Add(nameNode);

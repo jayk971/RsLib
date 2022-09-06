@@ -121,6 +121,12 @@
   <ItemGroup>
     <None Include="Resources\icons8_broom_64.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RsLib.BaseType\RsLib.BaseType.csproj">
+      <Project>{a83549cb-762b-457e-82aa-cfdb913d3cc6}</Project>
+      <Name>RsLib.BaseType</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
