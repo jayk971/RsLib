@@ -20,58 +20,58 @@ namespace RsLib.LogMgr
         private static Logger m_FatalLog = LogManager.GetLogger("Lib_Fatal");
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
+        private static readonly object _lock = new object();
         public static void Add(string Msg, MsgLevel errLevel, Exception ex = null)
         {
             string LogFolder = string.Format("{0}\\Log", System.Environment.CurrentDirectory);
             if (!Directory.Exists(LogFolder)) Directory.CreateDirectory(LogFolder);
-            LogMsg msg = new LogMsg(errLevel, Msg);
-            switch (errLevel)
+            lock (_lock)
             {
-                case MsgLevel.Trace:
-                    m_Log.Trace(Msg);
+                LogMsg msg = new LogMsg(errLevel, Msg);
+                switch (errLevel)
+                {
+                    case MsgLevel.Trace:
+                        m_Log.Trace(Msg);
 
-                    break;
-                case MsgLevel.Info:
+                        break;
+                    case MsgLevel.Info:
 
-                    m_Log.Info(Msg);
-                    //MessageBox.Show(Msg, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        m_Log.Info(Msg);
+                        //MessageBox.Show(Msg, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    break;
+                        break;
 
-                case MsgLevel.Warning:
+                    case MsgLevel.Warning:
 
-                    m_Log.Warn(Msg);
-                    //MessageBox.Show(Msg, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        m_Log.Warn(Msg);
+                        //MessageBox.Show(Msg, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    break;
+                        break;
 
-                case MsgLevel.Alarm:
-                    if (ex == null)
-                    {
-                        m_Log.Error(Msg);
-                        m_FatalLog.Fatal(Msg);
-                        //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    case MsgLevel.Alarm:
+                        if (ex == null)
+                        {
+                            m_Log.Error(Msg);
+                            m_FatalLog.Fatal(Msg);
+                            //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    }
-                    else
-                    {
-                        m_Log.Error(Msg + "\t" + ex.Message);
-                        m_FatalLog.Fatal(ex);
-                        MessageBox.Show(Msg + "\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            m_Log.Error(Msg + "\t" + ex.Message);
+                            m_FatalLog.Fatal(ex);
+                            MessageBox.Show(Msg + "\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    }
-                    break;
+                        }
+                        break;
 
 
-                default:
+                    default:
 
-                    break;
+                        break;
+                }
+                UiUpdated?.Invoke(msg);
             }
-            UiUpdated?.Invoke(msg);
-            //if (UiUpdated != null)
-            //{
-            //    UiUpdated(msg);
-            //}
         }
 
     }

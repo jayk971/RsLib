@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RsLib.Common">
-      <HintPath>..\..\..\..\..\RLib\bin\Release\RsLib.Common.dll</HintPath>
+      <HintPath>D:\RLib\bin\Release\RsLib.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,7 +49,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="YamlDotNet">
-      <HintPath>..\..\..\..\..\RLib\Lib\YamlDotNet.dll</HintPath>
+      <HintPath>D:\RLib\Lib\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
