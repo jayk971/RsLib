@@ -127,6 +127,11 @@
       <Name>RsLib.BaseType</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="NLog.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y

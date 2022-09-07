@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using NLog;
+using RsLib.BaseType;
+using System.Threading;
 namespace RsLib.LogMgr
 {
     public enum MsgLevel : int
@@ -21,46 +23,60 @@ namespace RsLib.LogMgr
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();
+        private static LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
         public static void Add(string Msg, MsgLevel errLevel, Exception ex = null)
+        {
+            lock (_lock)
+            {
+                LogMsg msg = new LogMsg(errLevel, Msg,ex);
+                logQ.Enqueue(msg);
+            }
+        }
+
+        public static void Start()
         {
             string LogFolder = string.Format("{0}\\Log", System.Environment.CurrentDirectory);
             if (!Directory.Exists(LogFolder)) Directory.CreateDirectory(LogFolder);
-            lock (_lock)
+
+            ThreadPool.QueueUserWorkItem(run);
+        }
+        static void run(object obj)
+        {
+            while(true)
             {
-                LogMsg msg = new LogMsg(errLevel, Msg);
-                switch (errLevel)
+                SpinWait.SpinUntil(() => false, 5);
+                if (logQ.Count == 0) continue;
+
+                LogMsg tempMsg = logQ.Dequeue();
+                switch (tempMsg.Level)
                 {
                     case MsgLevel.Trace:
-                        m_Log.Trace(Msg);
+                        m_Log.Trace(tempMsg.Text);
 
                         break;
                     case MsgLevel.Info:
-
-                        m_Log.Info(Msg);
-                        //MessageBox.Show(Msg, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        m_Log.Info(tempMsg.Text);
 
                         break;
 
                     case MsgLevel.Warning:
 
-                        m_Log.Warn(Msg);
-                        //MessageBox.Show(Msg, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                        m_Log.Warn(tempMsg.Text);
                         break;
 
                     case MsgLevel.Alarm:
-                        if (ex == null)
+                        if (tempMsg.Ex == null)
                         {
-                            m_Log.Error(Msg);
-                            m_FatalLog.Fatal(Msg);
+                            m_Log.Error(tempMsg.Text);
+                            m_FatalLog.Fatal(tempMsg.Text);
                             //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
                         else
                         {
-                            m_Log.Error(Msg + "\t" + ex.Message);
-                            m_FatalLog.Fatal(ex);
-                            MessageBox.Show(Msg + "\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            m_Log.Error(tempMsg.Text + "\t" + tempMsg.Ex.Message);
+                            m_FatalLog.Fatal(tempMsg.Ex);
+                            MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
                         break;
@@ -70,10 +86,10 @@ namespace RsLib.LogMgr
 
                         break;
                 }
-                UiUpdated?.Invoke(msg);
+                UiUpdated?.Invoke(tempMsg);
+
             }
         }
-
     }
 
     public class LogMsg
@@ -81,12 +97,14 @@ namespace RsLib.LogMgr
         public DateTime Time;
         public MsgLevel Level;
         public string Text;
+        public Exception Ex;
 
-        public LogMsg(MsgLevel level,string text)
+        public LogMsg(MsgLevel level,string text,Exception ex)
         {
             Time = DateTime.Now;
             Level = level;
             Text = text;
+            Ex = ex;
         }
 
         public override string ToString()

@@ -18,6 +18,8 @@ namespace TestForm
         public Form1()
         {
             InitializeComponent();
+            Log.Start();
+
             logControl.Dock = DockStyle.Fill;
             panel1.Controls.Add(logControl);
             ThreadPool.QueueUserWorkItem(testThread);
@@ -47,10 +49,10 @@ namespace TestForm
                     if (EnableTd)
                     {
                         Random rd = new Random();
-                        int rdNum = rd.Next(1, 100) * 10;
+                        int rdNum = rd.Next(10, 50) * 10;
                         DateTime dt = DateTime.Now;
                         Log.Add($"{rdNum} ,td  {dt:HH:mm:ss.fff}", MsgLevel.Warning);
-                        SpinWait.SpinUntil(() => false, 150);
+                        SpinWait.SpinUntil(() => false, rdNum);
                     }
                     else
                     {
@@ -73,10 +75,10 @@ namespace TestForm
                     if (EnableTd)
                     {
                         Random rd = new Random();
-                        int rdNum = rd.Next(1, 100) * 10;
+                        int rdNum = rd.Next(20, 60) * 10;
                         DateTime dt = DateTime.Now;
                         Log.Add($"{rdNum} , {dt:HH:mm:ss.fff} <<<<<<<<<<<", MsgLevel.Info);
-                        SpinWait.SpinUntil(() => false, 200);
+                        SpinWait.SpinUntil(() => false, rdNum);
                     }
                     else
                     {
