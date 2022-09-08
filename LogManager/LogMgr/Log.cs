@@ -24,6 +24,7 @@ namespace RsLib.LogMgr
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();
         private static LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
+        public static bool EnableUpdateUI = true;
         public static void Add(string Msg, MsgLevel errLevel, Exception ex = null)
         {
             lock (_lock)
@@ -32,7 +33,14 @@ namespace RsLib.LogMgr
                 logQ.Enqueue(msg);
             }
         }
-
+        public static void Add(string Msg, MsgLevel errLevel, bool updateUI,Exception ex = null)
+        {
+            lock (_lock)
+            {
+                LogMsg msg = new LogMsg(errLevel, Msg,ex, updateUI);
+                logQ.Enqueue(msg);
+            }
+        }
         public static void Start()
         {
             string LogFolder = string.Format("{0}\\Log", System.Environment.CurrentDirectory);
@@ -86,8 +94,10 @@ namespace RsLib.LogMgr
 
                         break;
                 }
-                UiUpdated?.Invoke(tempMsg);
-
+                if (EnableUpdateUI)
+                {
+                    if (tempMsg.UpdateUI) UiUpdated?.Invoke(tempMsg);
+                }
             }
         }
     }
@@ -98,6 +108,7 @@ namespace RsLib.LogMgr
         public MsgLevel Level;
         public string Text;
         public Exception Ex;
+        public bool UpdateUI = true;
 
         public LogMsg(MsgLevel level,string text,Exception ex)
         {
@@ -106,6 +117,15 @@ namespace RsLib.LogMgr
             Text = text;
             Ex = ex;
         }
+        public LogMsg(MsgLevel level, string text, Exception ex,bool updateUI)
+        {
+            Time = DateTime.Now;
+            Level = level;
+            Text = text;
+            Ex = ex;
+            UpdateUI = updateUI;
+        }
+
 
         public override string ToString()
         {
