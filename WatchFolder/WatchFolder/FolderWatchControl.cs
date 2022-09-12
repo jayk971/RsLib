@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using RsLib.LogMgr;
 using RsLib.Common;
+using System.Threading;
 namespace RsLib.WatchFolder
 {
     public partial class FolderWatchControl : UserControl
@@ -16,7 +17,9 @@ namespace RsLib.WatchFolder
         public event Action<string> FileUpdated;
         public event Action<string> WatchedFolderChanged;
         public event Action<string> WatchedFilterChanged;
-
+        bool EnableTd = false;
+        bool isTdRunning = false;
+        Thread td;
         public FolderWatchControl(string cfgName)
         {
             InitializeComponent();
@@ -41,7 +44,7 @@ namespace RsLib.WatchFolder
             {
                 pictureBox1.Visible = true;
             }
-            watcher.AfterFileAdded += Watcher_AfterFileAdded; ;
+            //watcher.AfterFileAdded += Watcher_AfterFileAdded; ;
             tbx_WatchFilter.Text = watcher.Filter;
             lbl_WatchedFolder.Text = watcher.Folder;
         }
@@ -91,8 +94,61 @@ namespace RsLib.WatchFolder
             Log.Add($"Start Monitor Folder : {watcher.Folder}", MsgLevel.Trace);
             Log.Add($"Start Monitor Filter : {watcher.Filter}", MsgLevel.Trace);
 
-            if(watcher.Start()) progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
+            if (watcher.Start())
+            {
+                progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
+                if (!isTdRunning)
+                {
+                    EnableTd = true;
+                    if (td == null)
+                    {
+                        td = new Thread(new ThreadStart(run));
+                        td.IsBackground = true;
+                    }
+                    else
+                    {
+                        if (td.IsAlive)
+                        {
 
+                        }
+                        else
+                        {
+                            td = new Thread(new ThreadStart(run));
+                            td.IsBackground = true;
+                        }
+                    }
+                    td.Start();
+                }
+            }
+        }
+        void run()
+        {
+            while (EnableTd)
+            {
+                isTdRunning = true;
+                try
+                {
+                    int count = watcher.DetectFile.Count;
+                    if (count > 0)
+                    {
+                        string filePath = watcher.DetectFile.Dequeue();
+                        bool isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
+                            () => FT_Functions.IsFileLocked(filePath),
+                            false);
+                        if (isTimeout) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warning);
+                        FileUpdated?.Invoke(filePath);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Log.Add("Watch folder file update exception.", MsgLevel.Alarm, ex);
+                }
+
+                if (!Enabled) break;
+                SpinWait.SpinUntil(() => false, 10);
+                }
+            
+            isTdRunning = false;
         }
 
         public void StopMonitor()
@@ -102,6 +158,7 @@ namespace RsLib.WatchFolder
             progressBar_RunStatus.Style = ProgressBarStyle.Blocks;
             progressBar_RunStatus.Value = 0;
             watcher.Stop();
+            if (isTdRunning) EnableTd = false;
         }
 
         private void tbx_TimeOut_KeyPress(object sender, KeyPressEventArgs e)

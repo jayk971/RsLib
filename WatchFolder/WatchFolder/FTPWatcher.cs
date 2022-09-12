@@ -9,15 +9,16 @@ using YamlDotNet.Serialization.NamingConventions;
 using System.Threading;
 using RsLib.LogMgr;
 using RsLib.Common;
+using RsLib.BaseType;
 namespace RsLib.WatchFolder
 {
     internal class Watcher
     {
         WatcherConfig config = new WatcherConfig();    
         FileSystemWatcher watcher = new FileSystemWatcher();
-
+        internal LockQueue<string> DetectFile = new LockQueue<string>();
         //public delegate void delegateFileAdded(string filePath);
-        internal event Action<string> AfterFileAdded;
+        //internal event Action<string> AfterFileAdded;
         internal string Filter 
         { 
             get => config.FilterString;
@@ -71,6 +72,7 @@ namespace RsLib.WatchFolder
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
                 watcher.EnableRaisingEvents = false;
                 watcher.Changed += Watcher_Changed;
+                DetectFile.Clear();
                 isInitial = true;
             }
             return isInitial;
@@ -80,12 +82,13 @@ namespace RsLib.WatchFolder
             watcher.EnableRaisingEvents = false;
             detectFilePath = e.FullPath;
             Log.Add($"File Detected. {detectFilePath}", MsgLevel.Info);
-            bool isTimeout = FT_Functions.IsTimeOut(config.TimeOutMilliSec, isFileDone);
-            if (!isTimeout) AfterFileAdded(detectFilePath);
-            else
-            {
-                Log.Add($"File unlock time out. > {config.TimeOutMilliSec} ms", MsgLevel.Warning);
-            }
+            DetectFile.Enqueue(detectFilePath);
+            //bool isTimeout = FT_Functions.IsTimeOut(config.TimeOutMilliSec, isFileDone);
+            //if (!isTimeout) AfterFileAdded(detectFilePath);
+            //else
+            //{
+            //    Log.Add($"File unlock time out. > {config.TimeOutMilliSec} ms", MsgLevel.Warning);
+            //}
             watcher.EnableRaisingEvents = true;
         }
         bool isFileDone()
@@ -124,7 +127,7 @@ namespace RsLib.WatchFolder
     {
         public string FilterString = @"*_IMG_HEIGHT.bmp";
         public string Folder = @"C:\FTP\lj-x3d\image\MSInspect";
-        public int TimeOutMilliSec = 5000; 
+        public int TimeOutMilliSec = 5000;
         bool isInit = false;
         [YamlIgnore]
         internal bool IsInit { get => isInit; }
