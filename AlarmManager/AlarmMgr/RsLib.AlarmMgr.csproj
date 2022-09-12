@@ -76,6 +76,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet">
+      <HintPath>..\..\..\..\..\RLib\Lib\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlarmBriefInfoControl.cs">
@@ -138,6 +141,10 @@
     <ProjectReference Include="..\..\LogManager\LogMgr\RsLib.LogMgr.csproj">
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RsLib.BaseType\RsLib.BaseType.csproj">
+      <Project>{a83549cb-762b-457e-82aa-cfdb913d3cc6}</Project>
+      <Name>RsLib.BaseType</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
