@@ -74,13 +74,23 @@ namespace RsLib.AlarmMgr
         public static void Add(object objCode, string note, Exception ex = null)
         {
             int code = (int)objCode;
-            if (contain(code) == false)
+
+            AlarmInfo info = alarmTable.GetInfo(code);
+            AlarmItem error = new AlarmItem(code, info.Name, note, info.Reason, info.Remedy, ex);
+            if(error.Level == MsgLevel.Alarm)
             {
-                AlarmInfo info = alarmTable.GetInfo(code);
-                AlarmItem error = new AlarmItem(code, info.Name, note, info.Reason, info.Remedy, ex);
+                if (contain(code) == false)
+                {
+                    _Q.Enqueue(error);
+                    AlarmQueueUpdated?.Invoke(_Q);
+                }
+            }
+            else
+            {
                 _Q.Enqueue(error);
                 AlarmQueueUpdated?.Invoke(_Q);
             }
+
         }
         static bool contain(int code)
         {
