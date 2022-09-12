@@ -77,7 +77,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="YamlDotNet">
-      <HintPath>..\..\..\..\..\RLib\Lib\YamlDotNet.dll</HintPath>
+      <HintPath>D:\RLib\Lib\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

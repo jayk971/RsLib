@@ -68,6 +68,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RsLib.AlarmMgr">
+      <HintPath>..\..\..\..\..\RLib\bin\Debug\RsLib.AlarmMgr.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -109,12 +112,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AlarmMgr\AlarmMgr.csproj">
-      <Project>{dc32da82-892a-4476-ac4f-c08a2be023c2}</Project>
-      <Name>AlarmMgr</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
