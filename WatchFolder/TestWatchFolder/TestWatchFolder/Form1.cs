@@ -37,7 +37,7 @@ namespace TestWatchFolder
 
         private void FTPWatcher_AfterFileAdded(string filePath)
         {
-            Log.Add(filePath, MsgLevel.Warning);
+            Log.Add(filePath, MsgLevel.Warn);
         }
     }
 }

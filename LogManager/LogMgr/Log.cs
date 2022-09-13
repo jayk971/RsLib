@@ -13,7 +13,7 @@ namespace RsLib.LogMgr
     {
         Trace,
         Info,
-        Warning,
+        Warn,
         Alarm,
     }
     public static class Log
@@ -67,7 +67,7 @@ namespace RsLib.LogMgr
 
                         break;
 
-                    case MsgLevel.Warning:
+                    case MsgLevel.Warn:
 
                         m_Log.Warn(tempMsg.Text);
                         break;
@@ -129,7 +129,7 @@ namespace RsLib.LogMgr
 
         public override string ToString()
         {
-            return $"{Time:HH:mm:ss.fff} {Level}\t\t{Text}";
+            return $"{Time:HH:mm:ss.fff}\t{Level}\t{Text}";
         }
     }
 }

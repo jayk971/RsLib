@@ -58,7 +58,7 @@ namespace RsLib.ConvertKeyBMP
                 Log.Add($"Loading Height Image : {file_path}", MsgLevel.Trace);
                 if (!checkFileStatus(file_path))
                 {
-                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warning);
+                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warn);
                     return;
                 }
                 Bitmap bmp = new Bitmap(file_path);
@@ -114,7 +114,7 @@ namespace RsLib.ConvertKeyBMP
                 Log.Add($"Loading Height Int Image : {file_path}", MsgLevel.Trace);
                 if (!checkFileStatus(file_path))
                 {
-                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warning);
+                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warn);
                     return;
                 }
                 Bitmap bmp = new Bitmap(file_path);
@@ -439,7 +439,7 @@ namespace RsLib.ConvertKeyBMP
 
             if (!File.Exists(file_path))
             {
-                Log.Add($"KeyBMP Module Config {file_path} Not Found.", MsgLevel.Warning);
+                Log.Add($"KeyBMP Module Config {file_path} Not Found.", MsgLevel.Warn);
                 SaveYaml();
             }
             string ReadData = "";

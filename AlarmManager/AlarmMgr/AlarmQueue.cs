@@ -104,7 +104,7 @@ namespace RsLib.AlarmMgr
 
         string name = "";
         public string Name { get => name; }
-        MsgLevel level = MsgLevel.Warning;
+        MsgLevel level = MsgLevel.Warn;
         public MsgLevel Level { get => level; }
         string description = "";
         public string Description { get => description; }
@@ -123,7 +123,7 @@ namespace RsLib.AlarmMgr
             remedy = _remedy;
 
             if (((int)code % 1000) < 500) level = MsgLevel.Alarm;
-            else level = MsgLevel.Warning;
+            else level = MsgLevel.Warn;
             if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
             else Log.Add($"Error Code : {code} -{name}, Note : {note}", level, ex);
 
@@ -133,7 +133,7 @@ namespace RsLib.AlarmMgr
         //    time = DateTime.Now;
         //    code = alarmCode;
         //    if (((int)code % 1000) < 500) level = MsgLevel.Alarm;
-        //    else level = MsgLevel.Warning;
+        //    else level = MsgLevel.Warn;
         //    GetErrorData();
         //    note = msg;
         //    if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
@@ -149,7 +149,7 @@ namespace RsLib.AlarmMgr
             remedy = _remedy;
 
             if (((int)code % 1000) < 500) level = MsgLevel.Alarm;
-            else level = MsgLevel.Warning;
+            else level = MsgLevel.Warn;
             note = _note;
             if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
             else Log.Add($"Error Code : {code} - {name}, Note : {note}", level, ex);

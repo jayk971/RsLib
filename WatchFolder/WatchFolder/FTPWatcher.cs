@@ -60,7 +60,7 @@ namespace RsLib.WatchFolder
             if (!Directory.Exists(config.Folder))
             {
                 isInitial = false;
-                Log.Add($"Folder {config.Folder} Not Exist.", MsgLevel.Warning);
+                Log.Add($"Folder {config.Folder} Not Exist.", MsgLevel.Warn);
             }
             else
             {
@@ -103,7 +103,7 @@ namespace RsLib.WatchFolder
                 }
                 else
                 {
-                    Log.Add("Log service was not initialized.", MsgLevel.Warning);
+                    Log.Add("Log service was not initialized.", MsgLevel.Warn);
                     return false;
                 }
             }

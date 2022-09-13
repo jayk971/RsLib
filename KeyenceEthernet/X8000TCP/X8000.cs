@@ -138,7 +138,7 @@ namespace RsLib.X8000TCP
             if (!IsConnected) return false;
             if (settingNum < 0)
             {
-                Log.Add($"X8000 recipe number {settingNum} < 0", MsgLevel.Warning);
+                Log.Add($"X8000 recipe number {settingNum} < 0", MsgLevel.Warn);
                 return false;
             }
 
@@ -257,19 +257,19 @@ namespace RsLib.X8000TCP
 
                     case "03":
                         //命令動作禁止 (接收的命令不能動作)
-                        Log.Add($"x8k {command} reject!", MsgLevel.Warning);
+                        Log.Add($"x8k {command} reject!", MsgLevel.Warn);
 
                         break;
 
                     case "22":
                         //參數錯誤 (數據的值, 數量在範圍外)
-                        Log.Add($"x8k {command} wrong parameter !", MsgLevel.Warning);
+                        Log.Add($"x8k {command} wrong parameter !", MsgLevel.Warn);
 
                         break;
 
                     case "91":
                         //超時錯誤
-                        Log.Add($"x8k {command} time out!", MsgLevel.Warning);
+                        Log.Add($"x8k {command} time out!", MsgLevel.Warn);
 
                         break;
 
@@ -304,7 +304,7 @@ namespace RsLib.X8000TCP
                 {
                     isConnected = false;
                     status = "Connect Exception";
-                    Log.Add("Cannot connect X8000.", MsgLevel.Warning,ex);
+                    Log.Add("Cannot connect X8000.", MsgLevel.Warn,ex);
                 }
             }
             else
@@ -371,7 +371,7 @@ namespace RsLib.X8000TCP
 
             if (!File.Exists(file_path))
             {
-                Log.Add($"X8000 TCP  Module Config {file_path} Not Found.", MsgLevel.Warning);
+                Log.Add($"X8000 TCP  Module Config {file_path} Not Found.", MsgLevel.Warn);
                 SaveYaml();
             }
             string ReadData = "";

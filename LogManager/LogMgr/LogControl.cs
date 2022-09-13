@@ -162,7 +162,7 @@ namespace RsLib.LogMgr
                 case MsgLevel.Info:
                     rtbx_Log.SelectionBackColor = Color.Silver;
                     break;
-                case MsgLevel.Warning:
+                case MsgLevel.Warn:
                     rtbx_Log.SelectionBackColor = Color.Gold;
                     break;
                 case MsgLevel.Alarm:

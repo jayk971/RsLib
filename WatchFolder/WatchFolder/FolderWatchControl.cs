@@ -129,13 +129,14 @@ namespace RsLib.WatchFolder
                     int count = watcher.DetectFile.Count;
                     if (count > 0)
                     {
-                        string filePath = watcher.DetectFile.Dequeue();
-                        if (watcher.DetectFile.Contains(filePath)) continue ;
+                        string filePath = watcher.DetectFile.Peek();
+                        //if (watcher.DetectFile.Contains(filePath)) continue ;
                         Log.Add($"File was detected. Queue remain {watcher.DetectFile.Count}. {filePath}", MsgLevel.Info);
                         bool isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
                             () => FT_Functions.IsFileLocked(filePath),
                             false);
-                        if (isTimeout) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warning);
+                        if (isTimeout) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warn);
+                        watcher.DetectFile.Dequeue();
                         FileUpdated?.Invoke(filePath);
                     }
                 }
