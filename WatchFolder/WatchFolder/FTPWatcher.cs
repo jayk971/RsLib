@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using RsLib.BaseType;
+using RsLib.Common;
+using RsLib.LogMgr;
+using System;
 using System.IO;
+using System.Text;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using System.Threading;
-using RsLib.LogMgr;
-using RsLib.Common;
-using RsLib.BaseType;
 namespace RsLib.WatchFolder
 {
     internal class Watcher
@@ -19,6 +16,7 @@ namespace RsLib.WatchFolder
         internal LockQueue<string> DetectFile = new LockQueue<string>();
         //public delegate void delegateFileAdded(string filePath);
         //internal event Action<string> AfterFileAdded;
+        object _lock = new object();
         internal string Filter 
         { 
             get => config.FilterString;
@@ -56,7 +54,6 @@ namespace RsLib.WatchFolder
             }
         }
         bool isInitial = false;
-        string detectFilePath = "";
         internal bool Init()
         {
             config.LoadYaml();
@@ -70,6 +67,7 @@ namespace RsLib.WatchFolder
                 watcher.Path = config.Folder;
                 watcher.Filter = $"{config.FilterString}";
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
+                
                 watcher.EnableRaisingEvents = false;
                 watcher.Changed += Watcher_Changed;
                 DetectFile.Clear();
@@ -79,23 +77,16 @@ namespace RsLib.WatchFolder
         }
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            watcher.EnableRaisingEvents = false;
-            detectFilePath = e.FullPath;
-            Log.Add($"File Detected. {detectFilePath}", MsgLevel.Info);
-            DetectFile.Enqueue(detectFilePath);
-            //bool isTimeout = FT_Functions.IsTimeOut(config.TimeOutMilliSec, isFileDone);
-            //if (!isTimeout) AfterFileAdded(detectFilePath);
-            //else
-            //{
-            //    Log.Add($"File unlock time out. > {config.TimeOutMilliSec} ms", MsgLevel.Warning);
-            //}
-            watcher.EnableRaisingEvents = true;
+            lock (_lock)
+            {
+                watcher.EnableRaisingEvents = false;                
+                if (!DetectFile.Contains(e.FullPath))
+                {
+                    DetectFile.Enqueue(e.FullPath);
+                }
+                watcher.EnableRaisingEvents = true;
+            }
         }
-        bool isFileDone()
-        {
-            return !FT_Functions.IsFileLocked(detectFilePath);
-        }
-
         internal bool Start()
         {
             if (isInitial)

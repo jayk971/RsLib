@@ -29,6 +29,7 @@ namespace RsLib.WatchFolder
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FolderWatchControl));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,6 +47,7 @@ namespace RsLib.WatchFolder
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tbx_TimeOut = new System.Windows.Forms.TextBox();
             this.btn_ApplyTimeOut = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -169,6 +171,12 @@ namespace RsLib.WatchFolder
             this.btn_ApplyTimeOut.UseVisualStyleBackColor = true;
             this.btn_ApplyTimeOut.Click += new System.EventHandler(this.btn_ApplyTimeOut_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 2000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // FolderWatchControl
             // 
             resources.ApplyResources(this, "$this");
@@ -203,5 +211,6 @@ namespace RsLib.WatchFolder
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbx_TimeOut;
         private System.Windows.Forms.Button btn_ApplyTimeOut;
+        private System.Windows.Forms.Timer timer1;
     }
 }

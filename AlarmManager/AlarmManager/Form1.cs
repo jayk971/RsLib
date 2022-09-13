@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using RsLib.AlarmMgr;
 using System.Threading;
+using RsLib.Common;
 namespace AlarmManager
 {
     public partial class Form1 : Form
@@ -26,30 +27,35 @@ namespace AlarmManager
             tableLayoutPanel1.Controls.Add(ac, 0, 0);
             abc.Dock = DockStyle.Fill;
             tableLayoutPanel1.Controls.Add(abc, 0, 1);
+            AlarmHistory.Initial(LangCode.zh_TW);
+            //Array ttt = Enum.GetValues(typeof(ErrorCode));
+            //string[] tstt = Enum.GetNames(typeof(ErrorCode));
+            //List<int> sss = new List<int>();
+            //for(int i = 0; i < ttt.Length;i++)
+            //{
+            //    object s =  ttt.GetValue(i);
+            //    Type f =  s.GetType();
+            //    sss.Add((int)s);
+            //}
+            ////List<int> sss = ttt.ToList();
 
-            Array ttt = Enum.GetValues(typeof(ErrorCode));
-            string[] tstt = Enum.GetNames(typeof(ErrorCode));
-            List<int> sss = new List<int>();
-            for(int i = 0; i < ttt.Length;i++)
-            {
-                object s =  ttt.GetValue(i);
-                Type f =  s.GetType();
-                sss.Add((int)s);
-            }
-            //List<int> sss = ttt.ToList();
-
-            AlarmHistory.CreateNewTableFile(sss);
+            //AlarmHistory.CreateNewTableFile(sss);
         }
 
         bool iii = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            bool tt = false;
-            tt = SpinWait.SpinUntil(() => true, 10000);
+            AlarmHistory.Add(ErrorCode.CalculationDelay);
+            AlarmHistory.Add(ErrorCode.FTPDelay);
+            AlarmHistory.Add(ErrorCode.HDStorageLow);
+            AlarmHistory.Add(ErrorCode.ModelIdentifyFileTimeOut);
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            AlarmHistory.Add(ErrorCode.MaterialDetectedButResultCountZero);
+            AlarmHistory.Add(ErrorCode.LocateMarkException);
 
         }
     }

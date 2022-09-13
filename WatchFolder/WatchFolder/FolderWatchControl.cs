@@ -91,12 +91,10 @@ namespace RsLib.WatchFolder
 
         public void StartMonitor()
         {
-            Log.Add($"Start Monitor Folder : {watcher.Folder}", MsgLevel.Trace);
-            Log.Add($"Start Monitor Filter : {watcher.Filter}", MsgLevel.Trace);
+            Log.Add($"Start Monitor : {watcher.Folder} - {watcher.Filter}", MsgLevel.Trace);
 
             if (watcher.Start())
             {
-                progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
                 if (!isTdRunning)
                 {
                     EnableTd = true;
@@ -132,6 +130,8 @@ namespace RsLib.WatchFolder
                     if (count > 0)
                     {
                         string filePath = watcher.DetectFile.Dequeue();
+                        if (watcher.DetectFile.Contains(filePath)) continue ;
+                        Log.Add($"File was detected. Queue remain {watcher.DetectFile.Count}. {filePath}", MsgLevel.Info);
                         bool isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
                             () => FT_Functions.IsFileLocked(filePath),
                             false);
@@ -145,7 +145,7 @@ namespace RsLib.WatchFolder
                 }
 
                 if (!Enabled) break;
-                SpinWait.SpinUntil(() => false, 10);
+                SpinWait.SpinUntil(() => false, 500);
                 }
             
             isTdRunning = false;
@@ -155,8 +155,6 @@ namespace RsLib.WatchFolder
         {
             Log.Add($"Stop Monitor Folder : {watcher.Folder}", MsgLevel.Trace);
 
-            progressBar_RunStatus.Style = ProgressBarStyle.Blocks;
-            progressBar_RunStatus.Value = 0;
             watcher.Stop();
             if (isTdRunning) EnableTd = false;
         }
@@ -175,6 +173,19 @@ namespace RsLib.WatchFolder
         {
             watcher.TimeOutMs = int.Parse(tbx_TimeOut.Text);
 
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(isTdRunning)
+            {
+                progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
+            }
+            else
+            {
+                progressBar_RunStatus.Style = ProgressBarStyle.Blocks;
+                progressBar_RunStatus.Value = 0;
+            }
         }
     }
 }

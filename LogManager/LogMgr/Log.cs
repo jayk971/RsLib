@@ -129,7 +129,7 @@ namespace RsLib.LogMgr
 
         public override string ToString()
         {
-            return $"{Time:HH:mm:ss}\t{Level}\t{Text}";
+            return $"{Time:HH:mm:ss.fff} {Level}\t\t{Text}";
         }
     }
 }

@@ -7,7 +7,6 @@ using RsLib.LogMgr;
 using RsLib.Common;
 using RsLib.BaseType;
 using System.IO;
-using YamlDotNet.Serialization;
 namespace RsLib.AlarmMgr
 {
     public static class AlarmHistory
@@ -16,19 +15,13 @@ namespace RsLib.AlarmMgr
         static LockQueue<AlarmItem> _Q = new LockQueue<AlarmItem>();
         static bool isInit = false;
         public static bool IsInit => isInit;
-        static AlarmTable alarmTable = new AlarmTable();
+        public static AlarmTable alarmTable = new AlarmTable();
 
-        public static void CreateNewTableFile(List<int> errorCodes)
+        public static void Initial(LangCode lang)
         {
             isInit = false;
-            alarmTable.CreateNewTable(errorCodes);
-            isInit = true;
-        }
-        public static void Initial()
-        {
-            isInit = false;
-            alarmTable.Load();
-            isInit = true;
+            bool isLoadOK = alarmTable.Load(lang);
+            isInit = isLoadOK;
         }
         public static void ResetAlarm()
         {
@@ -185,7 +178,7 @@ namespace RsLib.AlarmMgr
     {
         string mainFolder { get => System.Environment.CurrentDirectory; }
         string configFolder { get => $"{mainFolder}\\Config"; }
-        string alarmMsgIniFile { get => $"{configFolder}\\AlarmMsg.yaml"; }
+        string alarmMsgFile { get => $"{configFolder}\\AlarmMsg.csv"; }
 
         public Dictionary<int, AlarmInfo> Table = new Dictionary<int, AlarmInfo>();
 
@@ -200,53 +193,48 @@ namespace RsLib.AlarmMgr
                 return new AlarmInfo(code);
             }
         }
-
-        public void CreateNewTable(List<int> codes)
-        {
-            Table.Clear();
-            for(int i = 0; i < codes.Count; i++)
-            {
-                Table.Add(codes[i], new AlarmInfo(codes[i]));
-            }
-            saveYaml();
-        }
         public void Clear()
         {
             Table.Clear();
         }
-        public void Load()
+        public bool Load(LangCode lang)
         {
             Table.Clear();
-            loadYaml();
-        }
-        void loadYaml()
-        {
-            if (!File.Exists(alarmMsgIniFile)) saveYaml();
-
-            string ReadData = "";
-            using (StreamReader sr = new StreamReader(alarmMsgIniFile, Encoding.Default))
+            int langInt = (int)lang;
+            int reasonI = (langInt + 1) * 2;
+            int remedyI = reasonI + 1;
+            if (!File.Exists(alarmMsgFile)) return false;
+            using (StreamReader sr  = new StreamReader(alarmMsgFile,Encoding.Default))
             {
-                ReadData = sr.ReadToEnd();
+                while(!sr.EndOfStream)
+                {
+                    string[] splitData = sr.ReadLine().Split(',');
+                    if (splitData.Length <= 0) continue;
+                    string code = splitData[0];
+                    int codeI = -999;
+                    if (int.TryParse(code, out codeI))
+                    {
+                        if (splitData.Length > remedyI)
+                        {
+                            string name = splitData[1];
+                            string reason = splitData[reasonI];
+                            string remedy = splitData[remedyI];
+                            Table.Add(codeI, new AlarmInfo(codeI, name, reason, remedy));
+                        }
+                        else
+                        {
+                            Table.Add(codeI, new AlarmInfo(codeI));
+                        }
+                    }
+                    else
+                    {
+                        //not integer do nothing
+                    }
+                }
             }
-            var deserializer = new DeserializerBuilder()
-                .Build();
-
-            //yml contains a string containing your YAML
-            var p = deserializer.Deserialize<AlarmTable>(ReadData);
-            this.Table = p.Table.DeepClone();
+            if (Table.Count > 0) return true;
+            else return false;
         }
-        void saveYaml()
-        {
-            if (!Directory.Exists(configFolder)) Directory.CreateDirectory(configFolder);
-            using (StreamWriter sw = new StreamWriter(alarmMsgIniFile, false, Encoding.Default))
-            {
-                var serializer = new SerializerBuilder().Build();
-                var yaml = serializer.Serialize(this);
-                sw.WriteLine(yaml);
-                sw.Flush();
-            }
-        }
-
     }
     [Serializable]
     public class AlarmInfo
@@ -262,6 +250,13 @@ namespace RsLib.AlarmMgr
             Name = "add new name";
             Reason = "add new reason";
             Remedy = "add new remedy";
+        }
+        public AlarmInfo(int code,string name,string reason,string remedy)
+        {
+            Code = code;
+            Name = name;
+            Reason = reason;
+            Remedy = remedy;
         }
     }
 }

@@ -68,6 +68,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RsLib.LogMgr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.LogMgr.dll</HintPath>
+    </Reference>
+    <Reference Include="RsLib.WatchFolder">
+      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.WatchFolder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -109,12 +116,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\WatchFolder\WatchFolder.csproj">
-      <Project>{8309a26d-6106-4942-a38f-6de7991ad6fc}</Project>
-      <Name>WatchFolder</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
