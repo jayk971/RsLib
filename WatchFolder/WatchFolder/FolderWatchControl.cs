@@ -107,7 +107,6 @@ namespace RsLib.WatchFolder
                     {
                         if (td.IsAlive)
                         {
-
                         }
                         else
                         {
@@ -140,12 +139,15 @@ namespace RsLib.WatchFolder
                         FileUpdated?.Invoke(filePath);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.Add("Watch folder file update exception.", MsgLevel.Alarm, ex);
                 }
 
-                if (!Enabled) break;
+                if (!EnableTd)
+                {
+                    break;
+                }
                 SpinWait.SpinUntil(() => false, 500);
                 }
             

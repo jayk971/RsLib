@@ -1,0 +1,61 @@
+-1,Exception,其他例外,確認 log 資訊,其他例外,確認 log 資訊
+0,NoError,沒有錯誤,沒有錯誤,沒有錯誤,沒有錯誤
+1000,TestAlarm,測試錯誤碼,回傳 HQ 進行判斷,測試錯誤碼,回傳 HQ 進行判斷
+1001,UndefinedException,未定義例外狀況,將 日期.log 以及 日期_fatal.log 檔案以及記錄操作順序回傳 HQ 進行判斷,未定義例外狀況,將 日期.log 以及 日期_fatal.log 檔案以及記錄操作順序回傳 HQ 進行判斷
+1002,SystemInitialFail,系統初始化失敗,確認 log 是否有其他元件錯誤代碼,系統初始化失敗,確認 log 是否有其他元件錯誤代碼
+1003,SystemAutoRunFail,系統自動運轉失敗,確認是否有警告,系統自動運轉失敗,確認是否有警告
+1004,EMOActive,緊急停止觸發,確認緊急停止狀況,緊急停止觸發,確認緊急停止狀況
+1005,SafetyChainBreak,安全連鎖失效,確認所有安全裝置是否開啟或是毀損,安全連鎖失效,確認所有安全裝置是否開啟或是毀損
+1006,FacilitiPressureLow,廠務端壓力過低,確認廠務端氣壓源,廠務端壓力過低,確認廠務端氣壓源
+1007,AvsDLInitFail,Deep learning 初始化失敗,確認 log 是否有其他元件錯誤代碼,Deep learning 初始化失敗,確認 log 是否有其他元件錯誤代碼
+1008,PowerOFF,機台未上電,確認上電狀況或檢查 IO 狀況,機台未上電,確認上電狀況或檢查 IO 狀況
+1500,PCPerformanceLow,,,,
+1501,HDStorageLow,電腦硬碟容量過低,清理不必要的資料,電腦硬碟容量過低,清理不必要的資料
+2002,AvlSetModelException,AI 模型設定例外,檢查 adaptive vision dongle 是否正常,AI 模型設定例外,檢查 adaptive vision dongle 是否正常
+2003,SetScanCloudException,BMP轉換點雲錯誤例外,檢查圖片是否正常. 檢查 keyence.cfg 設定參數是否正確,BMP轉換點雲錯誤例外,檢查圖片是否正常. 檢查 keyence.cfg 設定參數是否正確
+2004,AvlLoadImageException,AVL圖片讀取錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常,AVL圖片讀取錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常
+2005,AvlFindMarkException,AI找尋記號錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料,AI找尋記號錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料
+2006,CalculateMark2DDisException,計算記號長度錯誤例外,檢查圖片是否正常. 回傳 log 資料,計算記號長度錯誤例外,檢查圖片是否正常. 回傳 log 資料
+2007,Show2DResultFail,記號顯示錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料,記號顯示錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料
+2008,FindMarkException,找尋記號錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料,找尋記號錯誤例外,檢查圖片是否正常. 檢查 adaptive vision dongle 是否正常. 回傳 log 資料
+2009,ResultObjectCountNotZero,系統帳數量不為 0,清空機台內物件. 並清除系統帳,系統帳數量不為 0,清空機台內物件. 並清除系統帳
+2010,MaterialDetectedButResultCountZero,偵測到材料. 但系統帳數量為 0,清空機台內物件,偵測到材料. 但系統帳數量為 0,清空機台內物件
+2014,YolactError,Yolact 模型辨識錯誤,確認其他資訊欄位,Yolact 模型辨識錯誤,確認其他資訊欄位
+2015,FileDetectButInputCountZero,偵測到檔案. 但計數為 ,確認 IO 狀態. 確認入料感測器狀態. 確認執行序狀態,偵測到檔案. 但計數為 ,確認 IO 狀態. 確認入料感測器狀態. 確認執行序狀態
+2016,YolactExited,Yolact 關閉,確認 Yolact Log. 並重新啟動 Yolact,Yolact 關閉,確認 Yolact Log. 並重新啟動 Yolact
+2501,CalculationDelay,出料感測器檢出. 計算尚未完成,檢查 FTP log. 分類 TXT 是否產生,出料感測器檢出. 計算尚未完成,檢查 FTP log. 分類 TXT 是否產生
+2502,ModelIdentifyFileTimeOut,模型分類 txt 檔案產生逾時,檢查 FTP 圖片是否產生. 檢查模型是否有訓練,模型分類 txt 檔案產生逾時,檢查 FTP 圖片是否產生. 檢查模型是否有訓練
+2504,YolactWarn,Yolact 模型辨識警告,確認其他資訊欄位,Yolact 模型辨識警告,確認其他資訊欄位
+3001,X8kError,X8000 控制器錯誤,使用 keyence 原廠軟體連線. 確認 X8000 控制器錯誤狀況,X8000 控制器錯誤,使用 keyence 原廠軟體連線. 確認 X8000 控制器錯誤狀況
+3002,X8kNotRun,X8000 非運轉模式,確認網路狀況. 重新自動運轉或使用 keyence 原廠軟體切換運轉模式,X8000 非運轉模式,確認網路狀況. 重新自動運轉或使用 keyence 原廠軟體切換運轉模式
+3003,X8kNotReady,X8000 忙碌中,重新自動運轉. 確認 IO 狀態或使用 keyence 原廠軟體停止掃描,X8000 忙碌中,重新自動運轉. 確認 IO 狀態或使用 keyence 原廠軟體停止掃描
+4001,PCI7433InitialFail,DI 卡 PCI 7433 初始化失敗,確認 adlink 錯誤碼,DI 卡 PCI 7433 初始化失敗,確認 adlink 錯誤碼
+4002,PCI7234InitialFail,DO 卡 PCI 7234P 初始化失敗,確認 adlink 錯誤碼,DO 卡 PCI 7234P 初始化失敗,確認 adlink 錯誤碼
+4003,ReadDiException,DI 讀取錯誤例外,回傳 log 資料,DI 讀取錯誤例外,回傳 log 資料
+4004,WriteDoException,DO 寫入錯誤例外,回傳 log 資料,DO 寫入錯誤例外,回傳 log 資料
+4005,ReadDiFail,Di 讀取失敗,確認 adlink 錯誤碼,Di 讀取失敗,確認 adlink 錯誤碼
+4006,WriteDoFail,Do 寫入失敗,確認 adlink 錯誤碼,Do 寫入失敗,確認 adlink 錯誤碼
+4007,BlockDownTimeOut,出料擋板下降逾時,確認 IO . 磁簧開關. 氣壓.,出料擋板下降逾時,確認 IO . 磁簧開關. 氣壓.
+4008,BlockUpTimeOut,出料擋板上升逾時,確認 IO . 磁簧開關. 氣壓.,出料擋板上升逾時,確認 IO . 磁簧開關. 氣壓.
+4009,RejecterBackwardTimeOut,排料氣缸後位逾時,確認 IO . 磁簧開關. 氣壓.,排料氣缸後位逾時,確認 IO . 磁簧開關. 氣壓.
+4010,RejecterForwardTimeOut,排料氣缸前位逾時,確認 IO . 磁簧開關. 氣壓.,排料氣缸前位逾時,確認 IO . 磁簧開關. 氣壓.
+4011,NGClassifyBackwardTimeOut,分類 NG 後位逾時,確認 IO . 磁簧開關. 氣壓.,分類 NG 後位逾時,確認 IO . 磁簧開關. 氣壓.
+4012,NGClassifyForwardTimeOut,分類 NG 前位逾時,確認 IO . 磁簧開關. 氣壓.,分類 NG 前位逾時,確認 IO . 磁簧開關. 氣壓.
+4013,OutMotorAlarm,出料馬達異常,確認馬達. 輸送帶狀況.,出料馬達異常,確認馬達. 輸送帶狀況.
+4014,InMotorAlarm,入料馬達異常,確認馬達. 輸送帶狀況.,入料馬達異常,確認馬達. 輸送帶狀況.
+4015,OutMotorAlarmResetFail,出料馬達異常回復失敗,確認 IO 狀況. 馬達狀況.,出料馬達異常回復失敗,確認 IO 狀況. 馬達狀況.
+4016,InMotorAlarmResetFail,入料馬達異常回復失敗,確認 IO 狀況. 馬達狀況.,入料馬達異常回復失敗,確認 IO 狀況. 馬達狀況.
+6001,SystemConfigFileLost,系統設定檔遺失,確認系統設定檔位置. 並確認系統設定參數.,系統設定檔遺失,確認系統設定檔位置. 並確認系統設定參數.
+6002,RecipeFileNotExist,參數檔案不存在,確認參數檔案位置,參數檔案不存在,確認參數檔案位置
+6003,AvlModelFolderNotExist,AI 模型資料夾不存在,確認模型資料夾位置. 並重新設定.,AI 模型資料夾不存在,確認模型資料夾位置. 並重新設定.
+6004,ResultLogSaveException,生產結果儲存錯誤例外,確認生產 log 是否被開啟.,生產結果儲存錯誤例外,確認生產 log 是否被開啟.
+6005,Draw2DMarkException,繪圖錯誤例外,回傳 log 資料. 確認 adaptive vision dongle 狀態.,繪圖錯誤例外,回傳 log 資料. 確認 adaptive vision dongle 狀態.
+6006,SetMarkRegionException,設定檢測範圍錯誤例外,回傳 log 資料. 確認 adaptive vision dongle 狀態.,設定檢測範圍錯誤例外,回傳 log 資料. 確認 adaptive vision dongle 狀態.
+6007,LocateMarkException,2D 定位錯誤例外,回傳 log 資料,2D 定位錯誤例外,回傳 log 資料
+6008,ModelIdBatFileNotExist,模型 bat 檔不存在,確認檔案. 重新建立 bat 檔.,模型 bat 檔不存在,確認檔案. 重新建立 bat 檔.
+7001,FTPUploadTimeOut,FTP 上傳檔案逾時,確認 FTP log 資料. 網路狀況.,FTP 上傳檔案逾時,確認 FTP log 資料. 網路狀況.
+7501,FTPDelay,FTP 上傳檔案延遲,確認 FTP log 資料,FTP 上傳檔案延遲,確認 FTP log 資料
+8001,OutConveyorSensorOffTimeOut,出料感測器持續檢出,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.,出料感測器持續檢出,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.
+8002,InConveyorSensorOffTimeOut,入料感測器持續檢出,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.,入料感測器持續檢出,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.
+8003,MaterialDelayTimeOut,計算結果等待材料逾時,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.,計算結果等待材料逾時,確認材料是否卡住. 確認出料感測器是否異常. 確認 IO 是否異常.
+8501,ImageCannotDelete,無法刪除影像,確認 log 資料,無法刪除影像,確認 log 資料

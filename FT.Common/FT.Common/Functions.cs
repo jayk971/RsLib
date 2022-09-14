@@ -483,44 +483,99 @@ namespace RsLib.Common
             stopwatch.Reset();
             return timeOutResult;
         }
-        public static bool IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition,bool waitStatus)
+        /// <summary>
+        /// Return is time out
+        /// </summary>
+        /// <param name="elapsedMilliSecond"></param>
+        /// <param name="waitCondition"></param>
+        /// <param name="waitStatus"></param>
+        /// <returns>-2 : time out. -1 : intime</returns>
+        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition,bool waitStatus)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            bool timeOutResult = true;
+            int retCode = -2;
+            //bool timeOutResult = true;
             while (stopwatch.ElapsedMilliseconds <= elapsedMilliSecond)
             {
                 bool isOK = waitCondition();
                 if (isOK == waitStatus)
                 {
-                    timeOutResult = false;
+                    retCode = -1;
+                    //timeOutResult = false;
                     break;
                 }
                 SpinWait.SpinUntil(() => false, 10);
             }
             stopwatch.Reset();
-            return timeOutResult;
+            return retCode;
         }
-        public static bool IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus,Func<bool> breakCondition)
+        /// <summary>
+        /// Return is time out
+        /// </summary>
+        /// <param name="elapsedMilliSecond"></param>
+        /// <param name="waitCondition"></param>
+        /// <param name="waitStatus"></param>
+        /// <param name="breakCondition"></param>
+        /// <returns>-2 : time out. -1 : intime. 0 : due to break condition</returns>
+        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus,Func<bool> breakCondition)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            bool timeOutResult = true;
+            int retCode = -2;
+            //bool timeOutResult = true;
             while (stopwatch.ElapsedMilliseconds <= elapsedMilliSecond)
             {
                 bool isOK = waitCondition();
                 if (isOK == waitStatus)
                 {
-                    timeOutResult = false;
+                    retCode = -1;
+                    //timeOutResult = false;
                     break;
                 }
                 if (breakCondition())
                 {
-                    timeOutResult = true;
+                    retCode = 0;
+                    //timeOutResult = true;
                     break;
                 }
                 SpinWait.SpinUntil(() => false, 10);
             }
             stopwatch.Reset();
-            return timeOutResult;
+            return retCode;
+        }
+        /// <summary>
+        /// Return is time out
+        /// </summary>
+        /// <param name="elapsedMilliSecond"></param>
+        /// <param name="waitCondition"></param>
+        /// <param name="waitStatus"></param>
+        /// <param name="breakCondition"></param>
+        /// <returns>-2 : time out. -1 : intime. >=0 : due to break condition</returns>
+        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus, List<Func<bool>> breakCondition)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int retCode = -2;
+            //bool timeOutResult = true;
+            while (stopwatch.ElapsedMilliseconds <= elapsedMilliSecond)
+            {
+                bool isOK = waitCondition();
+                if (isOK == waitStatus)
+                {
+                    retCode = -1;
+                    break;
+                }
+                for (int i = 0; i < breakCondition.Count; i++)
+                {
+                    if (breakCondition[i]())
+                    {
+                        retCode = i;
+                        break;
+                    }
+                }
+                if (retCode >= 0) break;
+                SpinWait.SpinUntil(() => false, 10);
+            }
+            stopwatch.Reset();
+            return retCode;
         }
 
         /// <summary>

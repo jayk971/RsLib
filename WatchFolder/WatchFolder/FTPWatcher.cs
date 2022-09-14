@@ -72,6 +72,7 @@ namespace RsLib.WatchFolder
                 watcher.Changed += Watcher_Changed;
                 DetectFile.Clear();
                 isInitial = true;
+                Log.Add($"Watch folder ready. {config.CfgFileName}", MsgLevel.Trace);
             }
             return isInitial;
         }
