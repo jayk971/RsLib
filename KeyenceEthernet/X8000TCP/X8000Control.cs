@@ -209,6 +209,13 @@ namespace RsLib.X8000TCP
             if (x8k == null) return;
             x8k.SwitchSettingNumber(num);
         }
+        public ushort GetSettingNum()
+        {
+            if (x8k == null) return 1000;
+
+            return (ushort)CurrentSettingNum;
+        }
+
         private void btn_WriteX8000SettingNum_Click(object sender, EventArgs e)
         {
             ChangeSettingNum(cmb_x8000Number.SelectedIndex);

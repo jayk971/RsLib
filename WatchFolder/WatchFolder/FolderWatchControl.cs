@@ -20,6 +20,8 @@ namespace RsLib.WatchFolder
         bool EnableTd = false;
         bool isTdRunning = false;
         Thread td;
+        public string WatchedFilter => watcher.Filter;
+        public string WatchedFolder => watcher.Folder;
         public FolderWatchControl(string cfgName)
         {
             InitializeComponent();
@@ -91,30 +93,37 @@ namespace RsLib.WatchFolder
 
         public void StartMonitor()
         {
-            Log.Add($"Start Monitor : {watcher.Folder} - {watcher.Filter}", MsgLevel.Trace);
-
-            if (watcher.Start())
+            if (watcher.IsStart)
             {
-                if (!isTdRunning)
+                Log.Add($"Already Monitor : {watcher.Folder} - {watcher.Filter}", MsgLevel.Trace);
+            }
+            else
+            {
+                Log.Add($"Start Monitor : {watcher.Folder} - {watcher.Filter}", MsgLevel.Trace);
+
+                if (watcher.Start())
                 {
-                    EnableTd = true;
-                    if (td == null)
+                    if (!isTdRunning)
                     {
-                        td = new Thread(new ThreadStart(run));
-                        td.IsBackground = true;
-                    }
-                    else
-                    {
-                        if (td.IsAlive)
-                        {
-                        }
-                        else
+                        EnableTd = true;
+                        if (td == null)
                         {
                             td = new Thread(new ThreadStart(run));
                             td.IsBackground = true;
                         }
+                        else
+                        {
+                            if (td.IsAlive)
+                            {
+                            }
+                            else
+                            {
+                                td = new Thread(new ThreadStart(run));
+                                td.IsBackground = true;
+                            }
+                        }
+                        td.Start();
                     }
-                    td.Start();
                 }
             }
         }
@@ -131,10 +140,10 @@ namespace RsLib.WatchFolder
                         string filePath = watcher.DetectFile.Peek();
                         //if (watcher.DetectFile.Contains(filePath)) continue ;
                         Log.Add($"File was detected. Queue remain {watcher.DetectFile.Count}. {filePath}", MsgLevel.Info);
-                        bool isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
+                        int isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
                             () => FT_Functions.IsFileLocked(filePath),
                             false);
-                        if (isTimeout) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warn);
+                        if (isTimeout <=-2) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warn);
                         watcher.DetectFile.Dequeue();
                         FileUpdated?.Invoke(filePath);
                     }
@@ -183,11 +192,14 @@ namespace RsLib.WatchFolder
             if(isTdRunning)
             {
                 progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
+                btn_StartMonitor.Enabled = false;
             }
             else
             {
                 progressBar_RunStatus.Style = ProgressBarStyle.Blocks;
                 progressBar_RunStatus.Value = 0;
+                btn_StartMonitor.Enabled = true;
+
             }
         }
     }

@@ -16,6 +16,7 @@ namespace RsLib.WatchFolder
         internal LockQueue<string> DetectFile = new LockQueue<string>();
         //public delegate void delegateFileAdded(string filePath);
         //internal event Action<string> AfterFileAdded;
+        public bool IsStart => watcher.EnableRaisingEvents;
         object _lock = new object();
         internal string Filter 
         { 

@@ -286,7 +286,7 @@ namespace RsLib.PointCloud
     {
         internal List<MatrixUnit> seq = new List<MatrixUnit>();
         public List<MatrixUnit> MatrixSequnce { get => seq; }
-        internal Matrix4x4 finalMatrix4 = Matrix4x4.Identity;
+        protected Matrix4x4 finalMatrix4 = Matrix4x4.Identity;
         public Matrix4x4 FinalMatrix4
         {
             get

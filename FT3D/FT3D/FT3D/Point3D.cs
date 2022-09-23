@@ -135,6 +135,10 @@ namespace RsLib.PointCloud
             Color = CopyData.Color;
 
         }
+        public string ToString(string spliter = ",")
+        {
+            return $"{X:F3}{spliter}{Y:F3}{spliter}{Z:F3}";
+        }
         public void SetXYZ(double x, double y, double z)
         {
             X = x;
@@ -366,7 +370,16 @@ namespace RsLib.PointCloud
             return new Point3D((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2, (p1.Z + p2.Z) / 2);
         }
 
-
+        public Point3D Multiply(List<CoordMatrix> matrics)
+        {
+            Matrix4x4 m = Matrix4x4.Identity;
+            for(int i = 0; i < matrics.Count; i++)
+            {
+                m = matrics[i].FinalMatrix4 * m;
+            }
+            Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)X, (float)Y, (float)Z, 1f));
+            return new Point3D(output.X, output.Y, output.Z);
+        }
         public Point3D Multiply(Matrix4x4 matrix)
         {
             Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)X, (float)Y, (float)Z, 1f));
