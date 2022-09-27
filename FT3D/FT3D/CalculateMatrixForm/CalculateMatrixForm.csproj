@@ -68,8 +68,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FT3D.CalculateMatrix">
-      <HintPath>..\Calculate3DOrig\bin\Debug\FT3D.CalculateMatrix.dll</HintPath>
+    <Reference Include="RsLib.PointCloud">
+      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.PointCloud.dll</HintPath>
+    </Reference>
+    <Reference Include="RsLib.PointCloud.CalculateMatrix">
+      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.PointCloud.CalculateMatrix.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -112,12 +115,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FT3D\FT3D.csproj">
-      <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
-      <Name>FT3D</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

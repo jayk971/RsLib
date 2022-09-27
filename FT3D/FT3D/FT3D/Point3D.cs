@@ -375,6 +375,7 @@ namespace RsLib.PointCloud
             Matrix4x4 m = Matrix4x4.Identity;
             for(int i = 0; i < matrics.Count; i++)
             {
+                matrics[i].CalculateFinalMatrix();
                 m = matrics[i].FinalMatrix4 * m;
             }
             Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)X, (float)Y, (float)Z, 1f));

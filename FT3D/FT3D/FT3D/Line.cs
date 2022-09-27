@@ -43,21 +43,31 @@ namespace RsLib.PointCloud
             Direction = dir;
             Length = length;
         }
-        public void Intersect2DLine(double L1x1, double L1y1, double L1x2, double L1y2, double L2x1, double L2y1, double L2x2, double L2y2)
+        public Line(Point3D startPoint, Point3D endPoint)
         {
-            Accord.Point l1p1 = new Accord.Point((float)L1x1, (float)L1y1);
-            Accord.Point l1p2 = new Accord.Point((float)L1x2, (float)L1y2);
-            Accord.Point l2p1 = new Accord.Point((float)L2x1, (float)L2y1);
-            Accord.Point l2p2 = new Accord.Point((float)L2x2, (float)L2y2);
+            this.X = startPoint.X;
+            this.Y = startPoint.Y;
+            this.Z = startPoint.Z;
+
+            Direction = new Vector3D( startPoint,endPoint);
+            Length = Direction.L;
+        }
+        public Point3D Intersect2DLine(Line line2D)
+        {
+            Accord.Point l1p1 = new Accord.Point((float)StartPoint.X, (float)StartPoint.Y);
+            Accord.Point l1p2 = new Accord.Point((float)EndPoint.X, (float)EndPoint.Y);
+            Accord.Point l2p1 = new Accord.Point((float)line2D.StartPoint.X, (float)line2D.StartPoint.Y);
+            Accord.Point l2p2 = new Accord.Point((float)line2D.EndPoint.X, (float)line2D.EndPoint.Y);
 
             Accord.Math.Geometry.Line line1 = Accord.Math.Geometry.Line.FromPoints(l1p1, l1p2);
             Accord.Math.Geometry.Line line2 = Accord.Math.Geometry.Line.FromPoints(l2p1, l2p2);
 
             Accord.Point? intersectP =  line1.GetIntersectionWith(line2);
-            if(intersectP != null)
+            if (intersectP.HasValue)
             {
-                
+                return new Point3D(intersectP.Value.X, intersectP.Value.Y, 0.0);
             }
+            else return null;
         }
 
     }

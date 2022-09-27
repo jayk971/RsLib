@@ -47,10 +47,14 @@ namespace RsLib.WatchFolder
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tbx_TimeOut = new System.Windows.Forms.TextBox();
             this.btn_ApplyTimeOut = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -67,6 +71,8 @@ namespace RsLib.WatchFolder
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.tbx_TimeOut, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.btn_ApplyTimeOut, 3, 3);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox3, 2, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -89,6 +95,7 @@ namespace RsLib.WatchFolder
             // 
             resources.ApplyResources(this.tbx_WatchFilter, "tbx_WatchFilter");
             this.tbx_WatchFilter.Name = "tbx_WatchFilter";
+            this.tbx_WatchFilter.TextChanged += new System.EventHandler(this.tbx_WatchFilter_TextChanged);
             // 
             // lbl_WatchedFolder
             // 
@@ -171,6 +178,20 @@ namespace RsLib.WatchFolder
             this.btn_ApplyTimeOut.UseVisualStyleBackColor = true;
             this.btn_ApplyTimeOut.Click += new System.EventHandler(this.btn_ApplyTimeOut_Click);
             // 
+            // pictureBox2
+            // 
+            resources.ApplyResources(this.pictureBox2, "pictureBox2");
+            this.pictureBox2.Image = global::RsLib.WatchFolder.Properties.Resources.icons8_warning_64;
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            resources.ApplyResources(this.pictureBox3, "pictureBox3");
+            this.pictureBox3.Image = global::RsLib.WatchFolder.Properties.Resources.icons8_warning_64;
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.TabStop = false;
+            // 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -189,6 +210,8 @@ namespace RsLib.WatchFolder
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -212,5 +235,7 @@ namespace RsLib.WatchFolder
         private System.Windows.Forms.TextBox tbx_TimeOut;
         private System.Windows.Forms.Button btn_ApplyTimeOut;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox3;
     }
 }

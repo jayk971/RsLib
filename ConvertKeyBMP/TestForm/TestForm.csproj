@@ -71,9 +71,18 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LogMgr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="RsLib.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\LogManager\LogMgr\bin\Release\LogMgr.dll</HintPath>
+      <HintPath>..\..\..\..\..\RLib\bin\Debug\RsLib.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="RsLib.ConvertKeyBMP">
+      <HintPath>..\..\..\..\..\RLib\bin\Debug\RsLib.ConvertKeyBMP.dll</HintPath>
+    </Reference>
+    <Reference Include="RsLib.LogMgr">
+      <HintPath>..\..\..\..\..\RLib\bin\Debug\RsLib.LogMgr.dll</HintPath>
+    </Reference>
+    <Reference Include="RsLib.WatchFolder">
+      <HintPath>..\..\..\..\..\RLib\bin\Debug\RsLib.WatchFolder.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,9 +94,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WatchFolder">
-      <HintPath>..\..\WatchFolder\WatchFolder\bin\Release\WatchFolder.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
@@ -120,12 +126,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConvertKeyBMP\ConvertKeyBMP.csproj">
-      <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
-      <Name>ConvertKeyBMP</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ph03nyx-Super-Mario-Goomba.ico" />

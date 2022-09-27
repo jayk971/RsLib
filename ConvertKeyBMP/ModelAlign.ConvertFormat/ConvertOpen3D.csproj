@@ -80,11 +80,5 @@
     <Compile Include="ConvertToOpen3DCloud.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConvertKeyBMP\ConvertKeyBMP.csproj">
-      <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
-      <Name>ConvertKeyBMP</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -53,6 +53,8 @@ namespace RsLib.WatchFolder
         private void btn_ApplyFilter_Click(object sender, EventArgs e)
         {
             watcher.Filter = tbx_WatchFilter.Text;
+            pictureBox2.Visible = false;
+
             if (WatchedFilterChanged != null) WatchedFilterChanged(watcher.Filter);
         }
 
@@ -174,6 +176,13 @@ namespace RsLib.WatchFolder
         private void tbx_TimeOut_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = FT_Functions.int_Positive_KeyPress(e.KeyChar);
+            int i = -1;
+            if (int.TryParse(tbx_TimeOut.Text, out i))
+            {
+                if (i != watcher.TimeOutMs) pictureBox3.Visible = true;
+                else pictureBox3.Visible = false;
+            }
+            else pictureBox3.Visible = true;
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -184,7 +193,7 @@ namespace RsLib.WatchFolder
         private void btn_ApplyTimeOut_Click(object sender, EventArgs e)
         {
             watcher.TimeOutMs = int.Parse(tbx_TimeOut.Text);
-
+            pictureBox3.Visible = false;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -201,6 +210,15 @@ namespace RsLib.WatchFolder
                 btn_StartMonitor.Enabled = true;
 
             }
+        }
+
+        private void tbx_WatchFilter_TextChanged(object sender, EventArgs e)
+        {
+            if(WatchedFilter != tbx_WatchFilter.Text)
+            {
+                pictureBox2.Visible = true;
+            }
+            else pictureBox2.Visible = false;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using FT3D;
+using RsLib.PointCloud;
 using Accord.Math;
 namespace TestForm
 {
@@ -18,6 +18,7 @@ namespace TestForm
         public Form1()
         {
             InitializeComponent();
+            p3c.Dock = DockStyle.Fill;
             panel1.Controls.Add(p3c);
         }
 
@@ -121,32 +122,24 @@ namespace TestForm
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Vector3D vx = new Vector3D(0.49, 0.59, -0.64);
-            Vector3D vy = new Vector3D(-0.77, 0.64, 0);
-            Vector3D vz = new Vector3D(0.41, 0.49, 0.77);
+            testMatrics();
 
-            Rotate euler = new Rotate(vx, vy, vz);
+        }
 
+        void testMatrics()
+        {
 
+            List<CoordMatrix> matrics = new List<CoordMatrix>();
+            Shift s1 = new Shift(-118.877, -237.762, 0);
+            Rotate r1 = new Rotate();
+            r1.AddRotateSeq(RefAxis.Z, 3.259);
+            r1.CalculateFinalMatrix();
+            Shift s2 = new Shift(113.328,236.398,0);
 
-            Matrix4x4 m1 = Matrix4x4.Identity;
-            m1.V00 = 3;
-            m1.V01 = 4;
-            m1.V02 = 5;
-            m1.V03 = 6;
-
-
-            Matrix4x4 m2 = Matrix4x4.Identity;
-            m2.V00 = 3;
-            m2.V10 = 4;
-            m2.V20 = 5;
-            m2.V30 = 6;
-
-
-            Matrix4x4 m3 = m1 * m2;
-            Matrix4x4 m4 = m2*m1;
-
-
+            matrics.Add(s1);
+            matrics.Add(r1);
+            matrics.Add(s2);
+            Point3D pp =  p3c.P.Multiply(matrics);
 
         }
     }

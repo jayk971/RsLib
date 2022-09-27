@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using ConvertKeyBMP;
+using RsLib.ConvertKeyBMP;
 using System.IO;
-using WatchFolder;
-using LogMgr;
+using RsLib.WatchFolder;
+using RsLib.LogMgr;
+using RsLib.Common;
 namespace TestForm
 {
     public partial class Form1 : Form
@@ -22,6 +23,7 @@ namespace TestForm
         {
             InitializeComponent();
             KeyBMP.Init();
+            Log.Start();
             fwc.Dock = DockStyle.Fill;
             tableLayoutPanel1.SetColumnSpan(fwc, 2);
             tableLayoutPanel1.Controls.Add(fwc, 1, 0);
@@ -80,6 +82,31 @@ namespace TestForm
                     }
                 }
             }
+        }
+
+        private void btn_CalPixel_Click(object sender, EventArgs e)
+        {
+            int x = -1;
+            int y = -1;
+            bool parseX = int.TryParse(tbx_PxX.Text, out x);
+            bool parseY = int.TryParse(tbx_PxY.Text, out y);
+            if (parseX && parseY)
+            {
+                double[] xyz = KeyBMP.FindXYZ(x, y);
+                lbl_RealX.Text = xyz[0].ToString("F3");
+                lbl_RealY.Text = xyz[1].ToString("F3");
+                lbl_RealZ.Text = xyz[2].ToString("F3");
+            }
+        }
+
+        private void tbx_PxX_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
+        }
+
+        private void tbx_PxY_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
         }
     }
 }
