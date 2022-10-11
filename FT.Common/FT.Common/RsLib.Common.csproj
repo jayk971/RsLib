@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="MultiLanguage.cs" />
     <Compile Include="ShoeEnum.cs" />
