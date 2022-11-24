@@ -3,13 +3,16 @@
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Point2D
+    public partial class Point2D:Object3D
     {
         public double X = 0;
         public double Y = 0;
 
         public double R = 0;
         public double A = 0;
+
+        public override uint DataCount => 1;
+
         public Point2D()
         {
         }

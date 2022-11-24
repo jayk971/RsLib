@@ -5,19 +5,19 @@ using System.Drawing;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class ColorPoint
+    public partial class ColorPoint:Object3D
     {
         public float R = 0.0f;
         public float G = 0.0f;
         public float B = 0.0f;
         public float Value = 0.0f;
+        public override uint DataCount => 1;
 
 
         public List<ColorPoint> Gradient = new List<ColorPoint>();
 
         public ColorPoint()
         {
-
         }
         public ColorPoint(float r, float g, float b, float val)
         {
@@ -26,6 +26,7 @@ namespace RsLib.PointCloud
             B = b;
             Value = val;
         }
+
 
         public void CreateColorGradient()
         {

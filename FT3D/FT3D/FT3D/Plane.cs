@@ -6,8 +6,10 @@ using AccPlane = Accord.Math.Plane;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class FTPlane
+    public partial class FTPlane:Object3D
     {
+        public override uint DataCount =>1;
+
         AccPlane m_Plane;
         public AccPlane PL { get => m_Plane; }
 
@@ -52,13 +54,14 @@ namespace RsLib.PointCloud
 
         [JsonIgnore]
         public Vector3D Normal { get => new Vector3D( m_Plane.Normal.X, m_Plane.Normal.Y, m_Plane.Normal.Z); }
+
+
         public FTPlane()
         {
             A = 0.0;
             B = 0.0;
             C = 1.0;
             D = 0.0;
-
         }
 
         public FTPlane(Vector3D n, Point3D p)

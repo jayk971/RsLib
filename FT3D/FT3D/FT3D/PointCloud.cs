@@ -11,12 +11,12 @@ namespace RsLib.PointCloud
 {
 
     [Serializable]
-    public partial class PointCloud
+    public partial class PointCloud:Object3D,IEnumerable<Point3D>
     {
         #region Main Property
         public List<Point3D> Points = new List<Point3D>();
 
-        public int Count { get { return Points.Count; } }
+        public int Count => (int)DataCount;
         public Point3D Median { get { return GetMedian(); } }
         public Point3D Q1 { get { return GetOneQuartile(); } }
         public Point3D Q3 { get { return GetThirdQuartile(); } }
@@ -28,12 +28,11 @@ namespace RsLib.PointCloud
         public Point3D LastPoint { get => GetLastPoint(); }
 
         #endregion
-
-        #region Display Property
-        public DisplayUnit Display = new DisplayUnit();
+        //public DisplayUnit Display = new DisplayUnit();
         public KDTree<int> kdTree = new KDTree<int>(3);
         public object KdTreeObj { get => kdTree; }
-        #endregion
+
+        public override uint DataCount => (uint)Points.Count;
 
         #region Private
         private Dictionary<string, Point3D> DuplicatePoints = new Dictionary<string, Point3D>();
@@ -42,7 +41,6 @@ namespace RsLib.PointCloud
 
         public PointCloud()
         {
-
         }
         public PointCloud(double[] x,double[] y,double[] z)
         {
@@ -3223,6 +3221,14 @@ namespace RsLib.PointCloud
                 if (tmpTag == tag) return Points[i];
             }
             return null;
+        }
+
+        public IEnumerator<Point3D> GetEnumerator()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                yield return Points[i];
+            }
         }
     }
 

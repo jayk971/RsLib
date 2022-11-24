@@ -22,7 +22,48 @@ namespace RsLib.PointCloud
             RangeMax = 0;
             RangeMin = 0;
             Percent = new List<double>();
+
         }
+        public bool LoadFromStringList(List<string> fileContent, bool IsAddKdTree, int ResampleCount = 0)
+        {
+            Points.Clear();
+            kdTree.Clear();
+            
+            if (ResampleCount <= 0) ResampleCount = 1;
+            if (fileContent.Count == 0) return false;
+
+            for (int i = 0; i < fileContent.Count; i++)
+            {
+                if (fileContent[i] != "")
+                {
+                    string[] SplitData = fileContent[i].Split(',');
+                    if (SplitData.Length == 6)
+                    {
+                        double x = 0;
+                        double y = 0;
+                        double z = 0;
+
+
+                        if (i % ResampleCount != 0) continue;
+
+                        if (!double.TryParse(SplitData[0], out x)) return false;
+                        if (!double.TryParse(SplitData[1], out y)) return false;
+                        if (!double.TryParse(SplitData[2], out z)) return false;
+
+                        Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
+                        LocateIndexOption index = new LocateIndexOption()
+                        { Index = Count};
+
+                        point.Options.Add(index);
+                        Points.Add(point);
+                        if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                    }
+                }
+            }
+            return true;
+
+        }
+
         public bool LoadFromOPTFile(string FilePath, bool IsAddKdTree, int ResampleCount = 0)
         {
             Points.Clear();
@@ -54,8 +95,12 @@ namespace RsLib.PointCloud
                         if (!double.TryParse(SplitData[2], out z)) return false;
 
                         Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
-                        LocateIndexProperty index = new LocateIndexProperty(Count);
-                        point.AddProperty(index);
+                        LocateIndexOption index = new LocateIndexOption()
+                        {
+                            Index = Count
+                        };
+
+                        point.Options.Add(index);
                         Points.Add(point);
                         if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                     }
@@ -537,8 +582,8 @@ namespace RsLib.PointCloud
             double L = 0;
             output.Add(0.0);
             double LineLength = Length;
-            LocatePercentProperty loc = new LocatePercentProperty();
-            Points[0].AddProperty(loc);
+            LocatePercentOption loc = new LocatePercentOption();
+            Points[0].Options.Add(loc);
 
             for (int i = 0; i < Points.Count - 1; i++)
             {
@@ -548,8 +593,11 @@ namespace RsLib.PointCloud
                 Vector3D vector = new Vector3D(Points[index], Points[index1]);
                 L += vector.L;
                 double P = Math.Round(L / LineLength, roundDigit);
-                loc = new LocatePercentProperty(P);
-                Points[index1].AddProperty(loc);
+                loc = new LocatePercentOption()
+                {
+                    Percent = P
+                };
+                Points[index1].Options.Add(loc);
                 output.Add(P);
             }
             return output;
@@ -1599,31 +1647,33 @@ namespace RsLib.PointCloud
         }
     }
     [Serializable]
-    public class LocatePercentProperty : PointProperty
+    public class LocatePercentOption : ObjectOption
     {
         public double Percent = 0.0;
 
-        public LocatePercentProperty()
+        public LocatePercentOption()
         {
 
-        }
-        public LocatePercentProperty(double loc)
-        {
-            Percent = loc;
         }
     }
     [Serializable]
-    public class LocateIndexProperty : PointProperty
+    public class LocateIndexOption : ObjectOption
     {
         public int Index = 0;
 
-        public LocateIndexProperty()
+        public LocateIndexOption()
         {
 
         }
-        public LocateIndexProperty(int loc)
+    }
+    [Serializable]
+    public class LineOption : ObjectOption
+    {
+        public int LineIndex = 0;
+
+        public LineOption()
         {
-            Index = loc;
+
         }
     }
 }

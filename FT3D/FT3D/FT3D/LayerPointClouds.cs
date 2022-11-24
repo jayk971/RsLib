@@ -7,13 +7,15 @@ using System.Text;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class LayerPointCloud
+    public partial class LayerPointCloud:Object3D
     {
         public List<PointCloud> Layers = new List<PointCloud>();
         public int LayerCount { get { return Layers.Count; } }
         public int PointCount { get { return TotalPointCount(); } }
         public Point3D Max { get { return GetMaxPoint(); } }
         public Point3D Min { get { return GetMinPoint(); } }
+
+        public override uint DataCount => (uint)LayerCount;
 
         public LayerPointCloud()
         {
@@ -123,7 +125,6 @@ namespace RsLib.PointCloud
             SortPosition = BasePosition.OrderBy(t => t.Key).ToDictionary(t => t.Key, t => t.Value);
 
             Layers = SortPosition.Values.ToList();
-
         }
         /// <summary>
         /// 切分點雲
@@ -185,7 +186,6 @@ namespace RsLib.PointCloud
             else SortPosition = BasePosition.OrderBy(t => t.Key).ToDictionary(t => t.Key, t => t.Value);
 
             Layers = SortPosition.Values.ToList();
-
         }
 
         public LayerPointCloud(string FilePath, int RowDigitCount, bool IsSplitX, DigitFormat Format, char SplitSymbol)

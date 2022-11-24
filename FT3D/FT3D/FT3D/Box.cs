@@ -6,7 +6,7 @@ using RsLib.Common;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Box
+    public partial class Box:Object3D
     {
         [DefaultValue(null)]
         public Point3D MinP { get; set; }
@@ -22,6 +22,9 @@ namespace RsLib.PointCloud
 
         [JsonIgnore]
         public double ContactBallR { get { return Point3D.Distance(Center, MinP); } }
+
+        public override uint DataCount => 1;
+
         /// <summary>
         /// 初始化 box 類別, 最大及最小角點皆為 (0,0)
         /// </summary>
@@ -47,7 +50,6 @@ namespace RsLib.PointCloud
 
             MinP = new Point3D(MinX, MinY, MinZ);
             MaxP = new Point3D(MaxX, MaxY, MaxZ);
-
         }
         /// <summary>
         /// 初始化 box 類別, 以兩點拉出長方體
@@ -70,7 +72,6 @@ namespace RsLib.PointCloud
 
             MinP = new Point3D(MinX, MinY, MinZ);
             MaxP = new Point3D(MaxX, MaxY, MaxZ);
-
         }
         /// <summary>
         /// 將長方體依照 X 方向等距切分成若干長方體

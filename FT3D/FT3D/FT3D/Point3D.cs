@@ -8,11 +8,14 @@ using RsLib.Common;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Point3D : IComparable<Point3D>
+    public partial class Point3D :Object3D, IComparable<Point3D>
 
     {
 
         public Point3 P => new Point3((float)X, (float)Y, (float)Z);
+
+        public override uint DataCount => 1;
+
         public double X = 0.0;
 
         public double Y = 0.0;
@@ -27,9 +30,6 @@ namespace RsLib.PointCloud
         public int tag = 0;
         public int tag1 = 0;
         
-
-        internal List<PointProperty> properties = new List<PointProperty>();
-
         public Point3D()
         {
             Dt = 0.0;
@@ -60,7 +60,6 @@ namespace RsLib.PointCloud
             tag = BasePoint.tag;
             tag1 = BasePoint.tag1;
             Color = BasePoint.Color;
-
         }
         public Point3D(double x, double y, double z)
         {
@@ -72,7 +71,6 @@ namespace RsLib.PointCloud
             tag = 0;
             tag1 = 0;
             Color = Color.DimGray;
-
         }
         public Point3D(double x, double y, double z, double dt)
         {
@@ -85,7 +83,6 @@ namespace RsLib.PointCloud
             tag1 = 0;
 
             Color = Color.DimGray;
-
         }
         public Point3D(double[] data, double dt)
         {
@@ -98,7 +95,6 @@ namespace RsLib.PointCloud
             tag1 = 0;
 
             Color = Color.DimGray;
-
         }
         public Point3D(double[] data)
         {
@@ -111,7 +107,6 @@ namespace RsLib.PointCloud
             tag1 = 0;
 
             Color = Color.DimGray;
-
         }
 
         //public Point3D(double x, double y, double z, double dt, bool flagModified, bool flag)
@@ -133,7 +128,6 @@ namespace RsLib.PointCloud
             tag1 = CopyData.tag1;
 
             Color = CopyData.Color;
-
         }
         public string ToString(string spliter = ",")
         {
@@ -150,31 +144,6 @@ namespace RsLib.PointCloud
             X = p.X;
             Y = p.Y;
             Z = p.Z;
-        }
-
-        public object GetProperty(Type t)
-        {
-            for(int i = 0; i < properties.Count; i++)
-            {
-                Type propertyType = properties[i].GetType();
-                if (propertyType == t) return properties[i];
-            }
-            return null;
-        }
-
-        public void AddProperty(PointProperty p)
-        {
-            bool canAdd = true;
-            foreach(object pp  in properties)
-            {
-                if(pp.GetType() == p.GetType())
-                {
-                    canAdd = false;
-                    break;
-                }
-            }
-            if(canAdd)
-                properties.Add(p);
         }
         public Point3D PositionXY()
         {
@@ -841,7 +810,7 @@ namespace RsLib.PointCloud
             Dt = src.Dt;
             flag = src.flag;
 
-            properties = src.properties.DeepClone();
+            AddOption(src.Options);
         }
         public PointV3D(PointV3D src)
         {
@@ -855,7 +824,7 @@ namespace RsLib.PointCloud
             Dt = src.Dt;
             flag = src.flag;
 
-            properties = src.properties.DeepClone();
+            AddOption(src.Options);
 
         }
         public void Save(string FilePath, bool IsAppend)

@@ -6,12 +6,12 @@ using Accord.Math;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Vector3D
+    public partial class Vector3D:Object3D
     {
         public readonly static Vector3D XAxis = new Vector3D(1, 0, 0);
         public readonly static Vector3D YAxis = new Vector3D(0, 1, 0);
         public readonly static Vector3D ZAxis = new Vector3D(0, 0, 1);
-
+        public override uint DataCount => 1;
         //Vector3 vector;
         public Vector3 V => new Vector3((float)X, (float)Y, (float)(Z));
         public double X = 0.0;
@@ -25,7 +25,27 @@ namespace RsLib.PointCloud
         public double R = 0;
         public double T = 0;
         public double P = 0;
-
+        // 0向量建構
+        public Vector3D()
+        {
+            X = 0.0;
+            Y = 0.0;
+            Z = 0.0;
+        }
+        // 直接指定分量建構
+        public Vector3D(double x, double y, double z)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+        // 指定起點與終點建構
+        public Vector3D(Point3D startP, Point3D endP)
+        {
+            X = Math.Round(endP.X - startP.X, 2);
+            Y = Math.Round(endP.Y - startP.Y, 2);
+            Z = Math.Round(endP.Z - startP.Z, 2);
+        }
         public void CalculateEulerAngle()
         {
             if (!(X == 0 && Y == 0 && Z == 0))
@@ -140,27 +160,7 @@ namespace RsLib.PointCloud
             Y = V.Y;
             Z = V.Z;
         }
-        // 0向量建構
-        public Vector3D()
-        {
-            X = 0.0;
-            Y = 0.0;
-            Z = 0.0;
-        }
-        // 直接指定分量建構
-        public Vector3D(double x, double y, double z)
-        {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
-        }
-        // 指定起點與終點建構
-        public Vector3D(Point3D startP, Point3D endP)
-        {
-            X = Math.Round(endP.X - startP.X,2);
-            Y = Math.Round(endP.Y - startP.Y,2);
-            Z = Math.Round(endP.Z - startP.Z,2);
-        }
+
         public static Vector3D operator +(Vector3D A, Vector3D B)
         {
             return new Vector3D(A.X + B.X, A.Y + B.Y, A.Z + B.Z);
