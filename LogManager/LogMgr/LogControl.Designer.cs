@@ -31,11 +31,11 @@ namespace RsLib.LogMgr
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btn_ClearMsg = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cmb_LevelFilter = new System.Windows.Forms.ToolStripComboBox();
             this.rtbx_Log = new System.Windows.Forms.RichTextBox();
-            this.btn_ClearMsg = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,6 +50,14 @@ namespace RsLib.LogMgr
             this.toolStripLabel1,
             this.cmb_LevelFilter});
             this.toolStrip1.Name = "toolStrip1";
+            // 
+            // btn_ClearMsg
+            // 
+            resources.ApplyResources(this.btn_ClearMsg, "btn_ClearMsg");
+            this.btn_ClearMsg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btn_ClearMsg.Image = global::RsLib.LogMgr.Properties.Resources.icons8_broom_64;
+            this.btn_ClearMsg.Name = "btn_ClearMsg";
+            this.btn_ClearMsg.Click += new System.EventHandler(this.btn_ClearMsg_Click);
             // 
             // toolStripSeparator1
             // 
@@ -77,14 +85,6 @@ namespace RsLib.LogMgr
             this.rtbx_Log.BackColor = System.Drawing.Color.White;
             this.rtbx_Log.Name = "rtbx_Log";
             this.rtbx_Log.ReadOnly = true;
-            // 
-            // btn_ClearMsg
-            // 
-            resources.ApplyResources(this.btn_ClearMsg, "btn_ClearMsg");
-            this.btn_ClearMsg.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btn_ClearMsg.Image = global::RsLib.LogMgr.Properties.Resources.icons8_broom_64;
-            this.btn_ClearMsg.Name = "btn_ClearMsg";
-            this.btn_ClearMsg.Click += new System.EventHandler(this.btn_ClearMsg_Click);
             // 
             // LogControl
             // 

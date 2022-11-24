@@ -28,6 +28,46 @@ namespace RsLib.Common
 
             return default(T);
         }
+        public static byte[] ConvertTobyteArr(this int intValue, uint arraySize)
+        {
+            byte[] array = new byte[arraySize];
+            string text = intValue.ToString("X");
+            if (text.Length % 2 != 0)
+            {
+                text = "0" + text;
+            }
+            int num = 0;
+            for (int num2 = text.Length - 1; num2 >= 0; num2 -= 2)
+            {
+                string value = text.Substring(num2 - 1, 2);
+                if (num < arraySize)
+                {
+                    array[num] = Convert.ToByte(value, 16);
+                    num++;
+                }
+            }
+            return array;
+        }
+        public static byte[] ConvertTobyteArr(this ushort intValue, uint arraySize)
+        {
+            byte[] array = new byte[arraySize];
+            string text = intValue.ToString("X");
+            if (text.Length % 2 != 0)
+            {
+                text = "0" + text;
+            }
+            int num = 0;
+            for (int num2 = text.Length - 1; num2 >= 0; num2 -= 2)
+            {
+                string value = text.Substring(num2 - 1, 2);
+                if (num < arraySize)
+                {
+                    array[num] = Convert.ToByte(value, 16);
+                    num++;
+                }
+            }
+            return array;
+        }
     }
     public class FT_StopWatch:Stopwatch
     {        /// <summary>

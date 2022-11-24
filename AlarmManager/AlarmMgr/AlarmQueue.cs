@@ -20,7 +20,7 @@ namespace RsLib.AlarmMgr
         public static void Initial(LangCode lang)
         {
             isInit = false;
-            bool isLoadOK = alarmTable.Load(lang);
+            bool isLoadOK = alarmTable.Load(lang,'\t');
             isInit = isLoadOK;
         }
         public static void ResetAlarm()
@@ -178,7 +178,7 @@ namespace RsLib.AlarmMgr
     {
         string mainFolder { get => System.Environment.CurrentDirectory; }
         string configFolder { get => $"{mainFolder}\\Config"; }
-        string alarmMsgFile { get => $"{configFolder}\\AlarmMsg.csv"; }
+        string alarmMsgFile { get => $"{configFolder}\\AlarmMsg.txt"; }
 
         public Dictionary<int, AlarmInfo> Table = new Dictionary<int, AlarmInfo>();
 
@@ -197,7 +197,7 @@ namespace RsLib.AlarmMgr
         {
             Table.Clear();
         }
-        public bool Load(LangCode lang)
+        public bool Load(LangCode lang,char splitChar)
         {
             Table.Clear();
             int langInt = (int)lang;
@@ -208,7 +208,7 @@ namespace RsLib.AlarmMgr
             {
                 while(!sr.EndOfStream)
                 {
-                    string[] splitData = sr.ReadLine().Split(',');
+                    string[] splitData = sr.ReadLine().Split(splitChar);
                     if (splitData.Length <= 0) continue;
                     string code = splitData[0];
                     int codeI = -999;

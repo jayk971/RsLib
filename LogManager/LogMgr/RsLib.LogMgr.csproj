@@ -104,6 +104,9 @@
     <EmbeddedResource Include="LogControl.resx">
       <DependentUpon>LogControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LogControl.vi.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogControl.zh-TW.resx">
       <DependentUpon>LogControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,6 +140,7 @@
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
 copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
 copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y
+copy "$(TargetDir)vi\" "D:\RLib\$(OutDir)vi" /Y
 copy "$(TargetDir)NLog.config" "D:\RLib\$(OutDir)NLog.config" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -102,6 +102,9 @@
     <EmbeddedResource Include="AlarmBriefInfoControl.resx">
       <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AlarmBriefInfoControl.vi.resx">
+      <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AlarmBriefInfoControl.zh-TW.resx">
       <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +112,9 @@
       <DependentUpon>AlarmBriefInfoControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AlarmControl.resx">
+      <DependentUpon>AlarmControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlarmControl.vi.resx">
       <DependentUpon>AlarmControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AlarmControl.zh-TW.resx">
@@ -148,6 +154,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
 copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
-copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y</PostBuildEvent>
+copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y
+copy "$(TargetDir)vi\" "D:\RLib\$(OutDir)vi" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

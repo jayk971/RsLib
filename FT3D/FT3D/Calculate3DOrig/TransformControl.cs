@@ -51,7 +51,9 @@ namespace RsLib.PointCloud.CalculateMatrix
 
             PointCloud p = pc.Multiply(mArr);
 
-            p.Save(lbl_XYZFilePath.Text.Replace(".xyz", "_T.xyz"));
+            string filePath = lbl_XYZFilePath.Text.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
+            p.Save(filePath);
+            MessageBox.Show($"{filePath} saved");
         }
     }
 }

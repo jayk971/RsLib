@@ -102,6 +102,9 @@
     <EmbeddedResource Include="FolderWatchControl.resx">
       <DependentUpon>FolderWatchControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FolderWatchControl.vi.resx">
+      <DependentUpon>FolderWatchControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FolderWatchControl.zh-TW.resx">
       <DependentUpon>FolderWatchControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,6 +161,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
 copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
-copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y</PostBuildEvent>
+copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y
+copy "$(TargetDir)vi\" "D:\RLib\$(OutDir)vi" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

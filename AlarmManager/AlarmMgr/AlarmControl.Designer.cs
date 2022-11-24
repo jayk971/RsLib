@@ -49,8 +49,8 @@ namespace RsLib.AlarmMgr
             this.dgvAlarmRealTimeColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvAlarmRealTimeColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btn_ResetAlarm = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btn_ResetAlarm = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlarmRealTime)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -65,6 +65,7 @@ namespace RsLib.AlarmMgr
             // 
             // dgvAlarmRealTime
             // 
+            resources.ApplyResources(this.dgvAlarmRealTime, "dgvAlarmRealTime");
             this.dgvAlarmRealTime.AllowUserToAddRows = false;
             this.dgvAlarmRealTime.AllowUserToDeleteRows = false;
             this.dgvAlarmRealTime.AllowUserToResizeRows = false;
@@ -95,7 +96,6 @@ namespace RsLib.AlarmMgr
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvAlarmRealTime.DefaultCellStyle = dataGridViewCellStyle9;
-            resources.ApplyResources(this.dgvAlarmRealTime, "dgvAlarmRealTime");
             this.dgvAlarmRealTime.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvAlarmRealTime.Name = "dgvAlarmRealTime";
             this.dgvAlarmRealTime.ReadOnly = true;
@@ -161,26 +161,26 @@ namespace RsLib.AlarmMgr
             // 
             // toolStrip1
             // 
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_ResetAlarm,
             this.toolStripSeparator1});
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
             this.toolStrip1.Name = "toolStrip1";
-            // 
-            // btn_ResetAlarm
-            // 
-            this.btn_ResetAlarm.BackgroundImage = global::RsLib.AlarmMgr.Properties.Resources.icons8_broom_64;
-            resources.ApplyResources(this.btn_ResetAlarm, "btn_ResetAlarm");
-            this.btn_ResetAlarm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btn_ResetAlarm.Name = "btn_ResetAlarm";
-            this.btn_ResetAlarm.Click += new System.EventHandler(this.btn_ResetAlarm_Click);
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            // 
+            // btn_ResetAlarm
+            // 
+            resources.ApplyResources(this.btn_ResetAlarm, "btn_ResetAlarm");
+            this.btn_ResetAlarm.BackgroundImage = global::RsLib.AlarmMgr.Properties.Resources.icons8_broom_64;
+            this.btn_ResetAlarm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btn_ResetAlarm.Name = "btn_ResetAlarm";
+            this.btn_ResetAlarm.Click += new System.EventHandler(this.btn_ResetAlarm_Click);
             // 
             // AlarmControl
             // 
