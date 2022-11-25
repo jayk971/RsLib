@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{52F26A3B-447C-4EDE-A5B2-C5FBB53808FD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CalculateMatrixForm</RootNamespace>
-    <AssemblyName>CalculateMatrixForm</AssemblyName>
+    <RootNamespace>RsLib.CalculateMatrixForm</RootNamespace>
+    <AssemblyName>Calculate Transform Matrix</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -105,6 +105,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

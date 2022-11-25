@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using RsLib.PointCloud;
 using RsLib.PointCloud.CalculateMatrix;
-namespace CalculateMatrixForm
+namespace RsLib.CalculateMatrixForm
 {
     public partial class Form1 : Form
     {
@@ -17,7 +17,7 @@ namespace CalculateMatrixForm
         {
             InitializeComponent();
             cmc.Dock = DockStyle.Fill;
-            this.Controls.Add(cmc);
+            Controls.Add(cmc);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-namespace CalculateMatrixForm
+namespace RsLib.CalculateMatrixForm
 {
     partial class Form1
     {

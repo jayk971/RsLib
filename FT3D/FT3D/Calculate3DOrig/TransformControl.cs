@@ -10,10 +10,14 @@ using System.Windows.Forms;
 using RsLib.PointCloud;
 using Accord.Math;
 using System.IO;
+using RsLib.Common;
+using System.Threading;
 namespace RsLib.PointCloud.CalculateMatrix
 {
     public partial class TransformControl : UserControl
     {
+        FormProcessing formProcessing;
+        bool _convertDone = false;
         public TransformControl()
         {
             InitializeComponent();
@@ -42,9 +46,10 @@ namespace RsLib.PointCloud.CalculateMatrix
                 }
             }
         }
-
+#if m
         private void btn_Calculate_Click(object sender, EventArgs e)
         {
+            _convertDone = false;
             if (File.Exists(lbl_XYZFilePath.Text))
             {
                 PointCloud pc = new PointCloud();
@@ -76,5 +81,63 @@ namespace RsLib.PointCloud.CalculateMatrix
                 MessageBox.Show($"Test cloud file : {lbl_XYZFilePath.Text} not exist.");
             }
         }
+#endif
+        private void btn_Calculate_Click(object sender, EventArgs e)
+        {
+            _convertDone = false;
+            bool isXYZExist = File.Exists(lbl_XYZFilePath.Text);
+            bool isMatrixExist = File.Exists(lbl_M44FilePath.Text);
+
+            if(isXYZExist)
+            {
+                if(isMatrixExist)
+                {
+                    Tuple<string, string> package = new Tuple<string, string>(lbl_XYZFilePath.Text, lbl_M44FilePath.Text);
+
+                    ThreadPool.QueueUserWorkItem(waitConvert);
+                    ThreadPool.QueueUserWorkItem(convertProcess, package);
+
+                    formProcessing = new FormProcessing("Wait transforming...");
+                    formProcessing.SetMode(ProgressBarStyle.Marquee);
+                    formProcessing.SetProgress(100);
+                    formProcessing.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show($"Transform matrix file : {lbl_M44FilePath.Text} not exist.");
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Test cloud file : {lbl_XYZFilePath.Text} not exist.");
+            }
+        }
+        void convertProcess(object obj)
+        {
+            Tuple<string, string> data = (Tuple<string, string>)obj;
+            string xyzFile = data.Item1;
+            string matrixFile = data.Item2;
+            PointCloud pc = new PointCloud();
+            pc.LoadFromFile(xyzFile, false);
+            double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(matrixFile);
+            PointCloud p = pc.Multiply(mArr);
+            string filePath = xyzFile.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
+            p.Save(filePath);
+            _convertDone = true;
+        }
+
+        void waitConvert(object state)
+        {
+            while (!_convertDone)
+            {
+                SpinWait.SpinUntil(() => false, 500);
+            }
+            formProcessing.Close();
+            MessageBox.Show("Done.");
+        }
+
+
     }
+
+
 }
