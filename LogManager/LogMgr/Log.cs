@@ -18,8 +18,8 @@ namespace RsLib.LogMgr
     }
     public static class Log
     {
-        private static Logger m_Log = LogManager.GetLogger("Lib");
-        private static Logger m_FatalLog = LogManager.GetLogger("Lib_Fatal");
+        internal static Logger m_Log = LogManager.GetLogger("Lib");
+        internal static Logger m_FatalLog = LogManager.GetLogger("Lib_Fatal");
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();

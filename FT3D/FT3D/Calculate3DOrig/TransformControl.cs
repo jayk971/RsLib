@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using RsLib.PointCloud;
 using Accord.Math;
+using System.IO;
 namespace RsLib.PointCloud.CalculateMatrix
 {
     public partial class TransformControl : UserControl
@@ -34,7 +35,7 @@ namespace RsLib.PointCloud.CalculateMatrix
         {
             using (OpenFileDialog op = new OpenFileDialog())
             {
-                op.Filter = "Matrix4x4 File|*.m44";
+                op.Filter = "Matrix 4x4 with data|*.m44d|Matrix4x4 File|*.m44";
                 if (op.ShowDialog() == DialogResult.OK)
                 {
                     lbl_M44FilePath.Text = op.FileName;
@@ -44,16 +45,36 @@ namespace RsLib.PointCloud.CalculateMatrix
 
         private void btn_Calculate_Click(object sender, EventArgs e)
         {
-            PointCloud pc = new PointCloud();
-            pc.LoadFromFile(lbl_XYZFilePath.Text,false);
+            if (File.Exists(lbl_XYZFilePath.Text))
+            {
+                PointCloud pc = new PointCloud();
+                pc.LoadFromFile(lbl_XYZFilePath.Text, false);
 
-            double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(lbl_M44FilePath.Text);
+                if(pc.Count ==0)
+                {
+                    MessageBox.Show($"Test cloud file : {lbl_XYZFilePath.Text} load fail. Points count = 0");
+                    return;
+                }
 
-            PointCloud p = pc.Multiply(mArr);
+                if (File.Exists(lbl_M44FilePath.Text))
+                {
+                    double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(lbl_M44FilePath.Text);
 
-            string filePath = lbl_XYZFilePath.Text.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
-            p.Save(filePath);
-            MessageBox.Show($"{filePath} saved");
+                    PointCloud p = pc.Multiply(mArr);
+
+                    string filePath = lbl_XYZFilePath.Text.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
+                    p.Save(filePath);
+                    MessageBox.Show($"{filePath} saved");
+                }
+                else
+                {
+                    MessageBox.Show($"Transform matrix file : {lbl_M44FilePath.Text} not exist.");
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Test cloud file : {lbl_XYZFilePath.Text} not exist.");
+            }
         }
     }
 }

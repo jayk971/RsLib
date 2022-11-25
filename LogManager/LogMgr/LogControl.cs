@@ -105,6 +105,8 @@ namespace RsLib.LogMgr
                 try
                 {
                     LogMsg[] lines = logQ.ToArray();
+                    if (cmb_LevelFilter == null) return;
+
                     int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
 
                     if (!clearAll)
@@ -120,6 +122,7 @@ namespace RsLib.LogMgr
                     }
                     else
                     {
+                        if (rtbx_Log == null) return;
                         rtbx_Log.Clear();
                         for (int i = 0; i < lines.Length; i++)
                         {
@@ -133,17 +136,14 @@ namespace RsLib.LogMgr
                             }
                         }
                     }
+                    if (rtbx_Log == null) return;
                     rtbx_Log.ScrollToCaret();
                 }
                 catch(Exception ex)
                 {
-                    string logErrorFile = $"d:\\{DateTime.Now:yyyy_MM_dd_HHmmss}_LogError.txt";
-                    using (StreamWriter sw = new StreamWriter(logErrorFile))
-                    {
-                        sw.WriteLine(ex.Message);
-                        sw.WriteLine(ex.StackTrace);
-                        sw.Flush();
-                    }
+                    Log.m_Log.Error(ex.Message);
+                    Log.m_FatalLog.Fatal(ex);
+
                 }
             }
         }

@@ -53,9 +53,24 @@ namespace RsLib.PointCloud
         public void SetXYZ(double x,double y,double z,int digit = 2)
         {
             p = new Point3D(x, y, z);
-            tbx_X.Text = Math.Round(x,digit).ToString();
-            tbx_Y.Text = Math.Round(y,digit).ToString();
-            tbx_Z.Text = Math.Round(z,digit).ToString();
+            updateBox(digit);
+        }
+        public void SetXYZ(string xStr, string yStr, string zStr, int digit = 2)
+        {
+            double x, y, z;
+            double.TryParse(xStr, out x);
+            double.TryParse(yStr, out y);
+            double.TryParse(zStr, out z);
+
+            p = new Point3D(x, y, z);
+            updateBox(digit);
+        }
+        private void updateBox(int digit = 1)
+        {
+            tbx_X.Text = Math.Round(p.X, digit).ToString();
+            tbx_Y.Text = Math.Round(p.Y, digit).ToString();
+            tbx_Z.Text = Math.Round(p.Z, digit).ToString();
+
         }
         private void tbx_X_KeyUp(object sender, KeyEventArgs e)
         {
@@ -158,6 +173,11 @@ namespace RsLib.PointCloud
         {
             handled = RsLib.Common.FT_Functions.double_Positive_Negative_KeyPress(e.KeyChar);
             e.Handled = handled;
+        }
+        public void Clear()
+        {
+            p = new Point3D();
+            updateBox();
         }
     }
 }

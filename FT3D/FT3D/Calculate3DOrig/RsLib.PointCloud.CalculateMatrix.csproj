@@ -145,6 +145,18 @@
       <Name>RsLib.PointCloud</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_broom_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_save_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_calculator_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_opened_folder_1_64.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>

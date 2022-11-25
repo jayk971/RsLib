@@ -1202,11 +1202,32 @@ namespace RsLib.PointCloud
             double[,] output = new double[4, 4];
             if (File.Exists(filePath))
             {
+                string ext = Path.GetExtension(filePath);
                 using (StreamReader sr = new StreamReader(filePath))
                 {
-                    string readData = sr.ReadToEnd();
-                    Matrix4x4 m = LoadMatrix4x4(readData);
-                    output = Matrix4x4ToArray(m);
+                    if (ext.ToUpper() == ".M44")
+                    {
+                        string readData = sr.ReadToEnd();
+                        Matrix4x4 m = LoadMatrix4x4(readData);
+                        output = Matrix4x4ToArray(m);
+                    }
+                    else if(ext.ToUpper() == ".M44D")
+                    {
+                        string row = "";
+                        for (int i = 0; i < 4; i++)
+                        {
+                            row+= (sr.ReadLine()+"\r\n");
+                        }
+                        Matrix4x4 m = LoadMatrix4x4(row);
+                        output = Matrix4x4ToArray(m);
+
+                    }
+                    else
+                    {
+                        Matrix4x4 m = Matrix4x4.Identity;
+                        output = Matrix4x4ToArray(m);
+
+                    }
                 }
             }
             else
@@ -1272,10 +1293,10 @@ namespace RsLib.PointCloud
         {
             if (matrix4x4.GetLength(0) != 4 || matrix4x4.GetLength(1) != 4) return "";
             string output = "";
-            output +=$"{Math.Round(matrix4x4[0, 0],digit)},{Math.Round(matrix4x4[0, 1], digit)},{Math.Round(matrix4x4[0, 2], digit)},{Math.Round(matrix4x4[0, 3], digit)}\n";
-            output += $"{Math.Round(matrix4x4[1, 0], digit)},{Math.Round(matrix4x4[1, 1], digit)},{Math.Round(matrix4x4[1, 2], digit)},{Math.Round(matrix4x4[1, 3], digit)}\n";
-            output += $"{Math.Round(matrix4x4[2, 0], digit)},{Math.Round(matrix4x4[2, 1], digit)},{Math.Round(matrix4x4[2, 2], digit)},{Math.Round(matrix4x4[2, 3], digit)}\n";
-            output += $"{Math.Round(matrix4x4[3, 0], digit)},{Math.Round(matrix4x4[3, 1], digit)},{Math.Round(matrix4x4[3, 2], digit)},{Math.Round(matrix4x4[3, 3], digit)}";
+            output +=$"{Math.Round(matrix4x4[0, 0],digit)}\t{Math.Round(matrix4x4[0, 1], digit)}\t{Math.Round(matrix4x4[0, 2], digit)}\t{Math.Round(matrix4x4[0, 3], digit)}\n";
+            output += $"{Math.Round(matrix4x4[1, 0], digit)}\t{Math.Round(matrix4x4[1, 1], digit)}\t{Math.Round(matrix4x4[1, 2], digit)}\t{Math.Round(matrix4x4[1, 3], digit)}\n";
+            output += $"{Math.Round(matrix4x4[2, 0], digit)}\t{Math.Round(matrix4x4[2, 1], digit)}\t{Math.Round(matrix4x4[2, 2], digit)}\t{Math.Round(matrix4x4[2, 3], digit)}\n";
+            output += $"{Math.Round(matrix4x4[3, 0], digit)}\t{Math.Round(matrix4x4[3, 1], digit)}\t{Math.Round(matrix4x4[3, 2], digit)}\t{Math.Round(matrix4x4[3, 3], digit)}\n";
             return output;
         }
     }

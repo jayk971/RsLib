@@ -63,6 +63,26 @@ namespace RsLib.PointCloud.CalculateMatrix.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_broom_64 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_broom_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_calculator_64 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_calculator_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_math_64 {
             get {
                 object obj = ResourceManager.GetObject("icons8_math_64", resourceCulture);
@@ -73,9 +93,29 @@ namespace RsLib.PointCloud.CalculateMatrix.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_opened_folder_1_64 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_opened_folder_1_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_opened_folder_64 {
             get {
                 object obj = ResourceManager.GetObject("icons8_opened_folder_64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_save_64 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_save_64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

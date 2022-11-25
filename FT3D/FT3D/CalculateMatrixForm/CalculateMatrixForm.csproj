@@ -67,12 +67,12 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icons8_math.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="RsLib.PointCloud">
       <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.PointCloud.dll</HintPath>
-    </Reference>
-    <Reference Include="RsLib.PointCloud.CalculateMatrix">
-      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.PointCloud.CalculateMatrix.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -115,6 +115,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Calculate3DOrig\RsLib.PointCloud.CalculateMatrix.csproj">
+      <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
+      <Name>RsLib.PointCloud.CalculateMatrix</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icons8_math.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
