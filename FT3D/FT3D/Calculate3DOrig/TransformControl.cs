@@ -17,10 +17,26 @@ namespace RsLib.PointCloud.CalculateMatrix
     public partial class TransformControl : UserControl
     {
         FormProcessing formProcessing;
+        System.Windows.Forms.Timer _waitClose;
         bool _convertDone = false;
         public TransformControl()
         {
             InitializeComponent();
+            _waitClose = new System.Windows.Forms.Timer()
+            {
+                Interval = 500,
+            };
+            _waitClose.Tick += _waitClose_Tick;
+        }
+
+        private void _waitClose_Tick(object sender, EventArgs e)
+        {
+            if (_convertDone)
+            {
+                _waitClose.Enabled = false;
+                formProcessing.Close();
+                MessageBox.Show("Done.");
+            }
         }
 
         private void btn_OpenXYZ_Click(object sender, EventArgs e)
@@ -93,8 +109,7 @@ namespace RsLib.PointCloud.CalculateMatrix
                 if(isMatrixExist)
                 {
                     Tuple<string, string> package = new Tuple<string, string>(lbl_XYZFilePath.Text, lbl_M44FilePath.Text);
-
-                    ThreadPool.QueueUserWorkItem(waitConvert);
+                    _waitClose.Enabled = true;
                     ThreadPool.QueueUserWorkItem(convertProcess, package);
 
                     formProcessing = new FormProcessing("Wait transforming...");
@@ -125,17 +140,6 @@ namespace RsLib.PointCloud.CalculateMatrix
             p.Save(filePath);
             _convertDone = true;
         }
-
-        void waitConvert(object state)
-        {
-            while (!_convertDone)
-            {
-                SpinWait.SpinUntil(() => false, 500);
-            }
-            formProcessing.Close();
-            MessageBox.Show("Done.");
-        }
-
 
     }
 

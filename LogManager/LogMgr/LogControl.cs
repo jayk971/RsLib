@@ -106,7 +106,7 @@ namespace RsLib.LogMgr
                 {
                     LogMsg[] lines = logQ.ToArray();
                     if (cmb_LevelFilter == null) return;
-
+                    
                     int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
 
                     if (!clearAll)

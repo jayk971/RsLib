@@ -20,6 +20,8 @@ namespace RsLib.LogMgr
     {
         internal static Logger m_Log = LogManager.GetLogger("Lib");
         internal static Logger m_FatalLog = LogManager.GetLogger("Lib_Fatal");
+        static bool _enableTd = false;
+        static bool _isTdRunning = false;
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();
@@ -46,12 +48,19 @@ namespace RsLib.LogMgr
             string LogFolder = string.Format("{0}\\Log", System.Environment.CurrentDirectory);
             if (!Directory.Exists(LogFolder)) Directory.CreateDirectory(LogFolder);
 
+            _enableTd = true;
             ThreadPool.QueueUserWorkItem(run);
+        }
+        public static void Stop()
+        {
+            EnableUpdateUI = false;
+            _enableTd = false;
         }
         static void run(object obj)
         {
-            while(true)
+            while(_enableTd)
             {
+                _isTdRunning = true;
                 SpinWait.SpinUntil(() => false, 5);
                 if (logQ.Count == 0) continue;
 
@@ -99,6 +108,7 @@ namespace RsLib.LogMgr
                     if (tempMsg.UpdateUI) UiUpdated?.Invoke(tempMsg);
                 }
             }
+            _isTdRunning = false;
         }
     }
 
