@@ -96,9 +96,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="FolderWatchControl.resx">
       <DependentUpon>FolderWatchControl.cs</DependentUpon>
     </EmbeddedResource>
