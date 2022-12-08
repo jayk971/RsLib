@@ -237,7 +237,7 @@ namespace RsLib.PointCloud
                 return m;
             }
         }
-        public Matrix4x4 RotateMatrix4Inverse { get => Matrix4x4.CreateFromRotation(RotateMatrix3.Inverse()); }
+        public Matrix4x4 RotateMatrix4Inverse { get => Transpose(); }
 
         public RotateUnit()
         {
@@ -255,6 +255,27 @@ namespace RsLib.PointCloud
             RefAxis = inRefAxis;
             if (ValueIsAngleUnit) Value = inRotValue /180*Math.PI;
             else Value = inRotValue;
+        }
+        public Matrix4x4 Transpose()
+        {
+            Matrix4x4 output = new Matrix4x4();
+            output.V00 = matrix4.V00;
+            output.V01 = matrix4.V10;
+            output.V02 = matrix4.V20;
+            output.V03 = matrix4.V30;
+            output.V10 = matrix4.V01;
+            output.V11 = matrix4.V11;
+            output.V12 = matrix4.V21;
+            output.V13 = matrix4.V31;
+            output.V20 = matrix4.V02;
+            output.V21 = matrix4.V12;
+            output.V22 = matrix4.V22;
+            output.V23 = matrix4.V32;
+            output.V30 = matrix4.V03;
+            output.V31 = matrix4.V13;
+            output.V32 = matrix4.V23;
+            output.V33 = matrix4.V33;
+            return output;
         }
 
         public void Rotate(ref PointV3D Coord)
@@ -284,6 +305,7 @@ namespace RsLib.PointCloud
     }
     public class CoordMatrix
     {
+        internal string Name = "";
         internal List<MatrixUnit> seq = new List<MatrixUnit>();
         public List<MatrixUnit> MatrixSequnce { get => seq; }
         protected Matrix4x4 finalMatrix4 = Matrix4x4.Identity;
@@ -305,13 +327,13 @@ namespace RsLib.PointCloud
             get
             {
                 Matrix4x4 m = Matrix4x4.Identity;
-                for(int i = seq.Count -1;i>=0; i--)
+                for(int i =0;i<seq.Count; i++)
                 {
                     switch(seq[i].Type)
                     {
                         case MatrixType.Rotate:
                             RotateUnit rUnit = seq[i] as RotateUnit;
-                            m = Matrix4x4.Multiply(rUnit.RotateMatrix4Inverse,m);
+                            m = Matrix4x4.Multiply(rUnit.RotateMatrix4Inverse, m);
                             break;
 
                         case MatrixType.Translation:
@@ -329,11 +351,15 @@ namespace RsLib.PointCloud
         }
         internal bool isMatrixCalculated = false;
         public bool IsMatrixCalculated { get => isMatrixCalculated; }
+
         public CoordMatrix()
         {
 
         }
+        void calculateQ()
+        {
 
+        }
 
         /// <summary>
         /// 加入平移或旋轉矩陣

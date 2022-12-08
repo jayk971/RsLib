@@ -1092,16 +1092,61 @@ namespace RsLib.PointCloud
             //Vector3D shift = new Vector3D(i_P, afterP);
 
             Rotate local_rotate_image = new Rotate(vx, vy, vz);
+            local_rotate_image.Name = "local_rotate_image";
             Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
-
+            local_shift_image.Name = "local_shift_image";
             Rotate local_rotate_robot = new Rotate(vx_, vy_, vz_);
+            local_rotate_robot.Name = "local_rotate_robot";
             Shift local_shift_robot = new Shift(afterP.X, afterP.Y, afterP.Z);
+            local_shift_robot.Name = "local_shift_robot";
 
+            // 下面的矩陣是由後面往前乘
             Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.FinalMatrix4Inverse * local_shift_image.FinalMatrix4Inverse;
+
 
             return Matrix4x4ToArray(final);
         }
+        public static double[,] CalculateTransformMatrix(Point3D x1,
+    Point3D x2,
+    Point3D y1,
+    Point3D y2,
+    Point3D afterP,
+    Vector3D vx_,
+    Vector3D vy_,
+    Vector3D vz_,
+    ref Point3D IntersectedPoint)
+        {
+            IntersectedPoint = GetIntersect(x1, x2, y1, y2);
+            Point3D i_P = IntersectedPoint;
 
+            Vector3 vx_temp = new Vector3((float)(x2.X - i_P.X), (float)(x2.Y - i_P.Y), (float)(x2.Z - i_P.Z));
+            vx_temp.Normalize();
+            Vector3 vy = new Vector3((float)(y2.X - i_P.X), (float)(y2.Y - i_P.Y), (float)(y2.Z - i_P.Z));
+            vy.Normalize();
+            Vector3 vz = Vector3.Cross(vx_temp, vy);
+            vz.Normalize();
+            Vector3 vx = Vector3.Cross(vy, vz);
+            vx.Normalize();
+            //double dot = Vector3.Dot(vx, vy);
+            //double dot1 = Vector3.Dot(vx, vz);
+
+            //Vector3D shift = new Vector3D(i_P, afterP);
+
+            Rotate local_rotate_image = new Rotate(vx, vy, vz);
+            local_rotate_image.Name = "local_rotate_image";
+            Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
+            local_shift_image.Name = "local_shift_image";
+            Rotate local_rotate_robot = new Rotate(vx_, vy_, vz_);
+            local_rotate_robot.Name = "local_rotate_robot";
+            Shift local_shift_robot = new Shift(afterP.X, afterP.Y, afterP.Z);
+            local_shift_robot.Name = "local_shift_robot";
+
+            // 下面的矩陣是由後面往前乘
+            Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.FinalMatrix4Inverse * local_shift_image.FinalMatrix4Inverse;
+
+
+            return Matrix4x4ToArray(final);
+        }
         public static double[,] Matrix4x4ToArray(Matrix4x4 m)
         {
             double[,] arr = new double[4, 4];

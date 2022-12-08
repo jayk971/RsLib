@@ -56,6 +56,7 @@ namespace RsLib.PointCloud.CalculateMatrix
 
         private void btn_CalculateMatrix_Click(object sender, EventArgs e)
         {
+            Point3D intersectP = new Point3D();
             double[,] m = m_Func.CalculateTransformMatrix(
                 x1.P,
                 x2.P,
@@ -64,10 +65,12 @@ namespace RsLib.PointCloud.CalculateMatrix
                 shift.P,
                 vx.V,
                 vy.V,
-                vz.V
+                vz.V, 
+                ref intersectP
                 );
             richTextBox1.Clear();
             richTextBox1.AppendText("Calculate matrix done\n");
+            richTextBox1.AppendText($"Intersect : {intersectP.X:F2} {intersectP.Y:F2} {intersectP.Z:F2}\n");
             richTextBox1.AppendText(m_Func.Matrix4x4ToString(m));
             using (SaveFileDialog sf = new SaveFileDialog())
             {

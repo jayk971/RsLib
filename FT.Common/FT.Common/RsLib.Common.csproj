@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorGradient.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="FormProcessing.cs">
       <SubType>Form</SubType>
