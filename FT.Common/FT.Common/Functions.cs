@@ -206,6 +206,9 @@ namespace RsLib.Common
                     case ShoeSize._130:
                         return ShoeSizeIndex._130_RL;
 
+                    case ShoeSize._135:
+                        return ShoeSizeIndex._135_RL;
+
                     case ShoeSize._140:
                         return ShoeSizeIndex._140_RL;
 
@@ -221,6 +224,20 @@ namespace RsLib.Common
                     case ShoeSize._180:
                         return ShoeSizeIndex._180_RL;
 
+                    case ShoeSize._190:
+                        return ShoeSizeIndex._190_RL;
+
+                    case ShoeSize._200:
+                        return ShoeSizeIndex._200_RL;
+
+                    case ShoeSize._210:
+                        return ShoeSizeIndex._210_RL;
+
+                    case ShoeSize._220:
+                        return ShoeSizeIndex._220_RL;
+
+                    case ShoeSize._230:
+                        return ShoeSizeIndex._230_RL;
                     default:
                         return ShoeSizeIndex._90_RL;
 
@@ -377,6 +394,13 @@ namespace RsLib.Common
                         else
                             return ShoeSizeIndex._130_R;
 
+                    case ShoeSize._135:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._135_L;
+                        else
+                            return ShoeSizeIndex._135_R;
+
                     case ShoeSize._140:
 
                         if (!(bool)isRight)
@@ -408,6 +432,38 @@ namespace RsLib.Common
                             return ShoeSizeIndex._180_L;
                         else
                             return ShoeSizeIndex._180_R;
+
+                    case ShoeSize._190:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._190_L;
+                        else
+                            return ShoeSizeIndex._190_R;
+
+                    case ShoeSize._200:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._200_L;
+                        else
+                            return ShoeSizeIndex._200_R;
+                    case ShoeSize._210:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._210_L;
+                        else
+                            return ShoeSizeIndex._210_R;
+                    case ShoeSize._220:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._220_L;
+                        else
+                            return ShoeSizeIndex._220_R;
+                    case ShoeSize._230:
+
+                        if (!(bool)isRight)
+                            return ShoeSizeIndex._230_L;
+                        else
+                            return ShoeSizeIndex._230_R;
                     default:
                         if (!(bool)isRight)
                             return ShoeSizeIndex._90_L;
@@ -424,20 +480,17 @@ namespace RsLib.Common
         /// <returns>true : Right // false : Left</returns>
         public static bool? SizeIndex2Side(ShoeSizeIndex Index)
         {
-            if ((int)Index > 52)
+            if ((int)Index % 3 == 0)
             {
-                return null;
+                return false;
+            }
+            else if ((int)Index % 3 == 1)
+            {
+                return true;
             }
             else
             {
-                if ((int)Index % 2 == 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return null;
             }
         }
 
@@ -625,232 +678,237 @@ namespace RsLib.Common
         /// <returns>鞋子尺寸 enum</returns>
         public static ShoeSize SizeIndex2Size(ShoeSizeIndex Index)
         {
-            if ((int)Index > 52)
+            switch (Index)
             {
-                switch (Index)
-                {
-                    case ShoeSizeIndex._30_RL:
-                        return ShoeSize._30;
+                case ShoeSizeIndex._30_L:
+                    return ShoeSize._30;
+                case ShoeSizeIndex._30_R:
+                    return ShoeSize._30;
+                case ShoeSizeIndex._30_RL:
+                    return ShoeSize._30;
 
-                    case ShoeSizeIndex._35_RL:
-                        return ShoeSize._35;
+                case ShoeSizeIndex._35_L:
+                    return ShoeSize._35;
+                case ShoeSizeIndex._35_R:
+                    return ShoeSize._35;
+                case ShoeSizeIndex._35_RL:
+                    return ShoeSize._35;
 
-                    case ShoeSizeIndex._40_RL:
-                        return ShoeSize._40;
+                case ShoeSizeIndex._40_L:
+                    return ShoeSize._40;
+                case ShoeSizeIndex._40_R:
+                    return ShoeSize._40;
+                case ShoeSizeIndex._40_RL:
+                    return ShoeSize._40;
 
-                    case ShoeSizeIndex._45_RL:
-                        return ShoeSize._45;
+                case ShoeSizeIndex._45_L:
+                    return ShoeSize._45;
+                case ShoeSizeIndex._45_R:
+                    return ShoeSize._45;
+                case ShoeSizeIndex._45_RL:
+                    return ShoeSize._45;
 
-                    case ShoeSizeIndex._50_RL:
-                        return ShoeSize._50;
+                case ShoeSizeIndex._50_L:
+                    return ShoeSize._50;
+                case ShoeSizeIndex._50_R:
+                    return ShoeSize._50;
+                case ShoeSizeIndex._50_RL:
+                    return ShoeSize._50;
 
-                    case ShoeSizeIndex._55_RL:
-                        return ShoeSize._55;
+                case ShoeSizeIndex._55_L:
+                    return ShoeSize._55;
+                case ShoeSizeIndex._55_R:
+                    return ShoeSize._55;
+                case ShoeSizeIndex._55_RL:
+                    return ShoeSize._55;
 
-                    case ShoeSizeIndex._60_RL:
-                        return ShoeSize._60;
+                case ShoeSizeIndex._60_L:
+                    return ShoeSize._60;
+                case ShoeSizeIndex._60_R:
+                    return ShoeSize._60;
+                case ShoeSizeIndex._60_RL:
+                    return ShoeSize._60;
 
-                    case ShoeSizeIndex._65_RL:
-                        return ShoeSize._65;
+                case ShoeSizeIndex._65_L:
+                    return ShoeSize._65;
+                case ShoeSizeIndex._65_R:
+                    return ShoeSize._65;
+                case ShoeSizeIndex._65_RL:
+                    return ShoeSize._65;
 
-                    case ShoeSizeIndex._70_RL:
-                        return ShoeSize._70;
+                case ShoeSizeIndex._70_L:
+                    return ShoeSize._70;
+                case ShoeSizeIndex._70_R:
+                    return ShoeSize._70;
+                case ShoeSizeIndex._70_RL:
+                    return ShoeSize._70;
 
-                    case ShoeSizeIndex._75_RL:
-                        return ShoeSize._75;
+                case ShoeSizeIndex._75_L:
+                    return ShoeSize._75;
+                case ShoeSizeIndex._75_R:
+                    return ShoeSize._75;
+                case ShoeSizeIndex._75_RL:
+                    return ShoeSize._75;
 
-                    case ShoeSizeIndex._80_RL:
-                        return ShoeSize._80;
+                case ShoeSizeIndex._80_L:
+                    return ShoeSize._80;
+                case ShoeSizeIndex._80_R:
+                    return ShoeSize._80;
+                case ShoeSizeIndex._80_RL:
+                    return ShoeSize._80;
 
-                    case ShoeSizeIndex._85_RL:
-                        return ShoeSize._85;
+                case ShoeSizeIndex._85_L:
+                    return ShoeSize._85;
+                case ShoeSizeIndex._85_R:
+                    return ShoeSize._85;
+                case ShoeSizeIndex._85_RL:
+                    return ShoeSize._85;
 
-                    case ShoeSizeIndex._90_RL:
-                        return ShoeSize._90;
+                case ShoeSizeIndex._90_L:
+                    return ShoeSize._90;
+                case ShoeSizeIndex._90_R:
+                    return ShoeSize._90;
+                case ShoeSizeIndex._90_RL:
+                    return ShoeSize._90;
 
-                    case ShoeSizeIndex._95_RL:
-                        return ShoeSize._95;
+                case ShoeSizeIndex._95_L:
+                    return ShoeSize._95;
+                case ShoeSizeIndex._95_R:
+                    return ShoeSize._95;
+                case ShoeSizeIndex._95_RL:
+                    return ShoeSize._95;
 
-                    case ShoeSizeIndex._100_RL:
-                        return ShoeSize._100;
+                case ShoeSizeIndex._100_L:
+                    return ShoeSize._100;
+                case ShoeSizeIndex._100_R:
+                    return ShoeSize._100;
+                case ShoeSizeIndex._100_RL:
+                    return ShoeSize._100;
 
-                    case ShoeSizeIndex._105_RL:
-                        return ShoeSize._105;
+                case ShoeSizeIndex._105_L:
+                    return ShoeSize._105;
+                case ShoeSizeIndex._105_R:
+                    return ShoeSize._105;
+                case ShoeSizeIndex._105_RL:
+                    return ShoeSize._105;
 
-                    case ShoeSizeIndex._110_RL:
-                        return ShoeSize._110;
 
-                    case ShoeSizeIndex._115_L:
-                        return ShoeSize._115;
-                    case ShoeSizeIndex._115_R:
-                        return ShoeSize._115;
+                case ShoeSizeIndex._110_L:
+                    return ShoeSize._110;
+                case ShoeSizeIndex._110_R:
+                    return ShoeSize._110;
+                case ShoeSizeIndex._110_RL:
+                    return ShoeSize._110;
 
-                    case ShoeSizeIndex._120_RL:
-                        return ShoeSize._120;
+                case ShoeSizeIndex._115_L:
+                    return ShoeSize._115;
+                case ShoeSizeIndex._115_R:
+                    return ShoeSize._115;
+                case ShoeSizeIndex._115_RL:
+                    return ShoeSize._115;
 
-                    case ShoeSizeIndex._125_RL:
-                        return ShoeSize._125;
+                case ShoeSizeIndex._120_L:
+                    return ShoeSize._120;
+                case ShoeSizeIndex._120_R:
+                    return ShoeSize._120;
+                case ShoeSizeIndex._120_RL:
+                    return ShoeSize._120;
 
-                    case ShoeSizeIndex._130_RL:
-                        return ShoeSize._130;
+                case ShoeSizeIndex._125_L:
+                    return ShoeSize._125;
+                case ShoeSizeIndex._125_R:
+                    return ShoeSize._125;
+                case ShoeSizeIndex._125_RL:
+                    return ShoeSize._125;
 
-                    case ShoeSizeIndex._140_RL:
-                        return ShoeSize._140;
+                case ShoeSizeIndex._130_L:
+                    return ShoeSize._130;
+                case ShoeSizeIndex._130_R:
+                    return ShoeSize._130;
+                case ShoeSizeIndex._130_RL:
+                    return ShoeSize._130;
 
-                    case ShoeSizeIndex._150_RL:
-                        return ShoeSize._150;
+                case ShoeSizeIndex._135_L:
+                    return ShoeSize._135;
+                case ShoeSizeIndex._135_R:
+                    return ShoeSize._135;
+                case ShoeSizeIndex._135_RL:
+                    return ShoeSize._135;
 
-                    case ShoeSizeIndex._160_RL:
-                        return ShoeSize._160;
+                case ShoeSizeIndex._140_L:
+                    return ShoeSize._140;
+                case ShoeSizeIndex._140_R:
+                    return ShoeSize._140;
+                case ShoeSizeIndex._140_RL:
+                    return ShoeSize._140;
 
-                    case ShoeSizeIndex._170_RL:
-                        return ShoeSize._170;
+                case ShoeSizeIndex._150_L:
+                    return ShoeSize._150;
+                case ShoeSizeIndex._150_R:
+                    return ShoeSize._150;
+                case ShoeSizeIndex._150_RL:
+                    return ShoeSize._150;
 
-                    case ShoeSizeIndex._180_RL:
-                        return ShoeSize._180;
+                case ShoeSizeIndex._160_L:
+                    return ShoeSize._160;
+                case ShoeSizeIndex._160_R:
+                    return ShoeSize._160;
+                case ShoeSizeIndex._160_RL:
+                    return ShoeSize._160;
 
-                    default:
-                        return ShoeSize._90;
-                }
+                case ShoeSizeIndex._170_L:
+                    return ShoeSize._170;
+                case ShoeSizeIndex._170_R:
+                    return ShoeSize._170;
+                case ShoeSizeIndex._170_RL:
+                    return ShoeSize._170;
+
+                case ShoeSizeIndex._180_L:
+                    return ShoeSize._180;
+                case ShoeSizeIndex._180_R:
+                    return ShoeSize._180;
+                case ShoeSizeIndex._180_RL:
+                    return ShoeSize._180;
+
+                case ShoeSizeIndex._190_L:
+                    return ShoeSize._190;
+                case ShoeSizeIndex._190_R:
+                    return ShoeSize._190;
+                case ShoeSizeIndex._190_RL:
+                    return ShoeSize._190;
+
+                case ShoeSizeIndex._200_L:
+                    return ShoeSize._200;
+                case ShoeSizeIndex._200_R:
+                    return ShoeSize._200;
+                case ShoeSizeIndex._200_RL:
+                    return ShoeSize._200;
+
+                case ShoeSizeIndex._210_L:
+                    return ShoeSize._210;
+                case ShoeSizeIndex._210_R:
+                    return ShoeSize._210;
+                case ShoeSizeIndex._210_RL:
+                    return ShoeSize._210;
+
+                case ShoeSizeIndex._220_L:
+                    return ShoeSize._220;
+                case ShoeSizeIndex._220_R:
+                    return ShoeSize._220;
+                case ShoeSizeIndex._220_RL:
+                    return ShoeSize._220;
+
+                case ShoeSizeIndex._230_L:
+                    return ShoeSize._230;
+                case ShoeSizeIndex._230_R:
+                    return ShoeSize._230;
+                case ShoeSizeIndex._230_RL:
+                    return ShoeSize._230;
+
+                default:
+                    return ShoeSize._90;
             }
-            else
-            {
-                switch (Index)
-                {
-                    case ShoeSizeIndex._30_L:
-                        return ShoeSize._30;
-                    case ShoeSizeIndex._30_R:
-                        return ShoeSize._30;
 
-                    case ShoeSizeIndex._35_L:
-                        return ShoeSize._35;
-                    case ShoeSizeIndex._35_R:
-                        return ShoeSize._35;
-
-                    case ShoeSizeIndex._40_L:
-                        return ShoeSize._40;
-                    case ShoeSizeIndex._40_R:
-                        return ShoeSize._40;
-
-                    case ShoeSizeIndex._45_L:
-                        return ShoeSize._45;
-                    case ShoeSizeIndex._45_R:
-                        return ShoeSize._45;
-
-                    case ShoeSizeIndex._50_L:
-                        return ShoeSize._50;
-                    case ShoeSizeIndex._50_R:
-                        return ShoeSize._50;
-
-                    case ShoeSizeIndex._55_L:
-                        return ShoeSize._55;
-                    case ShoeSizeIndex._55_R:
-                        return ShoeSize._55;
-
-                    case ShoeSizeIndex._60_L:
-                        return ShoeSize._60;
-                    case ShoeSizeIndex._60_R:
-                        return ShoeSize._60;
-
-                    case ShoeSizeIndex._65_L:
-                        return ShoeSize._65;
-                    case ShoeSizeIndex._65_R:
-                        return ShoeSize._65;
-
-                    case ShoeSizeIndex._70_L:
-                        return ShoeSize._70;
-                    case ShoeSizeIndex._70_R:
-                        return ShoeSize._70;
-
-                    case ShoeSizeIndex._75_L:
-                        return ShoeSize._75;
-                    case ShoeSizeIndex._75_R:
-                        return ShoeSize._75;
-
-                    case ShoeSizeIndex._80_L:
-                        return ShoeSize._80;
-                    case ShoeSizeIndex._80_R:
-                        return ShoeSize._80;
-
-                    case ShoeSizeIndex._85_L:
-                        return ShoeSize._85;
-                    case ShoeSizeIndex._85_R:
-                        return ShoeSize._85;
-
-                    case ShoeSizeIndex._90_L:
-                        return ShoeSize._90;
-                    case ShoeSizeIndex._90_R:
-                        return ShoeSize._90;
-
-                    case ShoeSizeIndex._95_L:
-                        return ShoeSize._95;
-                    case ShoeSizeIndex._95_R:
-                        return ShoeSize._95;
-
-                    case ShoeSizeIndex._100_L:
-                        return ShoeSize._100;
-                    case ShoeSizeIndex._100_R:
-                        return ShoeSize._100;
-
-                    case ShoeSizeIndex._105_L:
-                        return ShoeSize._105;
-                    case ShoeSizeIndex._105_R:
-                        return ShoeSize._105;
-
-                    case ShoeSizeIndex._110_L:
-                        return ShoeSize._110;
-                    case ShoeSizeIndex._110_R:
-                        return ShoeSize._110;
-
-                    case ShoeSizeIndex._115_L:
-                        return ShoeSize._115;
-                    case ShoeSizeIndex._115_R:
-                        return ShoeSize._115;
-
-                    case ShoeSizeIndex._120_L:
-                        return ShoeSize._120;
-                    case ShoeSizeIndex._120_R:
-                        return ShoeSize._120;
-
-                    case ShoeSizeIndex._125_L:
-                        return ShoeSize._125;
-                    case ShoeSizeIndex._125_R:
-                        return ShoeSize._125;
-
-                    case ShoeSizeIndex._130_L:
-                        return ShoeSize._130;
-                    case ShoeSizeIndex._130_R:
-                        return ShoeSize._130;
-
-                    case ShoeSizeIndex._140_L:
-                        return ShoeSize._140;
-                    case ShoeSizeIndex._140_R:
-                        return ShoeSize._140;
-
-                    case ShoeSizeIndex._150_L:
-                        return ShoeSize._150;
-                    case ShoeSizeIndex._150_R:
-                        return ShoeSize._150;
-
-                    case ShoeSizeIndex._160_L:
-                        return ShoeSize._160;
-                    case ShoeSizeIndex._160_R:
-                        return ShoeSize._160;
-
-                    case ShoeSizeIndex._170_L:
-                        return ShoeSize._170;
-                    case ShoeSizeIndex._170_R:
-                        return ShoeSize._170;
-
-                    case ShoeSizeIndex._180_L:
-                        return ShoeSize._180;
-                    case ShoeSizeIndex._180_R:
-                        return ShoeSize._180;
-
-                    default:
-                        return ShoeSize._90;
-                }
-            }
         }
         /// <summary>
         /// 唯一序號 int 轉 唯一序號 enum
