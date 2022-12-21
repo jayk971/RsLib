@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F354BD2A-D638-4EBD-BC61-414D1BD142CF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>RsLib.DemoForm</RootNamespace>
+    <AssemblyName>RsLib.DemoForm</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AlarmManager\AlarmMgr\RsLib.AlarmMgr.csproj">
+      <Project>{dc32da82-892a-4476-ac4f-c08a2be023c2}</Project>
+      <Name>RsLib.AlarmMgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConvertKeyBMP\ConvertKeyBMP\RsLib.ConvertKeyBMP.csproj">
+      <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
+      <Name>RsLib.ConvertKeyBMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FT.Common\FT.Common\RsLib.Common.csproj">
+      <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
+      <Name>RsLib.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FT3D\FT3D\Calculate3DOrig\RsLib.PointCloud.CalculateMatrix.csproj">
+      <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
+      <Name>RsLib.PointCloud.CalculateMatrix</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FT3D\FT3D\CalculateMatrixForm\RsLib.CalculateMatrixForm.csproj">
+      <Project>{52f26a3b-447c-4ede-a5b2-c5fbb53808fd}</Project>
+      <Name>RsLib.CalculateMatrixForm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FT3D\FT3D\FT3D\RsLib.PointCloud.csproj">
+      <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
+      <Name>RsLib.PointCloud</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FTDXF\FTDXF\RsLib.DXF.csproj">
+      <Project>{c2d53614-9834-46f6-8608-399e5c48ebd1}</Project>
+      <Name>RsLib.DXF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FTMMF\FT.MMF\RsLib.MMF.csproj">
+      <Project>{1a8e9830-4a01-4820-bce5-397d98f173be}</Project>
+      <Name>RsLib.MMF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FT_MC_0828\FT_MC\RsLib.McProtocol.csproj">
+      <Project>{a19dfbf8-20a8-45c8-be00-e7b4bb201e3b}</Project>
+      <Name>RsLib.McProtocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KeyenceEthernet\X8000TCP\RsLib.X8000TCP.csproj">
+      <Project>{2b900918-2b55-4f04-ab1e-55f06f26bb6b}</Project>
+      <Name>RsLib.X8000TCP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogManager\LogMgr\RsLib.LogMgr.csproj">
+      <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
+      <Name>RsLib.LogMgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RsLib.BaseType\RsLib.BaseType.csproj">
+      <Project>{a83549cb-762b-457e-82aa-cfdb913d3cc6}</Project>
+      <Name>RsLib.BaseType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RsLib.TCP\RsLib.TCP.csproj">
+      <Project>{6f3c8304-db61-4306-8189-374a8abc06d1}</Project>
+      <Name>RsLib.TCP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCanvas\FT.Display\RsLib.Display.csproj">
+      <Project>{8c037e99-2910-4f24-a289-8dde65b9e04f}</Project>
+      <Name>RsLib.Display</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCanvas\FT.DXF2Display\RsLib.DXF2Display.csproj">
+      <Project>{5e709816-1155-4c38-9c9d-b2aa746c65d7}</Project>
+      <Name>RsLib.DXF2Display</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WatchFolder\WatchFolder\RsLib.WatchFolder.csproj">
+      <Project>{8309a26d-6106-4942-a38f-6de7991ad6fc}</Project>
+      <Name>RsLib.WatchFolder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
