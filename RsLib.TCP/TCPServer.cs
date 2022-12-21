@@ -161,7 +161,10 @@ namespace RsLib.TCP.Server
                     }
                     else
                     {
-                        Log.Add($"Client has already connected.", MsgLevel.Warn);
+                        _clientObj[requestName].DataReceived -= StateObject_DataReceived;
+                        _clientObj[requestName].Disconnect();
+                        _clientObj[requestName] = temp;
+                        Log.Add($"Client reconnected.", MsgLevel.Warn);
                     }
                 }
             }
@@ -230,10 +233,13 @@ namespace RsLib.TCP.Server
     [Serializable]
     public class TCPServerOption
     {
+        [Category("Server")]
         [DisplayName("Name")]
         public string Name { get;set; } = "TCPServer";
+        [Category("Server")]
         [DisplayName("Max Client Count")]
         public ushort MaxClientCount { get; set; } = 4;
+        [Category("Server")]
         [DisplayName("Port")]
         public ushort Port { get; set; } = 1000;
         internal void SaveYaml(string filePath)

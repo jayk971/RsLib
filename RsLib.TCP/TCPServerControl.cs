@@ -19,6 +19,7 @@ namespace RsLib.TCP.Control
             InitializeComponent();
             _server.DataReceived += _server_DataReceived;
             _server.ClientAdded += _server_ClientAdded;
+            propertyGrid1.SelectedObject = _server.Option;
         }
 
         private void _server_ClientAdded(string obj)
@@ -75,7 +76,14 @@ namespace RsLib.TCP.Control
             btn_ServerStop.Enabled = _server.IsRun;
             btn_ServerStart.Enabled = !_server.IsRun;
         }
-
+        public void SendData(string clientName, string data)
+        {
+            if (data == "") return;
+            if (_server.IsRun == false) return;
+            _server.Send(clientName, data);
+            string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{data}\n";
+            richTextBox1.AppendText(displayMsg);
+        }
         private void btn_SendData_Click(object sender, EventArgs e)
         {
 
@@ -86,10 +94,7 @@ namespace RsLib.TCP.Control
             int selectIndex = cmb_ClientLIst.SelectedIndex;
             if (selectIndex == -1) return;
             string clientName = cmb_ClientLIst.SelectedItem.ToString();
-            _server.Send(clientName, data);
-            string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{data}\n";
-            richTextBox1.AppendText(displayMsg);
-
+            SendData(clientName, data);
         }
 
         private void btn_SendDataAll_Click(object sender, EventArgs e)
