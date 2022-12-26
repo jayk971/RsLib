@@ -107,6 +107,127 @@ namespace RsLib.ConvertKeyBMP
 
 
         }
+        public static void Load_ptr(string file_path)
+        {
+            try
+            {
+                Log.Add($"Loading Height Image : {file_path}", MsgLevel.Trace);
+                if (!checkFileStatus(file_path))
+                {
+                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warn);
+                    return;
+                }
+                Bitmap bmp = new Bitmap(file_path);
+                height = bmp.Height;
+                width = bmp.Width;
+                Rectangle rec = new Rectangle(0, 0, width, height);
+                BitmapData bData = bmp.LockBits(rec, ImageLockMode.ReadOnly, bmp.PixelFormat);
+                IntPtr ptr_scan0 = bData.Scan0;
+                //int size = bData.Stride * bData.Height;
+                //byte[] data = new byte[size];
+
+                cloudArray = new double[height, width];
+                //Marshal.Copy(ptr_scan0, data, 0, size);
+                unsafe
+                {
+                    byte* ptr = (byte*)ptr_scan0;
+                    for (int y = 0; y < bData.Height; y++)
+                    {
+                        for (int x = 0; x < bData.Width; x++)
+                        {
+
+                            byte B = *ptr;
+                            ptr++;
+                            byte G = *ptr;
+                            ptr++;
+                            byte R = *ptr;
+                            ptr++;
+
+
+                            if (B == 0 && G == 0 && R == 0)
+                            {
+                                cloudArray[y, x] = NoData;
+                                continue;
+                            }
+                            else
+                            {
+                                int testValue = RGBtoInt(R, G, B);
+                                double zz = IntToHeight(testValue);
+                                cloudArray[y, x] = zz;
+                            }
+                        }
+                    }
+                }
+                bmp.UnlockBits(bData);
+                bmp = null;
+                bData = null;
+                Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
+            }
+            catch (Exception ex)
+            {
+                Log.Add("Load height image exception.", MsgLevel.Alarm, ex);
+            }
+
+
+        }
+        public static void Load_GetPixel(string file_path)
+        {
+            try
+            {
+                Log.Add($"Loading Height Image : {file_path}", MsgLevel.Trace);
+                if (!checkFileStatus(file_path))
+                {
+                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warn);
+                    return;
+                }
+                Bitmap bmp = new Bitmap(file_path);
+                height = bmp.Height;
+                width = bmp.Width;
+                //Rectangle rec = new Rectangle(0, 0, width, height);
+                //BitmapData bData = bmp.LockBits(rec, ImageLockMode.ReadOnly, bmp.PixelFormat);
+                //IntPtr ptr_scan0 = bData.Scan0;
+                //int size = bData.Stride * bData.Height;
+                //byte[] data = new byte[size];
+
+                cloudArray = new double[height, width];
+                //Marshal.Copy(ptr_scan0, data, 0, size);
+
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    for (int x = 0; x < bmp.Width; x++)
+                    {
+                        Color c = bmp.GetPixel(x, y);
+                        byte B = c.B;
+                        byte G = c.G;
+                        byte R = c.R;
+
+
+                        if (B == 0 && G == 0 && R == 0)
+                        {
+                            cloudArray[y, x] = NoData;
+                            continue;
+                        }
+                        else
+                        {
+                            int testValue = RGBtoInt(R, G, B);
+                            double zz = IntToHeight(testValue);
+                            cloudArray[y, x] = zz;
+                        }
+                    }
+                }
+                
+                //bmp.UnlockBits(bData);
+                bmp = null;
+                //bData = null;
+                Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
+            }
+            catch (Exception ex)
+            {
+                Log.Add("Load height image exception.", MsgLevel.Alarm, ex);
+            }
+
+
+        }
         public static void LoadInt(string file_path)
         {
             try
@@ -157,6 +278,66 @@ namespace RsLib.ConvertKeyBMP
                 Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
             }
             catch(Exception ex)
+            {
+                Log.Add("Load height integer image exception.", MsgLevel.Alarm, ex);
+            }
+        }
+        public static void LoadInt_ptr(string file_path)
+        {
+            try
+            {
+                Log.Add($"Loading Height Int Image : {file_path}", MsgLevel.Trace);
+                if (!checkFileStatus(file_path))
+                {
+                    Log.Add($"Image : {file_path} Not Found", MsgLevel.Warn);
+                    return;
+                }
+                Bitmap bmp = new Bitmap(file_path);
+                height = bmp.Height;
+                width = bmp.Width;
+
+                Rectangle rec = new Rectangle(0, 0, width, height);
+                BitmapData bData = bmp.LockBits(rec, ImageLockMode.ReadOnly, bmp.PixelFormat);
+                IntPtr ptr_scan0 = bData.Scan0;
+                //int size = bData.Stride * bData.Height;
+                //byte[] data = new byte[size];
+
+                cloudArray = new double[height, width];
+                //Marshal.Copy(ptr_scan0, data, 0, size);
+
+                unsafe
+                {
+                    byte* ptr = (byte*)ptr_scan0;
+                    for (int y = 0; y < bData.Height; y++)
+                    {
+                        for (int x = 0; x < bData.Width; x ++)
+                        {
+                            byte B = *ptr;
+                            ptr ++;
+                            byte G = *ptr;
+                            ptr++;
+                            byte R = *ptr;
+                            ptr++;
+
+                            if (B == 0 && G == 0 && R == 0)
+                            {
+                                cloudArray[y, x ] = NoData;
+                                continue;
+                            }
+                            else
+                            {
+                                int testValue = RGBtoInt(R, G, B);
+                                cloudArray[y, x] = testValue;
+                            }
+                        }
+                    }
+                }
+                bmp.UnlockBits(bData);
+                bmp = null;
+                bData = null;
+                Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
+            }
+            catch (Exception ex)
             {
                 Log.Add("Load height integer image exception.", MsgLevel.Alarm, ex);
             }

@@ -3223,7 +3223,7 @@ namespace RsLib.PointCloud
             return null;
         }
 
-        public IEnumerator<Point3D> GetEnumerator()
+        public new IEnumerator<Point3D> GetEnumerator()
         {
             for (int i = 0; i < Points.Count; i++)
             {

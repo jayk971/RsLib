@@ -12,6 +12,7 @@ using System.IO;
 using RsLib.WatchFolder;
 using RsLib.LogMgr;
 using RsLib.Common;
+using System.Diagnostics;
 namespace TestForm
 {
     public partial class Form1 : Form
@@ -50,10 +51,31 @@ namespace TestForm
                 if(op.ShowDialog() == DialogResult.OK)
                 {
                     string file_path = op.FileName;
+                    long normal = 0;
+                    long ptr = 0;
+                    long getPixel = 0;
+
                     DialogResult dr =  MessageBox.Show("Load As XYZ Data ?", "Load Format", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                     if(dr == DialogResult.Yes)
                     {
-                        KeyBMP.Load(file_path);
+                        Stopwatch stopwatch = new Stopwatch();
+
+                        //stopwatch.Restart();
+                        //KeyBMP.Load(file_path);
+                        //stopwatch.Stop();
+                        //normal = stopwatch.ElapsedMilliseconds;
+
+                        stopwatch.Restart();
+                        KeyBMP.Load_ptr(file_path);
+                        stopwatch.Stop();
+                        ptr = stopwatch.ElapsedMilliseconds;
+
+                        //stopwatch.Restart();
+                        //KeyBMP.Load_GetPixel(file_path);
+                        //stopwatch.Stop();
+                        //getPixel = stopwatch.ElapsedMilliseconds;
+
+                        Log.Add($"{normal},{ptr},{getPixel}", MsgLevel.Info);
                     }
                     else
                     {

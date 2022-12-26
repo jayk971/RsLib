@@ -8,7 +8,7 @@ namespace RsLib.Common
 {
     public static class RsLibFile
     {
-        public static string MainDisk
+        static string MainDisk
         {
             get
             {
@@ -22,8 +22,8 @@ namespace RsLib.Common
                 }
             }
         }
-        public static string MainFolder = MainDisk + "RLib";
-        public static string Lib3rdParty = MainFolder + "\\Lib";
+        static string MainFolder = MainDisk + "RLib";
+        static string Lib3rdParty = MainFolder + "\\Lib";
         public static void CheckNLog(string destFolder)
         {
             if(Directory.Exists(destFolder))
