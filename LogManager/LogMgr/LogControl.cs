@@ -116,7 +116,7 @@ namespace RsLib.LogMgr
                         {
                             if ((int)lastMsg.Level >= levelFilterIndex || levelFilterIndex == 4)
                             {
-                                renderRichTexyBox(lastMsg.ToString(), lastMsg.Level);
+                                renderRichTexyBox(lastMsg);
                             }
                         }
                     }
@@ -131,7 +131,7 @@ namespace RsLib.LogMgr
                             {
                                 if ((int)msg.Level >= levelFilterIndex || levelFilterIndex == 4)
                                 {
-                                    renderRichTexyBox(msg.ToString(), msg.Level);
+                                    renderRichTexyBox(msg);
                                 }
                             }
                         }
@@ -147,7 +147,41 @@ namespace RsLib.LogMgr
                 }
             }
         }
+        void renderRichTexyBox(LogMsg msg)
+        {
+            int textLength = rtbx_Log.Text.Length;
+            rtbx_Log.AppendText(msg.ToString());
+            rtbx_Log.SelectionStart = textLength;
+            rtbx_Log.SelectionLength = rtbx_Log.Text.Length - textLength;
+            if (msg.EnableSpecialColor)
+            {
+                rtbx_Log.SelectionBackColor = msg.BackColor ;
+                rtbx_Log.SelectionColor = msg.ForeColor;
+            }
+            else
+            {
+                switch (msg.Level)
+                {
+                    case MsgLevel.Trace:
+                        rtbx_Log.SelectionBackColor = Color.White;
+                        break;
+                    case MsgLevel.Info:
+                        rtbx_Log.SelectionBackColor = Color.Silver;
+                        break;
+                    case MsgLevel.Warn:
+                        rtbx_Log.SelectionBackColor = Color.Gold;
+                        break;
+                    case MsgLevel.Alarm:
+                        rtbx_Log.SelectionBackColor = Color.Coral;
 
+                        break;
+                    default:
+                        rtbx_Log.SelectionBackColor = Color.White;
+                        break;
+                }
+            }
+            rtbx_Log.AppendText("\n");
+        }
         void renderRichTexyBox(string msg, MsgLevel level)
         {
             int textLength =  rtbx_Log.Text.Length;

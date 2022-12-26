@@ -7,6 +7,7 @@ using System.IO;
 using NLog;
 using RsLib.BaseType;
 using System.Threading;
+using System.Drawing;
 namespace RsLib.LogMgr
 {
     public enum MsgLevel : int
@@ -35,6 +36,15 @@ namespace RsLib.LogMgr
                 logQ.Enqueue(msg);
             }
         }
+        public static void Add(string Msg, MsgLevel errLevel,Color backColor,Color foreColor ,Exception ex = null)
+        {
+            lock (_lock)
+            {
+                LogMsg msg = new LogMsg(errLevel, Msg,backColor,foreColor, ex);
+                logQ.Enqueue(msg);
+            }
+        }
+
         public static void Add(string Msg, MsgLevel errLevel, bool updateUI,Exception ex = null)
         {
             lock (_lock)
@@ -119,13 +129,25 @@ namespace RsLib.LogMgr
         public string Text;
         public Exception Ex;
         public bool UpdateUI = true;
-
-        public LogMsg(MsgLevel level,string text,Exception ex)
+        public Color BackColor { get; private set; } = Color.FromKnownColor(KnownColor.Control);
+        public Color ForeColor { get; private set; } = Color.Black;
+        public bool EnableSpecialColor { get; private set; } = false;
+        public LogMsg(MsgLevel level, string text, Exception ex)
         {
             Time = DateTime.Now;
             Level = level;
             Text = text;
             Ex = ex;
+        }
+        public LogMsg(MsgLevel level,string text,Color backColor,Color foreColor,Exception ex)
+        {
+            Time = DateTime.Now;
+            Level = level;
+            Text = text;
+            Ex = ex;
+            BackColor = backColor;
+            ForeColor = foreColor;
+            EnableSpecialColor = true;
         }
         public LogMsg(MsgLevel level, string text, Exception ex,bool updateUI)
         {
