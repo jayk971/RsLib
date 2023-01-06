@@ -155,9 +155,12 @@ namespace RsLib.PointCloud
         }
         public void UnitVector()
         {
-            X /= V.Norm;
-            Y /= V.Norm;
-            Z /=V.Norm;
+            Vector3 temp = new Vector3((float)X, (float)Y, (float)Z);
+            temp.Normalize();
+
+            X = temp.X;
+            Y = temp.Y;
+            Z = temp.Z;
         }
 
         public static Vector3D operator +(Vector3D A, Vector3D B)
