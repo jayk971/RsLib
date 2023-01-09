@@ -68,6 +68,55 @@ namespace RsLib.Common
             }
             return array;
         }
+        /// <summary>
+        /// Convert string to word array. 
+        /// ex: Test => 
+        /// T : word 1 Low bit, e : word 1 High bit
+        /// s : word 2 Low bit, t : word 2 High bit
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="digit"></param>
+        /// <returns></returns>
+        public static int[] ConvertToWordArray(this string s, uint wordArrayCount)
+        {
+            int[] iArr = new int[wordArrayCount];
+            for (int i = 0; i < wordArrayCount; i++)
+            {
+                int lowBitStringIndex = i * 2;
+                int highBitStringIndex = i * 2 + 1;
+                int lowBitInt = 32; // ASCII space
+                int highBitInt = 32; // ASCII space
+                if (lowBitStringIndex < s.Length)
+                {
+                    char c = s[lowBitStringIndex];
+                    lowBitInt = Convert.ToInt32(c);
+                }
+
+                if (highBitStringIndex < s.Length)
+                {
+                    char c = s[highBitStringIndex];
+                    highBitInt = Convert.ToInt32(c);
+                }
+                iArr[i] = highBitInt << 16 | lowBitInt;
+            }
+            return iArr;
+        }
+        public static string ConvertToString(this int[] intArray)
+        {
+            string s = "";
+            List<char> charList = new List<char>();
+            for (int i = 0; i < intArray.Length; i++)
+            {
+                int intValue = intArray[i];
+                int lowBit = intValue & 65535;
+                int highBit = intValue >> 16 & 65535;
+                charList.Add(Convert.ToChar(lowBit));
+                charList.Add(Convert.ToChar(highBit));
+            }
+            s = string.Concat(charList.ToArray());
+            return s;
+        }
+
     }
     public class FT_StopWatch:Stopwatch
     {        /// <summary>

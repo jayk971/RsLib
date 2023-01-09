@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using RsLib.TCP.Control;
 using RsLib.LogMgr;
+using RsLib.Common;
 namespace RsLib.DemoForm
 {
     public partial class Form1 : Form
@@ -38,11 +39,11 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Log.Add("Test", MsgLevel.Info, Color.DarkGreen, Color.Cyan);
-            Log.Add("Test2", MsgLevel.Warn);
-            Log.Add("Test3", MsgLevel.Alarm);
-            Log.Add("Test4", MsgLevel.Info);
 
+            string s = "Test123";
+            int[] arr = s.ConvertToWordArray(10);
+
+            string sss = arr.ConvertToString();
         }
     }
 }
