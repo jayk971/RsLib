@@ -35,15 +35,23 @@ namespace RsLib.DemoForm
             double tt = Math.Round(test / 100, 2);
             label1.Text = tt.ToString("F2");
             Log.EnableUpdateUI = true;
+            comboBox1.AddEnumItems(typeof(LogControl));
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
 
-            string s = "Test123";
+            string s = "Ab12 #_.@$-()*&^";
             int[] arr = s.ConvertToWordArray(10);
 
-            string sss = arr.ConvertToString();
+            listBox1.Items.Clear();
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                listBox1.Items.Add(arr[i]);
+            }
+
+            listBox1.Items.Add(arr.ConvertToString());
         }
     }
 }
