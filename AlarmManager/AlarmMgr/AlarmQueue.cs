@@ -75,12 +75,18 @@ namespace RsLib.AlarmMgr
                 if (contain(code) == false)
                 {
                     _Q.Enqueue(error);
+                    if (error.Note == "") Log.Add($"Error Code : {error.Code} - {error.Name}", error.Level, ex);
+                    else Log.Add($"Error Code : {error.Code} - {error.Name}, Note : {error.Note}", error.Level, ex);
+
                     AlarmQueueUpdated?.Invoke(_Q);
                 }
             }
             else
             {
                 _Q.Enqueue(error);
+                if (error.Note == "") Log.Add($"Error Code : {error.Code} - {error.Name}", error.Level, ex);
+                else Log.Add($"Error Code : {error.Code} - {error.Name}, Note : {error.Note}", error.Level, ex);
+
                 AlarmQueueUpdated?.Invoke(_Q);
             }
 
@@ -124,8 +130,8 @@ namespace RsLib.AlarmMgr
 
             if (((int)code % 1000) < 500) level = MsgLevel.Alarm;
             else level = MsgLevel.Warn;
-            if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
-            else Log.Add($"Error Code : {code} -{name}, Note : {note}", level, ex);
+            //if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
+            //else Log.Add($"Error Code : {code} -{name}, Note : {note}", level, ex);
 
         }
         //public AlarmItem(int alarmCode, string msg, Exception ex = null)
@@ -151,8 +157,6 @@ namespace RsLib.AlarmMgr
             if (((int)code % 1000) < 500) level = MsgLevel.Alarm;
             else level = MsgLevel.Warn;
             note = _note;
-            if (note == "") Log.Add($"Error Code : {code} - {name}", level, ex);
-            else Log.Add($"Error Code : {code} - {name}, Note : {note}", level, ex);
 
         }
 

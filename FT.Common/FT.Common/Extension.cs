@@ -75,15 +75,15 @@ namespace RsLib.Common
         /// <param name="s"></param>
         /// <param name="digit"></param>
         /// <returns></returns>
-        public static int[] ConvertToWordArray(this string s, uint dWordCount)
+        public static int[] ConvertToWordArray(this string s, uint dWordCount, int emptyKeyCharValue = 32)
         {
             int[] iArr = new int[dWordCount];
             for (int i = 0; i < dWordCount; i++)
             {
                 int lowBitStringIndex = i * 2;
                 int highBitStringIndex = i * 2 + 1;
-                int lowBitInt = 32; // ASCII space
-                int highBitInt = 32; // ASCII space
+                int lowBitInt = emptyKeyCharValue; // ASCII space
+                int highBitInt = emptyKeyCharValue; // ASCII space
                 if (lowBitStringIndex < s.Length)
                 {
                     char c = s[lowBitStringIndex];
