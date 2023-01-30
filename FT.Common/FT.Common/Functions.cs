@@ -9,6 +9,7 @@ using System.Threading;
 using RsLib.LogMgr;
 using System.Security.Cryptography;
 using Microsoft.Win32;
+using System.Net.NetworkInformation;
 
 namespace RsLib.Common
 {
@@ -32,6 +33,22 @@ namespace RsLib.Common
     }
     public class FT_Functions
     {
+        public static bool PingOK(string ip)
+        {
+            Ping ping = new Ping();
+            PingReply pingReply = ping.Send(ip, 200);
+            if(pingReply.Status == IPStatus.Success)
+            {
+                Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
+                return true;
+            }
+            else
+            {
+                Log.Add($"Ping {ip} fail. Due to {pingReply.Status}.", MsgLevel.Warn);
+                return false;
+            }
+
+        }
         public static void OpenFolder(string folderPath)
         {
             string ExplorerFile = "c:\\Windows\\explorer.exe";

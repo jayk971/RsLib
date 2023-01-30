@@ -41,7 +41,9 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AlarmHistory.Add(3001);
+            bool ds = false;
+            ds = FT_Functions.PingOK("192.168.170.120");
+            //AlarmHistory.Add(3001);
             //string s = "Ab12 #_.@$-()*&^";
             //int[] arr = s.ConvertToWordArray(10);
 
