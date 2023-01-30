@@ -534,25 +534,25 @@ namespace RsLib.Common
                 return null;
             }
         }
-        public bool IsPrivateFirewallEnabled()
+        public static bool IsPrivateFirewallEnabled()
         {
             bool? isEnabled = isFirewallEnabled("StandardProfile");
             if (isEnabled == null) return true;
             else return (bool)isEnabled;
         }
-        public bool IsPublicFirewallEnabled()
+        public static bool IsPublicFirewallEnabled()
         {
             bool? isEnabled = isFirewallEnabled("PublicProfile");
             if (isEnabled == null) return true;
             else return (bool)isEnabled;
         }
-        public bool IsDomainFirewallEnabled()
+        public static bool IsDomainFirewallEnabled()
         {
             bool? isEnabled = isFirewallEnabled("DomainProfile");
             if (isEnabled == null) return true;
             else return (bool)isEnabled;
         }
-        public bool IsFirewallEnabled()
+        public static bool IsFirewallEnabled()
         {
             return IsPrivateFirewallEnabled() && IsPublicFirewallEnabled() && IsDomainFirewallEnabled();
         }
