@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using RsLib.LogMgr;
 using System.Security.Cryptography;
+using Microsoft.Win32;
 
 namespace RsLib.Common
 {
@@ -494,6 +495,66 @@ namespace RsLib.Common
                 returnStr = "Error";
                 return false;
             }
+        }
+
+        static bool? isFirewallEnabled(string testProfile)
+        {
+            try
+            {
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey($"System\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\{testProfile}"))
+                {
+                    if (key == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        Object o = key.GetValue("EnableFirewall");
+                        if (o == null)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            int firewall = (int)o;
+                            if (firewall == 1)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public bool IsPrivateFirewallEnabled()
+        {
+            bool? isEnabled = isFirewallEnabled("StandardProfile");
+            if (isEnabled == null) return true;
+            else return (bool)isEnabled;
+        }
+        public bool IsPublicFirewallEnabled()
+        {
+            bool? isEnabled = isFirewallEnabled("PublicProfile");
+            if (isEnabled == null) return true;
+            else return (bool)isEnabled;
+        }
+        public bool IsDomainFirewallEnabled()
+        {
+            bool? isEnabled = isFirewallEnabled("DomainProfile");
+            if (isEnabled == null) return true;
+            else return (bool)isEnabled;
+        }
+        public bool IsFirewallEnabled()
+        {
+            return IsPrivateFirewallEnabled() && IsPublicFirewallEnabled() && IsDomainFirewallEnabled();
         }
         public static bool IsTimeOut(double elapsedMilliSecond,Func<bool> waitCondition)
         {

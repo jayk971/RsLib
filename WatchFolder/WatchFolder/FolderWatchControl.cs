@@ -131,6 +131,7 @@ namespace RsLib.WatchFolder
         }
         void run()
         {
+            Log.Add("Watch folder td start running.", MsgLevel.Trace);
             while (EnableTd)
             {
                 isTdRunning = true;
@@ -163,6 +164,8 @@ namespace RsLib.WatchFolder
                 }
             
             isTdRunning = false;
+            Log.Add("Watch folder td was stopped.", MsgLevel.Trace);
+
         }
 
         public void StopMonitor()

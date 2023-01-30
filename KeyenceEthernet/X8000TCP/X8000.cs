@@ -216,7 +216,7 @@ namespace RsLib.X8000TCP
         }
         public bool WriteX8000Time(int yy, int mo, int dd, int hh, int mi, int ss)
         {
-            Log.Add($"Set X8000 time 20{yy}-{mo}-{dd} {hh}:{mi}:{ss}", MsgLevel.Trace);
+            Log.Add($"Set X8000 time {yy}-{mo}-{dd} {hh}:{mi}:{ss}", MsgLevel.Trace);
             if (!IsConnected) return false;
 
             string[] data = sendCommand($"TW,{yy},{mo},{dd},{hh},{mi},{ss}");
