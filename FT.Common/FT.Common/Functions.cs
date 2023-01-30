@@ -10,7 +10,7 @@ using RsLib.LogMgr;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using System.Net.NetworkInformation;
-
+using System.Net;
 namespace RsLib.Common
 {
     public class FT_StopWatch:Stopwatch
@@ -35,19 +35,29 @@ namespace RsLib.Common
     {
         public static bool PingOK(string ip)
         {
-            Ping ping = new Ping();
-            PingReply pingReply = ping.Send(ip, 200);
-            if(pingReply.Status == IPStatus.Success)
+            IPAddress parsedIP = new IPAddress(new byte[] { 127, 0, 0, 1 });
+            bool isIPlegal = IPAddress.TryParse(ip, out parsedIP);
+
+            if (isIPlegal)
             {
-                Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
-                return true;
+                Ping ping = new Ping();
+                PingReply pingReply = ping.Send(ip, 200);
+                if (pingReply.Status == IPStatus.Success)
+                {
+                    Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
+                    return true;
+                }
+                else
+                {
+                    Log.Add($"Ping {ip} fail. Due to {pingReply.Status}.", MsgLevel.Warn);
+                    return false;
+                }
             }
             else
             {
-                Log.Add($"Ping {ip} fail. Due to {pingReply.Status}.", MsgLevel.Warn);
+                Log.Add($"{ip} is illegal.", MsgLevel.Alarm);
                 return false;
             }
-
         }
         public static void OpenFolder(string folderPath)
         {
