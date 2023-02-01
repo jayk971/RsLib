@@ -127,6 +127,7 @@ namespace RsLib.TCP.Server
         {
             if (mainSocket == null) return;
             Socket handler = mainSocket.EndAccept(ar);
+            
             int currentClientCount = _clientObj.Count;
             if (currentClientCount >= Option.MaxClientCount)
             {
@@ -134,7 +135,7 @@ namespace RsLib.TCP.Server
                 return;
             }
             StateObject temp = new StateObject($"{Option.Name}_{currentClientCount}");
-            Log.Add($"Client is connecting to {temp.Name}", MsgLevel.Info);
+            Log.Add($"{handler.RemoteEndPoint} is connecting to {temp.Name}", MsgLevel.Info);
 
             temp.DataReceived += StateObject_DataReceived;
             temp.WorkSocket = handler;
@@ -156,7 +157,7 @@ namespace RsLib.TCP.Server
                     if (_clientObj.ContainsKey(requestName) == false)
                     {
                         _clientObj.Add(requestName, temp);
-                        Log.Add($"Client connects to {temp.Name} successfully.", MsgLevel.Info);
+                        Log.Add($"{handler.RemoteEndPoint} connects to {temp.Name} successfully.", MsgLevel.Info);
                         ClientAdded?.Invoke(requestName);
                     }
                     else
@@ -164,13 +165,13 @@ namespace RsLib.TCP.Server
                         _clientObj[requestName].DataReceived -= StateObject_DataReceived;
                         _clientObj[requestName].Disconnect();
                         _clientObj[requestName] = temp;
-                        Log.Add($"Client reconnected.", MsgLevel.Warn);
+                        Log.Add($"{handler.RemoteEndPoint} reconnected.", MsgLevel.Warn);
                     }
                 }
             }
             else
             {
-                Log.Add($"Client connect fail. Timeout : {!isInTime}. Msg : {Msg}", MsgLevel.Alarm);
+                Log.Add($"{handler.RemoteEndPoint} connect fail. Timeout : {!isInTime}. Msg : {Msg}", MsgLevel.Alarm);
             }
             // 等待下一個使用者連接
             mainSocket.BeginAccept(
