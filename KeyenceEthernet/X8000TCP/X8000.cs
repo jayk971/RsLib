@@ -39,7 +39,7 @@ namespace RsLib.X8000TCP
         {
         }
 
-        public bool Ping() =>FT_Functions.PingOK(IP);
+        public bool Ping(int pingByteSize) =>FT_Functions.PingOK(IP, pingByteSize);
         
         public bool CheckRunMode()
         {

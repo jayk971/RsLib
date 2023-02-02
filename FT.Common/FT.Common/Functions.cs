@@ -46,6 +46,11 @@ namespace RsLib.Common
             if (isIPlegal)
             {
                 if (byteSize >= 65000) byteSize = 64999;
+                else if(byteSize <= 0)
+                {
+                    byteSize = 1;
+                }
+
                 byte[] pingByte = new byte[byteSize];
                 Random rd = new Random();
                 rd.NextBytes(pingByte);
