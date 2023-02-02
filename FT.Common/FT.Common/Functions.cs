@@ -39,14 +39,18 @@ namespace RsLib.Common
             bool isIPlegal = IPAddress.TryParse(ip, out parsedIP);
             return isIPlegal;
         }
-        public static bool PingOK(string ip,bool enableWriteToLog = false)
+        public static bool PingOK(string ip,int byteSize,bool enableWriteToLog = false)
         {
             bool isIPlegal = IsIPLegal(ip);
 
             if (isIPlegal)
             {
+                if (byteSize >= 65000) byteSize = 64999;
+                byte[] pingByte = new byte[byteSize];
+                Random rd = new Random();
+                rd.NextBytes(pingByte);
                 Ping ping = new Ping();
-                PingReply pingReply = ping.Send(ip, 200);
+                PingReply pingReply = ping.Send(ip, 200, pingByte);
                 if (pingReply.Status == IPStatus.Success)
                 {
                     if(enableWriteToLog) Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
