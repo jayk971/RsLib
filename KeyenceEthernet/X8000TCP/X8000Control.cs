@@ -38,7 +38,7 @@ namespace RsLib.X8000TCP
             tbx_IP.Text = x8k.IP;
             tbx_Port.Text = x8k.Port.ToString();
         }
-
+        public bool Ping(int pingByteSize) => x8k.Ping(pingByteSize);
         public void SetX8000(X8000 x8000)
         {
             x8k = x8000;
