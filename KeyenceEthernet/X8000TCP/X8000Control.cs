@@ -17,6 +17,7 @@ namespace RsLib.X8000TCP
         public bool IsRunMode => x8k.CheckRunMode();
         public int CurrentSettingNum => x8k.ReadCurrentSettingNumber();
 
+        int _pingByteSize = 1;
         public string Status
         {
             get
@@ -38,7 +39,17 @@ namespace RsLib.X8000TCP
             tbx_IP.Text = x8k.IP;
             tbx_Port.Text = x8k.Port.ToString();
         }
-        public bool Ping(int pingByteSize) => x8k.Ping(pingByteSize);
+        public void StartPing(int pingByteSize,int pingInterval_ms)
+        {
+            _pingByteSize = pingByteSize;
+            if (pingInterval_ms < 1) pingInterval_ms = 1;
+            timer1.Interval = pingInterval_ms;
+            timer1.Enabled = true;
+        }
+        public void StopPing()
+        {
+            timer1.Enabled = false;
+        }
         public void SetX8000(X8000 x8000)
         {
             x8k = x8000;
@@ -236,6 +247,11 @@ namespace RsLib.X8000TCP
             DateTime dt = DateTime.Now;
             bool result = SyncTimeWithPC();
             if (result) MessageBox.Show($"Write {dt:yyyy-MM-dd HH:mm:ss}", "X8000 DateTime", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            x8k.Ping(_pingByteSize);   
         }
     }
 }

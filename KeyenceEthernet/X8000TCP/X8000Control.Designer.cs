@@ -29,6 +29,7 @@ namespace RsLib.X8000TCP
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(X8000Control));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -58,6 +59,7 @@ namespace RsLib.X8000TCP
             this.btn_ReadX8000SettingNum = new System.Windows.Forms.Button();
             this.btn_WriteX8000SettingNum = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -269,6 +271,10 @@ namespace RsLib.X8000TCP
             this.richTextBox1.Name = "richTextBox1";
             this.tableLayoutPanel2.SetRowSpan(this.richTextBox1, 2);
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // X8000Control
             // 
             resources.ApplyResources(this, "$this");
@@ -320,5 +326,6 @@ namespace RsLib.X8000TCP
         private System.Windows.Forms.ToolStripMenuItem mim_ReadX8000Time;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.ToolStripMenuItem setX8000TimeToolStripMenuItem;
+        private System.Windows.Forms.Timer timer1;
     }
 }
