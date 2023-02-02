@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using RsLib.Common;
 namespace RsLib.X8000TCP
 {
     public class X8000
@@ -37,6 +38,9 @@ namespace RsLib.X8000TCP
         public X8000()
         {
         }
+
+        public bool Ping() =>FT_Functions.PingOK(IP);
+        
         public bool CheckRunMode()
         {
             Log.Add($"Check X8000 run mode", MsgLevel.Trace);

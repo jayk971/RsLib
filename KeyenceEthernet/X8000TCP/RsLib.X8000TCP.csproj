@@ -123,6 +123,10 @@
     <None Include="Resources\icons8_link_64.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FT.Common\FT.Common\RsLib.Common.csproj">
+      <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
+      <Name>RsLib.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\LogManager\LogMgr\RsLib.LogMgr.csproj">
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
