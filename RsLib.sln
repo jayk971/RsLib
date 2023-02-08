@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.TCP", "RsLib.TCP\RsLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.DemoForm", "RsLib.DemoForm\RsLib.DemoForm.csproj", "{F354BD2A-D638-4EBD-BC61-414D1BD142CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.Display3D", "RsLib.Display3D\RsLib.Display3D.csproj", "{06D831F7-418C-409F-881E-1650A4E44834}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +253,18 @@ Global
 		{F354BD2A-D638-4EBD-BC61-414D1BD142CF}.Release|x64.Build.0 = Release|x64
 		{F354BD2A-D638-4EBD-BC61-414D1BD142CF}.Release|x86.ActiveCfg = Release|x86
 		{F354BD2A-D638-4EBD-BC61-414D1BD142CF}.Release|x86.Build.0 = Release|x86
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|x64.Build.0 = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Debug|x86.Build.0 = Debug|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|x64.ActiveCfg = Release|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|x64.Build.0 = Release|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|x86.ActiveCfg = Release|Any CPU
+		{06D831F7-418C-409F-881E-1650A4E44834}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

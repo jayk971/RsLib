@@ -22,5 +22,17 @@ namespace RsLib.DemoForm.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TestSetting {
+            get {
+                return ((string)(this["TestSetting"]));
+            }
+            set {
+                this["TestSetting"] = value;
+            }
+        }
     }
 }

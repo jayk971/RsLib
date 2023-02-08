@@ -1273,7 +1273,7 @@ namespace Automation
             }
             if (blnShowHitPoint && mouseMoveCount == 0)
             {
-                MouseHitCheck(mousePt, isClick: false);
+                //MouseHitCheck(mousePt, isClick: false);
             }
             if (isLeftDrag)
             {
