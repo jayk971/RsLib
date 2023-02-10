@@ -168,6 +168,10 @@
       <Project>{a83549cb-762b-457e-82aa-cfdb913d3cc6}</Project>
       <Name>RsLib.BaseType</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RsLib.Display3D\RsLib.Display3D.csproj">
+      <Project>{06d831f7-418c-409f-881e-1650a4e44834}</Project>
+      <Name>RsLib.Display3D</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RsLib.TCP\RsLib.TCP.csproj">
       <Project>{6f3c8304-db61-4306-8189-374a8abc06d1}</Project>
       <Name>RsLib.TCP</Name>

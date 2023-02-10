@@ -13,7 +13,7 @@ namespace RsLib.PointCloud
     {
 
         public Point3 P => new Point3((float)X, (float)Y, (float)Z);
-
+        public double[] PArray => new double[] { X, Y, Z };
         public override uint DataCount => 1;
 
         public double X = 0.0;
@@ -803,6 +803,20 @@ namespace RsLib.PointCloud
             Vx = new Vector3D(1, 0, 0);
             Vy = new Vector3D(0, 1, 0);
             Vz = new Vector3D(0, 0, 1);
+
+            X = src.X;
+            Y = src.Y;
+            Z = src.Z;
+            Dt = src.Dt;
+            flag = src.flag;
+
+            AddOption(src.Options);
+        }
+        public PointV3D(Point3D src,Vector3D zVecSrc)
+        {
+            Vx = new Vector3D(0, 0, 0);
+            Vy = new Vector3D(0, 0, 0);
+            Vz = zVecSrc.DeepClone();
 
             X = src.X;
             Y = src.Y;

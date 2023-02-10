@@ -1714,6 +1714,11 @@ namespace RsLib.PointCloud
                 this.Add(Clouds.Layers[i]);
             }
         }
+        public void Add(double x,double y,double z, bool IsAddKdTree = false)
+        {
+            Points.Add(new Point3D(x,y,z));
+            if (IsAddKdTree) kdTree.Add(new double[] { x, y, z}, Points.Count - 1);
+        }
         public void Add(Point3D point, bool IsAddKdTree = false)
         {
             Points.Add(point);

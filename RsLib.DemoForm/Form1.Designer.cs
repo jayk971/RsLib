@@ -40,6 +40,7 @@ namespace RsLib.DemoForm
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -52,6 +53,7 @@ namespace RsLib.DemoForm
             this.tabControl1.Controls.Add(this.tabPage_TCPServer);
             this.tabControl1.Controls.Add(this.tabPage_TCPClient);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
@@ -161,6 +163,16 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel1.Size = new System.Drawing.Size(770, 687);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(756, 450);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -192,6 +204,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 

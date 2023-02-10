@@ -13,6 +13,7 @@ using RsLib.Common;
 using RsLib.AlarmMgr;
 using System.IO;
 using System.Threading;
+using RsLib.Display3D;
 namespace RsLib.DemoForm
 {
     public partial class Form1 : Form
@@ -20,6 +21,7 @@ namespace RsLib.DemoForm
         TCPServerControl serverControl = new TCPServerControl();
         TCPClientControl clientControl = new TCPClientControl();
         LogControl logControl = new LogControl();
+        Display3DControl displayControl = new Display3DControl(4);
         public Form1()
         {
             InitializeComponent();
@@ -30,7 +32,8 @@ namespace RsLib.DemoForm
             clientControl.Dock = DockStyle.Fill;
             pnl_TCPClient.Controls.Add(clientControl);
 
-
+            displayControl.Dock = DockStyle.Fill;
+            tabPage2.Controls.Add(displayControl);
             logControl.Dock = DockStyle.Fill;
             tableLayoutPanel1.Controls.Add(logControl, 0, 1);
 
@@ -61,6 +64,31 @@ namespace RsLib.DemoForm
             string aaa = "321";
             Properties.Settings.Default.TestSetting = DateTime.Now.ToString("HH:mm:ss.fff");
             Properties.Settings.Default.Save();
+
+
+            PointCloud.PointCloud t = new PointCloud.PointCloud();
+            Random rd = new Random();
+            for (int i = 0; i < 100; i++)
+            {
+                
+                double x = rd.NextDouble() * 100;
+                double y = rd.NextDouble() * 100;
+                double z = rd.NextDouble() * 100;
+
+                //t.Add(x, y, z, true);
+            }
+            t.Add(100, 100, 100, true);
+            t.Add(10, 10, -100, true);
+            t.Add(-100, 97, 32, true);
+            t.Add(150, -35, 19, true);
+
+            PointCloud.Polyline line = new PointCloud.Polyline();
+            line.LoadFromOPTFile("d:\\test.opt",true);
+
+
+            displayControl.BuildPointCloud(t, Color.White, 5.0, 2,"random cloud");
+            displayControl.BuildPath(line, Color.Red, 2.0, 3,"test opt path");
+            displayControl.BuildVector(line, Color.LimeGreen, 2.0, 4,"test opt vector");
             //bool ds = false;
             //listBox1.Items.Clear();
             ////ds = FT_Functions.PingOK("192.168.170.120",4);
@@ -87,7 +115,7 @@ namespace RsLib.DemoForm
             //       string dd = sr.ReadToEnd();
             //        listBox1.Items.Add(dd);
             //    }
-                
+
 
             //}
             //catch(Exception ex)
