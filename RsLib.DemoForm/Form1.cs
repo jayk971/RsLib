@@ -44,6 +44,35 @@ namespace RsLib.DemoForm
             comboBox1.AddEnumItems(typeof(LogControl));
             //ThreadPool.QueueUserWorkItem(new WaitCallback(writeTxt));
             button1.Text = Properties.Settings.Default.TestSetting;
+
+            toolStrip1.MouseDown += ToolStrip1_MouseDown;
+            toolStrip1.MouseUp += ToolStrip1_MouseUp;
+            this.MouseMove += Form1_MouseMove;
+        }
+        bool _isDragTool = false;
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(_isDragTool)
+            {
+                toolStrip1.Left += (e.X - _mouseDown.X);
+                toolStrip1.Top += (e.Y - _mouseDown.Y);
+            }
+        }
+
+        private void ToolStrip1_MouseUp(object sender, MouseEventArgs e)
+        {
+            toolStrip1.Cursor = Cursors.Default;
+            _isDragTool = false;
+        }
+        Point _mouseDown;
+        private void ToolStrip1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left)
+            {
+                _mouseDown = e.Location;
+                toolStrip1.Cursor = Cursors.Hand;
+                _isDragTool = true;
+            }
         }
 
         void writeTxt(object obj)
@@ -85,10 +114,38 @@ namespace RsLib.DemoForm
             PointCloud.Polyline line = new PointCloud.Polyline();
             line.LoadFromOPTFile("d:\\test.opt",true);
 
+            DisplayObjectOption cloudOption = new DisplayObjectOption()
+            {
+                DisplayType = DisplayObjectType.PointCloud,
+                DrawColor = Color.White,
+                DrawSize = 5.0f,
+                ID = 2,
+                Name = "Random Cloud"
+            };
+            displayControl.AddDisplayOption(cloudOption);
+            displayControl.BuildPointCloud(t, cloudOption.ID,true,true);
+            DisplayObjectOption pathOption = new DisplayObjectOption()
+            {
+                DisplayType = DisplayObjectType.Path,
+                DrawColor = Color.Red,
+                DrawSize = 2.0f,
+                ID = 3,
+                Name = "test opt path"
+            };
+            displayControl.AddDisplayOption(pathOption);
 
-            displayControl.BuildPointCloud(t, Color.White, 5.0, 2,"random cloud");
-            displayControl.BuildPath(line, Color.Red, 2.0, 3,"test opt path");
-            displayControl.BuildVector(line, Color.LimeGreen, 2.0, 4,"test opt vector");
+            displayControl.BuildPath(line, pathOption.ID,true,true);
+            DisplayObjectOption vectorOption = new DisplayObjectOption()
+            {
+                DisplayType = DisplayObjectType.Vector,
+                DrawColor = Color.LimeGreen,
+                DrawSize = 2.0f,
+                ID = 4,
+                Name = "test opt vector"
+            };
+            displayControl.AddDisplayOption(vectorOption);
+
+            displayControl.BuildVector(line, vectorOption.ID,false,true);
             //bool ds = false;
             //listBox1.Items.Clear();
             ////ds = FT_Functions.PingOK("192.168.170.120",4);

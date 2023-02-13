@@ -179,6 +179,39 @@
   <ItemGroup>
     <None Include="Resources\collect_80px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\width_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shutdown_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\width_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paint_palette_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\available_updates_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\broom_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\available_updates_30px1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\resize_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\map_pinpoint_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\place_marker_30px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>

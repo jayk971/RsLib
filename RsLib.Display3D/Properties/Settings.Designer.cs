@@ -26,24 +26,120 @@ namespace RsLib.Display3D.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Red")]
-        public global::System.Drawing.Color SelectPoint {
+        public global::System.Drawing.Color Color_SelectPoint {
             get {
-                return ((global::System.Drawing.Color)(this["SelectPoint"]));
+                return ((global::System.Drawing.Color)(this["Color_SelectPoint"]));
             }
             set {
-                this["SelectPoint"] = value;
+                this["Color_SelectPoint"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
-        public global::System.Drawing.Color SelectRange {
+        public global::System.Drawing.Color Color_SelectRange {
             get {
-                return ((global::System.Drawing.Color)(this["SelectRange"]));
+                return ((global::System.Drawing.Color)(this["Color_SelectRange"]));
             }
             set {
-                this["SelectRange"] = value;
+                this["Color_SelectRange"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        public global::System.Drawing.Color Color_StartPoint {
+            get {
+                return ((global::System.Drawing.Color)(this["Color_StartPoint"]));
+            }
+            set {
+                this["Color_StartPoint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BlueViolet")]
+        public global::System.Drawing.Color Color_EndPoint {
+            get {
+                return ((global::System.Drawing.Color)(this["Color_EndPoint"]));
+            }
+            set {
+                this["Color_EndPoint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Pink")]
+        public global::System.Drawing.Color Color_MeasureLine {
+            get {
+                return ((global::System.Drawing.Color)(this["Color_MeasureLine"]));
+            }
+            set {
+                this["Color_MeasureLine"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public float Size_SelectPoint {
+            get {
+                return ((float)(this["Size_SelectPoint"]));
+            }
+            set {
+                this["Size_SelectPoint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public float Size_SelectRange {
+            get {
+                return ((float)(this["Size_SelectRange"]));
+            }
+            set {
+                this["Size_SelectRange"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public float Size_StartPoint {
+            get {
+                return ((float)(this["Size_StartPoint"]));
+            }
+            set {
+                this["Size_StartPoint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public float Size_EndPoint {
+            get {
+                return ((float)(this["Size_EndPoint"]));
+            }
+            set {
+                this["Size_EndPoint"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public float Size_MeasureLine {
+            get {
+                return ((float)(this["Size_MeasureLine"]));
+            }
+            set {
+                this["Size_MeasureLine"] = value;
             }
         }
     }

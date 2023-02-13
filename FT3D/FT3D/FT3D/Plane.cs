@@ -6,7 +6,7 @@ using AccPlane = Accord.Math.Plane;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class FTPlane:Object3D
+    public partial class RsPlane:Object3D
     {
         public override uint DataCount =>1;
 
@@ -56,7 +56,7 @@ namespace RsLib.PointCloud
         public Vector3D Normal { get => new Vector3D( m_Plane.Normal.X, m_Plane.Normal.Y, m_Plane.Normal.Z); }
 
 
-        public FTPlane()
+        public RsPlane()
         {
             A = 0.0;
             B = 0.0;
@@ -64,18 +64,18 @@ namespace RsLib.PointCloud
             D = 0.0;
         }
 
-        public FTPlane(Vector3D n, Point3D p)
+        public RsPlane(Vector3D n, Point3D p)
         {
             m_Plane = new AccPlane(n.V);
             m_Plane.Offset = (float)(-m_Plane.A * p.X - m_Plane.B * p.Y - m_Plane.C * p.Z);
             m_Plane.Normalize();
         }
-        public FTPlane(Point3D P0, Point3D P1, Point3D P2)
+        public RsPlane(Point3D P0, Point3D P1, Point3D P2)
         {
             m_Plane = AccPlane.FromPoints(P0.P, P1.P, P2.P);
             m_Plane.Normalize();
         }
-        public FTPlane(Point3D P0, Point3D P1, Point3D P2, Vector3D RefV)
+        public RsPlane(Point3D P0, Point3D P1, Point3D P2, Vector3D RefV)
         {
             AccPlane plane = AccPlane.FromPoints(P0.P, P1.P, P2.P);
             double dotValue = Vector3D.Dot(plane.Normal, RefV);
@@ -96,7 +96,7 @@ namespace RsLib.PointCloud
             m_Plane.Normalize();
         }
 
-        public FTPlane(Point3D P0, Point3D P1, Point3D P2, Point3D RefPoint)
+        public RsPlane(Point3D P0, Point3D P1, Point3D P2, Point3D RefPoint)
         {
             AccPlane plane = AccPlane.FromPoints(P0.P, P1.P, P2.P);
             Vector3D RefV = new Vector3D(P0, RefPoint);
@@ -191,5 +191,6 @@ namespace RsLib.PointCloud
 
 
     }
+
 
 }

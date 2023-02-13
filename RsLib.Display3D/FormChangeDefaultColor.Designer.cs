@@ -29,104 +29,98 @@ namespace RsLib.Display3D
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btn_SelectPointColor = new System.Windows.Forms.Button();
-            this.btn_SelectRangeColor = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChangeDefaultColor));
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Object = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // dataGridView1
             // 
-            this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.btn_SelectPointColor, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btn_SelectRangeColor, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(438, 410);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column_ID,
+            this.Column_Object,
+            this.Column_Color,
+            this.Column_Size});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(438, 410);
+            this.dataGridView1.TabIndex = 10;
             // 
-            // label1
+            // Column_ID
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(178, 35);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Selected Point";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_ID.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column_ID.HeaderText = "ID";
+            this.Column_ID.Name = "Column_ID";
+            this.Column_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column_ID.Width = 50;
             // 
-            // label2
+            // Column_Object
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(178, 35);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Selected Object Range";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Column_Object.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Column_Object.HeaderText = "Object";
+            this.Column_Object.Name = "Column_Object";
+            this.Column_Object.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // btn_SelectPointColor
+            // Column_Color
             // 
-            this.btn_SelectPointColor.BackColor = System.Drawing.Color.Red;
-            this.btn_SelectPointColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_SelectPointColor.Location = new System.Drawing.Point(187, 3);
-            this.btn_SelectPointColor.Name = "btn_SelectPointColor";
-            this.btn_SelectPointColor.Size = new System.Drawing.Size(29, 29);
-            this.btn_SelectPointColor.TabIndex = 2;
-            this.btn_SelectPointColor.UseVisualStyleBackColor = false;
-            this.btn_SelectPointColor.Click += new System.EventHandler(this.btn_SelectPointColor_Click);
+            this.Column_Color.HeaderText = "Color";
+            this.Column_Color.Name = "Column_Color";
+            this.Column_Color.Width = 70;
             // 
-            // btn_SelectRangeColor
+            // Column_Size
             // 
-            this.btn_SelectRangeColor.BackColor = System.Drawing.Color.Silver;
-            this.btn_SelectRangeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_SelectRangeColor.Location = new System.Drawing.Point(187, 38);
-            this.btn_SelectRangeColor.Name = "btn_SelectRangeColor";
-            this.btn_SelectRangeColor.Size = new System.Drawing.Size(29, 29);
-            this.btn_SelectRangeColor.TabIndex = 3;
-            this.btn_SelectRangeColor.UseVisualStyleBackColor = false;
-            this.btn_SelectRangeColor.Click += new System.EventHandler(this.btn_SelectRangeColor_Click);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Size.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Column_Size.HeaderText = "Size";
+            this.Column_Size.Name = "Column_Size";
+            this.Column_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FormChangeDefaultColor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(438, 410);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.dataGridView1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormChangeDefaultColor";
             this.Text = "Change Color";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormChangeDefaultColor_FormClosing);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn_SelectPointColor;
-        private System.Windows.Forms.Button btn_SelectRangeColor;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Object;
+        private System.Windows.Forms.DataGridViewButtonColumn Column_Color;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Size;
     }
 }

@@ -63,9 +63,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap available_updates_80px {
+        internal static System.Drawing.Bitmap available_updates_30px {
             get {
-                object obj = ResourceManager.GetObject("available_updates_80px", resourceCulture);
+                object obj = ResourceManager.GetObject("available_updates_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap broom_160px {
+        internal static System.Drawing.Bitmap broom_30px {
             get {
-                object obj = ResourceManager.GetObject("broom_160px", resourceCulture);
+                object obj = ResourceManager.GetObject("broom_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap checklist_52px {
+        internal static System.Drawing.Bitmap edit_30px {
             get {
-                object obj = ResourceManager.GetObject("checklist_52px", resourceCulture);
+                object obj = ResourceManager.GetObject("edit_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap checklist_80px {
+        internal static System.Drawing.Bitmap paint_palette_30px {
             get {
-                object obj = ResourceManager.GetObject("checklist_80px", resourceCulture);
+                object obj = ResourceManager.GetObject("paint_palette_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap collect_80px {
+        internal static System.Drawing.Bitmap place_marker_30px {
             get {
-                object obj = ResourceManager.GetObject("collect_80px", resourceCulture);
+                object obj = ResourceManager.GetObject("place_marker_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap edit_128px {
+        internal static System.Drawing.Bitmap resize_30px {
             get {
-                object obj = ResourceManager.GetObject("edit_128px", resourceCulture);
+                object obj = ResourceManager.GetObject("resize_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap paint_palette_160px {
+        internal static System.Drawing.Bitmap shutdown_30px {
             get {
-                object obj = ResourceManager.GetObject("paint_palette_160px", resourceCulture);
+                object obj = ResourceManager.GetObject("shutdown_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,49 +133,9 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
-        internal static System.Drawing.Bitmap resize_80px {
+        internal static System.Drawing.Bitmap width_30px {
             get {
-                object obj = ResourceManager.GetObject("resize_80px", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
-        /// </summary>
-        internal static System.Drawing.Bitmap services_64px {
-            get {
-                object obj = ResourceManager.GetObject("services_64px", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
-        /// </summary>
-        internal static System.Drawing.Bitmap settings_64px {
-            get {
-                object obj = ResourceManager.GetObject("settings_64px", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
-        /// </summary>
-        internal static System.Drawing.Bitmap toggle_off_96px {
-            get {
-                object obj = ResourceManager.GetObject("toggle_off_96px", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
-        /// </summary>
-        internal static System.Drawing.Bitmap toggle_on_96px {
-            get {
-                object obj = ResourceManager.GetObject("toggle_on_96px", resourceCulture);
+                object obj = ResourceManager.GetObject("width_30px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -913,7 +913,7 @@ namespace RsLib.PointCloud
         //    return output;
         //}
 
-        public void GetNearPlanePoints(RsLib.PointCloud.FTPlane plane, double Dis)
+        public void GetNearPlanePoints(RsLib.PointCloud.RsPlane plane, double Dis)
         {
             PointCloud cloud = new PointCloud();
 
@@ -946,7 +946,7 @@ namespace RsLib.PointCloud
             Points.Clear();
             Points = cloud.Points;
         }
-        public PointCloud ReturnNearPlanePoints(RsLib.PointCloud.FTPlane plane, double Dis)
+        public PointCloud ReturnNearPlanePoints(RsLib.PointCloud.RsPlane plane, double Dis)
         {
             PointCloud cloud = new PointCloud();
 
@@ -965,7 +965,7 @@ namespace RsLib.PointCloud
 
 
         }
-        public void Project2Plane(RsLib.PointCloud.FTPlane plane)
+        public void Project2Plane(RsLib.PointCloud.RsPlane plane)
         {
             PointCloud cloud = new PointCloud();
 
@@ -987,7 +987,7 @@ namespace RsLib.PointCloud
             Points = cloud.Points;
 
         }
-        public PointCloud GetProject2Plane(RsLib.PointCloud.FTPlane plane)
+        public PointCloud GetProject2Plane(RsLib.PointCloud.RsPlane plane)
         {
             PointCloud cloud = new PointCloud();
 
@@ -1011,7 +1011,7 @@ namespace RsLib.PointCloud
         public PointCloud GetInsideTiltBox(TiltBox Boundary)
         {
             PointCloud cloud = new PointCloud();
-            FTPlane plane = Boundary.BasePlane;
+            RsPlane plane = Boundary.BasePlane;
 #if !Parallel
             Point3D point, ProjP;
 
@@ -2918,7 +2918,7 @@ namespace RsLib.PointCloud
             }
         }
 
-        public Point3D FindClosetPointFromPlane(FTPlane find, Point3D refPoint = null)
+        public Point3D FindClosetPointFromPlane(RsPlane find, Point3D refPoint = null)
         {
             double length = double.MaxValue;
             int index = 0;
@@ -3205,7 +3205,7 @@ namespace RsLib.PointCloud
             Vector3D V_V = new Vector3D(0, 0, 1);
 
             Vector3D V_N = Vector3D.Cross(V_H, V_V);
-            FTPlane CrossSectionPlane = new FTPlane(V_N, P1);
+            RsPlane CrossSectionPlane = new RsPlane(V_N, P1);
 
             PointCloud tempCloud = ReturnNearPlanePoints(CrossSectionPlane, NearDis);
             tempCloud.Project2Plane(CrossSectionPlane);

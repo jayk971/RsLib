@@ -602,7 +602,7 @@ namespace RsLib.PointCloud
         {
             Vector3D normal = PlaneNormalUnitVector(p0, p1, p2);
 
-            FTPlane plane = new FTPlane(normal, p1);
+            RsPlane plane = new RsPlane(normal, p1);
 
             Vector3D x_axis = new Vector3D(p1, p0);
             Vector3D y_axis = new Vector3D();
@@ -727,7 +727,7 @@ namespace RsLib.PointCloud
             return curvatures;
         }
 
-        public static Point3D FindBitelineCloestPoint(List<Point3D> toFind, FTPlane find, Point3D refPoint)
+        public static Point3D FindBitelineCloestPoint(List<Point3D> toFind, RsPlane find, Point3D refPoint)
         {
             List<KeyValuePair<int, double>> cannidate = new List<KeyValuePair<int, double>>();
 

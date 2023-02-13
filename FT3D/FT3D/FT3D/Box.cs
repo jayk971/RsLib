@@ -181,7 +181,7 @@ namespace RsLib.PointCloud
     public partial class TiltBox
     {
         [DefaultValue(null)]
-        public FTPlane BasePlane { get; set; }
+        public RsPlane BasePlane { get; set; }
 
         [DefaultValue(null)]
         public Point3D BaseP0 { get; set; }
@@ -218,7 +218,7 @@ namespace RsLib.PointCloud
 
         public TiltBox()
         {
-            BasePlane = new FTPlane();
+            BasePlane = new RsPlane();
 
             BaseP0 = new Point3D();
             BaseP1 = new Point3D();
@@ -274,7 +274,7 @@ namespace RsLib.PointCloud
 
             RefVec = RefV;
 
-            BasePlane = new FTPlane(P0, P1, P2, RefVec);
+            BasePlane = new RsPlane(P0, P1, P2, RefVec);
 
             BaseP0 = P0.DeepClone();
             BaseP1 = P1.DeepClone();
@@ -313,7 +313,7 @@ namespace RsLib.PointCloud
 
             RefVec = new Vector3D(P0, RefP);
 
-            BasePlane = new FTPlane(P0, P1, P2, RefP);
+            BasePlane = new RsPlane(P0, P1, P2, RefP);
 
             BaseP0 = P0.DeepClone();
             BaseP1 = P1.DeepClone();
@@ -360,7 +360,7 @@ namespace RsLib.PointCloud
         }
         public void Clear()
         {
-            BasePlane = new FTPlane();
+            BasePlane = new RsPlane();
 
             BaseP0 = new Point3D();
             BaseP1 = new Point3D();
@@ -424,7 +424,7 @@ namespace RsLib.PointCloud
         }
         public bool IsInsideTiltBox(Point3D TargetP)
         {
-            FTPlane plane = BasePlane;
+            RsPlane plane = BasePlane;
             Point3D point, ProjP;
 
             Vector3D V0, V1, V2, V3, Vc0, Vc1, Vc2, Vc3;

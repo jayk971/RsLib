@@ -118,40 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="checklist_52px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checklist_52px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="resize_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\resize_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toggle_off_96px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toggle_off_96px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="width_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\width_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="settings_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\settings_64px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="edit_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\edit_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="resize_80px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\resize_80px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="available_updates_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\available_updates_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="available_updates_80px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\available_updates_80px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="paint_palette_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\paint_palette_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="broom_160px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\broom_160px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="shutdown_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\shutdown_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="services_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\services_64px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="broom_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\broom_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="edit_128px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\edit_128px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="checklist_80px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\checklist_80px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="toggle_on_96px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toggle_on_96px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="paint_palette_160px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\paint_palette_160px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="collect_80px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\collect_80px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="place_marker_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\place_marker_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

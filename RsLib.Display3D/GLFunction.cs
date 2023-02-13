@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using OpenTK;
-using OpenTK.Graphics;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
-
-using RsLib.PointCloud;
 using RsLib.Display3D.Properties;
+using RsLib.PointCloud;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 using RsLib.Common;
 namespace RsLib.Display3D
 {
@@ -27,17 +18,23 @@ namespace RsLib.Display3D
         private Vector3 _rotation = Vector3.Zero;
         bool _leftButtonPressed = false;
         bool _rightButtonPressed = false;
+        
+        int _middleMouseCount = 0;
 
         int _lastX, _lastY;
         int _lastRotX, _lastRotY;
         int _headList;
         int _maxDisplayList;
-        bool _enableSelectPoint = false;
+        PointPickMode _pickMode = PointPickMode.None;
         bool _haveClosestPoint = false;
-        Point3D _closetPoint = new Point3D();
         int _selectIndex = -1;
-        Dictionary<int, Object3D> _selectCandidate = new Dictionary<int, Object3D>();
-        Dictionary<int,DisplayObjectOption> _displayObject = new Dictionary<int, DisplayObjectOption>();
+        Dictionary<int, Object3D> _displayObject = new Dictionary<int, Object3D>();
+        Dictionary<int,DisplayObjectOption> _displayOption = new Dictionary<int, DisplayObjectOption>();
+
+        public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_selectIndex);
+        public Object3D CurrentSelectObj => GetDisplayObject(_selectIndex);
+        Point3D _closetPoint = new Point3D();
+        Polyline _multiSelectPoints = new Polyline();
 
         Vector3 _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
         Vector3 _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -56,7 +53,6 @@ namespace RsLib.Display3D
 
         private void _glControl_SizeChanged(object sender, EventArgs e)
         {
-
         }
         private void GlControl_Load(object sender, EventArgs e)
         {
@@ -88,32 +84,30 @@ namespace RsLib.Display3D
             else
                 GL.Ortho(-view_range, view_range, -view_range / aspect, view_range / aspect, -8 * view_range, 8 * view_range);
 
-            //GL.Ortho(-100.0, 100.0, -100.0, 100.0, -100.0, 100.0);
-
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
             GL.PushMatrix();
-            //Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _avgPoint);
-            //localTranslate *= Matrix4.CreateRotationX(_rotation.Y);
-            //localTranslate *= Matrix4.CreateRotationY(_rotation.X);
-            //localTranslate *= Matrix4.CreateRotationZ(_rotation.Z);
-            //localTranslate *= Matrix4.CreateTranslation(_avgPoint);
-            //localTranslate *= Matrix4.CreateScale(_scale, _scale, _scale);
-            //localTranslate *= Matrix4.CreateTranslation(_translation.X, _translation.Y, 0.0f);
-            //GL.MultMatrix(ref localTranslate);
             multiMatrix();
 
             GL.Viewport(0, 0, _glControl.Width, _glControl.Height);
             
             GL.CallList(_headList);
-            foreach (var item in _displayObject)
+            foreach (var item in _displayOption)
             {
                 DisplayObjectOption option = item.Value;
                 if (option.IsDisplay) GL.CallList(option.ID);
             }
-            if (_enableSelectPoint && _haveClosestPoint) drawSelectedPoint(Settings.Default.SelectPoint);
+            if (_pickMode == PointPickMode.Single)
+            {
+                if(_haveClosestPoint) drawSelectedPoint();
+            }
+            else if(_pickMode == PointPickMode.Measure)
+            {
+                if(_multiSelectPoints.Count <= 2)  
+                    drawMeasureLine();
+            }
 
-            if (_enableSelectPoint && _selectIndex > 1) drawSelectRangeFrame(Settings.Default.SelectRange);
+            if (_pickMode >= PointPickMode.Single && _selectIndex > 1) drawSelectRangeFrame();
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
@@ -131,7 +125,7 @@ namespace RsLib.Display3D
         {
             if (e.Button == MouseButtons.Middle)
             {
-                if (_enableSelectPoint == false) return;
+                if (_pickMode == PointPickMode.None) return;
 
                 int viewportX = 0;
                 int viewportY = 0;
@@ -141,14 +135,6 @@ namespace RsLib.Display3D
                 GL.MatrixMode(MatrixMode.Modelview);
                 GL.LoadIdentity();
                 GL.PushMatrix();
-                //Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _avgPoint);
-                //localTranslate *= Matrix4.CreateRotationX(_rotation.Y);
-                //localTranslate *= Matrix4.CreateRotationY(_rotation.X);
-                //localTranslate *= Matrix4.CreateRotationZ(_rotation.Z);
-                //localTranslate *= Matrix4.CreateTranslation(_avgPoint);
-                //localTranslate *= Matrix4.CreateScale(_scale, _scale, _scale);
-                //localTranslate *= Matrix4.CreateTranslation(_translation.X, _translation.Y, 0.0f);
-                //GL.MultMatrix(ref localTranslate);
                 multiMatrix();
                 // Get the world coordinates of the mouse click
                 Vector3 near = new Vector3(e.X, _glControl.Height - e.Y, 0f);
@@ -157,8 +143,54 @@ namespace RsLib.Display3D
                 Vector3 farWorld = unProject(far, viewportX, viewportY, viewportWidth, viewportHeight);
                 GL.PopMatrix();
                 _haveClosestPoint = closestPoint(nearWorld, farWorld, out _closetPoint);
-                AfterPointSelected?.Invoke(_haveClosestPoint, _closetPoint);
-                showSelectPointData(_haveClosestPoint, _closetPoint);
+
+                switch (_pickMode)
+                {
+                    case PointPickMode.Single:
+                        _middleMouseCount = 0;
+                        AfterPointSelected?.Invoke(_haveClosestPoint,_selectIndex, _closetPoint);
+                        showSelectPointData(_haveClosestPoint, _closetPoint);
+
+                        break;
+
+                    case PointPickMode.Measure:
+                        if(_haveClosestPoint)
+                        {
+                            if(_middleMouseCount%2 ==0)
+                            {
+                                lbl_PickPointMode.Text = "Measure 1";
+                                _multiSelectPoints.Clear();
+                                _multiSelectPoints.Add(_closetPoint);
+                            }
+                            else
+                            {
+                                lbl_PickPointMode.Text = "Measure 2";
+                                _multiSelectPoints.Add(_closetPoint);
+                            }
+                        }
+                        _middleMouseCount++;
+                        if (_middleMouseCount > 2)
+                        {
+                            lbl_PickPointMode.Text = "Measure";
+                            _multiSelectPoints.Clear();
+                            _middleMouseCount = 0;
+                        }
+                        showSelectMeasurePointData(_multiSelectPoints);
+
+                        break;
+
+                    case PointPickMode.Multiple:
+                        _middleMouseCount = 0;
+
+                        break;
+
+                    default:
+                        _middleMouseCount = 0;
+
+                        break;
+                
+                }
+
             }
         }
 
@@ -168,23 +200,10 @@ namespace RsLib.Display3D
             if (_leftButtonPressed)
             {
                 rotate(e.X, e.Y);
-                //_translation.X += (e.X - _lastX) / _scale;
-                //_translation.Y -= (e.Y - _lastY) / _scale;
-
-                ////_glControl.Invalidate();
-                //_lastX = e.X;
-                //_lastY = e.Y;
             }
             else if (_rightButtonPressed)
             {
                 shift(e.X, e.Y);
-                //_rotation.X += (e.X - _lastRotX) / (float)_glControl.Width * 180.0f;
-                //_rotation.Y += 1 * (e.Y - _lastRotY) / (float)_glControl.Height * 180.0f;
-                ////GL.Rotate(dx * 180.0f, Vector3.UnitY);
-                ////GL.Rotate(-dy * 180.0f, Vector3.UnitX);
-                ////_glControl.Invalidate();
-                //_lastRotX = e.X;
-                //_lastRotY = e.Y;
             }
         }
         private void GlControl_MouseUp(object sender, MouseEventArgs e)
@@ -221,63 +240,76 @@ namespace RsLib.Display3D
         #endregion
 
         #region method
+
+        public bool AddDisplayOption(DisplayObjectOption option)
+        {
+            if(_displayOption.ContainsKey(option.ID))
+            {
+                return false;
+            }
+            else
+            {
+                _displayOption.Add(option.ID, option);
+                return true;
+            }
+        }
         public void Clear()
         {
-            foreach (var item in _displayObject)
+            foreach (var item in _displayOption)
             {
                 DisplayObjectOption objOption = item.Value;
                 GL.NewList(objOption.ID, ListMode.Compile);
                 GL.EndList();
             }
-            _selectCandidate.Clear();
             _displayObject.Clear();
+            _displayOption.Clear();
             _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
             _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             ResetView();
             updateUI();
         }
-        public void ChangeDisplayOption(DisplayObjectOption newOption)
-        {
-            if(_displayObject.ContainsKey(newOption.ID))
-            {
-                _displayObject[newOption.ID].DisplayColor = newOption.DisplayColor;
-                _displayObject[newOption.ID].IsDisplay = newOption.IsDisplay;
-                ReBuild(newOption.ID);
-            }
-        }
+        //public void ChangeDisplayOption(DisplayObjectOption newOption)
+        //{
+        //    if(_displayOption.ContainsKey(newOption.ID))
+        //    {
+        //        _displayOption[newOption.ID].DrawColor = newOption.DrawColor;
+        //        _displayOption[newOption.ID].IsDisplay = newOption.IsDisplay;
+        //        ReBuild_ChangeColorSize(newOption.ID);
+        //    }
+        //}
 
         public void ReBuildAll()
         {
-            foreach (var item in _displayObject)
+            foreach (var item in _displayOption)
             {
-                ReBuild(item.Key);
+                ReBuild_ChangeColorSize(item.Key);
             }
         }
-        public void ReBuild(int id)
+        public void ReBuild_ChangeColorSize(int id)
         {
             if (this.InvokeRequired)
             {
-                Action<int> action = new Action<int>(ReBuild);
+                Action<int> action = new Action<int>(ReBuild_ChangeColorSize);
                 this.Invoke(action, id);
             }
             else
             {
-                if (_displayObject.ContainsKey(id))
+                if (_displayOption.ContainsKey(id))
                 {
-                    DisplayObjectOption option = _displayObject[id];
+                    DisplayObjectOption option = _displayOption[id];
                     switch (option.DisplayType)
                     {
                         case DisplayObjectType.PointCloud:
-                            BuildPointCloud((RPointCloud)_selectCandidate[id], option.DisplayColor, option.DrawSize, id, option.Name, true);
+                            BuildPointCloud((RPointCloud)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Vector:
-                            BuildVector((Polyline)_selectCandidate[id], option.DisplayColor, option.DrawSize, id, option.Name, true);
+                            BuildVector((Polyline)_displayObject[id], id,false,false);
                             break;
                         case DisplayObjectType.Path:
-                            BuildPath((Polyline)_selectCandidate[id], option.DisplayColor, option.DrawSize, id, option.Name, true);
+                            BuildPath((Polyline)_displayObject[id], id,false,false);
                             break;
                         case DisplayObjectType.Point:
-
+                            BuildPoint((Point3D)_displayObject[id], id,false,false);
                             break;
                         default:
 
@@ -286,11 +318,32 @@ namespace RsLib.Display3D
                 }
             }
         }
+        public Object3D GetDisplayObject(int index)
+        {
+            if (index > 0)
+            {
+                if (_displayObject.ContainsKey(index)) return _displayObject[index];
+                else return null;
+            }
+            else return null;
+        }
+
+        public DisplayObjectOption GetDisplayObjectOption(int index)
+        {
+
+            if (index > 0)
+            {
+                if (_displayOption.ContainsKey(index)) return _displayOption[index];
+                else return null;
+            }
+            else return null;
+
+        }
         public void SetObjectVisible(int id,bool visible)
         {
-            if(_displayObject.ContainsKey(id))
+            if(_displayOption.ContainsKey(id))
             {
-                _displayObject[id].IsDisplay = visible;
+                _displayOption[id].IsDisplay = visible;
             }
         }
         public void ResetView()
@@ -324,6 +377,19 @@ namespace RsLib.Display3D
 
             }
         }
+        void showSelectMeasurePointData(Polyline measureLine)
+        {
+            if (measureLine.Count == 2)
+            {
+                Vector3D v = new Vector3D(measureLine.Points[0], measureLine.Points[1]);
+                lbl_SelectPoint.Text = $"{measureLine.Points[0].ToString()} <-> {measureLine.Points[1].ToString()} : {measureLine.Length:F2} ({v.ToString()})";
+            }
+            else
+            {
+                lbl_SelectPoint.Text = "--";
+            }
+        }
+
         void shift(int mouseX, int mouseY)
         {
             _translation.X += (mouseX - _lastX);
@@ -364,11 +430,11 @@ namespace RsLib.Display3D
             rayDir = Vector3.Subtract(farWorld, nearWorld).Normalized();
             float closestDistance = float.MaxValue;
             bool hasClosetPoint = false;
-            if (_selectCandidate.Count == 0) return false;
+            if (_displayObject.Count == 0) return false;
             if (_selectIndex == -1) return false;
-            if (_selectCandidate.ContainsKey(_selectIndex) == false) return false;
+            if (_displayObject.ContainsKey(_selectIndex) == false) return false;
 
-            var selectCandidateCloud = _selectCandidate[_selectIndex] as PointCloud.PointCloud;
+            var selectCandidateCloud = _displayObject[_selectIndex] as PointCloud.PointCloud;
             foreach (Point3D point in selectCandidateCloud.Points)
             {
                 Vector3 vecPoint = new Vector3((float)point.X, (float)point.Y, (float)point.Z);
@@ -463,24 +529,51 @@ namespace RsLib.Display3D
                            0, 0, 0, 1);
             return mat4;
         }
-        void drawSelectedPoint(Color drawColor)
+        void drawSelectedPoint()
         {
-            GL.PointSize(10);
+            GL.PointSize(Settings.Default.Size_SelectPoint);
             GL.Begin(PrimitiveType.Points);
-            GL.Color3(drawColor);
+            GL.Color3(Settings.Default.Color_SelectPoint);
             GL.Vertex3(_closetPoint.PArray);
             GL.End();
         }
-        void drawSelectRangeFrame(Color drawColor)
+        void drawMeasureLine()
+        {
+            GL.PointSize(Settings.Default.Size_SelectPoint);
+            GL.Begin(PrimitiveType.Points);
+            for (int i = 0; i < _multiSelectPoints.Count; i++)
+            {
+                Point3D p = _multiSelectPoints.Points[i];
+                if (i == 0) GL.Color4(Settings.Default.Color_StartPoint);
+                else GL.Color4(Settings.Default.Color_EndPoint);
+                GL.Vertex3(p.PArray);
+            }
+            GL.End();
+
+            if (_multiSelectPoints.Count == 2)
+            {
+                GL.LineWidth(Settings.Default.Size_MeasureLine);
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color4(Settings.Default.Color_MeasureLine);
+                for (int i = 0; i < _multiSelectPoints.Count; i++)
+                {
+                    Point3D p = _multiSelectPoints.Points[i];
+                    GL.Vertex3(p.PArray);
+                }
+                GL.End();
+            }
+            }
+
+        void drawSelectRangeFrame()
         {
             if (_selectIndex <= 1) return;
-            if (_selectCandidate.Count == 0) return;
-            if (_selectCandidate.ContainsKey(_selectIndex) == false) return;
-            var selectCandidate = _selectCandidate[_selectIndex] as PointCloud.PointCloud;
+            if (_displayObject.Count == 0) return;
+            if (_displayObject.ContainsKey(_selectIndex) == false) return;
+            var selectCandidate = _displayObject[_selectIndex] as PointCloud.PointCloud;
             Point3D min = selectCandidate.Min;
             Point3D max = selectCandidate.Max;
 
-            drawFrame(new Vector3((float)min.X, (float)min.Y, (float)min.Z), new Vector3((float)max.X, (float)max.Y, (float)max.Z), 5f, drawColor);
+            drawFrame(new Vector3((float)min.X, (float)min.Y, (float)min.Z), new Vector3((float)max.X, (float)max.Y, (float)max.Z), Settings.Default.Size_SelectRange, Settings.Default.Color_SelectRange,true);
         }
         void drawCircle(Vector3 center, Vector3 normalDir, float radius, Color drawColor)
         {
@@ -619,51 +712,113 @@ namespace RsLib.Display3D
             }
             GL.PopMatrix();
         }
-        void drawFrame(Vector3 minPoint,Vector3 maxPoint,float lineWidth,Color drawColor)
+        void drawFrame(Vector3 minPoint,Vector3 maxPoint,float lineWidth,Color drawColor,bool useDashedLine)
         {
-            /*
+            /*                                8                           7
              *                                  ________________
              *                                /                          /|
-             *                              /                           / |
-             *                              ----------------  /
+             *                        4    /                           / | 3
+             *                        5   ---------------- 6  /
              *                             |_______________|
+             *                             1                        2
              */
+            Vector3 p1 = new Vector3(minPoint.X, minPoint.Y, minPoint.Z);
+            Vector3 p2 = new Vector3(maxPoint.X, minPoint.Y, minPoint.Z);
+            Vector3 p3 = new Vector3(maxPoint.X, maxPoint.Y, minPoint.Z);
+            Vector3 p4 = new Vector3(minPoint.X, maxPoint.Y, minPoint.Z);
+            Vector3 p5 = new Vector3(minPoint.X, minPoint.Y, maxPoint.Z);
+            Vector3 p6 = new Vector3(maxPoint.X, minPoint.Y, maxPoint.Z);
+            Vector3 p7 = new Vector3(maxPoint.X, maxPoint.Y, maxPoint.Z);
+            Vector3 p8 = new Vector3(minPoint.X, maxPoint.Y, maxPoint.Z);
 
-            // down surface
-            GL.Begin(PrimitiveType.LineLoop);
-            GL.Color3(drawColor);
+            if (useDashedLine)
+            {
+                #region dashed line
+                // down surface
+                drawDashedLine(p1, p2, lineWidth, drawColor, 5f);
+                drawDashedLine(p2, p3, lineWidth, drawColor, 5f);
+                drawDashedLine(p3, p4, lineWidth, drawColor, 5f);
+                drawDashedLine(p4, p1, lineWidth, drawColor, 5f);
+
+                //up surface
+                drawDashedLine(p5, p6, lineWidth, drawColor, 5f);
+                drawDashedLine(p6, p7, lineWidth, drawColor, 5f);
+                drawDashedLine(p7, p8, lineWidth, drawColor, 5f);
+                drawDashedLine(p8, p5, lineWidth, drawColor, 5f);
+
+                // side wall
+                drawDashedLine(p1, p5, lineWidth, drawColor, 5f);
+                drawDashedLine(p2, p6, lineWidth, drawColor, 5f);
+                drawDashedLine(p3, p7, lineWidth, drawColor, 5f);
+                drawDashedLine(p4, p8, lineWidth, drawColor, 5f);
+                #endregion
+            }
+            else
+            {
+                #region solid line
+                // down surface
+                GL.Begin(PrimitiveType.LineLoop);
+                GL.Color3(drawColor);
+                GL.LineWidth(lineWidth);
+                GL.Vertex3(minPoint.X, minPoint.Y, minPoint.Z);
+                GL.Vertex3(maxPoint.X, minPoint.Y, minPoint.Z);
+                GL.Vertex3(maxPoint.X, maxPoint.Y, minPoint.Z);
+                GL.Vertex3(minPoint.X, maxPoint.Y, minPoint.Z);
+                GL.End();
+
+                //up surface
+                GL.Begin(PrimitiveType.LineLoop);
+                GL.Color3(drawColor);
+                GL.LineWidth(lineWidth);
+                GL.Vertex3(minPoint.X, minPoint.Y, maxPoint.Z);
+                GL.Vertex3(maxPoint.X, minPoint.Y, maxPoint.Z);
+                GL.Vertex3(maxPoint.X, maxPoint.Y, maxPoint.Z);
+                GL.Vertex3(minPoint.X, maxPoint.Y, maxPoint.Z);
+                GL.End();
+
+                // side wall
+                GL.Begin(PrimitiveType.Lines);
+                GL.Color3(drawColor);
+                GL.LineWidth(lineWidth);
+                GL.Vertex3(minPoint.X, minPoint.Y, minPoint.Z);
+                GL.Vertex3(minPoint.X, minPoint.Y, maxPoint.Z);
+
+                GL.Vertex3(maxPoint.X, minPoint.Y, minPoint.Z);
+                GL.Vertex3(maxPoint.X, minPoint.Y, maxPoint.Z);
+
+                GL.Vertex3(minPoint.X, maxPoint.Y, minPoint.Z);
+                GL.Vertex3(minPoint.X, maxPoint.Y, maxPoint.Z);
+
+                GL.Vertex3(maxPoint.X, maxPoint.Y, minPoint.Z);
+                GL.Vertex3(maxPoint.X, maxPoint.Y, maxPoint.Z);
+                GL.End();
+                #endregion
+            }
+        }
+        void drawDashedLine(Vector3 start, Vector3 end,float lineWidth,Color drawColor ,float dashLength)
+        {
+            float distance = Vector3.Distance(start, end);
+            float dashCount = distance / dashLength;
+            
             GL.LineWidth(lineWidth);
-            GL.Vertex3(minPoint.X, minPoint.Y, minPoint.Z);
-            GL.Vertex3(maxPoint.X, minPoint.Y, minPoint.Z);
-            GL.Vertex3(maxPoint.X, maxPoint.Y, minPoint.Z);
-            GL.Vertex3(minPoint.X, maxPoint.Y, minPoint.Z);
-            GL.End();
-
-            //up surface
-            GL.Begin(PrimitiveType.LineLoop);
-            GL.Color3(drawColor);
-            GL.LineWidth(lineWidth);
-            GL.Vertex3(minPoint.X, minPoint.Y, maxPoint.Z);
-            GL.Vertex3(maxPoint.X, minPoint.Y, maxPoint.Z);
-            GL.Vertex3(maxPoint.X, maxPoint.Y, maxPoint.Z);
-            GL.Vertex3(minPoint.X, maxPoint.Y, maxPoint.Z);
-            GL.End();
-
-            // side wall
             GL.Begin(PrimitiveType.Lines);
-            GL.Color3(drawColor);
-            GL.LineWidth(lineWidth);
-            GL.Vertex3(minPoint.X, minPoint.Y, minPoint.Z);
-            GL.Vertex3(minPoint.X, minPoint.Y, maxPoint.Z);
+            GL.Color4(drawColor);
 
-            GL.Vertex3(maxPoint.X, minPoint.Y, minPoint.Z);
-            GL.Vertex3(maxPoint.X, minPoint.Y, maxPoint.Z);
-
-            GL.Vertex3(minPoint.X, maxPoint.Y, minPoint.Z);
-            GL.Vertex3(minPoint.X, maxPoint.Y, maxPoint.Z);
-
-            GL.Vertex3(maxPoint.X, maxPoint.Y, minPoint.Z);
-            GL.Vertex3(maxPoint.X, maxPoint.Y, maxPoint.Z);
+            if (dashCount >= 3)
+            {
+                for (int i = 0; i < dashCount; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        GL.Vertex3(start + (end - start) * (i / dashCount));
+                    }
+                }
+            }
+            else
+            {
+                GL.Vertex3(start);
+                GL.Vertex3(end);
+            }
             GL.End();
         }
         private void BuildAxis()
@@ -682,51 +837,94 @@ namespace RsLib.Display3D
             drawCone(new Vector3(0, 0, cylinderHeight), capHeight, Vector3.UnitZ, capRadius, Color.Blue);
             GL.EndList();
         }
-        public void BuildPointCloud(RPointCloud cloud, Color color, double pointSize, int callListIndex,string name,bool isReBuild = false)
+        void drawPoint(Point3D pt,float drawSize,Color drawColor, bool checkMaxMin)
         {
-            if (callListIndex > _maxDisplayList) return;
+            GL.PointSize(drawSize);
+            GL.Color4(drawColor);
+            GL.Begin(PrimitiveType.Points);
 
-            if (isReBuild == false)
+            if (checkMaxMin)
             {
-                if (_selectCandidate.ContainsKey(callListIndex))
+                checkMaxMinPoint(pt);
+            }
+            GL.Vertex3(pt.PArray);
+
+            GL.End();
+        }
+        public void BuildPoint(Point3D pt, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build point fail. Display option doesn't contain ID {id}.");
+            }
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.Point) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
                 {
-                    throw new Exception($"callListIndex {callListIndex} is already in the Dictionary");
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, pt);
                 }
-                _selectCandidate.Add(callListIndex, cloud);
-                _displayObject.Add(callListIndex, new DisplayObjectOption(callListIndex, name, color,DisplayObjectType.PointCloud,(float)pointSize));
+            }
+            else
+            {
+                _displayObject.Add(option.ID, pt);
             }
             updateUI();
-            GL.NewList(callListIndex, ListMode.Compile);
-            GL.PointSize((float)pointSize);
-            GL.Color4(color);
+            GL.NewList(id, ListMode.Compile);
+            drawPoint(pt, option.DrawSize, option.DrawColor, checkMaxMin);
+            GL.EndList();
+        }
+        void drawPointCloud(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
+        {
+            GL.PointSize(drawSize);
+            GL.Color4(drawColor);
             GL.Begin(PrimitiveType.Points);
             foreach (var item in cloud.Points)
             {
-                checkMaxMinPoint(item);
+                if (checkMaxMin)
+                {
+                    checkMaxMinPoint(item);
+                }
                 GL.Vertex3(item.PArray);
             }
             GL.End();
-            GL.EndList();
-
         }
-        public void BuildPath(Polyline polyLine, Color color, double lineWidth, int callListIndex, string name, bool isReBuild = false)
+        public void BuildPointCloud(RPointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
         {
-            if (callListIndex > _maxDisplayList) return;
-            if (polyLine.Count < 2) return;
-            if (isReBuild == false)
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
             {
-                if (_selectCandidate.ContainsKey(callListIndex))
+                throw new Exception($"Build point cloud fail. Display option doesn't contain ID {id}.");
+            }
+
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
                 {
-                    throw new Exception($"callListIndex {callListIndex} is already in the Dictionary");
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, cloud);
                 }
-                _selectCandidate.Add(callListIndex, polyLine);
-                _displayObject.Add(callListIndex, new DisplayObjectOption(callListIndex, name, color,DisplayObjectType.Path,(float)lineWidth));
+            }
+            else
+            {
+                _displayObject.Add(option.ID, cloud);
             }
             updateUI();
-
-            GL.NewList(callListIndex, ListMode.Compile);
-            GL.LineWidth((float)lineWidth);
-            GL.Color4(color);
+            GL.NewList(id, ListMode.Compile);
+            drawPointCloud(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
+            GL.EndList();
+        }
+        void drawPolyline(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin)
+        {
+            GL.LineWidth(drawSize);
+            GL.Color4(drawColor);
             GL.Begin(PrimitiveType.LineStrip);
 
             GL.Vertex3(polyLine.Points[0].PArray);
@@ -735,47 +933,230 @@ namespace RsLib.Display3D
             checkMaxMinPoint(polyLine.Points[1]);
             for (int i = 2; i < polyLine.Count; i++)
             {
+
                 GL.Vertex3(polyLine.Points[i].PArray);
-                checkMaxMinPoint(polyLine.Points[i]);
+                if (checkMaxMin)
+                {
+                    checkMaxMinPoint(polyLine.Points[i]);
+                }
             }
 
             GL.End();
-            GL.EndList();
-
         }
-        public void BuildVector(Polyline polyLine, Color color, double lineWidth, int callListIndex,string name, bool isReBuild = false)
+        public void BuildPath(Polyline polyLine, int id, bool checkMaxMin, bool isUpdateObject)
         {
-            if (callListIndex > _maxDisplayList) return;
-            if (polyLine.Count == 0) return;
-            if (polyLine.Points[0].GetType() != typeof(PointV3D)) return;
-
-            if (isReBuild == false)
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
             {
-                if (_selectCandidate.ContainsKey(callListIndex))
+                throw new Exception($"Build path fail. Display option doesn't contain ID {id}.");
+            }
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.Path) return;
+            if (polyLine.Count < 2) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
                 {
-                    throw new Exception($"callListIndex {callListIndex} is already in the Dictionary");
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, polyLine);
                 }
-                _selectCandidate.Add(callListIndex, polyLine);
-                _displayObject.Add(callListIndex, new DisplayObjectOption(callListIndex, name, color,DisplayObjectType.Vector,(float)lineWidth));
+            }
+            else
+            {
+                _displayObject.Add(option.ID, polyLine);
             }
             updateUI();
-
-            GL.NewList(callListIndex, ListMode.Compile);
-            GL.LineWidth((float)lineWidth);
-            GL.Color4(color);
+            GL.NewList(id, ListMode.Compile);
+            drawPolyline(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
+            GL.EndList();
+        }
+        void drawVector(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin)
+        {
+            GL.LineWidth(drawSize);
+            GL.Color4(drawColor);
             GL.Begin(PrimitiveType.Lines);
 
             for (int i = 0; i < polyLine.Count; i++)
             {
                 PointV3D p = polyLine.Points[i] as PointV3D;
+                if (checkMaxMin)
+                {
+                    checkMaxMinPoint(p);
+                }
                 GL.Vertex3(p.PArray);
                 GL.Vertex3(p.GetVzExtendPoint(10).PArray);
             }
             GL.End();
+        }
+        public void BuildVector(Polyline polyLine, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build vector fail. Display option doesn't contain ID {id}.");
+            }
 
+            DisplayObjectOption option = _displayOption[id];
+
+            if (option.DisplayType != DisplayObjectType.Vector) return;
+            if (polyLine.Count == 0) return;
+            if (polyLine.Points[0].GetType() != typeof(PointV3D)) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, polyLine);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, polyLine);
+            }
+            updateUI(); 
+            GL.NewList(id, ListMode.Compile);
+            drawVector(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
+            GL.EndList();
+        }
+        void drawQuad(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
+        {
+            GL.PointSize(drawSize);
+            GL.Color4(drawColor);
+            GL.Begin(PrimitiveType.Quads);
+
+            int count = cloud.Count / 4;
+            for (int i = 0; i < count; i++)
+            {
+                Point3D p0 = cloud.Points[i * 4];
+                Point3D p1 = cloud.Points[i * 4 + 1];
+                Point3D p2 = cloud.Points[i * 4 + 2];
+                Point3D p3 = cloud.Points[i * 4 + 3];
+
+                if (checkMaxMin)
+                {
+                    checkMaxMinPoint(p0);
+                    checkMaxMinPoint(p1);
+                    checkMaxMinPoint(p2);
+                    checkMaxMinPoint(p3);
+                }
+                GL.Vertex3(p0.PArray);
+                GL.Vertex3(p1.PArray);
+                GL.Vertex3(p2.PArray);
+                GL.Vertex3(p3.PArray);
+            }
+            GL.End();
+        }
+        public void BuildQuad(RPointCloud cloud, int id,bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build quad fail. Display option doesn't contain ID {id}.");
+            }
+            if (cloud.Count < 4) return;
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, cloud);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, cloud);
+            }
+            updateUI();
+            GL.NewList(id, ListMode.Compile);
+            drawQuad(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
+            GL.EndList();
+        }
+        void drawGroup(ObjectGroup group,DisplayObjectOption option, bool checkMaxMin)
+        {
+            foreach (var item in group.Objects)
+            {
+                string subOptionName = item.Key;
+                if (option.SubOptions.ContainsKey(subOptionName))
+                {
+                    DisplayObjectOption subOption = option.SubOptions[subOptionName];
+                    switch (subOption.DisplayType)
+                    {
+                        case DisplayObjectType.PointCloud:
+                            RPointCloud cloud = item.Value as RPointCloud;
+                            if (cloud != null) drawPointCloud(cloud, subOption.DrawSize, subOption.DrawColor, checkMaxMin);
+                            break;
+
+                        case DisplayObjectType.Path:
+                            Polyline line = item.Value as Polyline;
+                            if (line != null) drawPolyline(line, subOption.DrawSize, subOption.DrawColor, checkMaxMin);
+                            break;
+
+                        case DisplayObjectType.Vector:
+                            Polyline vector = item.Value as Polyline;
+                            if (vector != null) drawVector(vector, subOption.DrawSize, subOption.DrawColor, false);
+                            break;
+
+                        case DisplayObjectType.Point:
+                            Point3D pt = item.Value as Point3D;
+                            if (pt != null) drawPoint(pt, subOption.DrawSize, subOption.DrawColor, checkMaxMin);
+                            break;
+
+                        case DisplayObjectType.Quad:
+
+                            break;
+
+                        case DisplayObjectType.Composite:
+                            ObjectGroup subGroup = item.Value as ObjectGroup;
+                            if (subGroup != null) drawGroup(subGroup, subOption, checkMaxMin);
+                            break;
+
+                        default:
+
+                            break;
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Display option - sub option doesn't contain Key {subOptionName}.");
+                }
+            }
+
+        }
+        public void BuildGroup(ObjectGroup group, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build group fail. Display option doesn't contain ID {id}.");
+            }
+
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.Composite) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, group);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, group);
+            }
+            updateUI();
+            GL.NewList(option.ID, ListMode.Compile);
+            drawGroup(group, option, checkMaxMin);
             GL.EndList();
 
         }
+
         #endregion
     }
 
@@ -784,7 +1165,7 @@ namespace RsLib.Display3D
         public bool IsDisplay = true;
         public int ID = 0;
         public string Name = "";
-        public Color DisplayColor = Color.White;
+        public Color DrawColor = Color.White;
         public DisplayObjectType DisplayType = DisplayObjectType.None;
         float _drawSize = 5f;
         public float DrawSize
@@ -796,19 +1177,20 @@ namespace RsLib.Display3D
                 else _drawSize = value;
             }
         }
-
-
+        public bool IsShowAtDataGrid = true;
+        public Dictionary<string,DisplayObjectOption> SubOptions = new Dictionary<string, DisplayObjectOption>();
         public DisplayObjectOption()
         {
 
         }
-        public DisplayObjectOption(int id,string name,Color drawColor,DisplayObjectType displayType,float drawSize)
+        public DisplayObjectOption(int id, string name, Color drawColor, DisplayObjectType displayType, float drawSize, bool isShowDataGrid = true)
         {
             ID = id;
             Name = name;
-            DisplayColor = drawColor;
+            DrawColor = drawColor;
             DisplayType = displayType;
             DrawSize =  drawSize;
+            IsShowAtDataGrid = isShowDataGrid;
         }
 
         public object[] ToDataGridRowObject()
@@ -825,6 +1207,15 @@ namespace RsLib.Display3D
         Path,
         Vector,
         Point,
+        Quad,
+        Composite,
+    }
+    public enum PointPickMode : int
+    {
+        None = 0,
+        Single,
+        Measure,
+        Multiple,
     }
 
 }

@@ -87,7 +87,7 @@ namespace RsLib.PointCloud
         }
     }
     [Serializable]
-    public class ObjectGrop :Object3D
+    public class ObjectGroup :Object3D
     {
         public Dictionary<string, Object3D> Objects { get; private set; } = new Dictionary<string, Object3D>();
         public List<string> Sequence { get; private set; } = new List<string>();
@@ -108,7 +108,7 @@ namespace RsLib.PointCloud
         }
 
 
-        public ObjectGrop(string groupName)
+        public ObjectGroup(string groupName)
         {
             base.Name = groupName;
         }

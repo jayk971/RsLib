@@ -46,6 +46,11 @@ namespace RsLib.PointCloud
             Y = Math.Round(endP.Y - startP.Y, 2);
             Z = Math.Round(endP.Z - startP.Z, 2);
         }
+
+        public override string ToString()
+        {
+            return $"{X:F2},{Y:F2},{Z:F2}";
+        }
         public void CalculateEulerAngle()
         {
             if (!(X == 0 && Y == 0 && Z == 0))

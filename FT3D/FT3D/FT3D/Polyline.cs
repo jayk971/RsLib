@@ -117,6 +117,49 @@ namespace RsLib.PointCloud
             return true;
 
         }
+        public PointCloud GetRangePoints(double startPercent,double endPercent,bool isContainStartIndex,bool isContainEndIndex)
+        {
+            PointCloud output = new PointCloud();
+            if(Percent.Count ==0)
+            {
+                CalculatePercent();
+            }
+            if(startPercent > endPercent)
+            {
+                double tempStart = startPercent;
+                double tempEnd = endPercent;
+
+                startPercent = tempEnd;
+                endPercent = tempStart;
+            }
+            for (int i = 0; i < Percent.Count; i++)
+            {
+                double d = Percent[i];
+                if(isContainStartIndex)
+                {
+                    if(isContainEndIndex)
+                    {
+                        if (d >= startPercent && d <= endPercent) output.Add(Points[i]);
+                    }
+                    else
+                    {
+                        if (d >= startPercent && d < endPercent) output.Add(Points[i]);
+                    }
+                }
+                else
+                {
+                    if (isContainEndIndex)
+                    {
+                        if (d > startPercent && d <= endPercent) output.Add(Points[i]);
+                    }
+                    else
+                    {
+                        if (d > startPercent && d < endPercent) output.Add(Points[i]);
+                    }
+                }
+            }
+            return output;
+        }
         public new Polyline Multiply(double[,] matrixArr)
         {
             Polyline output = new Polyline();

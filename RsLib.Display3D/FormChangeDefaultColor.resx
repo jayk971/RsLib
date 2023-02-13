@@ -117,4 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="Column_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Column_Object.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Column_Color.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Column_Size.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAMAQAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFWOxglVmsZRWZ3LdVebyV5VmbsPAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAWpbDEVqezKFgptXdbLbn+3K98P9wu+z/XqPS2VCZxSMAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAV5nFI12iztdyvO//dsL1/2Ws3eFboM7EZ6/g5nTA8/9boc2tAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAW5LIDl6i0dF1wfP/dsL1/3O/8f9an8qUAAAAAFuezah2wfT/XaTRvgAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFqdzKRzvvD/dsL1/3bC9f92wfT/Wp/NylSXw0Bcoc/QdsL1/12i
+        0LcAAAAAAAAAAAAAAAAAAAAAAAAAAE6dxA1hqdjcdcD0/1573f9ee93/dsH0/3O+8f9ttuj/dL/y/3bC
+        9f9cpNHEAAAAAAAAAAAAAAAAAAAAAAAAAABXl8ZMbbfo+2mf6f92d+j/dnfo/2mg6f92wvX/dsL1/3bC
+        9f92wvX/abHj8FmezXYAAAAAAAAAAAAAAAAAAAAAWZ7JhHO98P9yt/H/WmfY/1pn2P9yuPH/dsL1/3bC
+        9f92wvX/dsL1/3bC9f9rtebwX6TTz1uhz7lZn8pqAAAAAFqeyoNyve//dsL1/3bC9f92wvX/dsL1/3bC
+        9f92wvX/dsL1/3bC9f92wvX/dsL1/3bC9f92wvX/Zq7f7lGYwy9ZnchTbbfo/HO/8f9gsdH/YLDR/3O/
+        8f92wvX/dsL1/3bC9f92wvX/dsL1/3bC9f92wvX/dsL1/2y25/pUl8NAVZm7D2Ko2N1quOX/htTq/4bU
+        6v9quOX/dsL1/3bC9f92wvX/e7zn/7GUe/+tlYP/d8Dx/3bC9f9hqNbfW5LIDgAAAABan82kcb7u/2Kx
+        1v9istb/dcHz/36yov+CsI//dr7h/5Optf/jqXz/1aB3/4Oz0v9yvvD/WqDNpAAAAAAAAAAAWpbDEVyi
+        0Nh1wfP/dsL1/3a/6f+Tu5H/tdmw/32zpv96vuv/r5WB/6mXiv92wPH/XaPQ01qWwxEAAAAAAAAAAAAA
+        AABRlccpXaPS1XK+8P92wvT/f7Gc/4Owi/93vd3/dsL1/3bC9f9yvvD/XKPR0lWYyCoAAAAAAAAAAAAA
+        AAAAAAAAAAAAAFWcxhJansqtYKfX4W636v10v/L/cr7w/2y25vthp9XfWZ7MplCPvxAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFmZvxRXmsdbWZ3MklqfzXpXm8dSUI+/EAAAAAAAAAAAAAAAAAAA
+        AAAAAAAA//8AAPA/AADgHwAAwR8AAIEfAACAHwAAgB8AAAADAAAAAQAAgAEAAIABAACAAQAAwAMAAOAH
+        AADwDwAA/v8AAA==
+</value>
+  </data>
 </root>

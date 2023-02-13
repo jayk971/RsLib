@@ -2,11 +2,35 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RsLib.Display3D.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SelectPoint" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="Color_SelectPoint" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Red</Value>
     </Setting>
-    <Setting Name="SelectRange" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="Color_SelectRange" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="Color_StartPoint" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Gold</Value>
+    </Setting>
+    <Setting Name="Color_EndPoint" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">BlueViolet</Value>
+    </Setting>
+    <Setting Name="Color_MeasureLine" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Pink</Value>
+    </Setting>
+    <Setting Name="Size_SelectPoint" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Size_SelectRange" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="Size_StartPoint" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Size_EndPoint" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Size_MeasureLine" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>
