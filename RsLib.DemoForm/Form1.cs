@@ -144,7 +144,7 @@ namespace RsLib.DemoForm
                 Name = "test opt vector"
             };
             displayControl.AddDisplayOption(vectorOption);
-
+            displayControl.SetObjectVisible(4, false);
             displayControl.BuildVector(line, vectorOption.ID,false,true);
             //bool ds = false;
             //listBox1.Items.Clear();

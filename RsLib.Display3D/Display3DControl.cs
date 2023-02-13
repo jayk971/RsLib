@@ -190,11 +190,11 @@ namespace RsLib.Display3D
             _isColorDialogOpen = false;
         }
 
-        void updateUI()
+        void updateDataGridView()
         {
             if (this.InvokeRequired)
             {
-                Action action = new Action(updateUI);
+                Action action = new Action(updateDataGridView);
                 this.Invoke(action);
             }
             else
@@ -262,7 +262,7 @@ namespace RsLib.Display3D
         private void btn_Update_Click(object sender, EventArgs e)
         {
             ReBuildAll();
-            updateUI();
+            updateDataGridView();
         }
 
         private void measureDistanceToolStripMenuItem_Click(object sender, EventArgs e)

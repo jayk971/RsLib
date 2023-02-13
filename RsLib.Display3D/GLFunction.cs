@@ -266,7 +266,7 @@ namespace RsLib.Display3D
             _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
             _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             ResetView();
-            updateUI();
+            updateDataGridView();
         }
         //public void ChangeDisplayOption(DisplayObjectOption newOption)
         //{
@@ -344,6 +344,7 @@ namespace RsLib.Display3D
             if(_displayOption.ContainsKey(id))
             {
                 _displayOption[id].IsDisplay = visible;
+                updateDataGridView();
             }
         }
         public void ResetView()
@@ -873,7 +874,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, pt);
             }
-            updateUI();
+            updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPoint(pt, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
@@ -916,7 +917,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, cloud);
             }
-            updateUI();
+            updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPointCloud(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
@@ -966,7 +967,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLine);
             }
-            updateUI();
+            updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPolyline(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
@@ -1015,7 +1016,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLine);
             }
-            updateUI(); 
+            updateDataGridView(); 
             GL.NewList(id, ListMode.Compile);
             drawVector(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
@@ -1071,7 +1072,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, cloud);
             }
-            updateUI();
+            updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawQuad(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
@@ -1150,7 +1151,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, group);
             }
-            updateUI();
+            updateDataGridView();
             GL.NewList(option.ID, ListMode.Compile);
             drawGroup(group, option, checkMaxMin);
             GL.EndList();
