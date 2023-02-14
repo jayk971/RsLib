@@ -135,8 +135,16 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
-copy "$(TargetDir)zh-TW\" "D:\RLib\$(OutDir)zh-TW" /Y
-copy "$(TargetDir)en\" "D:\RLib\$(OutDir)en" /Y
-copy "$(TargetDir)vi\" "D:\RLib\$(OutDir)vi" /Y</PostBuildEvent>
+set twFolder="D:\RLib\$(OutDir)zh-TW"
+set viFolder="D:\RLib\$(OutDir)vi"
+set enFolder="D:\RLib\$(OutDir)en"
+
+if not exist %25twFolder%25 mkdir %25twFolder%25
+if not exist %25viFolder%25 mkdir %25viFolder%25
+if not exist %25enFolder%25 mkdir %25enFolder%25
+
+copy "$(TargetDir)zh-TW\" %25twFolder%25 /Y
+copy "$(TargetDir)en\" %25enFolder%25 /Y
+copy "$(TargetDir)vi\" %25viFolder%25 /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
