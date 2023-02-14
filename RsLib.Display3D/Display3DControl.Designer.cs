@@ -29,9 +29,11 @@ namespace RsLib.Display3D
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
             this.btn_ResizeView = new System.Windows.Forms.ToolStripButton();
@@ -47,11 +49,13 @@ namespace RsLib.Display3D
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column_Display = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Column2_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -227,16 +231,17 @@ namespace RsLib.Display3D
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column_Type,
             this.Column_Display,
             this.Column_Name,
             this.Column1,
@@ -251,6 +256,16 @@ namespace RsLib.Display3D
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.Size = new System.Drawing.Size(250, 369);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // Column_Type
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column_Type.HeaderText = "Type";
+            this.Column_Type.Name = "Column_Type";
+            this.Column_Type.ReadOnly = true;
+            this.Column_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column_Type.Width = 70;
             // 
             // Column_Display
             // 
@@ -268,8 +283,8 @@ namespace RsLib.Display3D
             // 
             // Column1
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column1.HeaderText = "ID";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -285,8 +300,8 @@ namespace RsLib.Display3D
             // 
             // Column2_Size
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column2_Size.HeaderText = "Size";
             this.Column2_Size.Name = "Column2_Size";
             this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -331,10 +346,12 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripStatusLabel lbl_PickPointMode;
         private System.Windows.Forms.ToolStripMenuItem measureDistanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Type;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column_Display;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewButtonColumn Column_Color;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2_Size;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

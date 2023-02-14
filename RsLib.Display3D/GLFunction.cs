@@ -30,7 +30,7 @@ namespace RsLib.Display3D
         int _selectIndex = -1;
         Dictionary<int, Object3D> _displayObject = new Dictionary<int, Object3D>();
         Dictionary<int,DisplayObjectOption> _displayOption = new Dictionary<int, DisplayObjectOption>();
-
+        const float _closetDisLimit = 1.0f; 
         public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_selectIndex);
         public Object3D CurrentSelectObj => GetDisplayObject(_selectIndex);
         Point3D _closetPoint = new Point3D();
@@ -67,7 +67,7 @@ namespace RsLib.Display3D
             GL.Enable(EnableCap.Blend);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             GL.Enable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.Lighting);
+            
             _headList = GL.GenLists(_maxDisplayList);
             BuildAxis();
         }
@@ -99,7 +99,8 @@ namespace RsLib.Display3D
             }
             if (_pickMode == PointPickMode.Single)
             {
-                if(_haveClosestPoint) drawSelectedPoint();
+                if(_haveClosestPoint) 
+                    drawSelectedPoint();
             }
             else if(_pickMode == PointPickMode.Measure)
             {
@@ -107,7 +108,8 @@ namespace RsLib.Display3D
                     drawMeasureLine();
             }
 
-            if (_pickMode >= PointPickMode.Single && _selectIndex > 1) drawSelectRangeFrame();
+            if (_pickMode >= PointPickMode.Single && _selectIndex > 1) 
+                drawSelectRangeFrame();
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
@@ -219,7 +221,10 @@ namespace RsLib.Display3D
         }
         private void GlControl_MouseWheel(object sender, MouseEventArgs e)
         {
-            _scale += (float)e.Delta / SystemInformation.MouseWheelScrollDelta / 10.0f;
+            int step = e.Delta / SystemInformation.MouseWheelScrollDelta;
+            _scale *= (float)(1.0 + step * 0.1);
+
+            //_scale += (float)e.Delta / SystemInformation.MouseWheelScrollDelta / 10.0f;
             if (_scale <= 0.1f) _scale = 0.1f;
         }
         private void GlControl_MouseDown(object sender, MouseEventArgs e)
@@ -241,118 +246,7 @@ namespace RsLib.Display3D
 
         #region method
 
-        public bool AddDisplayOption(DisplayObjectOption option)
-        {
-            if(_displayOption.ContainsKey(option.ID))
-            {
-                return false;
-            }
-            else
-            {
-                _displayOption.Add(option.ID, option);
-                return true;
-            }
-        }
-        public void Clear()
-        {
-            foreach (var item in _displayOption)
-            {
-                DisplayObjectOption objOption = item.Value;
-                GL.NewList(objOption.ID, ListMode.Compile);
-                GL.EndList();
-            }
-            _displayObject.Clear();
-            _displayOption.Clear();
-            _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-            _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-            ResetView();
-            updateDataGridView();
-        }
-        //public void ChangeDisplayOption(DisplayObjectOption newOption)
-        //{
-        //    if(_displayOption.ContainsKey(newOption.ID))
-        //    {
-        //        _displayOption[newOption.ID].DrawColor = newOption.DrawColor;
-        //        _displayOption[newOption.ID].IsDisplay = newOption.IsDisplay;
-        //        ReBuild_ChangeColorSize(newOption.ID);
-        //    }
-        //}
 
-        public void ReBuildAll()
-        {
-            foreach (var item in _displayOption)
-            {
-                ReBuild_ChangeColorSize(item.Key);
-            }
-        }
-        public void ReBuild_ChangeColorSize(int id)
-        {
-            if (this.InvokeRequired)
-            {
-                Action<int> action = new Action<int>(ReBuild_ChangeColorSize);
-                this.Invoke(action, id);
-            }
-            else
-            {
-                if (_displayOption.ContainsKey(id))
-                {
-                    DisplayObjectOption option = _displayOption[id];
-                    switch (option.DisplayType)
-                    {
-                        case DisplayObjectType.PointCloud:
-                            BuildPointCloud((RPointCloud)_displayObject[id], id, false, false);
-                            break;
-                        case DisplayObjectType.Vector:
-                            BuildVector((Polyline)_displayObject[id], id,false,false);
-                            break;
-                        case DisplayObjectType.Path:
-                            BuildPath((Polyline)_displayObject[id], id,false,false);
-                            break;
-                        case DisplayObjectType.Point:
-                            BuildPoint((Point3D)_displayObject[id], id,false,false);
-                            break;
-                        default:
-
-                            break;
-                    }
-                }
-            }
-        }
-        public Object3D GetDisplayObject(int index)
-        {
-            if (index > 0)
-            {
-                if (_displayObject.ContainsKey(index)) return _displayObject[index];
-                else return null;
-            }
-            else return null;
-        }
-
-        public DisplayObjectOption GetDisplayObjectOption(int index)
-        {
-
-            if (index > 0)
-            {
-                if (_displayOption.ContainsKey(index)) return _displayOption[index];
-                else return null;
-            }
-            else return null;
-
-        }
-        public void SetObjectVisible(int id,bool visible)
-        {
-            if(_displayOption.ContainsKey(id))
-            {
-                _displayOption[id].IsDisplay = visible;
-                updateDataGridView();
-            }
-        }
-        public void ResetView()
-        {
-            _translation = new Vector3();
-            _rotation = new Vector3();
-            _scale = 1.0f;
-        }
         void multiMatrix()
         {
             Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _avgPoint);
@@ -434,27 +328,89 @@ namespace RsLib.Display3D
             if (_displayObject.Count == 0) return false;
             if (_selectIndex == -1) return false;
             if (_displayObject.ContainsKey(_selectIndex) == false) return false;
+            DisplayObjectType displayObjectType = _displayOption[_selectIndex].DisplayType;
+            if (displayObjectType == DisplayObjectType.None) return false;
 
-            var selectCandidateCloud = _displayObject[_selectIndex] as PointCloud.PointCloud;
-            foreach (Point3D point in selectCandidateCloud.Points)
+            Type objectType = _displayObject[_selectIndex].GetType();
+
+
+            if(objectType == typeof(Point3D))
             {
-                Vector3 vecPoint = new Vector3((float)point.X, (float)point.Y, (float)point.Z);
-                float distance = Vector3.Distance(rayOrig, vecPoint);
-                Vector3 displacement = vecPoint - rayOrig;
-                float projection = Vector3.Dot(displacement, rayDir);
-                float verticalDis = (float)Math.Sqrt(Math.Pow(distance, 2) - Math.Pow(projection, 2));
-                if (verticalDis < closestDistance)
+                var obj = _displayObject[_selectIndex] as Point3D;
+                float result = calculatePointMinDistance(rayOrig, rayDir, obj);
+                closestDistance = result;
+                closestPoint = obj;
+                hasClosetPoint = closestDistance <= _closetDisLimit;
+            }
+            else if(objectType == typeof(ObjectGroup))
+            {
+                var obj = _displayObject[_selectIndex] as ObjectGroup;
+                foreach (var item in obj.Objects)
                 {
-                    closestDistance = verticalDis;
-                    if (verticalDis < 1.0)
+                    var subObj = item.Value as RPointCloud;
+                    Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, subObj.Points);
+                    if (result.Item1 < closestDistance)
                     {
-                        hasClosetPoint = true;
-                        closestPoint = point;
+                        closestDistance = result.Item1;
+                        closestPoint = result.Item2;
+                        hasClosetPoint = closestDistance <= _closetDisLimit;
                     }
                 }
+
+            }
+             else
+            {
+                var obj = _displayObject[_selectIndex] as RPointCloud;
+                Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
+                closestDistance = result.Item1;
+                closestPoint = result.Item2;
+                hasClosetPoint = closestDistance <= _closetDisLimit;
+#if old
+                foreach (Point3D point in selectCandidateCloud.Points)
+                {
+                    Vector3 vecPoint = new Vector3((float)point.X, (float)point.Y, (float)point.Z);
+                    float distance = Vector3.Distance(rayOrig, vecPoint);
+                    Vector3 displacement = vecPoint - rayOrig;
+                    float projection = Vector3.Dot(displacement, rayDir);
+                    float verticalDis = (float)Math.Sqrt(Math.Pow(distance, 2) - Math.Pow(projection, 2));
+                    if (verticalDis < closestDistance)
+                    {
+                        closestDistance = verticalDis;
+                        if (verticalDis < 1.0)
+                        {
+                            hasClosetPoint = true;
+                            closestPoint = point;
+                        }
+                    }
+                }
+#endif  
             }
             return hasClosetPoint;
         }
+        Tuple<float,Point3D> calculateNearestPoint(Vector3 rayOrig,Vector3 rayDir, float closestDistance , List<Point3D> points)
+        {
+            Point3D closestPoint = new Point3D();
+            foreach (Point3D point in points)
+            {
+                float result = calculatePointMinDistance(rayOrig, rayDir, point);
+                if (result <= closestDistance)
+                {
+                    closestDistance = result;
+                    closestPoint = point;
+                }
+            }
+            return new Tuple<float, Point3D>(closestDistance, closestPoint);
+        }
+        float calculatePointMinDistance(Vector3 rayOrig, Vector3 rayDir,Point3D point)
+        {
+            Vector3 vecPoint = new Vector3((float)point.X, (float)point.Y, (float)point.Z);
+            float distance = Vector3.Distance(rayOrig, vecPoint);
+            Vector3 displacement = vecPoint - rayOrig;
+            float projection = Vector3.Dot(displacement, rayDir);
+            float verticalDis = (float)Math.Sqrt(Math.Pow(distance, 2) - Math.Pow(projection, 2));
+            return verticalDis;
+        }
+
         Vector3 unProject(Vector3 winCoord, int viewportX, int viewportY, int viewportWidth, int viewportHeight)
         {
             Matrix4 modelview;
@@ -570,11 +526,36 @@ namespace RsLib.Display3D
             if (_selectIndex <= 1) return;
             if (_displayObject.Count == 0) return;
             if (_displayObject.ContainsKey(_selectIndex) == false) return;
-            var selectCandidate = _displayObject[_selectIndex] as PointCloud.PointCloud;
-            Point3D min = selectCandidate.Min;
-            Point3D max = selectCandidate.Max;
+            
+            Point3D min = new Point3D();
+            Point3D max = new Point3D();
 
-            drawFrame(new Vector3((float)min.X, (float)min.Y, (float)min.Z), new Vector3((float)max.X, (float)max.Y, (float)max.Z), Settings.Default.Size_SelectRange, Settings.Default.Color_SelectRange,true);
+            Type objectType = _displayObject[_selectIndex].GetType();
+            if (objectType == typeof(RPointCloud))
+            {
+                RPointCloud selectCandidate = _displayObject[_selectIndex] as RPointCloud;
+                min = selectCandidate.Min;
+                max = selectCandidate.Max;
+            }
+            else if (objectType == typeof(Polyline))
+            {
+                Polyline selectCandidate = _displayObject[_selectIndex] as Polyline;
+                min = selectCandidate.Min;
+                max = selectCandidate.Max;
+            }
+            else if (objectType == typeof(ObjectGroup))
+            {
+                ObjectGroup selectCandidate = _displayObject[_selectIndex] as ObjectGroup;
+                min = selectCandidate.Min;
+                max = selectCandidate.Max;
+            }
+
+
+            drawFrame(new Vector3((float)min.X, (float)min.Y, (float)min.Z), 
+                new Vector3((float)max.X, (float)max.Y, (float)max.Z), 
+                Settings.Default.Size_SelectRange, 
+                Settings.Default.Color_SelectRange,
+                true);
         }
         void drawCircle(Vector3 center, Vector3 normalDir, float radius, Color drawColor)
         {
@@ -827,12 +808,12 @@ namespace RsLib.Display3D
             GL.NewList(_headList, ListMode.Compile);
             float cylinderHeight = 20f;
             float capHeight = 10f;
-            float cylinderRadius = 1f;
-            float capRadius = 4f;
+            float cylinderRadius = 0.5f;
+            float capRadius = 2f;
             drawCylinder(Vector3.Zero, Vector3.UnitX, cylinderRadius, cylinderHeight, Color.Red);
             drawCylinder(Vector3.Zero, Vector3.UnitY, cylinderRadius, cylinderHeight, Color.Green);
             drawCylinder(Vector3.Zero, Vector3.UnitZ, cylinderRadius, cylinderHeight, Color.Blue);
-            drawSphere(Vector3.Zero, 3.0f, Color.White);
+            drawSphere(Vector3.Zero, 2.0f, Color.White);
             drawCone(new Vector3(cylinderHeight, 0, 0), capHeight, Vector3.UnitX, capRadius, Color.Red);
             drawCone(new Vector3(0, cylinderHeight, 0), capHeight, Vector3.UnitY, capRadius, Color.Green);
             drawCone(new Vector3(0, 0, cylinderHeight), capHeight, Vector3.UnitZ, capRadius, Color.Blue);
@@ -874,10 +855,11 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, pt);
             }
-            updateDataGridView();
+            //updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPoint(pt, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
+            updateDataGridView();
         }
         void drawPointCloud(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
         {
@@ -917,11 +899,48 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, cloud);
             }
-            updateDataGridView();
+            //updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPointCloud(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
+            updateDataGridView();
+
         }
+        public void BuildPointCloud(ObjectGroup group, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build point cloud fail. Display option doesn't contain ID {id}.");
+            }
+
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, group);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, group);
+            }
+            //updateDataGridView();
+            GL.NewList(id, ListMode.Compile);
+            foreach (var item in group.Objects)
+            {
+                Polyline line = item.Value as Polyline;
+                if(line != null) drawPointCloud(line, option.DrawSize, option.DrawColor, checkMaxMin);
+            }
+            GL.EndList();
+            updateDataGridView();
+
+        }
+
         void drawPolyline(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin)
         {
             GL.LineWidth(drawSize);
@@ -967,10 +986,49 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLine);
             }
-            updateDataGridView();
+            //updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawPolyline(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
+            updateDataGridView();
+
+        }
+        public void BuildMultiPath(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (polyLines.DataCount == 0) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build path fail. Display option doesn't contain ID {id}.");
+            }
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.Path) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, polyLines);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, polyLines);
+            }
+            //updateDataGridView();
+            GL.NewList(id, ListMode.Compile);
+            foreach (var item in polyLines.Objects)
+            {
+                Polyline line = item.Value as Polyline;
+                if (line != null)
+                {
+                    drawPolyline(line, option.DrawSize, option.DrawColor, checkMaxMin);
+                }
+            }
+            GL.EndList();
+            updateDataGridView();
+
         }
         void drawVector(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin)
         {
@@ -1016,10 +1074,49 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLine);
             }
-            updateDataGridView(); 
+            //updateDataGridView(); 
             GL.NewList(id, ListMode.Compile);
             drawVector(polyLine, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
+            updateDataGridView();
+
+        }
+        public void BuildMultiPathVector(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            if (id > _maxDisplayList) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build vector fail. Display option doesn't contain ID {id}.");
+            }
+
+            DisplayObjectOption option = _displayOption[id];
+
+            if (option.DisplayType != DisplayObjectType.Vector) return;
+            if (polyLines.DataCount == 0) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, polyLines);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, polyLines);
+            }
+            //updateDataGridView(); 
+            GL.NewList(id, ListMode.Compile);
+            foreach (var item in polyLines.Objects)
+            {
+                Polyline line = item.Value as Polyline;
+                if(line != null)
+                    drawVector(line, option.DrawSize, option.DrawColor, checkMaxMin);
+            }
+            GL.EndList();
+            updateDataGridView();
+
         }
         void drawQuad(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
         {
@@ -1072,10 +1169,12 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, cloud);
             }
-            updateDataGridView();
+            //updateDataGridView();
             GL.NewList(id, ListMode.Compile);
             drawQuad(cloud, option.DrawSize, option.DrawColor, checkMaxMin);
             GL.EndList();
+            updateDataGridView();
+
         }
         void drawGroup(ObjectGroup group,DisplayObjectOption option, bool checkMaxMin)
         {
@@ -1151,11 +1250,11 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, group);
             }
-            updateDataGridView();
+            //updateDataGridView();
             GL.NewList(option.ID, ListMode.Compile);
             drawGroup(group, option, checkMaxMin);
             GL.EndList();
-
+            updateDataGridView();
         }
 
         #endregion
@@ -1193,10 +1292,21 @@ namespace RsLib.Display3D
             DrawSize =  drawSize;
             IsShowAtDataGrid = isShowDataGrid;
         }
-
+        public static DisplayObjectOption[] CreateDisplayOptionArray(int startID,int count,DisplayObjectType defaultType,float defaultSize)
+        {
+            DisplayObjectOption[] output = new DisplayObjectOption[count];
+            for (int i = 0; i < output.Length; i++)
+            {
+                output[i] = new DisplayObjectOption();
+                output[i].ID = startID + i;
+                output[i].DisplayType = defaultType;
+                output[i].DrawSize = defaultSize;
+            }
+            return output;
+        }
         public object[] ToDataGridRowObject()
         {
-            return new object[] { IsDisplay, Name, ID, "",DrawSize};
+            return new object[] { DisplayType,IsDisplay, Name, ID, "",DrawSize};
         }
 
 

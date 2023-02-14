@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("DemoApp")]
+[assembly: AssemblyTitle("RsLib.XYZViewer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DemoApp")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyProduct("RsLib.XYZViewer")]
+[assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 下列 GUID 為專案公開 (Expose) 至 COM 時所要使用的 typelib ID
-[assembly: Guid("f354bd2a-d638-4ebd-bc61-414d1bd142cf")]
+[assembly: Guid("a878a3d1-bbdc-4853-a098-c3ded6c4a39a")]
 
 // 組件的版本資訊由下列四個值所組成: 
 //
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // 設為預設，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.23045.1")]
+[assembly: AssemblyFileVersion("1.0.23045.56")]

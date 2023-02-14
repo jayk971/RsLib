@@ -22,7 +22,9 @@ namespace RsLib.PointCloud
         public double Z = 0.0;
 
 
-        public readonly static Point3D Orig = new Point3D(0, 0, 0);
+        public static Point3D Orig => new Point3D(0, 0, 0);
+        public static Point3D MaxValue => new Point3D(double.MaxValue, double.MaxValue, double.MaxValue);
+        public static Point3D MinValue => new Point3D(double.MinValue, double.MinValue, double.MinValue);
 
         public Color Color = Color.DimGray;
         public double Dt;   //記錄與上一點之距離或備用於其他演算法        

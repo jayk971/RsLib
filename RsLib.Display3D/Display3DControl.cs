@@ -16,12 +16,23 @@ using RsLib.PointCloud;
 using RsLib.Display3D.Properties;
 namespace RsLib.Display3D
 {
+    using RPointCloud = RsLib.PointCloud.PointCloud;
+
     public partial class Display3DControl : UserControl
     {
         public event Action<bool,int,Point3D> AfterPointSelected;
+        public event Action AfterCleared;
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
         const int splitContainerPanel1MinSize = 300;
+        const int _typeIndex = 0;
+        const int _visibleIndex = 1;
+        const int _nameIndex = 2;
+        const int _idIndex = 3;
+        const int _colorIndex = 4;
+        const int _sizeIndex = 5;
+
+
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
@@ -52,16 +63,137 @@ namespace RsLib.Display3D
             //GlControl_Load(null, null);
             splitContainer1.Panel1Collapsed = true;
         }
+        public bool AddDisplayOption(DisplayObjectOption option)
+        {
+            if (_displayOption.ContainsKey(option.ID))
+            {
+                return false;
+            }
+            else
+            {
+                _displayOption.Add(option.ID, option);
+                //updateDataGridView();
+                return true;
+            }
+        }
+        public void AddDisplayOption(DisplayObjectOption[] option)
+        {
+            for (int i = 0; i < option.Length; i++)
+            {
+                if (_displayOption.ContainsKey(option[i].ID))
+                {
+                }
+                else
+                {
+                    _displayOption.Add(option[i].ID, option[i]);
+                }
+            }
+            //updateDataGridView();
+        }
+        public void Clear(bool clearOptions = true)
+        {
+            _displayObject.Clear();
+            foreach (var item in _displayOption)
+            {
+                DisplayObjectOption objOption = item.Value;
+                GL.NewList(objOption.ID, ListMode.Compile);
+                GL.EndList();
+            }
+            if (clearOptions)
+            {
+                _displayOption.Clear();
+            }
+            _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+            _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            ResetView();
+            updateDataGridView();
+            AfterCleared?.Invoke();
+        }
+        public void ReBuildAll()
+        {
+            foreach (var item in _displayOption)
+            {
+                ReBuild_ChangeColorSize(item.Key);
+            }
+        }
+        public void ReBuild_ChangeColorSize(int id)
+        {
+            if (this.InvokeRequired)
+            {
+                Action<int> action = new Action<int>(ReBuild_ChangeColorSize);
+                this.Invoke(action, id);
+            }
+            else
+            {
+                if (_displayOption.ContainsKey(id))
+                {
+                    DisplayObjectOption option = _displayOption[id];
+                    switch (option.DisplayType)
+                    {
+                        case DisplayObjectType.PointCloud:
+                            BuildPointCloud((RPointCloud)_displayObject[id], id, false, false);
+                            break;
+                        case DisplayObjectType.Vector:
+                            BuildVector((Polyline)_displayObject[id], id, false, false);
+                            break;
+                        case DisplayObjectType.Path:
+                            BuildPath((Polyline)_displayObject[id], id, false, false);
+                            break;
+                        case DisplayObjectType.Point:
+                            BuildPoint((Point3D)_displayObject[id], id, false, false);
+                            break;
+                        default:
 
+                            break;
+                    }
+                }
+            }
+        }
+        public Object3D GetDisplayObject(int index)
+        {
+            if (index > 0)
+            {
+                if (_displayObject.ContainsKey(index)) return _displayObject[index];
+                else return null;
+            }
+            else return null;
+        }
+        public DisplayObjectOption GetDisplayObjectOption(int index)
+        {
+
+            if (index > 0)
+            {
+                if (_displayOption.ContainsKey(index)) return _displayOption[index];
+                else return null;
+            }
+            else return null;
+
+        }
+        //public void SetObjectVisible(int id, bool visible)
+        //{
+        //    if (_displayOption.ContainsKey(id))
+        //    {
+        //        _displayOption[id].IsDisplay = visible;
+        //        //updateDataGridView();
+        //    }
+        //}
+        public void ResetView()
+        {
+            _translation = new Vector3();
+            _rotation = new Vector3();
+            _scale = 1.0f;
+        }
         private void DataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            int columnIndex = e.ColumnIndex;
-            int rowIndex = e.RowIndex;
-            int id = (int)dataGridView1.Rows[rowIndex].Cells[2].Value;
-            if (columnIndex == 4)
+            int c = e.ColumnIndex;
+            int r = e.RowIndex;
+            if (r == -1 || c == -1) return;
+
+            int id = (int)dataGridView1.Rows[r].Cells[_idIndex].Value;
+            if (c == _sizeIndex)
             {
                 float newValue;
-                if (float.TryParse(dataGridView1.Rows[rowIndex].Cells[4].Value.ToString(), out newValue) == false)
+                if (float.TryParse(dataGridView1.Rows[r].Cells[_sizeIndex].Value.ToString(), out newValue) == false)
                 {
                     e.Cancel = true;
                 }
@@ -81,14 +213,19 @@ namespace RsLib.Display3D
         private void DataGridView1_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
         {
             _isMouseOnCell = true;
+            int c = e.ColumnIndex;
+            int r = e.RowIndex;
+            if (r == -1 || c == -1) return;
+            dataGridView1.Rows[r].Cells[c].ToolTipText = dataGridView1.Rows[r].Cells[c].Value.ToString();
         }
 
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int columnIndex = e.ColumnIndex;
-            int rowIndex = e.RowIndex;
-            int id = (int)dataGridView1.Rows[rowIndex].Cells[2].Value;
+            int c = e.ColumnIndex;
+            int r = e.RowIndex;
+            if (r == -1 || c == -1) return;
+            int id = (int)dataGridView1.Rows[r].Cells[_idIndex].Value;
 
             if (_displayOption.ContainsKey(id))
             {
@@ -111,13 +248,13 @@ namespace RsLib.Display3D
         {
             int c = e.ColumnIndex;
             int r = e.RowIndex;
-            if (r == -1) return;
-            int id = (int)dataGridView1.Rows[r].Cells[2].Value;
+            if (r == -1 || c == -1) return;
+            int id = (int)dataGridView1.Rows[r].Cells[_idIndex].Value;
             
-            if (c == 0)
+            if (c == _visibleIndex)
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
 
-            else if (c == 3)
+            else if (c == _colorIndex)
             {
                 if (_isColorDialogOpen == false)
                 {
@@ -132,13 +269,15 @@ namespace RsLib.Display3D
 
         private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            int columnIndex = e.ColumnIndex;
-            int rowIndex = e.RowIndex;
-            int id = (int)dataGridView1.Rows[rowIndex].Cells[2].Value;
+            int c = e.ColumnIndex;
+            int r = e.RowIndex;
+            if (r == -1 || c == -1) return;
 
-            if (columnIndex == 0)
+            int id = (int)dataGridView1.Rows[r].Cells[_idIndex].Value;
+
+            if (c == _visibleIndex)
             {
-                bool isCheck = (bool)dataGridView1.Rows[rowIndex].Cells[0].Value;
+                bool isCheck = (bool)dataGridView1.Rows[r].Cells[_visibleIndex].Value;
                 if(_displayOption.ContainsKey(id))
                 {
                     bool oldCheck = _displayOption[id].IsDisplay;
@@ -149,11 +288,11 @@ namespace RsLib.Display3D
                 }
 
             }
-            else if(columnIndex == 4)
+            else if(c == _sizeIndex)
             {
                 if (_displayOption.ContainsKey(id))
                 {
-                    float newValue = float.Parse(dataGridView1.Rows[rowIndex].Cells[4].Value.ToString());
+                    float newValue = float.Parse(dataGridView1.Rows[r].Cells[_sizeIndex].Value.ToString());
                     float oldValue = _displayOption[id].DrawSize;
                     if (oldValue != newValue)
                     {
@@ -203,11 +342,18 @@ namespace RsLib.Display3D
                 foreach (var item in _displayOption)
                 {
                     DisplayObjectOption option = item.Value;
-                    dataGridView1.Rows.Add(option.ToDataGridRowObject());
-                    int currentIndex = dataGridView1.Rows.Count - 1;
-                    DataGridViewButtonCell btn = dataGridView1.Rows[currentIndex].Cells[3] as DataGridViewButtonCell;
-                    btn.FlatStyle = FlatStyle.Flat;
-                    btn.Style.BackColor = option.DrawColor;
+                    if (_displayObject.ContainsKey(option.ID) == false) continue;
+                    if (option.IsShowAtDataGrid)
+                    {
+                        if (option.Name != "")
+                        {
+                            dataGridView1.Rows.Add(option.ToDataGridRowObject());
+                            int currentIndex = dataGridView1.Rows.Count - 1;
+                            DataGridViewButtonCell btn = dataGridView1.Rows[currentIndex].Cells[_colorIndex] as DataGridViewButtonCell;
+                            btn.FlatStyle = FlatStyle.Flat;
+                            btn.Style.BackColor = option.DrawColor;
+                        }
+                    }
                 }
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 using System.Drawing;
 using System.Collections;
-
+using System.IO;
 namespace RsLib.PointCloud
 {
     [Serializable]
@@ -17,6 +17,7 @@ namespace RsLib.PointCloud
     public  abstract class Object3D:IEnumerable<ObjectOption>
     {
         public string Name = "";
+
         List<ObjectOption> _Options = new List<ObjectOption>();
         public List<ObjectOption> Options => _Options;
         public abstract uint DataCount { get;}
@@ -87,7 +88,7 @@ namespace RsLib.PointCloud
         }
     }
     [Serializable]
-    public class ObjectGroup :Object3D
+    public class ObjectGroup : Object3D
     {
         public Dictionary<string, Object3D> Objects { get; private set; } = new Dictionary<string, Object3D>();
         public List<string> Sequence { get; private set; } = new List<string>();
@@ -98,7 +99,7 @@ namespace RsLib.PointCloud
             get
             {
                 uint sum = 0;
-                foreach(KeyValuePair<string, Object3D> kvp in Objects)
+                foreach (KeyValuePair<string, Object3D> kvp in Objects)
                 {
                     sum += kvp.Value.DataCount;
                 }
@@ -107,7 +108,44 @@ namespace RsLib.PointCloud
             }
         }
 
-
+        public Point3D Min
+        {
+            get
+            {
+                Point3D output = Point3D.MaxValue;
+                foreach (var item in Objects)
+                {
+                    PointCloud line = item.Value as PointCloud;
+                    if(line != null)
+                    {
+                        Point3D lineMin = line.Min;
+                        if (output.X >= lineMin.X) output.X = lineMin.X;
+                        if (output.Y >= lineMin.Y) output.Y = lineMin.Y;
+                        if (output.Z >= lineMin.Z) output.Z = lineMin.Z;
+                    }
+                }
+                return output;
+            }
+        }
+        public Point3D Max
+        {
+            get
+            {
+                Point3D output = Point3D.MinValue;
+                foreach (var item in Objects)
+                {
+                    PointCloud line = item.Value as PointCloud;
+                    if (line != null)
+                    {
+                        Point3D lineMax = line.Max;
+                        if (output.X <= lineMax.X) output.X = lineMax.X;
+                        if (output.Y <= lineMax.Y) output.Y = lineMax.Y;
+                        if (output.Z <= lineMax.Z) output.Z = lineMax.Z;
+                    }
+                }
+                return output;
+            }
+        }
         public ObjectGroup(string groupName)
         {
             base.Name = groupName;
@@ -148,6 +186,48 @@ namespace RsLib.PointCloud
             Objects.Clear();
             Sequence.Clear();
         }
+
+        public void LoadMultiPathOPT(string filePath,bool buildKDTree)
+        {
+            List<string> temp = new List<string>();
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    if (readData != "")
+                    {
+                        temp.Add(readData);
+                    }
+                    else
+                    {
+                        if (temp.Count > 0)
+                        {
+                            Polyline p = new Polyline();
+                            LineOption lineProperty = new LineOption();
+                            lineProperty.LineIndex = Objects.Count;
+                            p.Options.Add(lineProperty);
+                            p.LoadFromStringList(temp, buildKDTree);
+                            Objects.Add(lineProperty.LineIndex.ToString(),p);
+                            Sequence.Add(lineProperty.LineIndex.ToString());
+                            temp.Clear();
+                        }
+                    }
+                }
+            }
+            if (temp.Count > 0)
+            {
+                Polyline p = new Polyline();
+                LineOption lineProperty = new LineOption();
+                lineProperty.LineIndex = Objects.Count;
+                p.Options.Add(lineProperty);
+                p.LoadFromStringList(temp, buildKDTree);
+                Objects.Add(lineProperty.LineIndex.ToString(), p);
+                Sequence.Add(lineProperty.LineIndex.ToString());
+                temp.Clear();
+            }
+        }
+
     }
 
 }

@@ -42,20 +42,30 @@ namespace RsLib.PointCloud
                         double x = 0;
                         double y = 0;
                         double z = 0;
-
+                        double vz_x = 0;
+                        double vz_y = 0;
+                        double vz_z = 0;
 
                         if (i % ResampleCount != 0) continue;
 
                         if (!double.TryParse(SplitData[0], out x)) return false;
                         if (!double.TryParse(SplitData[1], out y)) return false;
                         if (!double.TryParse(SplitData[2], out z)) return false;
+                        if (!double.TryParse(SplitData[3], out vz_x)) return false;
+                        if (!double.TryParse(SplitData[4], out vz_y)) return false;
+                        if (!double.TryParse(SplitData[5], out vz_z)) return false;
 
                         Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
-                        LocateIndexOption index = new LocateIndexOption()
-                        { Index = Count};
+                        Vector3D vec = new Vector3D(Math.Round(vz_x, 2), Math.Round(vz_y, 2), Math.Round(vz_z, 2));
 
+                        LocateIndexOption index = new LocateIndexOption()
+                        {
+                            Index = Count
+                        };
+                        point.Options.AddRange(Options);
                         point.Options.Add(index);
-                        Points.Add(point);
+                        PointV3D point_V = new PointV3D(point, vec);
+                        Points.Add(point_V);
                         if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                     }
                 }
@@ -106,6 +116,7 @@ namespace RsLib.PointCloud
                         {
                             Index = Count
                         };
+                        point.Options.AddRange(Options);
                         point.Options.Add(index);
 
                         PointV3D point_V = new PointV3D(point, vec);
