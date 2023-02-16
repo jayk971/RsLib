@@ -121,6 +121,9 @@
   <data name="resize_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\resize_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="place_marker_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\place_marker_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="width_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\width_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -139,7 +142,7 @@
   <data name="broom_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\broom_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="place_marker_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\place_marker_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="disclaimer_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disclaimer_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

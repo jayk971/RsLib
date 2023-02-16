@@ -341,27 +341,45 @@ namespace RsLib.PointCloud
             return new Point3D((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2, (p1.Z + p2.Z) / 2);
         }
 
-        public Point3D Multiply(List<CoordMatrix> matrics)
+        public static Point3D Multiply(Point3D pt, List<CoordMatrix> matrics)
         {
+            Point3D outPt = new Point3D(pt);
             Matrix4x4 m = Matrix4x4.Identity;
             for(int i = 0; i < matrics.Count; i++)
             {
                 matrics[i].CalculateFinalMatrix();
                 m = matrics[i].FinalMatrix4 * m;
             }
-            Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)X, (float)Y, (float)Z, 1f));
-            return new Point3D(output.X, output.Y, output.Z);
+            Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
         }
-        public Point3D Multiply(Matrix4x4 matrix)
+        public static Point3D Multiply(Point3D pt, Matrix4x4 matrix)
         {
-            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)X, (float)Y, (float)Z, 1f));
-            return new Point3D(output.X, output.Y, output.Z);
+            Point3D outPt = new Point3D(pt);
+
+            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
         }
-        public Point3D Multiply(double[,] matrixArr)
+        public static Point3D Multiply(Point3D pt,double[,] matrixArr)
         {
+            Point3D outPt = new Point3D(pt);
+
             Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
-            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)X, (float)Y, (float)Z, 1f));
-            return new Point3D(output.X, output.Y, output.Z);
+
+            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
         }
 
 
@@ -842,6 +860,46 @@ namespace RsLib.PointCloud
 
             AddOption(src.Options);
 
+        }
+        
+        public static PointV3D Multiply(PointV3D pt, List<CoordMatrix> matrics)
+        {
+            PointV3D outPt = new PointV3D(pt);
+            Matrix4x4 m = Matrix4x4.Identity;
+            for (int i = 0; i < matrics.Count; i++)
+            {
+                matrics[i].CalculateFinalMatrix();
+                m = matrics[i].FinalMatrix4 * m;
+            }
+            Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
+        }
+        public static PointV3D Multiply(PointV3D pt,Matrix4x4 matrix)
+        {
+            PointV3D outPt = new PointV3D(pt);
+
+            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
+        }
+        public static PointV3D Multiply(PointV3D pt, double[,] matrixArr)
+        {
+            PointV3D outPt = new PointV3D(pt);
+
+            Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
+            Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
         }
         public void Save(string FilePath, bool IsAppend)
         {

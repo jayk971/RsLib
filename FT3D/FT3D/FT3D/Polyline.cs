@@ -177,8 +177,21 @@ namespace RsLib.PointCloud
             Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
             for (int i = 0; i < Points.Count; i++)
             {
-                Point3D p = Points[i].Multiply(matrix);
-                output.Add(p);
+                Type type = Points[i].GetType();
+                if (type == typeof(Point3D))
+                {
+                    Point3D pt = Points[i];
+                    Point3D p = Point3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
+                else if (type == typeof(PointV3D))
+                {
+                    PointV3D pt = Points[i] as PointV3D;
+                    PointV3D p = PointV3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
             }
             return output;
         }
@@ -1711,7 +1724,7 @@ namespace RsLib.PointCloud
     [Serializable]
     public class LocatePercentOption : ObjectOption
     {
-        public double Percent = 0.0;
+        public double Percent { get; set; } = 0.0;
 
         public LocatePercentOption()
         {
@@ -1721,7 +1734,7 @@ namespace RsLib.PointCloud
     [Serializable]
     public class LocateIndexOption : ObjectOption
     {
-        public int Index = 0;
+        public int Index { get; set; } = 0;
 
         public LocateIndexOption()
         {
@@ -1731,7 +1744,7 @@ namespace RsLib.PointCloud
     [Serializable]
     public class LineOption : ObjectOption
     {
-        public int LineIndex = 0;
+        public int LineIndex { get; set; } = 0;
 
         public LineOption()
         {

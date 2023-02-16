@@ -183,8 +183,21 @@ namespace RsLib.PointCloud
             PointCloud output = new PointCloud();
             for(int i = 0; i < Points.Count;i++)
             {
-                Point3D p = Points[i].Multiply(matrix);
-                output.Add(p);
+                Type type = Points[i].GetType();
+                if(type == typeof(Point3D))
+                {
+                    Point3D pt = Points[i];
+                    Point3D p = Point3D.Multiply(pt,matrix);
+                    output.Add(p);
+
+                }
+                else if (type == typeof(PointV3D))
+                {
+                    PointV3D pt = Points[i] as PointV3D;
+                    PointV3D p = PointV3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
             }
             return output;
         }
@@ -194,8 +207,21 @@ namespace RsLib.PointCloud
             Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
             for (int i = 0; i < Points.Count; i++)
             {
-                Point3D p = Points[i].Multiply(matrix);
-                output.Add(p);
+                Type type = Points[i].GetType();
+                if (type == typeof(Point3D))
+                {
+                    Point3D pt = Points[i];
+                    Point3D p = Point3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
+                else if (type == typeof(PointV3D))
+                {
+                    PointV3D pt = Points[i] as PointV3D;
+                    PointV3D p = PointV3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
             }
             return output;
         }

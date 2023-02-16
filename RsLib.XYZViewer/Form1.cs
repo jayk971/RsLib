@@ -31,7 +31,7 @@ namespace RsLib.XYZViewer
             InitializeComponent();
             _displayCtrl.Dock = DockStyle.Fill;
             tableLayoutPanel2.Controls.Add(_displayCtrl, 1, 0);
-            _displayCtrl.AfterCleared += _displayCtrl_AfterCleared;
+            _displayCtrl.AfterClearButtonPressed += _displayCtrl_AfterCleared;
             init();
         }
 
@@ -45,12 +45,11 @@ namespace RsLib.XYZViewer
 
         void init()
         {
-            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 1.0f);
+            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 1.0f,true);
+            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f,false);
+            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f,true);
+            DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f,false);
 
-            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f);
-            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f);
-            DisplayObjectOption[] VectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Vector, 3, DisplayObjectType.Vector, 1.0f);
-            
             XYZOptions[0].DrawColor = Color.Gray;
             XYZOptions[1].DrawColor = Color.DarkGray;
             XYZOptions[2].DrawColor = Color.Silver;
@@ -65,14 +64,14 @@ namespace RsLib.XYZViewer
             PointOptions[1].DrawColor = Color.Cyan;
             PointOptions[2].DrawColor = Color.Gold;
 
-            VectorOptions[0].DrawColor = Color.LimeGreen;
-            VectorOptions[1].DrawColor = Color.Cyan;
-            VectorOptions[2].DrawColor = Color.Gold;
+            vzVectorOptions[0].DrawColor = Color.Blue;
+            vzVectorOptions[1].DrawColor = Color.Blue;
+            vzVectorOptions[2].DrawColor = Color.Blue;
 
             _displayCtrl.AddDisplayOption(XYZOptions);
             _displayCtrl.AddDisplayOption(PathOptions);
             _displayCtrl.AddDisplayOption(PointOptions);
-            _displayCtrl.AddDisplayOption(VectorOptions);
+            _displayCtrl.AddDisplayOption(vzVectorOptions);
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor);
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor);
@@ -129,12 +128,14 @@ namespace RsLib.XYZViewer
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
                     _displayCtrl.BuildMultiPathVector(group, (int)drawItem+6, false, true);
+
                     break;
 
                 default:
 
                     break;
             }
+            _displayCtrl.UpdateDataGridView();
         }
         DrawItem getPressedButton(Button btn)
         {
@@ -192,11 +193,6 @@ namespace RsLib.XYZViewer
                 }
             }
         }
-
-        private void btn_ClearFile_Click(object sender, EventArgs e)
-        {
-            _displayCtrl.Clear(false);
-        }
     }
     public enum DrawItem:int
     {
@@ -215,9 +211,8 @@ namespace RsLib.XYZViewer
         OPT2Point,
         OPT3Point,
 
-        OPT1Vector,
-        OPT2Vector,
-        OPT3Vector,
-
+        OPT1vzVector,
+        OPT2vzVector,
+        OPT3vzVector,
     }
 }

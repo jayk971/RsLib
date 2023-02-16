@@ -20,8 +20,10 @@ namespace RsLib.Display3D
 
     public partial class Display3DControl : UserControl
     {
-        public event Action<bool,int,Point3D> AfterPointSelected;
-        public event Action AfterCleared;
+        public event Action<Polyline> AfterPointsSelected;
+        public event Action AfterClearButtonPressed;
+        public event Action MiddleMouseButtonClick;
+
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
         const int splitContainerPanel1MinSize = 300;
@@ -31,7 +33,6 @@ namespace RsLib.Display3D
         const int _idIndex = 3;
         const int _colorIndex = 4;
         const int _sizeIndex = 5;
-
 
         public Display3DControl(int listNum = 1)
         {
@@ -62,6 +63,8 @@ namespace RsLib.Display3D
             dataGridView1.CellValidating += DataGridView1_CellValidating;
             //GlControl_Load(null, null);
             splitContainer1.Panel1Collapsed = true;
+            splitContainer2.Panel2Collapsed = true;
+
         }
         public bool AddDisplayOption(DisplayObjectOption option)
         {
@@ -72,7 +75,6 @@ namespace RsLib.Display3D
             else
             {
                 _displayOption.Add(option.ID, option);
-                //updateDataGridView();
                 return true;
             }
         }
@@ -88,7 +90,6 @@ namespace RsLib.Display3D
                     _displayOption.Add(option[i].ID, option[i]);
                 }
             }
-            //updateDataGridView();
         }
         public void Clear(bool clearOptions = true)
         {
@@ -106,8 +107,8 @@ namespace RsLib.Display3D
             _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
             _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
             ResetView();
-            updateDataGridView();
-            AfterCleared?.Invoke();
+            UpdateDataGridView();
+            AfterClearButtonPressed?.Invoke();
         }
         public void ReBuildAll()
         {
@@ -133,7 +134,7 @@ namespace RsLib.Display3D
                         case DisplayObjectType.PointCloud:
                             BuildPointCloud((RPointCloud)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector:
+                        case DisplayObjectType.Vector_z:
                             BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Path:
@@ -229,18 +230,37 @@ namespace RsLib.Display3D
 
             if (_displayOption.ContainsKey(id))
             {
-                if (_selectIndex != id) _haveClosestPoint = false;
-                _selectIndex = id;
+                if (_displayOption[id].IsSelectable)
+                {
+                    if (_selectIndex != id) _haveClosestPoint = false;
+                    _selectIndex = id;
+                    lbl_Selectable.Visible = false;
+                }
+                else
+                {
+                    lbl_Selectable.Visible = true;
+                    clearDataGridSelection();
+                }
+            }
+            else
+            {
+                lbl_Selectable.Visible = false;
+                clearDataGridSelection();
             }
         }
-
+        void clearDataGridSelection()
+        {
+            _selectIndex = 0;
+            _haveClosestPoint = false;
+            dataGridView1.ClearSelection();
+        }
         private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
         {
             if (_isMouseOnCell == false)
             {
-                _selectIndex = 0;
-                _haveClosestPoint = false;
-                dataGridView1.ClearSelection();
+                clearDataGridSelection();
+                lbl_Selectable.Visible = false;
+
             }
         }
 
@@ -329,11 +349,11 @@ namespace RsLib.Display3D
             _isColorDialogOpen = false;
         }
 
-        void updateDataGridView()
+        public void UpdateDataGridView()
         {
             if (this.InvokeRequired)
             {
-                Action action = new Action(updateDataGridView);
+                Action action = new Action(UpdateDataGridView);
                 this.Invoke(action);
             }
             else
@@ -352,6 +372,11 @@ namespace RsLib.Display3D
                             DataGridViewButtonCell btn = dataGridView1.Rows[currentIndex].Cells[_colorIndex] as DataGridViewButtonCell;
                             btn.FlatStyle = FlatStyle.Flat;
                             btn.Style.BackColor = option.DrawColor;
+
+                            if(option.IsSelectable == false)
+                            {
+                                dataGridView1.Rows[currentIndex].DefaultCellStyle.BackColor = Color.Gray;
+                            }
                         }
                     }
                 }
@@ -408,12 +433,12 @@ namespace RsLib.Display3D
         private void btn_Update_Click(object sender, EventArgs e)
         {
             ReBuildAll();
-            updateDataGridView();
+            UpdateDataGridView();
         }
 
         private void measureDistanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.Measure)
+            if (_pickMode == PointPickMode.Multiple)
             {
                 pickMode_None();
             }
@@ -432,21 +457,27 @@ namespace RsLib.Display3D
             _pickMode = PointPickMode.None;
             lbl_PickPointMode.Text = "None";
             lbl_PickPointMode.Image = Resources.shutdown_30px;
-            lbl_SelectPoint.Text = "--";
+            treeView1.Nodes.Clear();
+            splitContainer2.Panel2Collapsed = true;
+
         }
         void pickMode_Single()
         {
             _pickMode = PointPickMode.Single;
             lbl_PickPointMode.Text = "Pick Point";
             lbl_PickPointMode.Image = Resources.place_marker_30px;
-            lbl_SelectPoint.Text = "--";
+            treeView1.Nodes.Clear();
+            splitContainer2.Panel2Collapsed = false;
+
         }
         void pickMode_Measure()
         {
-            _pickMode = PointPickMode.Measure;
-            lbl_PickPointMode.Text = "Measure";
+            _pickMode = PointPickMode.Multiple;
+            lbl_PickPointMode.Text = "Pick 1st Point";
             lbl_PickPointMode.Image = Resources.width_30px;
-            lbl_SelectPoint.Text = "--";
+            treeView1.Nodes.Clear();
+            splitContainer2.Panel2Collapsed = false;
+
         }
     }
 }

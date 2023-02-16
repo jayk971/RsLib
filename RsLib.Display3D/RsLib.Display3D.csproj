@@ -212,6 +212,9 @@
   <ItemGroup>
     <None Include="Resources\place_marker_30px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disclaimer_30px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y

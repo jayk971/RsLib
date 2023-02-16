@@ -137,7 +137,7 @@ namespace RsLib.DemoForm
             displayControl.BuildPath(line, pathOption.ID,true,true);
             DisplayObjectOption vectorOption = new DisplayObjectOption()
             {
-                DisplayType = DisplayObjectType.Vector,
+                DisplayType = DisplayObjectType.Vector_z,
                 DrawColor = Color.LimeGreen,
                 DrawSize = 2.0f,
                 ID = 4,
