@@ -218,7 +218,7 @@ namespace RsLib.XYZViewer
                     {
                         if (ext == ".xyz")
                         {
-                            canDrop = false;
+                            canDrop = true;
                         }
                         else if (ext == ".csv")
                         {
@@ -246,7 +246,7 @@ namespace RsLib.XYZViewer
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 DrawItem dropedBtn = getPressedButton((Button)sender);
-                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz|CSV Raw File|*_HRaw.csv|BMP Raw File|*_Height.bmp";
+                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz|Keyence CSV Raw File|*_HRaw.csv|Keyence BMP Raw File|*_Height.bmp";
                 if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path) op.Filter = "OPT path file|*.opt";
 
                 if (op.ShowDialog() == DialogResult.OK)
