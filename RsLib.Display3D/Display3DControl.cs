@@ -278,7 +278,8 @@ namespace RsLib.Display3D
             {
                 if (_isColorDialogOpen == false)
                 {
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(showColorDialogTd), id);
+                    //ThreadPool.QueueUserWorkItem(new WaitCallback(showColorDialogTd), id);
+                    showColorDialogTd(id);
                 }
                 else
                 {
@@ -478,6 +479,56 @@ namespace RsLib.Display3D
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = false;
 
+        }
+
+        private void btn_SaveAs_Click(object sender, EventArgs e)
+        {
+            if (_selectIndex <= 1)
+            {
+                MessageBox.Show("Please select object first.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_displayObject.ContainsKey(_selectIndex) == false)
+            {
+                MessageBox.Show("No data to be saved.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            Type objectType = _displayObject[_selectIndex].GetType();
+
+            using (SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Filter = "XYZ point cloud|*.xyz";
+                if(sf.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = sf.FileName;
+                    if (objectType == typeof(Point3D))
+                    {
+                        var obj = _displayObject[_selectIndex] as Point3D;
+                        obj.Save(filePath);
+                    }
+                    else if (objectType == typeof(ObjectGroup))
+                    {
+                        var obj = _displayObject[_selectIndex] as ObjectGroup;
+                        obj.Save(filePath);
+                    }
+                    else
+                    {
+                        var obj = _displayObject[_selectIndex] as RPointCloud;
+                        obj.Save(filePath);
+                    }
+
+                }
+            }
+
+            
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(_GLUpdateDone)
+                _glControl.Invalidate();
+            GC.Collect();
         }
     }
 }

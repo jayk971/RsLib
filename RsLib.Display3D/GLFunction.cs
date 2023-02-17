@@ -32,7 +32,8 @@ namespace RsLib.Display3D
         int _selectIndex = -1;
         Dictionary<int, Object3D> _displayObject = new Dictionary<int, Object3D>();
         Dictionary<int,DisplayObjectOption> _displayOption = new Dictionary<int, DisplayObjectOption>();
-        const float _closetDisLimit = 1.0f; 
+        const float _closetDisLimit = 1.0f;
+        bool _GLUpdateDone = true;
         public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_selectIndex);
         public Object3D CurrentSelectObj => GetDisplayObject(_selectIndex);
         Point3D _closetPoint = new Point3D();
@@ -72,9 +73,11 @@ namespace RsLib.Display3D
             
             _headList = GL.GenLists(_maxDisplayList);
             BuildAxis();
+            timer1.Enabled = true;
         }
         private void GlControl_Paint(object sender, PaintEventArgs e)
         {
+            _GLUpdateDone = false;
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.MatrixMode(MatrixMode.Projection);
@@ -116,8 +119,9 @@ namespace RsLib.Display3D
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
             _glControl.SwapBuffers();
+            _GLUpdateDone = true;
             //SpinWait.SpinUntil(() => false, 100);
-            _glControl.Invalidate();
+            //_glControl.Invalidate();
         }
         private void GlControl_MouseDoubleClick(object sender, MouseEventArgs e)
         {

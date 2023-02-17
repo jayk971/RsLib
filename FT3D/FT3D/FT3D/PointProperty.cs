@@ -186,7 +186,16 @@ namespace RsLib.PointCloud
             Objects.Clear();
             Sequence.Clear();
         }
-
+        public void Save(string filePath)
+        {
+            PointCloud total = new PointCloud();
+            foreach (var item in Objects)
+            {
+                var subObj = item.Value as PointCloud;
+                total.Add(subObj);
+            }
+            total.Save(filePath);
+        }
         public void LoadMultiPathOPT(string filePath,bool buildKDTree)
         {
             List<string> temp = new List<string>();

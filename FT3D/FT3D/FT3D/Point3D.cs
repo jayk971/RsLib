@@ -151,6 +151,14 @@ namespace RsLib.PointCloud
         {
             return new Point3D(X, Y, 0.0);
         }
+        public void Save(string filePath)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            {
+                sw.WriteLine($"{X} {Y} {Z}");
+                sw.Flush();
+            }
+        }
         public double Distance(Point3D Target)
         {
             double x = X - Target.X;
