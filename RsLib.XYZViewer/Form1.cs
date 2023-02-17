@@ -13,6 +13,7 @@ using System.IO;
 using RsLib.Common;
 using RsLib.Display3D;
 using RsLib.PointCloud;
+using RsLib.ConvertKeyBMP;
 namespace RsLib.XYZViewer
 {
     using RPointCloud = RsLib.PointCloud.PointCloud;
@@ -30,6 +31,7 @@ namespace RsLib.XYZViewer
         public Form1()
         {
             InitializeComponent();
+            KeyBMP.Init();
             _displayCtrl.Dock = DockStyle.Fill;
             tableLayoutPanel2.Controls.Add(_displayCtrl, 1, 0);
             _displayCtrl.AfterClearButtonPressed += _displayCtrl_AfterCleared;
@@ -143,7 +145,19 @@ namespace RsLib.XYZViewer
                     _displayCtrl.BuildMultiPathVector(group, (int)drawItem+6, false, true);
 
                     break;
+                case ".csv":
+                    RPointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
+                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                    _displayCtrl.BuildPointCloud(cloud2, (int)drawItem, true, true);
 
+                    break;
+                case ".bmp":
+                    KeyBMP.Load(filePath);
+                    RPointCloud cloud3 = KeyBMP.ConvertToXYZ();
+                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                    _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
+
+                    break;
                 default:
 
                     break;
@@ -188,16 +202,41 @@ namespace RsLib.XYZViewer
 
         private void Btn_DragEnter(object sender, DragEventArgs e)
         {
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
+                bool canDrop = false;
+
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length > 0)
                 {
                     string ext = Path.GetExtension(files[0]).ToLower();
+                    string fileName = Path.GetFileName(files[0]).ToLower();
                     DrawItem dropedBtn = getPressedButton((Button)sender);
 
-                    if(dropedBtn>=DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5 && ext == ".xyz") e.Effect = DragDropEffects.Move;
-                    if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path && ext == ".opt") e.Effect = DragDropEffects.Move;
+                    if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5)
+                    {
+                        if (ext == ".xyz")
+                        {
+                            canDrop = false;
+                        }
+                        else if (ext == ".csv")
+                        {
+                            if (fileName.Contains(KeyRawCSV.Extension.ToLower())) canDrop = true;
+                        }
+                        else if(ext == ".bmp")
+                        {
+                            if (fileName.Contains(KeyBMP.HeightExt.ToLower())) canDrop = true;
+                        }
+                        else
+                        {
+                            canDrop = false;
+                        }
+                    }
+                    if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path && ext == ".opt") canDrop = true;
+
+
+                    if(canDrop) e.Effect = DragDropEffects.Move;
                 }
             }
         }
@@ -207,7 +246,7 @@ namespace RsLib.XYZViewer
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 DrawItem dropedBtn = getPressedButton((Button)sender);
-                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz";
+                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz|CSV Raw File|*_HRaw.csv|BMP Raw File|*_Height.bmp";
                 if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path) op.Filter = "OPT path file|*.opt";
 
                 if (op.ShowDialog() == DialogResult.OK)

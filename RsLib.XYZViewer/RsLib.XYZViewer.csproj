@@ -131,6 +131,10 @@
     <None Include="Resources\broom_30px.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConvertKeyBMP\ConvertKeyBMP\RsLib.ConvertKeyBMP.csproj">
+      <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
+      <Name>RsLib.ConvertKeyBMP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FT.Common\FT.Common\RsLib.Common.csproj">
       <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
       <Name>RsLib.Common</Name>

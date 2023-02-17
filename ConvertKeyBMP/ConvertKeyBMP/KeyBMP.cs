@@ -13,8 +13,10 @@ using YamlDotNet.Serialization.NamingConventions;
 
 using RsLib.LogMgr;
 using System.Diagnostics;
+using RsLib.PointCloud;
 namespace RsLib.ConvertKeyBMP
 {
+    using RPointCloud = RsLib.PointCloud.PointCloud;
     public class KeyBMP
     {
         static KeyBMPConfig config = new KeyBMPConfig();
@@ -368,7 +370,30 @@ namespace RsLib.ConvertKeyBMP
                 sw.Flush();
             }
         }
-        public static void SaveData(string filePath)
+        public static RPointCloud ConvertToXYZ()
+        {
+            RPointCloud p = new RPointCloud();
+            int yCount = cloudArray.GetLength(0);
+            int xCount = cloudArray.GetLength(1);
+            for (int y = 0; y < yCount; y++)
+            {
+                int blankCount = 0;
+                for (int x = 0; x < xCount; x++)
+                {
+                    double zValue = cloudArray[y, x];
+                    if (zValue == NoData)
+                    {
+                        blankCount++;
+                        continue;
+                    }
+                    double xValue = GetXValue(x);
+                    double yValue = GetYValue(y);
+                    p.Add(new Point3D(xValue, yValue, zValue));
+                }
+            }
+            return p;
+        }
+        public static void SaveXYZData(string filePath)
         {
             Log.Add($"Save XYZ File. {filePath}", MsgLevel.Trace);
 
