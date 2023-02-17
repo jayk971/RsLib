@@ -37,7 +37,7 @@ namespace RsLib.PointCloud
                 if (fileContent[i] != "")
                 {
                     string[] SplitData = fileContent[i].Split(',');
-                    if (SplitData.Length == 6)
+                    if (SplitData.Length >= 6)
                     {
                         double x = 0;
                         double y = 0;

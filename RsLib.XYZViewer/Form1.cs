@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -25,7 +26,7 @@ namespace RsLib.XYZViewer
         Dictionary<DrawItem, Button> xyzButtons = new Dictionary<DrawItem, Button>();
         Dictionary<DrawItem, Button> optButtons = new Dictionary<DrawItem, Button>();
 
-
+        FormProcessing _processForm;
         public Form1()
         {
             InitializeComponent();
@@ -100,8 +101,20 @@ namespace RsLib.XYZViewer
             panel1.Controls.Add(btn);
         }
 
+        void showProcessForm_td(object obj)
+        {
+            if(_processForm ==null)
+            {
+                _processForm = new FormProcessing("Loading...");
+                _processForm.SetMode(ProgressBarStyle.Marquee);
+                _processForm.SetProgress(100);
+                _processForm.ShowDialog();
+            }
+        }
+
         void loadFile(DrawItem drawItem,string filePath)
         {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(showProcessForm_td));
             string ext = Path.GetExtension(filePath).ToLower();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             switch (ext)
@@ -134,6 +147,16 @@ namespace RsLib.XYZViewer
                 default:
 
                     break;
+            }
+
+            if(_processForm != null)
+            {
+                _processForm.BeginInvoke(new Action(
+                    () => 
+                    { 
+                        _processForm.Close();
+                        _processForm = null;
+                    }));
             }
             _displayCtrl.UpdateDataGridView();
         }
