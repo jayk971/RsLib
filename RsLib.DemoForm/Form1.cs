@@ -22,6 +22,8 @@ namespace RsLib.DemoForm
         TCPClientControl clientControl = new TCPClientControl();
         LogControl logControl = new LogControl();
         Display3DControl displayControl = new Display3DControl(4);
+        ZoomImageControl zoomCtrl = new ZoomImageControl();
+        ZoomImageControl zoom1Ctrl = new ZoomImageControl();
         public Form1()
         {
             InitializeComponent();
@@ -36,6 +38,11 @@ namespace RsLib.DemoForm
             tabPage2.Controls.Add(displayControl);
             logControl.Dock = DockStyle.Fill;
             tableLayoutPanel1.Controls.Add(logControl, 0, 1);
+            zoomCtrl.Dock = DockStyle.Fill;
+            zoom1Ctrl.Dock = DockStyle.Fill;
+
+            tableLayoutPanel2.Controls.Add(zoomCtrl, 0, 0);
+            tableLayoutPanel2.Controls.Add(zoom1Ctrl, 1, 0);
 
             double test = 70;
             double tt = Math.Round(test / 100, 2);
@@ -44,36 +51,76 @@ namespace RsLib.DemoForm
             comboBox1.AddEnumItems(typeof(LogControl));
             //ThreadPool.QueueUserWorkItem(new WaitCallback(writeTxt));
             button1.Text = Properties.Settings.Default.TestSetting;
-
-            toolStrip1.MouseDown += ToolStrip1_MouseDown;
-            toolStrip1.MouseUp += ToolStrip1_MouseUp;
             this.MouseMove += Form1_MouseMove;
+            zoomCtrl.SetImage("d:\\test.png");
+            zoom1Ctrl.SetImage("d:\\test.bmp");
+            zoomCtrl.MouseMove += ZoomCtrl_MouseMove;
+            zoomCtrl.MouseWheel += ZoomCtrl_MouseWheel;
+            zoomCtrl.MouseDoubleClick += ZoomCtrl_MouseDoubleClick;
+            zoom1Ctrl.MouseMove += Zoom1Ctrl_MouseMove;
+            zoom1Ctrl.MouseWheel += Zoom1Ctrl_MouseWheel;
+            zoom1Ctrl.MouseDoubleClick += Zoom1Ctrl_MouseDoubleClick;
         }
+
+        private void Zoom1Ctrl_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Middle)
+            {
+                zoom1Ctrl.ResetView();
+                zoomCtrl.ResetView();
+            }
+        }
+
+        private void ZoomCtrl_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                zoom1Ctrl.ResetView();
+                zoomCtrl.ResetView();
+            }
+        }
+
+        private void Zoom1Ctrl_MouseWheel(object sender, MouseEventArgs e)
+        {
+            zoomCtrl.Zoom = zoom1Ctrl.Zoom;
+            zoomCtrl.Pan = zoom1Ctrl.Pan;
+        }
+
+        private void Zoom1Ctrl_MouseMove(object sender, MouseEventArgs e)
+        {
+          if(e.Button == MouseButtons.Left)
+            {
+                zoomCtrl.Zoom = zoom1Ctrl.Zoom;
+                zoomCtrl.Pan = zoom1Ctrl.Pan;
+            }
+        }
+
+        private void ZoomCtrl_MouseWheel(object sender, MouseEventArgs e)
+        {
+            zoom1Ctrl.Zoom = zoomCtrl.Zoom;
+            zoom1Ctrl.Pan = zoomCtrl.Pan;
+        }
+
+        private void ZoomCtrl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                zoom1Ctrl.Zoom = zoomCtrl.Zoom;
+                zoom1Ctrl.Pan = zoomCtrl.Pan;
+            }
+        }
+
+
+
         bool _isDragTool = false;
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
             if(_isDragTool)
             {
-                toolStrip1.Left += (e.X - _mouseDown.X);
-                toolStrip1.Top += (e.Y - _mouseDown.Y);
             }
         }
 
-        private void ToolStrip1_MouseUp(object sender, MouseEventArgs e)
-        {
-            toolStrip1.Cursor = Cursors.Default;
-            _isDragTool = false;
-        }
-        Point _mouseDown;
-        private void ToolStrip1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Left)
-            {
-                _mouseDown = e.Location;
-                toolStrip1.Cursor = Cursors.Hand;
-                _isDragTool = true;
-            }
-        }
+
 
         void writeTxt(object obj)
         {

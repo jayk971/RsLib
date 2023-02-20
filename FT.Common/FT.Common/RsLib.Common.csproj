@@ -100,6 +100,12 @@
     <Compile Include="ShoeIndexControl.Designer.cs">
       <DependentUpon>ShoeIndexControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ZoomImageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZoomImageControl.Designer.cs">
+      <DependentUpon>ZoomImageControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormProcessing.resx">
@@ -107,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ShoeIndexControl.resx">
       <DependentUpon>ShoeIndexControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZoomImageControl.resx">
+      <DependentUpon>ZoomImageControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
