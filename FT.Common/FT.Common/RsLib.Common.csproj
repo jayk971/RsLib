@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="AppFile.cs" />
     <Compile Include="ColorGradient.cs" />
+    <Compile Include="CSVReader.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="FormProcessing.cs">

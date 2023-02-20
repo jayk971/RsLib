@@ -29,6 +29,7 @@ namespace RsLib.DemoForm
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage_TCPServer = new System.Windows.Forms.TabPage();
@@ -49,6 +50,7 @@ namespace RsLib.DemoForm
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -192,7 +194,7 @@ namespace RsLib.DemoForm
             this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(276, 196);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(158, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(127, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -255,6 +257,12 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel1.Size = new System.Drawing.Size(770, 687);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -298,6 +306,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

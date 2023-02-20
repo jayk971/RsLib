@@ -191,5 +191,11 @@ namespace RsLib.DemoForm
 
             ////listBox1.Items.Add(arr.ConvertToString());
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            int threadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
+            this.Text = threadCount.ToString();
+        }
     }
 }
