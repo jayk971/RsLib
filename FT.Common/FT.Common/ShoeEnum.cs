@@ -5,6 +5,7 @@ namespace RsLib.Common
     [Serializable]
     public enum ShoeType : int
     {
+        NotDefine = -1,
         Men = 0,
         Women,
         Kids,
@@ -12,6 +13,7 @@ namespace RsLib.Common
     [Serializable]
     public enum ShoeSide : int
     {
+        NotDefine = -1,
         R = 0,
         L,
         C,
@@ -19,6 +21,7 @@ namespace RsLib.Common
     [Serializable]
     public enum ShoeSize : int
     {
+        NotDefine = -1,
         _30 = 30,
         _35 = 35,
         _40 = 40,
@@ -55,6 +58,7 @@ namespace RsLib.Common
     [Serializable]
     public enum ShoeSizeIndex : int
     {
+        NotDefine = -1,
         _30_L = 0,
         _30_R,
         _30_RL,

@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 namespace RsLib.Common
 {
-    public static class CSVReader
+    public static class CSVFile
     {
         public static List<string[]> Load(string filePath,int expectColumn,bool enableSplit)
         {
@@ -64,6 +64,17 @@ namespace RsLib.Common
 
             return output;
         }
-
+        public static void Save(string filePath,List<string> saveRow)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            {
+                for (int i = 0; i < saveRow.Count; i++)
+                {
+                    string data = saveRow[i];
+                    sw.WriteLine(data);
+                }
+                sw.Flush();
+            }
+        }
     }
 }
