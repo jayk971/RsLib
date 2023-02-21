@@ -52,7 +52,10 @@ namespace RsLib.DemoForm
             //ThreadPool.QueueUserWorkItem(new WaitCallback(writeTxt));
             button1.Text = Properties.Settings.Default.TestSetting;
             this.MouseMove += Form1_MouseMove;
-            zoomCtrl.SetImage("d:\\test.png");
+            Bitmap bitmap = new Bitmap( Image.FromFile("d:\\test.png"));
+
+
+            zoomCtrl.SetImage(bitmap.GetHbitmap());
             zoom1Ctrl.SetImage("d:\\test.bmp");
             zoomCtrl.MouseMove += ZoomCtrl_MouseMove;
             zoomCtrl.MouseWheel += ZoomCtrl_MouseWheel;
@@ -60,13 +63,19 @@ namespace RsLib.DemoForm
             zoom1Ctrl.MouseMove += Zoom1Ctrl_MouseMove;
             zoom1Ctrl.MouseWheel += Zoom1Ctrl_MouseWheel;
             zoom1Ctrl.MouseDoubleClick += Zoom1Ctrl_MouseDoubleClick;
+
+            Log.Add("Trace", MsgLevel.Trace);
+            Log.Add("Info", MsgLevel.Info);
+            Log.Add("Warn", MsgLevel.Warn);
+            Log.Add("Alarm", MsgLevel.Alarm);
+            Log.Add("Exception", MsgLevel.Alarm,new Exception("Test Exception"));
+
         }
 
         private void Zoom1Ctrl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if(e.Button == MouseButtons.Middle)
             {
-                zoom1Ctrl.ResetView();
                 zoomCtrl.ResetView();
             }
         }
@@ -76,7 +85,6 @@ namespace RsLib.DemoForm
             if (e.Button == MouseButtons.Middle)
             {
                 zoom1Ctrl.ResetView();
-                zoomCtrl.ResetView();
             }
         }
 

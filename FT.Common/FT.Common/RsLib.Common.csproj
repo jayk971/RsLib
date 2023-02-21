@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Functions.cs" />
     <Compile Include="MultiLanguage.cs" />
+    <Compile Include="PinnedObject.cs" />
     <Compile Include="RsLibFilePath.cs" />
     <Compile Include="ShoeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

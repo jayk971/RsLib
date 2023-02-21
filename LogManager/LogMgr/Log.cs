@@ -78,30 +78,30 @@ namespace RsLib.LogMgr
                 switch (tempMsg.Level)
                 {
                     case MsgLevel.Trace:
-                        m_Log.Trace(tempMsg.Text);
+                        m_Log.Trace(tempMsg.ToString());
 
                         break;
                     case MsgLevel.Info:
-                        m_Log.Info(tempMsg.Text);
+                        m_Log.Info(tempMsg.ToString());
 
                         break;
 
                     case MsgLevel.Warn:
 
-                        m_Log.Warn(tempMsg.Text);
+                        m_Log.Warn(tempMsg.ToString());
                         break;
 
                     case MsgLevel.Alarm:
                         if (tempMsg.Ex == null)
                         {
-                            m_Log.Error(tempMsg.Text);
+                            m_Log.Error(tempMsg.ToString());
                             m_FatalLog.Fatal(tempMsg.Text);
                             //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
                         else
                         {
-                            m_Log.Error(tempMsg.Text + "\t" + tempMsg.Ex.Message);
+                            m_Log.Error(tempMsg.ToString() + "\t" + tempMsg.Ex.Message);
                             m_FatalLog.Fatal(tempMsg.Ex);
                             MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

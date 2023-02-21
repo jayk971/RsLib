@@ -93,11 +93,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\LogManager\LogMgr\RsLib.LogMgr.csproj">
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
