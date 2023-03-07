@@ -911,7 +911,6 @@ namespace RsLib.Display3D
         void drawPointCloud(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
         {
             GL.PointSize(drawSize);
-            GL.Color4(drawColor);
             GL.Begin(PrimitiveType.Points);
             foreach (var item in cloud.Points)
             {
@@ -919,6 +918,10 @@ namespace RsLib.Display3D
                 {
                     checkMaxMinPoint(item);
                 }
+                DisplayOption option = item.GetOption(typeof(DisplayOption)) as DisplayOption;
+                if (option == null) GL.Color4(drawColor);
+                else GL.Color3(option.Color);
+
                 GL.Vertex3(item.PArray);
             }
             GL.End();

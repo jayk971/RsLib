@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 using RsLib.Common;
 using Accord.Math;
 namespace RsLib.PointCloud
@@ -2437,7 +2438,8 @@ namespace RsLib.PointCloud
                     if (s != "")
                     {
                         string[] SplitData = s.Split(' ');
-                        if (SplitData.Length >= 3)
+                        if (SplitData.Length == 1) SplitData = s.Split('\t');
+                        if (SplitData.Length == 3)
                         {
                             double x = 0;
                             double y = 0;
@@ -2451,6 +2453,35 @@ namespace RsLib.PointCloud
                             if (!double.TryParse(SplitData[2], out z)) return false;
 
                             Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
+                            Points.Add(point);
+                            kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                            i++;
+                        }
+                        else if(SplitData.Length == 6)
+                        {
+                            double x = 0;
+                            double y = 0;
+                            double z = 0;
+
+                            int r = 0;
+                            int g = 0;
+                            int b = 0;
+
+                            if (ResampleCount != 0)
+                                if (i % ResampleCount != 0) continue;
+
+                            if (!double.TryParse(SplitData[0], out x)) return false;
+                            if (!double.TryParse(SplitData[1], out y)) return false;
+                            if (!double.TryParse(SplitData[2], out z)) return false;
+                            if (!int.TryParse(SplitData[3], out r)) return false;
+                            if (!int.TryParse(SplitData[4], out g)) return false;
+                            if (!int.TryParse(SplitData[5], out b)) return false;
+
+
+                            Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
+                            DisplayOption displayOption = new DisplayOption();
+                            displayOption.Color = Color.FromArgb(r, g, b);
+                            point.AddOption(displayOption);
                             Points.Add(point);
                             kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                             i++;
