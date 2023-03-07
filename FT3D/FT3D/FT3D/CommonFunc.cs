@@ -874,6 +874,13 @@ namespace RsLib.PointCloud
             Point3D P = new Point3D(temp[0].Node.Position[0], temp[0].Node.Position[1], temp[0].Node.Position[2]);
             return P;
         }
+        public static int GetInRadiusPoint(KDTree<int> InputTree, Point3D TargetPoint, double radius)
+        {
+            List<NodeDistance<KDTreeNode<int>>> temp = InputTree.Nearest(new double[] { TargetPoint.X, TargetPoint.Y, TargetPoint.Z }, radius).ToList<NodeDistance<KDTreeNode<int>>>();
+            if (temp.Count == 0) return -1;
+            else return temp[0].Node.Value;
+        }
+
         public static Point3D GetNearestPoint(KDTree<int> InputTree, Point3D TargetPoint, out double MinDis)
         {
             MinDis = double.MinValue;

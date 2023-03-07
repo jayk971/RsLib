@@ -369,7 +369,7 @@ namespace RsLib.PointCloud
         }
         public void ReduceByKDTree(double Radius)
         {
-            Accord.Collections.KDTree<int> temp = BuildIndexKDtree();
+            Accord.Collections.KDTree<int> temp = GetIndexKDtree();
             Point3D refP = Points[0];
             List<Point3D> Output = new List<Point3D>();
             Output.Add(refP);
@@ -402,13 +402,13 @@ namespace RsLib.PointCloud
                 Output.Add(refP);
                 if (NewCloud.Count == 0) break;
                 Points = NewCloud.DeepClone();
-                temp = BuildIndexKDtree();
+                temp = GetIndexKDtree();
             }
             Points = Output.DeepClone();
         }
         public void ReduceByKDTree(double Radius, Point3D refP)
         {
-            Accord.Collections.KDTree<int> temp = BuildIndexKDtree();
+            Accord.Collections.KDTree<int> temp = GetIndexKDtree();
             List<Point3D> Output = new List<Point3D>();
             Output.Add(refP);
             while (true)
@@ -440,13 +440,13 @@ namespace RsLib.PointCloud
                 Output.Add(refP);
                 if (NewCloud.Count == 0) break;
                 Points = NewCloud.DeepClone();
-                temp = BuildIndexKDtree();
+                temp = GetIndexKDtree();
             }
             Points = Output.DeepClone();
         }
         public void ReduceByKDTree(double Radius, Point3D P_Start, Point3D P_End)
         {
-            Accord.Collections.KDTree<int> temp = BuildIndexKDtree();
+            Accord.Collections.KDTree<int> temp = GetIndexKDtree();
             List<Point3D> Output = new List<Point3D>();
             Output.Add(P_Start);
             while (true)
@@ -478,7 +478,7 @@ namespace RsLib.PointCloud
                 Output.Add(P_Start);
                 if (NewCloud.Count == 0) break;
                 Points = NewCloud.DeepClone();
-                temp = BuildIndexKDtree();
+                temp = GetIndexKDtree();
             }
 
             Points = Output.DeepClone();

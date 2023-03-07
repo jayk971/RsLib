@@ -676,7 +676,7 @@ namespace RsLib.PointCloud
 
         public void ReduceOutside(Polyline OuterLine)
         {
-            KDTree<int> tmp = OuterLine.BuildIndexKDtree(true);
+            KDTree<int> tmp = OuterLine.GetIndexKDtree(true);
             Point3D Center = OuterLine.Average;
 
             Center.Z = 0;
