@@ -8,6 +8,8 @@ using NLog;
 using RsLib.BaseType;
 using System.Threading;
 using System.Drawing;
+using System.Collections.Concurrent;
+
 namespace RsLib.LogMgr
 {
     public enum MsgLevel : int
@@ -26,32 +28,41 @@ namespace RsLib.LogMgr
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();
-        private static LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
+        private static ConcurrentQueue<LogMsg> _logQ = new ConcurrentQueue<LogMsg>();
+        //private static LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
         public static bool EnableUpdateUI = true;
         public static void Add(string Msg, MsgLevel errLevel, Exception ex = null)
         {
-            lock (_lock)
-            {
-                LogMsg msg = new LogMsg(errLevel, Msg,ex);
-                logQ.Enqueue(msg);
-            }
+            //lock (_lock)
+            //{
+            //    LogMsg msg = new LogMsg(errLevel, Msg,ex);
+            //    logQ.Enqueue(msg);
+            //}
+            LogMsg msg = new LogMsg(errLevel, Msg, ex);
+            _logQ.Enqueue(msg);
+
         }
         public static void Add(string Msg, MsgLevel errLevel,Color backColor,Color foreColor ,Exception ex = null)
         {
-            lock (_lock)
-            {
-                LogMsg msg = new LogMsg(errLevel, Msg,backColor,foreColor, ex);
-                logQ.Enqueue(msg);
-            }
+            //lock (_lock)
+            //{
+            //    LogMsg msg = new LogMsg(errLevel, Msg,backColor,foreColor, ex);
+            //    logQ.Enqueue(msg);
+            //}
+            LogMsg msg = new LogMsg(errLevel, Msg, backColor, foreColor, ex);
+            _logQ.Enqueue(msg);
+
         }
 
         public static void Add(string Msg, MsgLevel errLevel, bool updateUI,Exception ex = null)
         {
-            lock (_lock)
-            {
-                LogMsg msg = new LogMsg(errLevel, Msg,ex, updateUI);
-                logQ.Enqueue(msg);
-            }
+            //lock (_lock)
+            //{
+            //    LogMsg msg = new LogMsg(errLevel, Msg,ex, updateUI);
+            //    logQ.Enqueue(msg);
+            //}
+            LogMsg msg = new LogMsg(errLevel, Msg, ex, updateUI);
+            _logQ.Enqueue(msg);
         }
         public static void Start()
         {
@@ -72,50 +83,54 @@ namespace RsLib.LogMgr
             {
                 _isTdRunning = true;
                 SpinWait.SpinUntil(() => false, 5);
-                if (logQ.Count == 0) continue;
-
-                LogMsg tempMsg = logQ.Dequeue();
-                switch (tempMsg.Level)
+                if (_logQ.Count == 0) continue;
+                LogMsg tempMsg;
+                bool isDequeueOK = _logQ.TryDequeue(out tempMsg);
+                //LogMsg tempMsg = logQ.Dequeue();
+                if (isDequeueOK)
                 {
-                    case MsgLevel.Trace:
-                        m_Log.Trace(tempMsg.ToString());
+                    switch (tempMsg.Level)
+                    {
+                        case MsgLevel.Trace:
+                            m_Log.Trace(tempMsg.ToString());
 
-                        break;
-                    case MsgLevel.Info:
-                        m_Log.Info(tempMsg.ToString());
+                            break;
+                        case MsgLevel.Info:
+                            m_Log.Info(tempMsg.ToString());
 
-                        break;
+                            break;
 
-                    case MsgLevel.Warn:
+                        case MsgLevel.Warn:
 
-                        m_Log.Warn(tempMsg.ToString());
-                        break;
+                            m_Log.Warn(tempMsg.ToString());
+                            break;
 
-                    case MsgLevel.Alarm:
-                        if (tempMsg.Ex == null)
-                        {
-                            m_Log.Error(tempMsg.ToString());
-                            m_FatalLog.Fatal(tempMsg.Text);
-                            //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        case MsgLevel.Alarm:
+                            if (tempMsg.Ex == null)
+                            {
+                                m_Log.Error(tempMsg.ToString());
+                                m_FatalLog.Fatal(tempMsg.Text);
+                                //MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                        }
-                        else
-                        {
-                            m_Log.Error(tempMsg.ToString() + "\t" + tempMsg.Ex.Message);
-                            m_FatalLog.Fatal(tempMsg.Ex);
-                            MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                m_Log.Error(tempMsg.ToString() + "\t" + tempMsg.Ex.Message);
+                                m_FatalLog.Fatal(tempMsg.Ex);
+                                MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                        }
-                        break;
+                            }
+                            break;
 
 
-                    default:
+                        default:
 
-                        break;
-                }
-                if (EnableUpdateUI)
-                {
-                    if (tempMsg.UpdateUI) UiUpdated?.Invoke(tempMsg);
+                            break;
+                    }
+                    if (EnableUpdateUI)
+                    {
+                        if (tempMsg.UpdateUI) UiUpdated?.Invoke(tempMsg);
+                    }
                 }
             }
             _isTdRunning = false;

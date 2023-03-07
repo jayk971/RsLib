@@ -57,12 +57,45 @@ namespace RsLib.DemoForm
             button1.Text = Properties.Settings.Default.TestSetting;
             this.MouseMove += Form1_MouseMove;
 
-            Log.Add("Trace", MsgLevel.Trace);
-            Log.Add("Info", MsgLevel.Info);
-            Log.Add("Warn", MsgLevel.Warn);
-            Log.Add("Alarm", MsgLevel.Alarm);
-            Log.Add("Exception", MsgLevel.Alarm,new Exception("Test Exception"));
+            ThreadPool.QueueUserWorkItem(traceTd);
+            ThreadPool.QueueUserWorkItem(infoTd);
+            ThreadPool.QueueUserWorkItem(warnTd);
+            ThreadPool.QueueUserWorkItem(alarmTd);
 
+
+        }
+        void traceTd(object obj)
+        {
+            while(true)
+            {
+                Log.Add($" {Thread.CurrentThread.ManagedThreadId} - Trace", MsgLevel.Trace);
+                SpinWait.SpinUntil(() => false, 500);
+            }
+        }
+        void infoTd(object obj)
+        {
+            while (true)
+            {
+                Log.Add($" {Thread.CurrentThread.ManagedThreadId} - Info", MsgLevel.Info);
+                SpinWait.SpinUntil(() => false, 600);
+            }
+        }
+        void warnTd(object obj)
+        {
+            while (true)
+            {
+                Log.Add($" {Thread.CurrentThread.ManagedThreadId} - warn", MsgLevel.Warn);
+                SpinWait.SpinUntil(() => false, 250);
+            }
+        }
+        void alarmTd(object obj)
+        {
+            while (true)
+            {
+                
+                Log.Add($" {Thread.CurrentThread.ManagedThreadId} - alarm", MsgLevel.Alarm);
+                SpinWait.SpinUntil(() => false, 300);
+            }
         }
 
         private void Zoom1Ctrl_MouseDoubleClick(object sender, MouseEventArgs e)
