@@ -193,6 +193,10 @@
       <Project>{06d831f7-418c-409f-881e-1650a4e44834}</Project>
       <Name>RsLib.Display3D</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RsLib.SerialPort\RsLib.SerialPort.csproj">
+      <Project>{1debd81e-7d9d-41b7-8771-45c73e3bb54a}</Project>
+      <Name>RsLib.SerialPort</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RsLib.TCP\RsLib.TCP.csproj">
       <Project>{6f3c8304-db61-4306-8189-374a8abc06d1}</Project>
       <Name>RsLib.TCP</Name>

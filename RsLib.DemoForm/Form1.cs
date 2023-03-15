@@ -18,6 +18,7 @@ using RsLib.PointCloud;
 
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using RsLib.SerialPortLib;
 namespace RsLib.DemoForm
 {
     public partial class Form1 : Form
@@ -57,10 +58,10 @@ namespace RsLib.DemoForm
             button1.Text = Properties.Settings.Default.TestSetting;
             this.MouseMove += Form1_MouseMove;
 
-            ThreadPool.QueueUserWorkItem(traceTd);
-            ThreadPool.QueueUserWorkItem(infoTd);
-            ThreadPool.QueueUserWorkItem(warnTd);
-            ThreadPool.QueueUserWorkItem(alarmTd);
+            //ThreadPool.QueueUserWorkItem(traceTd);
+            //ThreadPool.QueueUserWorkItem(infoTd);
+            //ThreadPool.QueueUserWorkItem(warnTd);
+            //ThreadPool.QueueUserWorkItem(alarmTd);
 
 
         }
@@ -183,15 +184,9 @@ namespace RsLib.DemoForm
             }
             if (File.Exists(filePath) == false) return;
 
-            string bmpFilePath = filePath.Replace(".xyz", ".bmp");
-            PointCloud.PointCloud cloud = new PointCloud.PointCloud();
-            int width = 2000;
-            int height = 800;
 
-            Rectangle rec = new Rectangle(0, 0, width, height);
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            BitmapData bitmapData = bmp.LockBits(rec, ImageLockMode.WriteOnly, bmp.PixelFormat);
-            List<byte> byteList = new List<byte>();
+            PointCloud.PointCloud cloud = new PointCloud.PointCloud();
+
             using (StreamReader sr = new StreamReader(filePath))
             {
                 while(!sr.EndOfStream)
@@ -218,6 +213,114 @@ namespace RsLib.DemoForm
                 }
             }
             cloud.BuildIndexKDtree(true);
+#if !ConvertPxStitchPath
+
+            PointCloud.PointCloud findStitch3D = new PointCloud.PointCloud();
+            PointCloud.PointCloud finalStitch = new PointCloud.PointCloud();
+
+            string pxFilePath = filePath.Replace(".xyz", ".txt");
+            string stitchRealPath = filePath.Replace(".xyz", "stitch.xyz");
+            string findRealPath = filePath.Replace(".xyz", "find.xyz");
+
+            using (StreamReader sr = new StreamReader(pxFilePath))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    string[] splitData = readData.Split(',');
+                    double pxX = double.Parse(splitData[0]);
+                    double pxY = double.Parse(splitData[1]);
+
+                    double realX = -200 + pxX * 0.2;
+                    double realY = -80 + (799 - pxY) * 0.2;
+
+
+
+                    List<int> nearIntCloud= cloud.GetNearestCloudIndex(new Point3D(realX, realY, 0), 1.0);
+                    if (nearIntCloud.Count == 0) continue;
+
+                    PointCloud.PointCloud nearCloud = new PointCloud.PointCloud();
+                    for (int i = 0; i < nearIntCloud.Count; i++)
+                    {
+                        nearCloud.Add(cloud.Points[nearIntCloud[i]]);
+                    }
+                    PointCloud.PointCloud tmpCloud = nearCloud.DeepClone();
+                    tmpCloud.ReduceAboveY(realY);
+                    Point3D tmpMaxZ =  tmpCloud.GetMaxZPoint();
+                    nearCloud.ReduceBelowY(tmpMaxZ.Y);
+                    Point3D findMinZ = nearCloud.GetMinZPoint();
+
+                    finalStitch.Add(findMinZ);
+
+                }
+                finalStitch.Save(findRealPath);
+
+                Log.Add(findRealPath, MsgLevel.Info, Color.Black, Color.LimeGreen);
+            }
+
+            string dataFilePath = "";
+            using (OpenFileDialog op = new OpenFileDialog())
+            {
+                op.Filter = "Halcon data|*.dat";
+                if(op.ShowDialog() == DialogResult.OK)
+                {
+                    dataFilePath = op.FileName;
+                }
+            }
+
+            if(File.Exists(dataFilePath))
+            {
+                CoordMatrix cm = new CoordMatrix();
+
+                
+                using (StreamReader sr = new StreamReader(dataFilePath))
+                {
+                    while(!sr.EndOfStream)
+                    {
+                        string readData = sr.ReadLine();
+                        if(readData.Contains("Rodriguez"))
+                        {
+                            readData = sr.ReadLine();
+                            string[] splitData = readData.Split(' ');
+                            Rotate r = new Rotate();
+                            double rz = double.Parse(splitData[3]);
+                            double ry = double.Parse(splitData[2]);
+                            double rx = double.Parse(splitData[1]);
+
+                            r.AddRotateSeq(RefAxis.Z, rz);
+                            r.AddRotateSeq(RefAxis.Y, ry);
+                            r.AddRotateSeq(RefAxis.X, rx);
+                            cm.AddSeq(r);
+
+                        }
+                        if (readData.Contains("Translation vector"))
+                        {
+                            readData = sr.ReadLine();
+                            string[] splitData = readData.Split(' ');
+                            double tx = double.Parse(splitData[1]);
+                            double ty = double.Parse(splitData[2]);
+                            double tz = double.Parse(splitData[3]);
+
+                            Shift s = new Shift(tx,ty,tz);
+                            cm.AddSeq(s);
+
+                        }
+                    }
+                }
+
+                PointCloud.PointCloud finalCloud = finalStitch.Multiply(cm.FinalMatrix4);
+                finalCloud.Save(stitchRealPath);
+            }
+#endif
+#if convertBMP
+            int width = 2000;
+            int height = 800;
+            string bmpFilePath = filePath.Replace(".xyz", ".bmp");
+
+            Rectangle rec = new Rectangle(0, 0, width, height);
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            BitmapData bitmapData = bmp.LockBits(rec, ImageLockMode.WriteOnly, bmp.PixelFormat);
+            List<byte> byteList = new List<byte>();
 
             for (int y = 799; y >=0; y--)
             {
@@ -259,27 +362,60 @@ namespace RsLib.DemoForm
             bmp.UnlockBits(bitmapData);
             bmp.Save(bmpFilePath);
             Log.Add("Convert to BMP done.", MsgLevel.Info, Color.White, Color.LimeGreen);
-                //cloud.LoadFromFile(filePath,DigitFormat.XYZ,'\t');
 
-                //Rotate r = new Rotate();
-                //r.AddRotateSeq(RefAxis.Z, 95.0250352976598);
-                //r.AddRotateSeq(RefAxis.Y, 70.3304675358202);
-                //r.AddRotateSeq(RefAxis.X, 355.815193115526);
+#endif
 
-                //Shift s = new Shift(16.0686951767622, 121.255767387646, 178.63285793135);
+#if transformMatrix
+            cloud.LoadFromFile(filePath, DigitFormat.XYZ, '\t');
 
-                //CoordMatrix cm = new CoordMatrix();
-                //cm.AddSeq(r);
-                //cm.AddSeq(s);
+            Rotate r = new Rotate();
+            r.AddRotateSeq(RefAxis.Z, 95.0250352976598);
+            r.AddRotateSeq(RefAxis.Y, 70.3304675358202);
+            r.AddRotateSeq(RefAxis.X, 355.815193115526);
 
-                //PointCloud.PointCloud finalCloud =  cloud.Multiply(cm.FinalMatrix4);
-                //finalCloud.Save("D:\\20230221_AF1大底線\\test.xyz");
+            Shift s = new Shift(16.0686951767622, 121.255767387646, 178.63285793135);
+
+            CoordMatrix cm = new CoordMatrix();
+            cm.AddSeq(r);
+            cm.AddSeq(s);
+
+            PointCloud.PointCloud finalCloud = cloud.Multiply(cm.FinalMatrix4);
+            finalCloud.Save("D:\\20230221_AF1大底線\\test.xyz");
+#endif
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             int threadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
             this.Text = threadCount.ToString();
+        }
+        RS232 rS232 = new RS232();
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            rS232.Start();
+            rS232.DataUpdated += RS232_DataUpdated;
+            listBox1.Items.Clear();
+        }
+
+        private void RS232_DataUpdated(string obj)
+        {
+            if(this.InvokeRequired)
+            {
+                Action<string> action = new Action<string>(RS232_DataUpdated);
+                this.Invoke(action, obj);
+            }
+            else
+            {
+                listBox1.Items.Add(obj);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            rS232.Stop(); 
+            rS232.DataUpdated -= RS232_DataUpdated;
+
         }
     }
 }

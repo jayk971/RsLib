@@ -3199,7 +3199,21 @@ namespace RsLib.PointCloud
             }
             else return null;
         }
+        public PointCloud GetNearestCloud(Point3D refP,double radius)
+        {
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
+            PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP,radius);
 
+            return tree;
+        }
+        public List<int> GetNearestCloudIndex(Point3D refP, double radius)
+        {
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
+            List<int> output = new List<int>();
+            m_Func.GetNearestPointCloud(kdTree, refP, radius,out output);
+
+            return output;
+        }
         public PointCloud GetEdge(Point3D BoxMin, Point3D BoxMax, bool BoxSplitX, double BoxSplitRange = 0.5)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
