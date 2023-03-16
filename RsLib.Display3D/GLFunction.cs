@@ -171,7 +171,7 @@ namespace RsLib.Display3D
                             {
                                 _multiSelectPoints.Clear();
                                 _multiSelectPoints.Add(_closetPoint);
-                                lbl_PickPointMode.Text = "Pick 2nd Point";
+                                lbl_PickPointMode.Text = "Pick 2nd Point - Middle Click";
                                 _middleMouseCount++;
 
                             }
@@ -188,13 +188,13 @@ namespace RsLib.Display3D
                         {
                             _middleMouseCount = 0;
                             _multiSelectPoints.Clear();
-                            lbl_PickPointMode.Text = "Pick 1st Point";
+                            lbl_PickPointMode.Text = "Pick 1st Point - Middle Click";
                             showSelectMeasurePointData(_multiSelectPoints);
                         }
                         if (_middleMouseCount >= 2)
                         {
                             _middleMouseCount = 0;
-                            lbl_PickPointMode.Text = "Pick 1st Point";
+                            lbl_PickPointMode.Text = "Pick 1st Point - Middle Click";
                         }
 
                         break;
@@ -331,7 +331,7 @@ namespace RsLib.Display3D
                 treeView1.Nodes.Add($"Vector", "Vector");
 
                 treeView1.Nodes.Add($"Length", $"Length : {v.L:F2}");
-                treeView1.Nodes["Start Point"].BackColor = Settings.Default.Color_MeasureLine;
+                treeView1.Nodes["Length"].BackColor = Settings.Default.Color_MeasureLine;
 
                 treeView1.Nodes["Start Point"].Nodes.Add($" X : {measureLine.Points[0].X:F2}");
                 treeView1.Nodes["Start Point"].Nodes.Add($" Y : {measureLine.Points[0].Y:F2}");
@@ -351,9 +351,7 @@ namespace RsLib.Display3D
                     treeView1.Nodes["End Point"].Nodes["Property"].Nodes.Add(endPtProp[i]);
                 }
 
-                treeView1.Nodes["Vector"].Nodes.Add($" Vx : {v.X:F3}");
-                treeView1.Nodes["Vector"].Nodes.Add($" Vy : {v.Y:F3}");
-                treeView1.Nodes["Vector"].Nodes.Add($" Vz : {v.Z:F3}");
+                treeView1.Nodes["Vector"].Nodes.Add($" Vz : {v.X:F3} ,  {v.Y:F3} , {v.Z:F3}");
             }
             treeView1.ExpandAll();
         }

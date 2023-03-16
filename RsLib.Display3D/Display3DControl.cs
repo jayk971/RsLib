@@ -468,7 +468,7 @@ namespace RsLib.Display3D
         void pickMode_Single()
         {
             _pickMode = PointPickMode.Single;
-            lbl_PickPointMode.Text = "Pick Point";
+            lbl_PickPointMode.Text = "Pick Point - Middle Click";
             lbl_PickPointMode.Image = Resources.place_marker_30px;
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = false;
@@ -477,7 +477,7 @@ namespace RsLib.Display3D
         void pickMode_Measure()
         {
             _pickMode = PointPickMode.Multiple;
-            lbl_PickPointMode.Text = "Pick 1st Point";
+            lbl_PickPointMode.Text = "Pick 1st Point - Middle Click";
             lbl_PickPointMode.Image = Resources.width_30px;
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = false;
