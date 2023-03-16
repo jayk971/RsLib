@@ -428,7 +428,10 @@ namespace RsLib.Display3D
 
         private void Display3DControl_SizeChanged(object sender, EventArgs e)
         {
-            splitContainer1.SplitterDistance = splitContainerPanel1MinSize;
+            if (splitContainer1.Width > splitContainerPanel1MinSize)
+            {
+                splitContainer1.SplitterDistance = splitContainerPanel1MinSize;
+            }
         }
 
         private void btn_Update_Click(object sender, EventArgs e)

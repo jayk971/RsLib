@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.Display3D", "RsLib.Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.XYZViewer", "RsLib.XYZViewer\RsLib.XYZViewer.csproj", "{A878A3D1-BBDC-4853-A098-C3DED6C4A39A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.SerialPort", "RsLib.SerialPort\RsLib.SerialPort.csproj", "{1DEBD81E-7D9D-41B7-8771-45C73E3BB54A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.SerialPortLib", "RsLib.SerialPort\RsLib.SerialPortLib.csproj", "{1DEBD81E-7D9D-41B7-8771-45C73E3BB54A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
