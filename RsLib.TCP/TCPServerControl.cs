@@ -13,7 +13,7 @@ namespace RsLib.TCP.Control
     public partial class TCPServerControl : UserControl
     {
         TCPServer _server = new TCPServer();
-
+        public event Action<string, string> DataReceived;
         public TCPServerControl()
         {
             InitializeComponent();
@@ -42,7 +42,8 @@ namespace RsLib.TCP.Control
 
         private void _server_DataReceived(string arg1, string arg2)
         {
-            if(this.InvokeRequired)
+            DataReceived?.Invoke(arg1, arg2);
+            if (this.InvokeRequired)
             {
                 Action<string, string> action = new Action<string, string>(_server_DataReceived);
                 this.Invoke(action, arg1, arg2);
