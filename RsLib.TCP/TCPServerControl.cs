@@ -83,7 +83,11 @@ namespace RsLib.TCP.Control
             if (_server.IsRun == false) return;
             _server.Send(clientName, data);
             string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{data}\n";
-            richTextBox1.AppendText(displayMsg);
+            richTextBox1.Invoke((Action)(() =>
+            {
+                richTextBox1.AppendText(displayMsg);
+            }));
+
         }
         private void btn_SendData_Click(object sender, EventArgs e)
         {
