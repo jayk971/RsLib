@@ -260,7 +260,8 @@ namespace RsLib.X8000TCP
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            x8k.Ping(_pingByteSize);   
+            //x8k.Ping(_pingByteSize);   
+            x8k.Echo("Hi");
         }
     }
 }
