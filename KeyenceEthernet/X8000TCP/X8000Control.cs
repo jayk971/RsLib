@@ -210,7 +210,16 @@ namespace RsLib.X8000TCP
         {
 
         }
-
+        public void Echo(string msg)
+        {
+            if (x8k == null) return;
+            x8k.Echo(msg);
+        }
+        public void ClearHistory()
+        {
+            if (x8k == null) return;
+            x8k.ClearHistory();
+        }
         private void btn_ReadX8000SettingNum_Click(object sender, EventArgs e)
         {
             cmb_x8000Number.SelectedIndex = CurrentSettingNum;

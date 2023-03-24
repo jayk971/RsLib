@@ -163,6 +163,12 @@ namespace RsLib.X8000TCP
             }
             else return -1;
         }
+
+        public bool ClearHistory()
+        {
+            string[] data = sendCommand("HC");
+            return data[0] == "HC";
+        }
         public bool SettingDelayTime(int ms)
         {
             Log.Add($"X8000 set trigger delay {ms} ms", MsgLevel.Trace);

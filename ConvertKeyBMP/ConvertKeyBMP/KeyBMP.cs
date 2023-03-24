@@ -444,7 +444,6 @@ namespace RsLib.ConvertKeyBMP
                 sw.Close();
             }
         }
-
         public static void SaveData(double[,] cloudArray, string filePath)
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
