@@ -6,31 +6,35 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO.Ports;
 using RsLib.LogMgr;
+using YamlDotNet.Serialization;
+using System.IO;
+using RsLib.Common;
 namespace RsLib.SerialPortLib
 {
     public class RS232
     {
-        public string DeviceName { get; private set; } = "";
-        public string PortName { get; private set; } = "";
         SerialPort _serialPort;
-        
-        bool _enableTd = false;
-        bool _TdRunning = false;
-
+        public bool IsConnected
+        {
+            get
+            {
+                if (_serialPort == null) return false;
+                else
+                {
+                    return _serialPort.IsOpen;
+                }
+            }
+        }
         public event Action<string> DataUpdated;
         public RS232()
         {
-
         }
 
         public RS232(string deviceName,string portName,BaudRate baudRate, Parity parity,int dataBits, StopBits stopBits)
         {
-            DeviceName = deviceName;
-            PortName = portName;
-            Log.Add($"RS232 {deviceName} {portName} {baudRate} {parity} {dataBits} {stopBits}",MsgLevel.Info);
+
             _serialPort = new SerialPort(portName, (int)baudRate, parity, dataBits, stopBits);
         }
-
         public static string[] DetectSerialPort()
         {
             string[] portNames = SerialPort.GetPortNames();
@@ -39,33 +43,23 @@ namespace RsLib.SerialPortLib
 
         public void Start()
         {
-            _enableTd = true;
-
-            ThreadPool.QueueUserWorkItem(run);
+            _serialPort.Open();
+            _serialPort.DataReceived += _serialPort_DataReceived;
         }
         public void Stop()
         {
-            _enableTd = false;
-        }
-        void run(object obj)
-        {
-            _TdRunning = true;
-            _serialPort.Open();
-            while(_enableTd)
-            {
-                if (_serialPort.IsOpen)
-                {
-                    if (_serialPort.BytesToRead > 0)
-                    {
-                        string data = _serialPort.ReadLine();
-                        DataUpdated?.Invoke(data);
-                    }
-                }
-                SpinWait.SpinUntil(() => false, 100);
-            }
+            _serialPort.DataReceived -= _serialPort_DataReceived;
             _serialPort.Close();
-            _TdRunning = false;
-
+        }
+        public void Send(string data)
+        {
+            _serialPort.WriteLine(data);
+        }
+        private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort s = (SerialPort)sender;
+            string data = s.ReadLine();
+            DataUpdated?.Invoke(data);
         }
     }
 

@@ -386,24 +386,29 @@ namespace RsLib.DemoForm
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            int threadCount = System.Diagnostics.Process.GetCurrentProcess().Threads.Count;
-            this.Text = threadCount.ToString();
-        }
-        RS232 rS232 = new RS232();
+            if (eJ1500 == null)
+            {
+                button2.BackColor = Color.Red;
 
+                return;
+            }
+            button2.BackColor = eJ1500.IsConnected ? Color.LimeGreen : Color.Red;
+        }
+        EJ1500 eJ1500;
         private void button2_Click(object sender, EventArgs e)
         {
-            rS232.Start();
-            rS232.DataUpdated += RS232_DataUpdated;
+            eJ1500 = new EJ1500(1);
+            eJ1500.WeightMeasured += EJ1500_WeightMeasured;
+            eJ1500.Connect();
             listBox1.Items.Clear();
         }
 
-        private void RS232_DataUpdated(string obj)
+        private void EJ1500_WeightMeasured(int index,double obj)
         {
-            if(this.InvokeRequired)
+            if (this.InvokeRequired)
             {
-                Action<string> action = new Action<string>(RS232_DataUpdated);
-                this.Invoke(action, obj);
+                Action<int,double> action = new Action<int,double>(EJ1500_WeightMeasured);
+                this.Invoke(action,index, obj);
             }
             else
             {
@@ -411,10 +416,21 @@ namespace RsLib.DemoForm
             }
         }
 
+
+
         private void button3_Click(object sender, EventArgs e)
         {
-            rS232.Stop(); 
-            rS232.DataUpdated -= RS232_DataUpdated;
+            eJ1500.Disconnect();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            eJ1500.Measure();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            eJ1500.SetSero();
 
         }
     }
