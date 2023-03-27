@@ -95,7 +95,7 @@
     </Compile>
     <Compile Include="RS232.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScaleEJ1500.cs" />
+    <Compile Include="EJ1500.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FT.Common\FT.Common\RsLib.Common.csproj">
@@ -133,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\broom_30px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kitchen_scales_32px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -22,8 +22,22 @@ namespace RsLib.SerialPortLib
             InitializeComponent();
             _ej1500 = eJ1500;
             _ej1500.WeightMeasured += _ej1500_WeightMeasured;
+            _ej1500.Connected += _ej1500_Connected;
             propertyGrid1.SelectedObject = _ej1500.Setting;
             
+        }
+
+        private void _ej1500_Connected(bool obj)
+        {
+            if (this.InvokeRequired)
+            {
+                Action<bool> action = new Action<bool>(_ej1500_Connected);
+                this.Invoke(action, obj);
+            }
+            else
+            {
+                btn_Start.Image = obj ? Resources.toggle_on_96px : Resources.toggle_off_96px;
+            }
         }
 
         private void _ej1500_WeightMeasured(int scaleIndex, double measuredWeight)
@@ -51,7 +65,6 @@ namespace RsLib.SerialPortLib
             {
                 _ej1500.Disconnect();
             }
-            btn_Start.Image = _ej1500.IsConnected ? Resources.toggle_on_96px : Resources.toggle_off_96px;
         }
 
         private void btn_Measure_Click(object sender, EventArgs e)

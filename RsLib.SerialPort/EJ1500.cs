@@ -14,6 +14,7 @@ namespace RsLib.SerialPortLib
     public class EJ1500
     {
         public event Action<int,double> WeightMeasured;
+        public event Action<bool> Connected;
         RS232 _rs232;
         public EJ1500Setting Setting { get;private set; } = new EJ1500Setting();
         public bool IsConnected
@@ -94,11 +95,11 @@ namespace RsLib.SerialPortLib
                 }
             }
         }
-        public void Connect()
+        public bool Connect()
         {
-            if (Setting.Index <= 0) return;
-            if (Setting.PortName == "") return;
-            if (Setting.DataBits == 0) return;
+            if (Setting.Index <= 0) return false;
+            if (Setting.PortName == "") return false;
+            if (Setting.DataBits == 0) return false;
 
             _rs232 = new RS232($"EJ1500_{Setting.Index}",
                 Setting.PortName,
@@ -110,10 +111,14 @@ namespace RsLib.SerialPortLib
             _rs232.DataUpdated += _rs232_DataUpdated;
 
             _rs232.Start();
+            Connected?.Invoke(IsConnected);
+            return IsConnected;
         }
         public void Disconnect()
         {
             _rs232.Stop();
+            Connected?.Invoke(IsConnected);
+
         }
         public void Measure(int time = 1)
         {

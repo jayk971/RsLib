@@ -103,6 +103,16 @@ namespace RsLib.SerialPortLib.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap kitchen_scales_32px {
+            get {
+                object obj = ResourceManager.GetObject("kitchen_scales_32px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap toggle_off_96px {
             get {
                 object obj = ResourceManager.GetObject("toggle_off_96px", resourceCulture);

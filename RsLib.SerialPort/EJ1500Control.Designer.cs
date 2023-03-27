@@ -93,7 +93,7 @@ namespace RsLib.SerialPortLib
             // btn_Measure
             // 
             this.btn_Measure.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btn_Measure.Image = global::RsLib.SerialPortLib.Properties.Resources.industrial_scales_40px;
+            this.btn_Measure.Image = global::RsLib.SerialPortLib.Properties.Resources.kitchen_scales_32px;
             this.btn_Measure.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_Measure.Name = "btn_Measure";
             this.btn_Measure.Size = new System.Drawing.Size(23, 27);
