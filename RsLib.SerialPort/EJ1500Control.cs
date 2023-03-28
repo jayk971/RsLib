@@ -66,13 +66,6 @@ namespace RsLib.SerialPortLib
                 _ej1500.Disconnect();
             }
         }
-
-        private void btn_Measure_Click(object sender, EventArgs e)
-        {
-            if (_ej1500 == null) return;
-            _ej1500.Measure();
-        }
-
         private void btn_Zero_Click(object sender, EventArgs e)
         {
             if (_ej1500 == null) return;
@@ -82,6 +75,12 @@ namespace RsLib.SerialPortLib
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             PropertyUpdated?.Invoke();
+        }
+
+        private void btn_GetWeight_Click(object sender, EventArgs e)
+        {
+            if (_ej1500 == null) return;
+            _ej1500.Measure();
         }
     }
 }

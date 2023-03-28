@@ -108,17 +108,23 @@ namespace RsLib.SerialPortLib
                 Setting.DataBits,
                 Setting.StopBitsOption);
 
+            Log.Add($"EJ1500 {Setting.Index} {Setting.PortName} {Setting.BaudrateOption} {Setting.ParityOption} {Setting.DataBits} {Setting.StopBitsOption} is connecting...", MsgLevel.Info);
             _rs232.DataUpdated += _rs232_DataUpdated;
 
             _rs232.Start();
             Connected?.Invoke(IsConnected);
+            if(IsConnected)
+                Log.Add($"EJ1500 {Setting.Index} is connected.", MsgLevel.Info);
+            else
+                Log.Add($"EJ1500 {Setting.Index} cannot connect.", MsgLevel.Alarm);
+
             return IsConnected;
         }
         public void Disconnect()
         {
             _rs232.Stop();
             Connected?.Invoke(IsConnected);
-
+            Log.Add($"EJ1500 {Setting.Index} disconnect.", MsgLevel.Info);
         }
         public void Measure(int time = 1)
         {

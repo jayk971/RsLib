@@ -83,6 +83,16 @@ namespace RsLib.SerialPortLib.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap creative_commons_zero_32px {
+            get {
+                object obj = ResourceManager.GetObject("creative_commons_zero_32px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap Disconnect {
             get {
                 object obj = ResourceManager.GetObject("Disconnect", resourceCulture);
@@ -106,6 +116,16 @@ namespace RsLib.SerialPortLib.Properties {
         internal static System.Drawing.Bitmap kitchen_scales_32px {
             get {
                 object obj = ResourceManager.GetObject("kitchen_scales_32px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap kitchen_scales_96px {
+            get {
+                object obj = ResourceManager.GetObject("kitchen_scales_96px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

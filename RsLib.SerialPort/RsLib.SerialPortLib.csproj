@@ -137,6 +137,12 @@
   <ItemGroup>
     <None Include="Resources\kitchen_scales_32px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kitchen_scales_96px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\creative_commons_zero_32px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>

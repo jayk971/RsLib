@@ -42,7 +42,6 @@ namespace RsLib.TCP.Control
 
         private void _server_DataReceived(string arg1, string arg2)
         {
-            DataReceived?.Invoke(arg1, arg2);
             if (this.InvokeRequired)
             {
                 Action<string, string> action = new Action<string, string>(_server_DataReceived);
@@ -51,6 +50,7 @@ namespace RsLib.TCP.Control
             else
             {
                 if (richTextBox1.Lines.Length > 10) richTextBox1.Clear();
+                DataReceived?.Invoke(arg1, arg2);
 
                 string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{arg1}\t{arg2}\n";
                 richTextBox1.AppendText(displayMsg);
