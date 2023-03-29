@@ -33,6 +33,7 @@ namespace RsLib.SerialPortLib
         int _stableCount = 0;
         double _weightSum = 0;
         bool _enableGetWeight = false;
+        public bool IsSettingLoaded { get; private set; } = false;
         public EJ1500()
         {
 
@@ -63,6 +64,7 @@ namespace RsLib.SerialPortLib
             //yml contains a string containing your YAML
             var p = deserializer.Deserialize<EJ1500Setting>(ReadData);
             Setting = p.DeepClone();
+            IsSettingLoaded = true;
         }
 
         private void _rs232_DataUpdated(string obj)
@@ -81,7 +83,7 @@ namespace RsLib.SerialPortLib
                     {
                         _stableCount++;
                         _weightSum += weight;
-                        Log.Add($"Weight {_stableCount} Get {weight:F2}", MsgLevel.Info);
+                        Log.Add($"Measure {_stableCount} Get {weight:F2}", MsgLevel.Info);
 
                         if (_stableCount >= StableTime)
                         {
@@ -100,6 +102,7 @@ namespace RsLib.SerialPortLib
             if (Setting.Index <= 0) return false;
             if (Setting.PortName == "") return false;
             if (Setting.DataBits == 0) return false;
+            if (IsSettingLoaded == false) return false;
 
             _rs232 = new RS232($"EJ1500_{Setting.Index}",
                 Setting.PortName,
