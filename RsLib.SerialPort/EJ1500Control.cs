@@ -68,8 +68,7 @@ namespace RsLib.SerialPortLib
         }
         private void btn_Zero_Click(object sender, EventArgs e)
         {
-            if (_ej1500 == null) return;
-            _ej1500.SetSero();
+
         }
 
         private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -81,6 +80,12 @@ namespace RsLib.SerialPortLib
         {
             if (_ej1500 == null) return;
             _ej1500.Measure();
+        }
+
+        private void btn_ReZero_Click(object sender, EventArgs e)
+        {
+            if (_ej1500 == null) return;
+            _ej1500.SetSero();
         }
     }
 }
