@@ -158,16 +158,27 @@ namespace RsLib.SerialPortLib
     [Serializable]
     public class EJ1500Setting
     {
+        [Category("Setting")]
         [DisplayName("Index")]
         public int Index { get; set; } = -1;
+
+        [Category("Setting")]
         [DisplayName("Port Name")]
         public string PortName { get; set; } = "";
+
+        [Category("Setting")]
         [DisplayName("Baud Rate")]
         public BaudRate BaudrateOption { get; set; } = BaudRate._9600;
+
+        [Category("Setting")]
         [DisplayName("Parity")]
         public Parity ParityOption { get; set; } = Parity.None;
+        
+        [Category("Setting")]
         [DisplayName("Data Bits")]
         public int DataBits { get; set; } = 8;
+
+        [Category("Setting")]
         [DisplayName("Stop Bits")]
         public StopBits StopBitsOption { get; set; } = StopBits.One;
         public void SaveYaml(string filePath)
