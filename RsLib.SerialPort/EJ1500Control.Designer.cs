@@ -29,18 +29,20 @@ namespace RsLib.SerialPortLib
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.btn_Start = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.btn_ReZero = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.lbl_MeasuredWeight = new System.Windows.Forms.Label();
             this.btn_GetWeight = new System.Windows.Forms.Button();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -57,7 +59,7 @@ namespace RsLib.SerialPortLib
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 71.9403F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.0597F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(398, 365);
@@ -67,6 +69,7 @@ namespace RsLib.SerialPortLib
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.btn_Start,
@@ -76,9 +79,15 @@ namespace RsLib.SerialPortLib
             this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(398, 35);
+            this.toolStrip1.Size = new System.Drawing.Size(398, 32);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(54, 29);
+            this.toolStripLabel1.Text = "Connect";
             // 
             // btn_Start
             // 
@@ -94,7 +103,13 @@ namespace RsLib.SerialPortLib
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 35);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(38, 29);
+            this.toolStripLabel2.Text = "Reset";
             // 
             // btn_ReZero
             // 
@@ -107,13 +122,18 @@ namespace RsLib.SerialPortLib
             this.btn_ReZero.Text = "Zero";
             this.btn_ReZero.Click += new System.EventHandler(this.btn_ReZero_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            // 
             // propertyGrid1
             // 
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid1.HelpVisible = false;
-            this.propertyGrid1.Location = new System.Drawing.Point(3, 38);
+            this.propertyGrid1.Location = new System.Drawing.Point(3, 35);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(392, 231);
+            this.propertyGrid1.Size = new System.Drawing.Size(392, 233);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.ToolbarVisible = false;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
@@ -126,21 +146,21 @@ namespace RsLib.SerialPortLib
             this.tableLayoutPanel2.Controls.Add(this.lbl_MeasuredWeight, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btn_GetWeight, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 275);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 274);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(392, 87);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(392, 88);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // lbl_MeasuredWeight
             // 
             this.lbl_MeasuredWeight.AutoSize = true;
             this.lbl_MeasuredWeight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_MeasuredWeight.Font = new System.Drawing.Font("微軟正黑體", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lbl_MeasuredWeight.Font = new System.Drawing.Font("Microsoft JhengHei", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.lbl_MeasuredWeight.Location = new System.Drawing.Point(199, 0);
             this.lbl_MeasuredWeight.Name = "lbl_MeasuredWeight";
-            this.lbl_MeasuredWeight.Size = new System.Drawing.Size(190, 87);
+            this.lbl_MeasuredWeight.Size = new System.Drawing.Size(190, 88);
             this.lbl_MeasuredWeight.TabIndex = 2;
             this.lbl_MeasuredWeight.Text = "0.0";
             this.lbl_MeasuredWeight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -151,27 +171,11 @@ namespace RsLib.SerialPortLib
             this.btn_GetWeight.Image = global::RsLib.SerialPortLib.Properties.Resources.kitchen_scales_96px;
             this.btn_GetWeight.Location = new System.Drawing.Point(3, 3);
             this.btn_GetWeight.Name = "btn_GetWeight";
-            this.btn_GetWeight.Size = new System.Drawing.Size(190, 81);
+            this.btn_GetWeight.Size = new System.Drawing.Size(190, 82);
             this.btn_GetWeight.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.btn_GetWeight, "Read Scale");
             this.btn_GetWeight.UseVisualStyleBackColor = true;
             this.btn_GetWeight.Click += new System.EventHandler(this.btn_GetWeight_Click);
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(54, 32);
-            this.toolStripLabel1.Text = "Connect";
-            // 
-            // toolStripLabel2
-            // 
-            this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(38, 32);
-            this.toolStripLabel2.Text = "Reset";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 35);
             // 
             // EJ1500Control
             // 
@@ -204,5 +208,6 @@ namespace RsLib.SerialPortLib
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
