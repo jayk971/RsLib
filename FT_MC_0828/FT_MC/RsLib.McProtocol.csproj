@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="CTCPIP.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="CPLCLog.cs" />
     <Compile Include="PLC_ASCII.cs" />
     <Compile Include="PLC_Binary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
