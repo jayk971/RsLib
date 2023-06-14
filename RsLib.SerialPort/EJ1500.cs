@@ -30,7 +30,7 @@ namespace RsLib.SerialPortLib
         double _weightSum = 0;
         bool _enableGetWeight = false;
         public bool IsSettingLoaded { get; private set; } = false;
-        bool _isTriggerFromControl = false;
+        bool _isRaiseEvent = false;
 
         public string Status { get; private set; } = "Not Connect";
         public EJ1500()
@@ -87,7 +87,7 @@ namespace RsLib.SerialPortLib
                         if (_stableCount >= Setting.MeasureCount)
                         {
                             double avgWeight = Math.Round(_weightSum / (double)Setting.MeasureCount, 1);
-                            if(_isTriggerFromControl == false) WeightMeasured?.Invoke(Setting.Index, avgWeight);
+                            if(_isRaiseEvent == false) WeightMeasured?.Invoke(Setting.Index, avgWeight);
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;
@@ -114,7 +114,7 @@ namespace RsLib.SerialPortLib
 
             Log.Add($"EJ1500 {Setting.Index} {Setting.PortName} {Setting.BaudrateOption} {Setting.ParityOption} {Setting.DataBits} {Setting.StopBitsOption} is connecting...", MsgLevel.Info);
             _rs232.DataUpdated += _rs232_DataUpdated;
-
+            _isRaiseEvent = false;
             _rs232.Start("Q\r",2000);
             Connected?.Invoke(IsConnected);
             if (IsConnected)
@@ -137,11 +137,11 @@ namespace RsLib.SerialPortLib
             Status = "Disconnected";
 
         }
-        public void Measure(bool isTriggerFromControl)
+        public void Measure(bool isRaiseEventl)
         {
             if (_rs232 == null) return;
             if (_rs232.IsConnected == false) return;
-            _isTriggerFromControl = isTriggerFromControl;
+            _isRaiseEvent = isRaiseEventl;
             _enableGetWeight = true;
             Status = "Weight measuring...";
 
