@@ -1,22 +1,15 @@
 ﻿using System;
 using System.IO.Ports;
+using RsLib.Common;
+using RsLib.LogMgr;
 namespace RsLib.SerialPortLib
 {
     public class RS232
     {
         SerialPort _serialPort;
-        public bool IsConnected
-        {
-            get
-            {
-                if (_serialPort == null) return false;
-                else
-                {
-                    return _serialPort.IsOpen;
-                }
-            }
-        }
+        public bool IsConnected { get; private set; } = false;
         public event Action<string> DataUpdated;
+        public string ReadData { get; private set; } = "";
         public RS232()
         {
         }
@@ -32,25 +25,42 @@ namespace RsLib.SerialPortLib
             return portNames;
         }
 
-        public void Start()
+        //public void Start()
+        //{
+        //    _serialPort.Open();
+        //    _serialPort.DataReceived += _serialPort_DataReceived;
+        //}
+        public void Start(string testCommand,double waitTime)
         {
             _serialPort.Open();
             _serialPort.DataReceived += _serialPort_DataReceived;
+            Send(testCommand);
+           int isTimeOut =  FT_Functions.IsTimeOut(waitTime, () => ReadData != "", true);
+            if (isTimeOut == (int)TimeOutType.TimeOut)
+            {
+                IsConnected = false;
+                Stop();
+                Log.Add($"Serial port {_serialPort.PortName} connect fail.", MsgLevel.Warn);
+            }
+            else IsConnected = true;
         }
         public void Stop()
         {
             _serialPort.DataReceived -= _serialPort_DataReceived;
             _serialPort.Close();
+            IsConnected = false;
+
         }
         public void Send(string data)
         {
+            ReadData = "";
             _serialPort.WriteLine(data);
         }
         private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort s = (SerialPort)sender;
-            string data = s.ReadLine();
-            DataUpdated?.Invoke(data);
+            ReadData = s.ReadLine();
+            DataUpdated?.Invoke(ReadData);
         }
     }
 

@@ -20,13 +20,11 @@ namespace RsLib.SerialPortLib
             get
             {
                 if (_rs232 == null) return false;
-                else
-                {
-                    return _rs232.IsConnected;
-                }
+                else return _rs232.IsConnected;
             }
         }
-        public int StableTime { get; private set; } = 1;
+
+        //public int StableTime { get; private set; } = 1;
         public int Index => Setting.Index;
         int _stableCount = 0;
         double _weightSum = 0;
@@ -81,11 +79,11 @@ namespace RsLib.SerialPortLib
                     {
                         _stableCount++;
                         _weightSum += weight;
-                        Log.Add($"Measure {_stableCount} Get {weight:F2}", MsgLevel.Info);
+                        Log.Add($"Measure {_stableCount}/{Setting.MeasureCount} Get {weight:F2}", MsgLevel.Trace);
 
-                        if (_stableCount >= StableTime)
+                        if (_stableCount >= Setting.MeasureCount)
                         {
-                            double avgWeight = Math.Round(_weightSum / (double)StableTime, 1);
+                            double avgWeight = Math.Round(_weightSum / (double)Setting.MeasureCount, 1);
                             WeightMeasured?.Invoke(Setting.Index, avgWeight);
                             _stableCount = 0;
                             _weightSum = 0;
@@ -112,7 +110,7 @@ namespace RsLib.SerialPortLib
             Log.Add($"EJ1500 {Setting.Index} {Setting.PortName} {Setting.BaudrateOption} {Setting.ParityOption} {Setting.DataBits} {Setting.StopBitsOption} is connecting...", MsgLevel.Info);
             _rs232.DataUpdated += _rs232_DataUpdated;
 
-            _rs232.Start();
+            _rs232.Start("Q\r",2000);
             Connected?.Invoke(IsConnected);
             if (IsConnected)
                 Log.Add($"EJ1500 {Setting.Index} is connected.", MsgLevel.Info);
@@ -127,12 +125,11 @@ namespace RsLib.SerialPortLib
             Connected?.Invoke(IsConnected);
             Log.Add($"EJ1500 {Setting.Index} disconnect.", MsgLevel.Info);
         }
-        public void Measure(int time = 1)
+        public void Measure()
         {
             if (_rs232 == null) return;
             if (_rs232.IsConnected == false) return;
-            if (time <= 0) StableTime = 1;
-            else StableTime = time;
+
             _enableGetWeight = true;
             ThreadPool.QueueUserWorkItem(getWeight);
         }
@@ -142,7 +139,17 @@ namespace RsLib.SerialPortLib
             while (_enableGetWeight)
             {
                 _rs232.Send("Q\r");
-                SpinWait.SpinUntil(() => false, 150);
+                int waitTime = FT_Functions.IsTimeOut(2000, () => _rs232.ReadData != "", true);
+                if(waitTime ==(int)TimeOutType.TimeOut)
+                {
+                    Log.Add($"{Setting.PortName} read data time out.", MsgLevel.Warn);
+                    _enableGetWeight = false;
+                }
+                else
+                {
+
+                }
+                //SpinWait.SpinUntil(() => false, 150);
             }
         }
         public void SetSero()
@@ -156,29 +163,33 @@ namespace RsLib.SerialPortLib
     [Serializable]
     public class EJ1500Setting
     {
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Index")]
         public int Index { get; set; } = -1;
 
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Port Name")]
         public string PortName { get; set; } = "";
 
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Baud Rate")]
         public BaudRate BaudrateOption { get; set; } = BaudRate._9600;
 
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Parity")]
         public Parity ParityOption { get; set; } = Parity.None;
 
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Data Bits")]
         public int DataBits { get; set; } = 8;
 
-        [Category("Setting")]
+        [Category("1. Setting")]
         [DisplayName("Stop Bits")]
         public StopBits StopBitsOption { get; set; } = StopBits.One;
+        [Category("2. Measure")]
+        [DisplayName("Measure Count")]
+        public int MeasureCount { get; set; } = 1;
+
         public void SaveYaml(string filePath)
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))

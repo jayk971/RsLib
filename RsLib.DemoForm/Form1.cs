@@ -21,9 +21,17 @@ namespace RsLib.DemoForm
         Display3DControl displayControl = new Display3DControl(4);
         ZoomImageControl zoomCtrl = new ZoomImageControl();
         ZoomImageControl zoom1Ctrl = new ZoomImageControl();
+
+        EJ1500 _EJ1500 = new EJ1500(0);
+        EJ1500Control eJ1500Ctrl;
         public Form1()
         {
             InitializeComponent();
+            _EJ1500.LoadYaml("d:\\testEj1500.yaml");
+            eJ1500Ctrl = new EJ1500Control(_EJ1500);
+            eJ1500Ctrl.Dock = DockStyle.Fill;
+            tabPage4.Controls.Add(eJ1500Ctrl);
+
             Log.EnableUpdateUI = false;
             Log.Start();
             serverControl.Dock = DockStyle.Fill;
