@@ -30,6 +30,7 @@ namespace RsLib.SerialPortLib
         double _weightSum = 0;
         bool _enableGetWeight = false;
         public bool IsSettingLoaded { get; private set; } = false;
+        bool _isTriggerFromControl = false;
         public EJ1500()
         {
 
@@ -84,7 +85,7 @@ namespace RsLib.SerialPortLib
                         if (_stableCount >= Setting.MeasureCount)
                         {
                             double avgWeight = Math.Round(_weightSum / (double)Setting.MeasureCount, 1);
-                            WeightMeasured?.Invoke(Setting.Index, avgWeight);
+                            if(_isTriggerFromControl == false) WeightMeasured?.Invoke(Setting.Index, avgWeight);
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;
@@ -125,11 +126,11 @@ namespace RsLib.SerialPortLib
             Connected?.Invoke(IsConnected);
             Log.Add($"EJ1500 {Setting.Index} disconnect.", MsgLevel.Info);
         }
-        public void Measure()
+        public void Measure(bool isTriggerFromControl)
         {
             if (_rs232 == null) return;
             if (_rs232.IsConnected == false) return;
-
+            _isTriggerFromControl = isTriggerFromControl;
             _enableGetWeight = true;
             ThreadPool.QueueUserWorkItem(getWeight);
         }

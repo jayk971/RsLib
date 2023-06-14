@@ -73,7 +73,7 @@ namespace RsLib.SerialPortLib
         private void btn_GetWeight_Click(object sender, EventArgs e)
         {
             if (_ej1500 == null) return;
-            _ej1500.Measure();
+            _ej1500.Measure(true);
         }
 
         private void btn_ReZero_Click(object sender, EventArgs e)
