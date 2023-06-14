@@ -14,8 +14,6 @@ namespace RsLib.McProtocol
     {
         protected string logger_ip = string.Empty; 
         public string Name { get; set; }
-        //protected string Log = @"C:\\SYSTEM\\LOG\\FT_MC";
-        //protected string log_date = DateTime.Now.ToString("yyyyMMdd");
         static object lockMe = new object();
         protected bool m_bPassive;
         protected int m_iPortNum = 0;
@@ -29,6 +27,7 @@ namespace RsLib.McProtocol
         private TcpConnectionInformation[] connections;
         public ThreadingTimer tdt_PLC_Connect = null;
         bool tdt_busy = false;
+        bool isPLCAlarm = false;
         public string ConnectStatus
         {
             get
@@ -48,6 +47,7 @@ namespace RsLib.McProtocol
                 this.m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 this.m_ClientSocket.Connect(IPAddress.Parse(this.m_sIPAddress), this.m_iPortNum);
                 flag = true;
+                isPLCAlarm = false;
             }
             catch(Exception e)
             {
@@ -55,6 +55,7 @@ namespace RsLib.McProtocol
                 this.m_ClientSocket = null;
                 SpinWait.SpinUntil(() => false, 500);
                 flag = false;
+                isPLCAlarm = true;
             }
             return flag;
         }
@@ -62,7 +63,6 @@ namespace RsLib.McProtocol
         {
             try
             {
-                Log.Add($"{logger_ip} - Close Connection",MsgLevel.Trace);
                 this.m_ClientSocket.Shutdown(SocketShutdown.Both);
                 this.m_ClientSocket.Close();
                 Log.Add($"{logger_ip} - Connection is already closed", MsgLevel.Trace);
@@ -71,6 +71,7 @@ namespace RsLib.McProtocol
                     this.m_enConState = ConState.Opening;
                 else
                     this.m_enConState = ConState.listen;
+                isPLCAlarm = false;
             }
             catch (Exception e)
             {
@@ -121,6 +122,7 @@ namespace RsLib.McProtocol
                 {
                     Log.Add($"{logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     num = -1;
+                    isPLCAlarm = true;
                 }
             }
             return num;
@@ -144,7 +146,7 @@ namespace RsLib.McProtocol
                         num1 = num1 + num2;
                         num3 = iReqLen - num1;
                     }
-                    if (num2 == 0)
+                    else if (num2 == 0)
                     {
                         num1 = -1;
                         this.CloseSocket();
@@ -156,6 +158,7 @@ namespace RsLib.McProtocol
                 {
                     Log.Add($"{logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     num1 = -1;
+                    isPLCAlarm = true;
                     break;
                 }
             }
