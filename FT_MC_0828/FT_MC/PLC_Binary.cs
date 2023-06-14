@@ -4,19 +4,22 @@ namespace RsLib.McProtocol
 {
     public class PLC_Binary : CTCPIP
     {
-        private bool m_bLogEnable;
+        //private bool m_bLogEnable;
+        private object _LockObj = new object();
         public PLC_Binary(string PLCName)
         {
             Name = PLCName;
         }
         public void Close()
         {
-            this.m_bStop = true;
+            m_bStop = true;
         }
         private bool IsBitDevice(Device device)
         {
             bool flag = false;
-            if ((device == Device.B || device == Device.M || device == Device.X ? true : device == Device.Y))
+            if ((device == Device.B || 
+                device == Device.M || 
+                device == Device.X ? true : device == Device.Y))
             {
                 flag = true;
             }
@@ -25,7 +28,9 @@ namespace RsLib.McProtocol
         private bool IsWordDevice(Device device)
         {
             bool flag = false;
-            if ((device == Device.D || device == Device.W || device == Device.R ? true : device == Device.ZR))
+            if ((device == Device.D || 
+                device == Device.W || 
+                device == Device.R ? true : device == Device.ZR))
             {
                 flag = true;
             }
@@ -39,7 +44,7 @@ namespace RsLib.McProtocol
                 ByteArr[i * 2] = (byte)(NumArr[i] % 256);
                 ByteArr[i * 2 + 1] = (byte)(NumArr[i] / 256);
             }
-            return (int)NumArr.Length * 2;
+            return NumArr.Length * 2;
         }
         private int MakeSendByteArr(bool[] BoolArr, ref byte[] ByteArr, int Count)
         {
@@ -50,13 +55,13 @@ namespace RsLib.McProtocol
                 int num1 = Convert.ToByte(BoolArr[i * 2 + 1]);
                 ByteArr[i] = (byte)(num + num1);
             }
-            return (int)ByteArr.Length;
+            return ByteArr.Length;
         }
         private bool[] PLCDataToBoolArr(byte[] ByteArr, int Count)
         {
-            if (((int)ByteArr.Length - 2) * 2 < Count)
+            if ((ByteArr.Length - 2) * 2 < Count)
             {
-                Count = ((int)ByteArr.Length - 2) * 2;
+                Count = (ByteArr.Length - 2) * 2;
             }
             bool[] flag = new bool[Count];
             for (int i = 0; i < Count; i++)
@@ -76,8 +81,8 @@ namespace RsLib.McProtocol
         }
         private int[] PLCDataToNumArr(byte[] ByteArr)
         {
-            int[] byteArr = new int[((int)ByteArr.Length - 2) / 2];
-            for (int i = 0; i < (int)byteArr.Length; i++)
+            int[] byteArr = new int[(ByteArr.Length - 2) / 2];
+            for (int i = 0; i < byteArr.Length; i++)
             {
                 byteArr[i] = ByteArr[i * 2 + 2] + ByteArr[i * 2 + 3] * 256;
             }
@@ -93,11 +98,11 @@ namespace RsLib.McProtocol
             byte[] numArray2 = new byte[0];
             byte[] startAddress = new byte[21];
             int rc = -1;
-            lock (this)
+            lock (_LockObj)
             {
-                if (this.m_enConState == ConState.Connected & this.IsBitDevice(device))
+                if (m_enConState == ConState.Connected & IsBitDevice(device))
                 {
-                    this.WordReadIniFormat(ref startAddress);
+                    WordReadIniFormat(ref startAddress);
                     num = (byte)device;
                     startAddress[13] = 1;
                     startAddress[14] = 0;
@@ -106,20 +111,20 @@ namespace RsLib.McProtocol
                     startAddress[18] = num;
                     startAddress[19] = (byte)(Count % 256);
                     startAddress[20] = (byte)(Count / 256);
-                    Array.Copy(numArray1, 0, startAddress, 21, (int)numArray1.Length);
-                    rc = base.SendSocket(startAddress, num1);
+                    Array.Copy(numArray1, 0, startAddress, 21, numArray1.Length);
+                    rc =SendSocket (startAddress, num1);
                     if (rc < 0) return false;
-                    rc = base.ReadSocket(ref numArray2, 9);
+                    rc = ReadSocket(ref numArray2, 9);
                     if (rc == 9)
                     {
                         int num2 = numArray2[7] + numArray2[8] * 256;
-                        rc = base.ReadSocket(ref numArray2, num2);
+                        rc = ReadSocket(ref numArray2, num2);
                         if (rc < 0) return false;
                         else
                         {
                             if ((numArray2[0] != 0 ? false : numArray2[1] == 0))
                             {
-                                ReadBit = this.PLCDataToBoolArr(numArray2, Count);
+                                ReadBit = PLCDataToBoolArr(numArray2, Count);
                                 flag = true;
                             }
                         }
@@ -141,11 +146,11 @@ namespace RsLib.McProtocol
             int rc = -1;
             try
             {
-                lock (this)
+                lock (_LockObj)
                 {
-                    if (this.m_enConState == ConState.Connected & this.IsWordDevice(device))
+                    if (m_enConState == ConState.Connected & IsWordDevice(device))
                     {
-                        this.WordReadIniFormat(ref startAddress);
+                        WordReadIniFormat(ref startAddress);
                         num = (byte)device;
                         startAddress[13] = 0;
                         startAddress[14] = 0;
@@ -154,20 +159,20 @@ namespace RsLib.McProtocol
                         startAddress[18] = num;
                         startAddress[19] = (byte)(Count % 256);
                         startAddress[20] = (byte)(Count / 256);
-                        Array.Copy(numArray1, 0, startAddress, 21, (int)numArray1.Length);
-                        rc = base.SendSocket(startAddress, num1);
+                        Array.Copy(numArray1, 0, startAddress, 21, numArray1.Length);
+                        rc = SendSocket(startAddress, num1);
                         if (rc < 0) return false;
-                        rc = base.ReadSocket(ref numArray2, 9);
+                        rc = ReadSocket(ref numArray2, 9);
                         if (rc == 9)
                         {
                             int num2 = numArray2[7] + numArray2[8] * 256;
-                            rc = base.ReadSocket(ref numArray2, num2);
+                            rc = ReadSocket(ref numArray2, num2);
                             if (rc < 0) return false;
                             else
                             {
                                 if ((numArray2[0] != 0 ? false : numArray2[1] == 0))
                                 {
-                                    ReadWord = this.PLCDataToNumArr(numArray2);
+                                    ReadWord = PLCDataToNumArr(numArray2);
                                     flag = true;
                                 }
                             }
@@ -179,8 +184,6 @@ namespace RsLib.McProtocol
             catch (Exception e)
             {
                 Log.Add($"{logger_ip} ReadWord exception", MsgLevel.Alarm, e);
-                //logger.ErrorException(logger_ip, e);
-                //Write_Log(e.Message, "ReadWord");
             }
             return flag;
         }
@@ -230,13 +233,13 @@ namespace RsLib.McProtocol
             int count = Count / 2 + Count % 2;
             byte[] startAddress = new byte[count + 21];
             int rc = -1;
-            lock (this)
+            lock (_LockObj)
             {
-                if (this.m_enConState == ConState.Connected & this.IsBitDevice(device))
+                if (m_enConState == ConState.Connected & IsBitDevice(device))
                 {
-                    this.WordWriteIniFormat(ref startAddress);
+                    WordWriteIniFormat(ref startAddress);
                     byte num = (byte)device;
-                    this.MakeSendByteArr(WriteBitAy, ref numArray, Count);
+                    MakeSendByteArr(WriteBitAy, ref numArray, Count);
                     startAddress[7] = (byte)((12 + count) % 256);
                     startAddress[8] = (byte)((12 + count) / 256);
                     startAddress[13] = 1;
@@ -246,14 +249,14 @@ namespace RsLib.McProtocol
                     startAddress[18] = num;
                     startAddress[19] = (byte)(Count % 256);
                     startAddress[20] = (byte)(Count / 256);
-                    Array.Copy(numArray, 0, startAddress, 21, (int)numArray.Length);
-                    rc = base.SendSocket(startAddress, count + 21);
+                    Array.Copy(numArray, 0, startAddress, 21, numArray.Length);
+                    rc = SendSocket(startAddress, count + 21);
                     if (rc < 0) return false;
-                    rc = base.ReadSocket(ref numArray1, 9);
+                    rc = ReadSocket(ref numArray1, 9);
                     if (rc == 9)
                     {
                         int num1 = numArray1[7] + numArray1[8] * 256;
-                        rc = base.ReadSocket(ref numArray1, num1);
+                        rc = ReadSocket(ref numArray1, num1);
                         if (rc < 0) return false;
                         else
                         {
@@ -275,11 +278,11 @@ namespace RsLib.McProtocol
             byte[] numArray1 = new byte[0];
             byte[] startAddress = new byte[22];
             int rc = -1;
-            lock (this)
+            lock (_LockObj)
             {
-                if (this.m_enConState == ConState.Connected & this.IsBitDevice(device))
+                if (m_enConState == ConState.Connected & IsBitDevice(device))
                 {
-                    this.WordWriteIniFormat(ref startAddress);
+                    WordWriteIniFormat(ref startAddress);
                     byte num = (byte)device;
                     startAddress[7] = 13;
                     startAddress[8] = 0;
@@ -291,13 +294,13 @@ namespace RsLib.McProtocol
                     startAddress[19] = 1;
                     startAddress[20] = 0;
                     startAddress[21] = (byte)(Convert.ToByte(WriteBit) * 16);
-                    rc = base.SendSocket(startAddress, 22);
+                    rc = SendSocket(startAddress, 22);
                     if (rc < 0) return false;
-                    rc = base.ReadSocket(ref numArray1, 9);
+                    rc = ReadSocket(ref numArray1, 9);
                     if (rc == 9)
                     {
                         int num1 = numArray1[7] + numArray1[8] * 256;
-                        rc = base.ReadSocket(ref numArray1, num1);
+                        rc = ReadSocket(ref numArray1, num1);
                         if (rc < 0) return false;
                         else
                         {
@@ -320,13 +323,13 @@ namespace RsLib.McProtocol
             int count = 21 + Count * 2;
             byte[] startAddress = new byte[count];
             int rc = -1;
-            lock (this)
+            lock (_LockObj)
             {
-                if (this.m_enConState == ConState.Connected & this.IsWordDevice(device))
+                if (m_enConState == ConState.Connected & IsWordDevice(device))
                 {
-                    this.WordWriteIniFormat(ref startAddress);
+                    WordWriteIniFormat(ref startAddress);
                     byte num = (byte)device;
-                    this.MakeSendByteArr(aWriteWord, ref numArray, Count);
+                    MakeSendByteArr(aWriteWord, ref numArray, Count);
                     startAddress[7] = (byte)((12 + Count * 2) % 256);
                     startAddress[8] = (byte)((12 + Count * 2) / 256);
                     startAddress[13] = 0;
@@ -336,14 +339,14 @@ namespace RsLib.McProtocol
                     startAddress[18] = num;
                     startAddress[19] = (byte)(Count % 256);
                     startAddress[20] = (byte)(Count / 256);
-                    Array.Copy(numArray, 0, startAddress, 21, (int)numArray.Length);
-                    rc = base.SendSocket(startAddress, count);
+                    Array.Copy(numArray, 0, startAddress, 21, numArray.Length);
+                    rc = SendSocket(startAddress, count);
                     if (rc < 0) return false;
-                    rc = base.ReadSocket(ref numArray1, 9);
+                    rc = ReadSocket(ref numArray1, 9);
                     if (rc == 9)
                     {
                         int num1 = numArray1[7] + numArray1[8] * 256;
-                        rc = base.ReadSocket(ref numArray1, num1);
+                        rc = ReadSocket(ref numArray1, num1);
                         if (rc < 0) return false;
                         else
                         {
@@ -364,11 +367,11 @@ namespace RsLib.McProtocol
             byte[] numArray = new byte[0];
             byte[] startAddress = new byte[23];
             int rc = -1;
-            lock (this)
+            lock (_LockObj)
             {
-                if (this.m_enConState == ConState.Connected & this.IsWordDevice(device))
+                if (m_enConState == ConState.Connected & IsWordDevice(device))
                 {
-                    this.WordWriteIniFormat(ref startAddress);
+                    WordWriteIniFormat(ref startAddress);
                     byte num = (byte)device;
                     startAddress[7] = 14;
                     startAddress[8] = 0;
@@ -381,13 +384,13 @@ namespace RsLib.McProtocol
                     startAddress[20] = 0;
                     startAddress[21] = (byte)(WriteWord % 256);
                     startAddress[22] = (byte)(WriteWord / 256);
-                    rc = base.SendSocket(startAddress, 23);
+                    rc = SendSocket(startAddress, 23);
                     if (rc < 0) return false;
-                    rc = base.ReadSocket(ref numArray, 9);
+                    rc = ReadSocket(ref numArray, 9);
                     if (rc == 9)
                     {
                         int num1 = numArray[7] + numArray[8] * 256;
-                        rc = base.ReadSocket(ref numArray, num1);
+                        rc = ReadSocket(ref numArray, num1);
                         if (rc < 0) return false;
                         else
                         {

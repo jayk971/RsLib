@@ -27,13 +27,8 @@ namespace RsLib.McProtocol
         bool tdt_busy = false;
         //bool isPLCAlarm = false;
         public event Action PLCAlarm;
-        public string ConnectStatus
-        {
-            get
-            {
-                return this.m_enConState.ToString();
-            }
-        }
+        public string ConnectStatus => m_enConState.ToString();
+
         public CTCPIP()
         {
         }
@@ -42,17 +37,18 @@ namespace RsLib.McProtocol
             bool flag;
             try
             {
-                this.m_enConState = ConState.Opening;
-                this.m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this.m_ClientSocket.Connect(IPAddress.Parse(this.m_sIPAddress), this.m_iPortNum);
+                m_enConState = ConState.Opening;
+                m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                m_ClientSocket.Connect(IPAddress.Parse(m_sIPAddress), m_iPortNum);
                 flag = true;
             }
             catch (Exception e)
             {
-                Log.Add($"PLC connect exception {logger_ip}", MsgLevel.Alarm, e);
-                this.m_ClientSocket = null;
+                m_ClientSocket = null;
                 SpinWait.SpinUntil(() => false, 500);
                 flag = false;
+
+                Log.Add($"PLC connect exception {logger_ip}", MsgLevel.Alarm, e);
                 PLCAlarm?.Invoke();
             }
             return flag;
@@ -61,14 +57,14 @@ namespace RsLib.McProtocol
         {
             try
             {
-                this.m_ClientSocket.Shutdown(SocketShutdown.Both);
-                this.m_ClientSocket.Close();
+                m_ClientSocket.Shutdown(SocketShutdown.Both);
+                m_ClientSocket.Close();
                 Log.Add($"PLC {logger_ip} - Connection is already closed", MsgLevel.Trace);
                 SpinWait.SpinUntil(() => false, 100);
-                if (!this.m_bPassive)
-                    this.m_enConState = ConState.Opening;
+                if (!m_bPassive)
+                    m_enConState = ConState.Opening;
                 else
-                    this.m_enConState = ConState.listen;
+                    m_enConState = ConState.listen;
             }
             catch (Exception e)
             {
@@ -80,15 +76,16 @@ namespace RsLib.McProtocol
         protected bool IsConnect(int PortNO)
         {
             bool flag = false;
-            this.properties = IPGlobalProperties.GetIPGlobalProperties();
-            this.connections = this.properties.GetActiveTcpConnections();
-            if ((int)this.connections.Length > 0)
+            properties = IPGlobalProperties.GetIPGlobalProperties();
+            connections = properties.GetActiveTcpConnections();
+            if (connections.Length > 0)
             {
-                TcpConnectionInformation[] tcpConnectionInformationArray = this.connections;
-                for (int i = 0; i < (int)tcpConnectionInformationArray.Length; i++)
+                TcpConnectionInformation[] tcpConnectionInformationArray = connections;
+                for (int i = 0; i < tcpConnectionInformationArray.Length; i++)
                 {
                     TcpConnectionInformation tcpConnectionInformation = tcpConnectionInformationArray[i];
-                    if (tcpConnectionInformation.State == TcpState.Established & tcpConnectionInformation.RemoteEndPoint.Port == PortNO)
+                    if (tcpConnectionInformation.State == TcpState.Established & 
+                        tcpConnectionInformation.RemoteEndPoint.Port == PortNO)
                     {
                         flag = true;
                     }
@@ -100,27 +97,24 @@ namespace RsLib.McProtocol
         {
             int num = -1;
             byte[] numArray = new byte[1941];
-            if (this.m_enConState == ConState.Connected)
+            if (m_enConState == ConState.Connected)
             {
                 try
                 {
-                    num = this.m_ClientSocket.Receive(numArray);
+                    num = m_ClientSocket.Receive(numArray);
                     Buffer = new byte[num];
                     Array.Copy(numArray, Buffer, num);
                     if (num == 0)
                     {
                         num = -1;
                         Log.Add($"PLC {logger_ip} - Close socket", MsgLevel.Trace);
-                        if (this.m_ClientSocket != null)
-                            this.CloseSocket();
-
-                        Log.Add($"PLC {logger_ip} - Socket is already closed", MsgLevel.Trace);
+                        if (m_ClientSocket != null)  CloseSocket();
                     }
                 }
                 catch (Exception e)
                 {
-                    Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     num = -1;
+                    Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     PLCAlarm?.Invoke();
                 }
             }
@@ -138,26 +132,26 @@ namespace RsLib.McProtocol
             {
                 try
                 {
-                    num2 = this.m_ClientSocket.Receive(numArray, num3, SocketFlags.None);
+                    num2 = m_ClientSocket.Receive(numArray, num3, SocketFlags.None);
                     if (num2 > 0)
                     {
                         Array.Copy(numArray, 0, Buffer, num1, num2);
-                        num1 = num1 + num2;
+                        num1 += num2;
                         num3 = iReqLen - num1;
                     }
                     else if (num2 == 0)
                     {
                         num1 = -1;
-                        this.CloseSocket();
+                        CloseSocket();
                         num = num1;
                         return num;
                     }
                 }
                 catch (Exception e)
                 {
-                    Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     num1 = -1;
-                    isPLCAlarm = true;
+                    Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
+                    PLCAlarm?.Invoke();
                     break;
                 }
             }
@@ -170,12 +164,13 @@ namespace RsLib.McProtocol
             int num = 0;
             try
             {
-                num = this.m_ClientSocket.Send(SendByte, size, SocketFlags.None);
+                num = m_ClientSocket.Send(SendByte, size, SocketFlags.None);
             }
             catch (Exception e)
             {
-                Log.Add($"{logger_ip} send socket exception.", MsgLevel.Alarm, e);
                 num = -1;
+                Log.Add($"{logger_ip} send socket exception.", MsgLevel.Alarm, e);
+                PLCAlarm?.Invoke();
             }
             return num;
         }
@@ -184,17 +179,17 @@ namespace RsLib.McProtocol
             bool flag;
             try
             {
-                this.m_ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this.m_ServerSocket.Bind(new IPEndPoint(IPAddress.Parse(this.m_sIPAddress), this.m_iPortNum));
-                this.m_ServerSocket.Listen(10);
+                m_ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                m_ServerSocket.Bind(new IPEndPoint(IPAddress.Parse(m_sIPAddress), m_iPortNum));
+                m_ServerSocket.Listen(10);
                 flag = true;
             }
             catch (Exception e)
             {
-                Log.Add($"{logger_ip} server listen exception.", MsgLevel.Alarm, e);
-
-                this.m_ServerSocket = null;
+                m_ServerSocket = null;
                 flag = false;
+                Log.Add($"{logger_ip} server listen exception.", MsgLevel.Alarm, e);
+                PLCAlarm?.Invoke();
             }
             return flag;
         }
@@ -202,13 +197,14 @@ namespace RsLib.McProtocol
         {
             try
             {
-                this.m_enConState = ConState.Opening;
-                this.m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this.m_ClientSocket.Connect(IPAddress.Parse(this.m_sIPAddress), this.m_iPortNum);
+                m_enConState = ConState.Opening;
+                m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                m_ClientSocket.Connect(IPAddress.Parse(m_sIPAddress), m_iPortNum);
             }
             catch (Exception e)
             {
                 Log.Add($"{logger_ip} test plc exception.", MsgLevel.Alarm, e);
+                PLCAlarm?.Invoke();
             }
             finally
             {
@@ -222,30 +218,28 @@ namespace RsLib.McProtocol
                 if (!tdt_busy)
                 {
                     tdt_busy = true;
-                    if (!this.m_bPassive)
+                    if (!m_bPassive)
                     {
-                        if (this.m_enConState != ConState.Connected)
+                        if (m_enConState != ConState.Connected)
                         {
-                            if (!this.ClientConnect())
+                            if (!ClientConnect())
                             {
                                 Log.Add($"PLC {logger_ip} disconnected", MsgLevel.Trace);
-                                this.m_enConState = ConState.Opening;
+                                m_enConState = ConState.Opening;
                             }
                             else
                             {
                                 Log.Add($"PLC {logger_ip} already connected", MsgLevel.Trace);
-                                this.m_enConState = ConState.Connected;
+                                m_enConState = ConState.Connected;
                             }
                         }
                     }
-                    if (this.m_enConState == ConState.Connected)
+                    if (m_enConState == ConState.Connected)
                     {
-                        if (!this.IsConnect(this.m_iPortNum))
+                        if (!IsConnect(this.m_iPortNum))
                         {
                             Log.Add($"PLC {logger_ip} - Close Socket", MsgLevel.Trace);
-                            if (this.m_ClientSocket != null) //確認 Socket 是有被宣告的
-                                this.CloseSocket();
-                            Log.Add($"PLC {logger_ip} - Socket is already closed", MsgLevel.Trace);
+                            if (m_ClientSocket != null) CloseSocket();//確認 Socket 是有被宣告的
                         }
                     }
                 }
@@ -253,6 +247,7 @@ namespace RsLib.McProtocol
             catch (Exception e)
             {
                 Log.Add($"PLC {logger_ip} check plc exception.", MsgLevel.Alarm, e);
+                PLCAlarm?.Invoke();
             }
             finally
             {
@@ -263,19 +258,19 @@ namespace RsLib.McProtocol
         {
             try
             {
-                //Initial_Log(); //初始化 Log File 檔案位置
                 logger_ip = IPAddress;
-                this.m_sIPAddress = IPAddress;
-                this.m_iPortNum = Port;
-                this.m_bPassive = false;
+                m_sIPAddress = IPAddress;
+                m_iPortNum = Port;
+                m_bPassive = false;
                 CTCPIP cTCPIP = this;
-                tdt_PLC_Connect = new ThreadingTimer(new System.Threading.TimerCallback(Check_PLC), null, 0, 5000);
+                tdt_PLC_Connect = new ThreadingTimer(new TimerCallback(Check_PLC), null, 0, 5000);
                 Log.Add($"{logger_ip} -Connect to plc", MsgLevel.Info);
                 SpinWait.SpinUntil(() => false, 100);
             }
             catch (Exception e)
             {
                 Log.Add($"{logger_ip} plc connect exception.", MsgLevel.Alarm, e);
+                PLCAlarm?.Invoke();
             }
         }
     }
