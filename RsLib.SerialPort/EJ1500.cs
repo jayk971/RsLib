@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO.Ports;
+﻿using RsLib.Common;
 using RsLib.LogMgr;
-using System.Threading;
-using System.IO;
-using YamlDotNet.Serialization;
-using RsLib.Common;
+using System;
 using System.ComponentModel;
+using System.IO;
+using System.IO.Ports;
+using System.Text;
+using System.Threading;
+using YamlDotNet.Serialization;
 namespace RsLib.SerialPortLib
 {
     public class EJ1500
     {
-        public event Action<int,double> WeightMeasured;
+        public event Action<int, double> WeightMeasured;
         public event Action<bool> Connected;
         RS232 _rs232;
-        public EJ1500Setting Setting { get;private set; } = new EJ1500Setting();
+        public EJ1500Setting Setting { get; private set; } = new EJ1500Setting();
         public bool IsConnected
         {
             get
@@ -71,15 +69,15 @@ namespace RsLib.SerialPortLib
         {
             //"ST,+000105.2  g\r""
 
-            if(obj.Contains("ST,"))
+            if (obj.Contains("ST,"))
             {
                 string[] split1 = obj.Split(',');
-                if(split1.Length == 2)
+                if (split1.Length == 2)
                 {
                     string[] split2 = split1[1].Split(' ');
                     string str_weight = split2[0];
                     double weight = 0;
-                    if(double.TryParse(str_weight,out weight))
+                    if (double.TryParse(str_weight, out weight))
                     {
                         _stableCount++;
                         _weightSum += weight;
@@ -87,8 +85,8 @@ namespace RsLib.SerialPortLib
 
                         if (_stableCount >= StableTime)
                         {
-                            double avgWeight = Math.Round(_weightSum / (double)StableTime,1);
-                            WeightMeasured?.Invoke(Setting.Index,avgWeight);
+                            double avgWeight = Math.Round(_weightSum / (double)StableTime, 1);
+                            WeightMeasured?.Invoke(Setting.Index, avgWeight);
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;
@@ -116,7 +114,7 @@ namespace RsLib.SerialPortLib
 
             _rs232.Start();
             Connected?.Invoke(IsConnected);
-            if(IsConnected)
+            if (IsConnected)
                 Log.Add($"EJ1500 {Setting.Index} is connected.", MsgLevel.Info);
             else
                 Log.Add($"EJ1500 {Setting.Index} cannot connect.", MsgLevel.Alarm);
@@ -173,7 +171,7 @@ namespace RsLib.SerialPortLib
         [Category("Setting")]
         [DisplayName("Parity")]
         public Parity ParityOption { get; set; } = Parity.None;
-        
+
         [Category("Setting")]
         [DisplayName("Data Bits")]
         public int DataBits { get; set; } = 8;

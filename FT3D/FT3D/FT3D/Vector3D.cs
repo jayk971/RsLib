@@ -1,12 +1,11 @@
 ﻿
+using Accord.Math;
 using System;
 using System.Collections.Generic;
-
-using Accord.Math;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Vector3D:Object3D
+    public partial class Vector3D : Object3D
     {
         public readonly static Vector3D XAxis = new Vector3D(1, 0, 0);
         public readonly static Vector3D YAxis = new Vector3D(0, 1, 0);
@@ -19,7 +18,7 @@ namespace RsLib.PointCloud
         public double Y = 0.0;
         public double Z = 0.0;
 
-        public double L{ get => V.Norm;}
+        public double L { get => V.Norm; }
 
 
         public double R = 0;
@@ -215,7 +214,7 @@ namespace RsLib.PointCloud
         /// 向量內積
         /// </summary>
         public static double Dot(Vector3D A, Vector3D B) => Vector3.Dot(A.V, B.V);
-        public static double Dot(Vector3 A, Vector3D B) =>Vector3.Dot(A, B.V);
+        public static double Dot(Vector3 A, Vector3D B) => Vector3.Dot(A, B.V);
         public static double Dot(Vector3 A, Vector3 B) => Vector3.Dot(A, B);
         public static double Dot(Vector3D A, Vector3 B) => Vector3.Dot(A.V, B);
 

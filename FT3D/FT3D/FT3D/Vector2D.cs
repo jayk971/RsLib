@@ -3,13 +3,13 @@ using System.ComponentModel;
 
 namespace RsLib.PointCloud
 {
-    public partial class Vector2D:Object3D
+    public partial class Vector2D : Object3D
     {
         [DefaultValue(0.0)]
         public double X { get; set; } = 0.0;
         [DefaultValue(0.0)]
         public double Y { get; set; } = 0.0;
-        public override uint DataCount =>1;
+        public override uint DataCount => 1;
 
         public double L
         {

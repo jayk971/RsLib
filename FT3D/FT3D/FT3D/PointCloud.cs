@@ -1,18 +1,18 @@
 ﻿using Accord.Collections;
+using Accord.Math;
+using RsLib.Common;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
-using RsLib.Common;
-using Accord.Math;
 namespace RsLib.PointCloud
 {
 
     [Serializable]
-    public partial class PointCloud:Object3D,IEnumerable<Point3D>
+    public partial class PointCloud : Object3D, IEnumerable<Point3D>
     {
         #region Main Property
         public List<Point3D> Points = new List<Point3D>();
@@ -44,11 +44,11 @@ namespace RsLib.PointCloud
         public PointCloud()
         {
         }
-        public PointCloud(double[] x,double[] y,double[] z)
+        public PointCloud(double[] x, double[] y, double[] z)
         {
-            if(x.Length == y.Length && x.Length == z.Length)
+            if (x.Length == y.Length && x.Length == z.Length)
             {
-                for(int i = 0; i < x.Length;i++)
+                for (int i = 0; i < x.Length; i++)
                 {
                     Point3D p = new Point3D(x[i], y[i], z[i]);
                     Points.Add(p);
@@ -183,13 +183,13 @@ namespace RsLib.PointCloud
         public PointCloud Multiply(Matrix4x4 matrix)
         {
             PointCloud output = new PointCloud();
-            for(int i = 0; i < Points.Count;i++)
+            for (int i = 0; i < Points.Count; i++)
             {
                 Type type = Points[i].GetType();
-                if(type == typeof(Point3D))
+                if (type == typeof(Point3D))
                 {
                     Point3D pt = Points[i];
-                    Point3D p = Point3D.Multiply(pt,matrix);
+                    Point3D p = Point3D.Multiply(pt, matrix);
                     output.Add(p);
 
                 }
@@ -227,7 +227,7 @@ namespace RsLib.PointCloud
             }
             return output;
         }
-        
+
         public List<Point3D> GetYValuesMin2Max()
         {
             List<Point3D> SortedY = Points.OrderBy(T => T.Y).ToList();
@@ -300,7 +300,7 @@ namespace RsLib.PointCloud
         {
             if (Points.Count == 0) return;
 
-            if(IsKdTreeBuilded == false)  BuildIndexKDtree();
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
             for (int i = 0; i < Points.Count; i++)
             {
                 PointCloud temp = m_Func.GetNearestPointCloud(kdTree, Points[i], Radius);
@@ -1490,7 +1490,7 @@ namespace RsLib.PointCloud
                 }
             }
             Dictionary<int, Point3D> Sorted = Orig.OrderBy(t => t.Key).ToDictionary(t => t.Key, tt => tt.Value);
-            
+
             Points.Clear();
             Points = Sorted.Values.ToList();
         }
@@ -1742,10 +1742,10 @@ namespace RsLib.PointCloud
                 this.Add(Clouds.Layers[i]);
             }
         }
-        public void Add(double x,double y,double z, bool IsAddKdTree = false)
+        public void Add(double x, double y, double z, bool IsAddKdTree = false)
         {
-            Points.Add(new Point3D(x,y,z));
-            if (IsAddKdTree) kdTree.Add(new double[] { x, y, z}, Points.Count - 1);
+            Points.Add(new Point3D(x, y, z));
+            if (IsAddKdTree) kdTree.Add(new double[] { x, y, z }, Points.Count - 1);
         }
         public void Add(Point3D point, bool IsAddKdTree = false)
         {
@@ -1878,7 +1878,7 @@ namespace RsLib.PointCloud
         }
         public Point3D FindClosePoint(PointCloud Target, out int TargetIndex)
         {
-            if(IsKdTreeBuilded == false) BuildIndexKDtree();
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
             double minDis = double.MaxValue;
             Point3D MinPoint = new Point3D();
             TargetIndex = -1;
@@ -1897,7 +1897,7 @@ namespace RsLib.PointCloud
         }
         public int FindClosePointIndex(PointCloud Target)
         {
-            if(IsKdTreeBuilded == false) BuildIndexKDtree();
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
             double minDis = double.MaxValue;
             int MinPointIndex = -1;
             for (int i = 0; i < Target.Count; i++)
@@ -1912,7 +1912,7 @@ namespace RsLib.PointCloud
             }
             return MinPointIndex;
         }
-        public int FindClosePointIndex(PointCloud Target,double radius)
+        public int FindClosePointIndex(PointCloud Target, double radius)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             double minDis = double.MaxValue;
@@ -1932,7 +1932,7 @@ namespace RsLib.PointCloud
         public int FindClosePointIndex(Point3D Target, double radius)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
-            return m_Func.GetInRadiusPoint(kdTree, Target,radius);
+            return m_Func.GetInRadiusPoint(kdTree, Target, radius);
         }
 
         public Accord.Collections.KDTree<int> GetIndexKDtree(bool MakeZequal0 = false)
@@ -2457,7 +2457,7 @@ namespace RsLib.PointCloud
                             kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                             i++;
                         }
-                        else if(SplitData.Length == 6)
+                        else if (SplitData.Length == 6)
                         {
                             double x = 0;
                             double y = 0;
@@ -2672,7 +2672,7 @@ namespace RsLib.PointCloud
                 sw.Close();
             }
         }
-        public void Save(string FilePath,bool WritePointTag,bool WritePointFlag,bool WritePointDt)
+        public void Save(string FilePath, bool WritePointTag, bool WritePointFlag, bool WritePointDt)
         {
 
             using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
@@ -3191,7 +3191,7 @@ namespace RsLib.PointCloud
         }
         public Point3D GetNearest(Point3D refP)
         {
-            if(IsKdTreeBuilded == false)   BuildIndexKDtree();
+            if (IsKdTreeBuilded == false) BuildIndexKDtree();
             PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP, 1);
             if (tree.Count == 1)
             {
@@ -3199,10 +3199,10 @@ namespace RsLib.PointCloud
             }
             else return null;
         }
-        public PointCloud GetNearestCloud(Point3D refP,double radius)
+        public PointCloud GetNearestCloud(Point3D refP, double radius)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
-            PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP,radius);
+            PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP, radius);
 
             return tree;
         }
@@ -3210,7 +3210,7 @@ namespace RsLib.PointCloud
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             List<int> output = new List<int>();
-            m_Func.GetNearestPointCloud(kdTree, refP, radius,out output);
+            m_Func.GetNearestPointCloud(kdTree, refP, radius, out output);
 
             return output;
         }
@@ -3344,7 +3344,7 @@ namespace RsLib.PointCloud
         }
         public Point3D FindPoint3DByTag(int tag)
         {
-            for(int i = 0; i < Points.Count; i++)
+            for (int i = 0; i < Points.Count; i++)
             {
                 int tmpTag = Points[i].tag;
                 if (tmpTag == tag) return Points[i];

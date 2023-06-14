@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RsLib.PointCloud
@@ -39,7 +34,7 @@ namespace RsLib.PointCloud
         /// <summary>
         /// After x, y or z value changed
         /// </summary>
-        public event Action<CoordinateType,double, double, double> ValueChanged;
+        public event Action<CoordinateType, double, double, double> ValueChanged;
         bool handled = false;
         public Point3DControl(string name)
         {
@@ -50,7 +45,7 @@ namespace RsLib.PointCloud
             else lbl_PointName.Text = name;
         }
 
-        public void SetXYZ(double x,double y,double z,int digit = 2)
+        public void SetXYZ(double x, double y, double z, int digit = 2)
         {
             p = new Point3D(x, y, z);
             updateBox(digit);
@@ -79,17 +74,17 @@ namespace RsLib.PointCloud
             bool parseOK = double.TryParse(box.Text, out tmpValue);
             if (parseOK)
             {
-                if(e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Enter)
                 {
                     p.X = tmpValue;
                     box.ForeColor = Color.Black;
-                    if(ValueChanged != null) ValueChanged(CoordinateType.X,X, Y, Z);
+                    if (ValueChanged != null) ValueChanged(CoordinateType.X, X, Y, Z);
                 }
                 else
                 {
-                    if(!handled)
+                    if (!handled)
                     {
-                        if(p.X == tmpValue) box.ForeColor = Color.Black;
+                        if (p.X == tmpValue) box.ForeColor = Color.Black;
                         else box.ForeColor = Color.Red;
                     }
                 }
@@ -111,7 +106,7 @@ namespace RsLib.PointCloud
                 {
                     p.Y = tmpValue;
                     box.ForeColor = Color.Black;
-                    if (ValueChanged != null) ValueChanged(CoordinateType.Y,X, Y, Z);
+                    if (ValueChanged != null) ValueChanged(CoordinateType.Y, X, Y, Z);
 
                 }
                 else
@@ -140,7 +135,7 @@ namespace RsLib.PointCloud
                 {
                     p.Z = tmpValue;
                     box.ForeColor = Color.Black;
-                    if (ValueChanged != null) ValueChanged(CoordinateType.Z,X, Y, Z);
+                    if (ValueChanged != null) ValueChanged(CoordinateType.Z, X, Y, Z);
 
                 }
                 else
@@ -160,7 +155,7 @@ namespace RsLib.PointCloud
         }
         private void tbx_X_KeyPress(object sender, KeyPressEventArgs e)
         {
-            handled  = RsLib.Common.FT_Functions.double_Positive_Negative_KeyPress(e.KeyChar);
+            handled = RsLib.Common.FT_Functions.double_Positive_Negative_KeyPress(e.KeyChar);
             e.Handled = handled;
         }
         private void tbx_Y_KeyPress(object sender, KeyPressEventArgs e)

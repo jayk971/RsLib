@@ -1,7 +1,6 @@
 ﻿using System;
 
 using System.ComponentModel;
-using Accord.Math.Geometry;
 namespace RsLib.PointCloud
 {
     [Serializable]
@@ -49,7 +48,7 @@ namespace RsLib.PointCloud
             this.Y = startPoint.Y;
             this.Z = startPoint.Z;
 
-            Direction = new Vector3D( startPoint,endPoint);
+            Direction = new Vector3D(startPoint, endPoint);
             Length = Direction.L;
         }
         public Point3D Intersect2DLine(Line line2D)
@@ -62,7 +61,7 @@ namespace RsLib.PointCloud
             Accord.Math.Geometry.Line line1 = Accord.Math.Geometry.Line.FromPoints(l1p1, l1p2);
             Accord.Math.Geometry.Line line2 = Accord.Math.Geometry.Line.FromPoints(l2p1, l2p2);
 
-            Accord.Point? intersectP =  line1.GetIntersectionWith(line2);
+            Accord.Point? intersectP = line1.GetIntersectionWith(line2);
             if (intersectP.HasValue)
             {
                 return new Point3D(intersectP.Value.X, intersectP.Value.Y, 0.0);

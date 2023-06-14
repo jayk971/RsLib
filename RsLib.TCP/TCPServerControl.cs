@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using RsLib.TCP.Server;
+using System;
 using System.Windows.Forms;
-
-using RsLib.TCP.Server;
 namespace RsLib.TCP.Control
 {
     public partial class TCPServerControl : UserControl
@@ -71,7 +64,7 @@ namespace RsLib.TCP.Control
         private void timer1_Tick(object sender, EventArgs e)
         {
             toolStripProgressBar1.Style = _server.IsRun ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
-            toolStripProgressBar1.Value = _server.IsRun? 100 : 0;
+            toolStripProgressBar1.Value = _server.IsRun ? 100 : 0;
             lbl_ClientCount.Text = _server.ClientCount.ToString();
 
             btn_ServerStop.Enabled = _server.IsRun;

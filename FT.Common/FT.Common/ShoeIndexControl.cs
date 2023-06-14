@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RsLib.Common
@@ -15,7 +11,7 @@ namespace RsLib.Common
         public event Action<ShoeSizeIndex> ShoeSizeChanged;
 
         bool needRL = true;
-        public bool NeedRL 
+        public bool NeedRL
         {
             get => needRL;
             set
@@ -77,7 +73,7 @@ namespace RsLib.Common
                 {
                     RadioButton rb = (RadioButton)c;
                     string sizeString = rb.Name.Remove(0, 3);
-                    if(sizeString == shoeSize.ToString())
+                    if (sizeString == shoeSize.ToString())
                     {
                         rb.Checked = true;
                         break;
@@ -85,7 +81,7 @@ namespace RsLib.Common
                 }
             }
         }
-    
+
         bool FindSize()
         {
             foreach (Control c in tlp_Size.Controls)
@@ -115,7 +111,7 @@ namespace RsLib.Common
                                 return false;
                             }
                         }
-                    }                   
+                    }
                 }
             }
             return false;

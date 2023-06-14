@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using RsLib.BaseType;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using RsLib.BaseType;
 namespace RsLib.LogMgr
 {
     public partial class LogControl : UserControl
@@ -21,8 +15,8 @@ namespace RsLib.LogMgr
             InitializeComponent();
             Log.UiUpdated += Log_UiUpdated;
             cmb_LevelFilter.Items.Clear();
-            string[] levels= Enum.GetNames(typeof(MsgLevel));
-            for(int i = 0; i < levels.Length;i++)
+            string[] levels = Enum.GetNames(typeof(MsgLevel));
+            for (int i = 0; i < levels.Length; i++)
             {
                 cmb_LevelFilter.Items.Add(levels[i]);
             }
@@ -45,7 +39,7 @@ namespace RsLib.LogMgr
         {
             if (logQ.Count >= 100)
             {
-                for(int i = 0; i < 75;i++)
+                for (int i = 0; i < 75; i++)
                 {
                     logQ.Dequeue();
                 }
@@ -106,7 +100,7 @@ namespace RsLib.LogMgr
                 {
                     LogMsg[] lines = logQ.ToArray();
                     if (cmb_LevelFilter == null) return;
-                    
+
                     int levelFilterIndex = cmb_LevelFilter.SelectedIndex;
 
                     if (!clearAll)
@@ -139,7 +133,7 @@ namespace RsLib.LogMgr
                     if (rtbx_Log == null) return;
                     rtbx_Log.ScrollToCaret();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.m_Log.Error(ex.Message);
                     Log.m_FatalLog.Fatal(ex);
@@ -155,7 +149,7 @@ namespace RsLib.LogMgr
             rtbx_Log.SelectionLength = rtbx_Log.Text.Length - textLength;
             if (msg.EnableSpecialColor)
             {
-                rtbx_Log.SelectionBackColor = msg.BackColor ;
+                rtbx_Log.SelectionBackColor = msg.BackColor;
                 rtbx_Log.SelectionColor = msg.ForeColor;
             }
             else
@@ -184,7 +178,7 @@ namespace RsLib.LogMgr
         }
         void renderRichTexyBox(string msg, MsgLevel level)
         {
-            int textLength =  rtbx_Log.Text.Length;
+            int textLength = rtbx_Log.Text.Length;
             rtbx_Log.AppendText(msg);
             rtbx_Log.SelectionStart = textLength;
             rtbx_Log.SelectionLength = rtbx_Log.Text.Length - textLength;

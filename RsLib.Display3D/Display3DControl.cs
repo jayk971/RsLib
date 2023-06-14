@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Forms;
-using OpenTK;
-using OpenTK.Graphics;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
-
-using RsLib.PointCloud;
 using RsLib.Display3D.Properties;
+using RsLib.PointCloud;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 namespace RsLib.Display3D
 {
     using RPointCloud = RsLib.PointCloud.PointCloud;
@@ -37,8 +28,8 @@ namespace RsLib.Display3D
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
-            _maxDisplayList = listNum +1;
-            
+            _maxDisplayList = listNum + 1;
+
             _glControl = new GLControl();
             _glControl.Load += GlControl_Load;
             _glControl.Paint += GlControl_Paint;
@@ -270,7 +261,7 @@ namespace RsLib.Display3D
             int r = e.RowIndex;
             if (r == -1 || c == -1) return;
             int id = (int)dataGridView1.Rows[r].Cells[_idIndex].Value;
-            
+
             if (c == _visibleIndex)
                 dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
 
@@ -299,17 +290,17 @@ namespace RsLib.Display3D
             if (c == _visibleIndex)
             {
                 bool isCheck = (bool)dataGridView1.Rows[r].Cells[_visibleIndex].Value;
-                if(_displayOption.ContainsKey(id))
+                if (_displayOption.ContainsKey(id))
                 {
                     bool oldCheck = _displayOption[id].IsDisplay;
-                    if(oldCheck != isCheck)
+                    if (oldCheck != isCheck)
                     {
                         _displayOption[id].IsDisplay = isCheck;
                     }
                 }
 
             }
-            else if(c == _sizeIndex)
+            else if (c == _sizeIndex)
             {
                 if (_displayOption.ContainsKey(id))
                 {
@@ -338,7 +329,7 @@ namespace RsLib.Display3D
                         Color selectColor = cd.Color;
                         Color oldColor = _displayOption[id].DrawColor;
 
-                        if(selectColor != oldColor)
+                        if (selectColor != oldColor)
                         {
                             _displayOption[id].DrawColor = selectColor;
                             ReBuild_ChangeColorSize(id);
@@ -374,7 +365,7 @@ namespace RsLib.Display3D
                             btn.FlatStyle = FlatStyle.Flat;
                             btn.Style.BackColor = option.DrawColor;
 
-                            if(option.IsSelectable == false)
+                            if (option.IsSelectable == false)
                             {
                                 dataGridView1.Rows[currentIndex].DefaultCellStyle.BackColor = Color.Gray;
                             }
@@ -501,7 +492,7 @@ namespace RsLib.Display3D
             using (SaveFileDialog sf = new SaveFileDialog())
             {
                 sf.Filter = "XYZ point cloud|*.xyz";
-                if(sf.ShowDialog() == DialogResult.OK)
+                if (sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
                     if (objectType == typeof(Point3D))
@@ -523,13 +514,13 @@ namespace RsLib.Display3D
                 }
             }
 
-            
+
 
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(_GLUpdateDone)
+            if (_GLUpdateDone)
                 _glControl.Invalidate();
             GC.Collect();
         }

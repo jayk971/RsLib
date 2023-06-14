@@ -1,9 +1,9 @@
-﻿using System;
+﻿using RsLib.LogMgr;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Text;
 using System.Threading;
-using RsLib.LogMgr;
 namespace RsLib.MMF
 {
     public class MMFServer
@@ -136,7 +136,7 @@ namespace RsLib.MMF
                 }//end while
                 Log.Add("MMF server thread stopped.", MsgLevel.Info);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Add("MMF server exception", MsgLevel.Alarm, ex);
             }

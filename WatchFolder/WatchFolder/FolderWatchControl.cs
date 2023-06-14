@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using RsLib.Common;
 using RsLib.LogMgr;
-using RsLib.Common;
+using System;
 using System.Threading;
+using System.Windows.Forms;
 namespace RsLib.WatchFolder
 {
     public partial class FolderWatchControl : UserControl
@@ -40,7 +34,7 @@ namespace RsLib.WatchFolder
             watcher = new Watcher();
             if (cfgName != "")
             {
-                watcher.CfgName  = cfgName;
+                watcher.CfgName = cfgName;
             }
             if (!watcher.Init())
             {
@@ -63,7 +57,7 @@ namespace RsLib.WatchFolder
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
                 fbd.SelectedPath = "d:\\";
-                if(fbd.ShowDialog() == DialogResult.OK)
+                if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     watcher.Folder = fbd.SelectedPath;
                     lbl_WatchedFolder.Text = fbd.SelectedPath;
@@ -146,7 +140,7 @@ namespace RsLib.WatchFolder
                         int isTimeout = FT_Functions.IsTimeOut(watcher.TimeOutMs,
                             () => FT_Functions.IsFileLocked(filePath),
                             false);
-                        if (isTimeout <=-2) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warn);
+                        if (isTimeout <= -2) Log.Add($"{filePath} unlock time out. > {watcher.TimeOutMs} ms", MsgLevel.Warn);
                         watcher.DetectFile.Dequeue();
                         FileUpdated?.Invoke(filePath);
                     }
@@ -161,8 +155,8 @@ namespace RsLib.WatchFolder
                     break;
                 }
                 SpinWait.SpinUntil(() => false, 500);
-                }
-            
+            }
+
             isTdRunning = false;
             Log.Add("Watch folder td was stopped.", MsgLevel.Trace);
 
@@ -201,7 +195,7 @@ namespace RsLib.WatchFolder
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(isTdRunning)
+            if (isTdRunning)
             {
                 progressBar_RunStatus.Style = ProgressBarStyle.Marquee;
                 btn_StartMonitor.Enabled = false;
@@ -217,7 +211,7 @@ namespace RsLib.WatchFolder
 
         private void tbx_WatchFilter_TextChanged(object sender, EventArgs e)
         {
-            if(WatchedFilter != tbx_WatchFilter.Text)
+            if (WatchedFilter != tbx_WatchFilter.Text)
             {
                 pictureBox2.Visible = true;
             }

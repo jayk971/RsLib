@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using RsLib.SerialPortLib.Properties;
+using System;
 using System.Windows.Forms;
-using RsLib.SerialPortLib.Properties;
 namespace RsLib.SerialPortLib
 {
     public partial class EJ1500Control : UserControl
@@ -24,7 +18,7 @@ namespace RsLib.SerialPortLib
             _ej1500.WeightMeasured += _ej1500_WeightMeasured;
             _ej1500.Connected += _ej1500_Connected;
             propertyGrid1.SelectedObject = _ej1500.Setting;
-            
+
         }
 
         private void _ej1500_Connected(bool obj)
@@ -42,7 +36,7 @@ namespace RsLib.SerialPortLib
 
         private void _ej1500_WeightMeasured(int scaleIndex, double measuredWeight)
         {
-            if(this.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 Action<int, double> action = new Action<int, double>(_ej1500_WeightMeasured);
                 this.Invoke(action, scaleIndex, measuredWeight);

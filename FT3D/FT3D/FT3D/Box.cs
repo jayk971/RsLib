@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
+using RsLib.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using RsLib.Common;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Box:Object3D
+    public partial class Box : Object3D
     {
         [DefaultValue(null)]
         public Point3D MinP { get; set; }

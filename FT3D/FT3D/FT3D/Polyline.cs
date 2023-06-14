@@ -1,11 +1,11 @@
 ﻿using Accord.Collections;
+using Accord.Math;
+using RsLib.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using RsLib.Common;
-using Accord.Math;
 namespace RsLib.PointCloud
 {
     [Serializable]
@@ -28,7 +28,7 @@ namespace RsLib.PointCloud
         {
             Points.Clear();
             kdTree.Clear();
-            
+
             if (ResampleCount <= 0) ResampleCount = 1;
             if (fileContent.Count == 0) return false;
 
@@ -128,14 +128,14 @@ namespace RsLib.PointCloud
             return true;
 
         }
-        public PointCloud GetRangePoints(double startPercent,double endPercent,bool isContainStartIndex,bool isContainEndIndex)
+        public PointCloud GetRangePoints(double startPercent, double endPercent, bool isContainStartIndex, bool isContainEndIndex)
         {
             PointCloud output = new PointCloud();
-            if(Percent.Count ==0)
+            if (Percent.Count == 0)
             {
                 CalculatePercent();
             }
-            if(startPercent > endPercent)
+            if (startPercent > endPercent)
             {
                 double tempStart = startPercent;
                 double tempEnd = endPercent;
@@ -146,9 +146,9 @@ namespace RsLib.PointCloud
             for (int i = 0; i < Percent.Count; i++)
             {
                 double d = Percent[i];
-                if(isContainStartIndex)
+                if (isContainStartIndex)
                 {
-                    if(isContainEndIndex)
+                    if (isContainEndIndex)
                     {
                         if (d >= startPercent && d <= endPercent) output.Add(Points[i]);
                     }
@@ -635,7 +635,7 @@ namespace RsLib.PointCloud
         {
             Percent = CalTotalPercent();
         }
-        
+
         public double CalTotalLength()
         {
             double L = 0;
@@ -664,7 +664,7 @@ namespace RsLib.PointCloud
             {
                 int index = i;
                 int index1 = i + 1;
-                
+
                 Vector3D vector = new Vector3D(Points[index], Points[index1]);
                 L += vector.L;
                 double P = Math.Round(L / LineLength, roundDigit);
@@ -677,7 +677,7 @@ namespace RsLib.PointCloud
             }
             return output;
         }
-        public void CalculateNormalVector(object tree,double searchRadius,Vector3D positiveDir)
+        public void CalculateNormalVector(object tree, double searchRadius, Vector3D positiveDir)
         {
             if (tree.GetType() != typeof(KDTree<int>)) return;
 
@@ -704,7 +704,7 @@ namespace RsLib.PointCloud
                 else p.Vz = positiveDir.DeepClone();
                 p.SetXYZ(target.X, target.Y, target.Z);
                 Points.Add(p);
-            }           
+            }
         }
         public void RemovePoint(double percent)
         {
@@ -1183,7 +1183,7 @@ namespace RsLib.PointCloud
                     if (Points[i].GetType() == typeof(PointV3D))
                     {
                         PointV3D p = Points[i] as PointV3D;
-                        WriteData = string.Format("{0:F2},{1:F2},{2:F2},{3:F2},{4:F2},{5:F2}", p.X, p.Y, p.Z,p.Vz.X, p.Vz.Y, p.Vz.Z);
+                        WriteData = string.Format("{0:F2},{1:F2},{2:F2},{3:F2},{4:F2},{5:F2}", p.X, p.Y, p.Z, p.Vz.X, p.Vz.Y, p.Vz.Z);
                     }
                     else
                     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RsLib.McProtocol
+﻿namespace RsLib.McProtocol
 {
     public enum Device
     {

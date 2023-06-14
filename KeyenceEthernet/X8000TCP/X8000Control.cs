@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Threading;
-using RsLib.LogMgr;
 namespace RsLib.X8000TCP
 {
     public partial class X8000Control : UserControl
@@ -39,7 +31,7 @@ namespace RsLib.X8000TCP
             tbx_IP.Text = x8k.IP;
             tbx_Port.Text = x8k.Port.ToString();
         }
-        public void StartPing(int pingByteSize,int pingInterval_ms)
+        public void StartPing(int pingByteSize, int pingInterval_ms)
         {
             _pingByteSize = pingByteSize;
             if (pingInterval_ms < 1) pingInterval_ms = 1;
@@ -64,7 +56,7 @@ namespace RsLib.X8000TCP
             x8k.IP = tbx_IP.Text;
             x8k.Port = int.Parse(tbx_Port.Text);
             //x8k.SaveYaml();
-            bool isConnected =  x8k.Connect();
+            bool isConnected = x8k.Connect();
             if (isConnected)
             {
                 SwitchRunMode();
@@ -76,7 +68,7 @@ namespace RsLib.X8000TCP
 
         void updateUI()
         {
-            if(this.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 Action action = new Action(updateUI);
                 this.Invoke(action);
@@ -202,8 +194,8 @@ namespace RsLib.X8000TCP
         private void mim_X8kVersion_Click(object sender, EventArgs e)
         {
             if (x8k == null) return;
-            string[] data =  x8k.ReadX8000Version();
-            MessageBox.Show($"{data[0]},{data[1]}","x8000 Version",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            string[] data = x8k.ReadX8000Version();
+            MessageBox.Show($"{data[0]},{data[1]}", "x8000 Version", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void X8000Control_Load(object sender, EventArgs e)

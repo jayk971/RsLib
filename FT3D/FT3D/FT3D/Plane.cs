@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
-using Accord.Math;
 using AccPlane = Accord.Math.Plane;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class RsPlane:Object3D
+    public partial class RsPlane : Object3D
     {
-        public override uint DataCount =>1;
+        public override uint DataCount => 1;
 
         AccPlane m_Plane;
         public AccPlane PL { get => m_Plane; }
@@ -53,7 +52,7 @@ namespace RsLib.PointCloud
         }
 
         [JsonIgnore]
-        public Vector3D Normal { get => new Vector3D( m_Plane.Normal.X, m_Plane.Normal.Y, m_Plane.Normal.Z); }
+        public Vector3D Normal { get => new Vector3D(m_Plane.Normal.X, m_Plane.Normal.Y, m_Plane.Normal.Z); }
 
 
         public RsPlane()
@@ -101,7 +100,7 @@ namespace RsLib.PointCloud
             AccPlane plane = AccPlane.FromPoints(P0.P, P1.P, P2.P);
             Vector3D RefV = new Vector3D(P0, RefPoint);
             double dotValue = Vector3D.Dot(plane.Normal, RefV);
-            
+
             if (dotValue < 0)
             {
                 A = -plane.Normal.X;

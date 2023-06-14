@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using System.Drawing;
 namespace RsLib.Common
@@ -11,21 +9,21 @@ namespace RsLib.Common
     public class ColorGradient
     {
         public double Max { get; private set; } = 0;
-        public double Min { get;private  set; } = 0;
+        public double Min { get; private set; } = 0;
 
         ColorTupleList _gradient = new ColorTupleList();
 
-        public ColorGradient(double min,double max)
+        public ColorGradient(double min, double max)
         {
             Max = max;
             Min = min;
 
             _gradient.Clear();
             _gradient.Add(new ColorTuple(0.0, 0f, 0f, 1f));  //blue
-            _gradient.Add(new ColorTuple(0.25,0f, 1f, 1f)); // cyan
-            _gradient.Add(new ColorTuple(0.5,0f, 1f, 0f)); // green
-            _gradient.Add(new ColorTuple(0.75,1f, 1f, 0f)); // yellow
-            _gradient.Add(new ColorTuple(1.0,1f, 0f, 0f)); // red
+            _gradient.Add(new ColorTuple(0.25, 0f, 1f, 1f)); // cyan
+            _gradient.Add(new ColorTuple(0.5, 0f, 1f, 0f)); // green
+            _gradient.Add(new ColorTuple(0.75, 1f, 1f, 0f)); // yellow
+            _gradient.Add(new ColorTuple(1.0, 1f, 0f, 0f)); // red
         }
 
         public Color GetColorFromGradient(double testValue)

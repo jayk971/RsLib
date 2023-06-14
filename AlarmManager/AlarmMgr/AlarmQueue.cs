@@ -1,12 +1,11 @@
-﻿using System;
+﻿using RsLib.BaseType;
+using RsLib.Common;
+using RsLib.LogMgr;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-
-using RsLib.LogMgr;
-using RsLib.Common;
-using RsLib.BaseType;
-using System.IO;
 namespace RsLib.AlarmMgr
 {
     public static class AlarmHistory
@@ -20,7 +19,7 @@ namespace RsLib.AlarmMgr
         public static void Initial(LangCode lang)
         {
             isInit = false;
-            bool isLoadOK = alarmTable.Load(lang,'\t');
+            bool isLoadOK = alarmTable.Load(lang, '\t');
             isInit = isLoadOK;
         }
         public static void ResetAlarm()
@@ -30,7 +29,7 @@ namespace RsLib.AlarmMgr
                 AlarmItem ErrorItem = _Q.Dequeue();
                 Log.Add(string.Format("Error Reset : {0}", ErrorItem.Code), MsgLevel.Trace);
             }
-            if(AlarmQueueUpdated!= null) AlarmQueueUpdated(_Q);
+            if (AlarmQueueUpdated != null) AlarmQueueUpdated(_Q);
         }
         public static void ResetAllAlarm()
         {
@@ -70,7 +69,7 @@ namespace RsLib.AlarmMgr
 
             AlarmInfo info = alarmTable.GetInfo(code);
             AlarmItem error = new AlarmItem(code, info.Name, note, info.Reason, info.Remedy, ex);
-            if(error.Level == MsgLevel.Alarm)
+            if (error.Level == MsgLevel.Alarm)
             {
                 if (contain(code) == false)
                 {
@@ -106,7 +105,7 @@ namespace RsLib.AlarmMgr
     {
         DateTime time;
         int code = 0;
-        public int Code {get => code; }
+        public int Code { get => code; }
 
         string name = "";
         public string Name { get => name; }
@@ -120,7 +119,7 @@ namespace RsLib.AlarmMgr
         public string Remedy = "";
         string note = "";
         public string Note { get => note; }
-        public AlarmItem(int alarmCode, string _name,string _reason, string _remedy,Exception ex = null)
+        public AlarmItem(int alarmCode, string _name, string _reason, string _remedy, Exception ex = null)
         {
             time = DateTime.Now;
             code = alarmCode;
@@ -146,7 +145,7 @@ namespace RsLib.AlarmMgr
         //    else Log.Add($"Error Code : {code} - {name}, Note : {note}",level, ex);
 
         //}
-        public AlarmItem(int alarmCode, string _name, string _note,string _reason,string _remedy ,Exception ex = null)
+        public AlarmItem(int alarmCode, string _name, string _note, string _reason, string _remedy, Exception ex = null)
         {
             time = DateTime.Now;
             code = alarmCode;
@@ -167,7 +166,7 @@ namespace RsLib.AlarmMgr
         }
         public object[] ToBriefObj()
         {
-            object[] objs = new object[] { time.ToString("HH:mm:ss"), level, code, name, reason,note };
+            object[] objs = new object[] { time.ToString("HH:mm:ss"), level, code, name, reason, note };
             return objs;
         }
         public object[] ToShortObj()
@@ -188,7 +187,7 @@ namespace RsLib.AlarmMgr
 
         public AlarmInfo GetInfo(int code)
         {
-            if(Table.ContainsKey(code))
+            if (Table.ContainsKey(code))
             {
                 return Table[code];
             }
@@ -201,16 +200,16 @@ namespace RsLib.AlarmMgr
         {
             Table.Clear();
         }
-        public bool Load(LangCode lang,char splitChar)
+        public bool Load(LangCode lang, char splitChar)
         {
             Table.Clear();
             int langInt = (int)lang;
             int reasonI = (langInt + 1) * 2;
             int remedyI = reasonI + 1;
             if (!File.Exists(alarmMsgFile)) return false;
-            using (StreamReader sr  = new StreamReader(alarmMsgFile,Encoding.Default))
+            using (StreamReader sr = new StreamReader(alarmMsgFile, Encoding.Default))
             {
-                while(!sr.EndOfStream)
+                while (!sr.EndOfStream)
                 {
                     string[] splitData = sr.ReadLine().Split(splitChar);
                     if (splitData.Length <= 0) continue;
@@ -255,7 +254,7 @@ namespace RsLib.AlarmMgr
             Reason = "add new reason";
             Remedy = "add new remedy";
         }
-        public AlarmInfo(int code,string name,string reason,string remedy)
+        public AlarmInfo(int code, string name, string reason, string remedy)
         {
             Code = code;
             Name = name;

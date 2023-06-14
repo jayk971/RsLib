@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-using RsLib.PointCloud;
-using Accord.Math;
+﻿using RsLib.Common;
+using System;
 using System.IO;
-using RsLib.Common;
 using System.Threading;
+using System.Windows.Forms;
 namespace RsLib.PointCloud.CalculateMatrix
 {
     public partial class TransformControl : UserControl
@@ -44,7 +35,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 op.Filter = "XYZ File|*.xyz";
-                if(op.ShowDialog() == DialogResult.OK)
+                if (op.ShowDialog() == DialogResult.OK)
                 {
                     lbl_XYZFilePath.Text = op.FileName;
                 }
@@ -104,9 +95,9 @@ namespace RsLib.PointCloud.CalculateMatrix
             bool isXYZExist = File.Exists(lbl_XYZFilePath.Text);
             bool isMatrixExist = File.Exists(lbl_M44FilePath.Text);
 
-            if(isXYZExist)
+            if (isXYZExist)
             {
-                if(isMatrixExist)
+                if (isMatrixExist)
                 {
                     Tuple<string, string> package = new Tuple<string, string>(lbl_XYZFilePath.Text, lbl_M44FilePath.Text);
                     _waitClose.Enabled = true;

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using netDxf.Entities;
-using System.Drawing;
+﻿using netDxf.Entities;
 using RsLib.PointCloud;
-using RsLib.Common;
-using netDxf;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 namespace RsLib.DXF
 {
 

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
-
-using RsLib.Common;
+﻿using RsLib.Common;
+using RsLib.ConvertKeyBMP;
 using RsLib.Display3D;
 using RsLib.PointCloud;
-using RsLib.ConvertKeyBMP;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 namespace RsLib.XYZViewer
 {
     using RPointCloud = RsLib.PointCloud.PointCloud;
@@ -22,7 +16,7 @@ namespace RsLib.XYZViewer
         const int MaxXYZCount = 5;
         const int MaxOPTCount = 3;
 
-        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount+ MaxOPTCount*3);
+        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount + MaxOPTCount * 3);
 
         Dictionary<DrawItem, Button> xyzButtons = new Dictionary<DrawItem, Button>();
         Dictionary<DrawItem, Button> optButtons = new Dictionary<DrawItem, Button>();
@@ -48,10 +42,10 @@ namespace RsLib.XYZViewer
 
         void init()
         {
-            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 1.0f,true);
-            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f,false);
-            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f,true);
-            DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f,false);
+            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 1.0f, true);
+            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f, false);
+            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f, true);
+            DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
 
             XYZOptions[0].DrawColor = Color.Gray;
             XYZOptions[1].DrawColor = Color.DarkGray;
@@ -79,7 +73,7 @@ namespace RsLib.XYZViewer
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor);
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor);
             createButton(optButtons, DrawItem.OPT1Path, PathOptions[0].DrawColor);
-            
+
             createButton(xyzButtons, DrawItem.XYZ5, XYZOptions[4].DrawColor);
             createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor);
             createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor);
@@ -88,7 +82,7 @@ namespace RsLib.XYZViewer
 
         }
 
-        void createButton(Dictionary<DrawItem, Button> dic,DrawItem drawItem,Color backColor)
+        void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor)
         {
             Button btn = new Button();
             btn.BackColor = backColor;
@@ -105,7 +99,7 @@ namespace RsLib.XYZViewer
 
         void showProcessForm_td(object obj)
         {
-            if(_processForm ==null)
+            if (_processForm == null)
             {
                 _processForm = new FormProcessing("Loading...");
                 _processForm.SetMode(ProgressBarStyle.Marquee);
@@ -114,7 +108,7 @@ namespace RsLib.XYZViewer
             }
         }
 
-        void loadFile(DrawItem drawItem,string filePath)
+        void loadFile(DrawItem drawItem, string filePath)
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback(showProcessForm_td));
             string ext = Path.GetExtension(filePath).ToLower();
@@ -130,19 +124,19 @@ namespace RsLib.XYZViewer
 
                 case ".opt":
                     ObjectGroup group = new ObjectGroup(fileName);
-                    group.LoadMultiPathOPT(filePath,true);
+                    group.LoadMultiPathOPT(filePath, true);
 
                     //Polyline line = new Polyline();
                     //line.LoadFromOPTFile(filePath, true);
                     _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                     _displayCtrl.BuildMultiPath(group, (int)drawItem, true, true);
 
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem+3).Name = fileName;
-                    _displayCtrl.BuildPointCloud(group, (int)drawItem+3, false, true);
+                    _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+                    _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
 
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
-                    _displayCtrl.BuildMultiPathVector(group, (int)drawItem+6, false, true);
+                    _displayCtrl.BuildMultiPathVector(group, (int)drawItem + 6, false, true);
 
                     break;
                 case ".csv":
@@ -163,11 +157,11 @@ namespace RsLib.XYZViewer
                     break;
             }
 
-            if(_processForm != null)
+            if (_processForm != null)
             {
                 _processForm.BeginInvoke(new Action(
-                    () => 
-                    { 
+                    () =>
+                    {
                         _processForm.Close();
                         _processForm = null;
                     }));
@@ -196,7 +190,7 @@ namespace RsLib.XYZViewer
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 DrawItem dropedBtn = getPressedButton((Button)sender);
 
-                loadFile(dropedBtn,files[0]);
+                loadFile(dropedBtn, files[0]);
             }
         }
 
@@ -224,7 +218,7 @@ namespace RsLib.XYZViewer
                         {
                             if (fileName.Contains(KeyRawCSV.Extension.ToLower())) canDrop = true;
                         }
-                        else if(ext == ".bmp")
+                        else if (ext == ".bmp")
                         {
                             if (fileName.Contains(KeyBMP.HeightExt.ToLower())) canDrop = true;
                         }
@@ -236,7 +230,7 @@ namespace RsLib.XYZViewer
                     if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path && ext == ".opt") canDrop = true;
 
 
-                    if(canDrop) e.Effect = DragDropEffects.Move;
+                    if (canDrop) e.Effect = DragDropEffects.Move;
                 }
             }
         }
@@ -251,12 +245,12 @@ namespace RsLib.XYZViewer
 
                 if (op.ShowDialog() == DialogResult.OK)
                 {
-                    loadFile(dropedBtn,op.FileName);
+                    loadFile(dropedBtn, op.FileName);
                 }
             }
         }
     }
-    public enum DrawItem:int
+    public enum DrawItem : int
     {
         None = 0,
         XYZ1 = 2,

@@ -1,6 +1,4 @@
 ﻿using System.Globalization;
-using System.Reflection;
-using System.Resources;
 using System.Threading;
 namespace RsLib.Common
 {
@@ -15,7 +13,7 @@ namespace RsLib.Common
         //{
         //    resourceMgr = new ResourceManager(resourceBaseName, Assembly.GetExecutingAssembly());
         //}
-        
+
         //public static string GetText(string Key)
         //{
         //    if (resourceMgr != null) return resourceMgr.GetString(Key);

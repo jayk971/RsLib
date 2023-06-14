@@ -1,25 +1,23 @@
 ﻿using RsLib.BaseType;
-using RsLib.Common;
 using RsLib.LogMgr;
 using System;
 using System.IO;
 using System.Text;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using System.Threading;
 namespace RsLib.WatchFolder
 {
     internal class Watcher
     {
-        WatcherConfig config = new WatcherConfig();    
+        WatcherConfig config = new WatcherConfig();
         FileSystemWatcher watcher = new FileSystemWatcher();
         internal LockQueue<string> DetectFile = new LockQueue<string>();
         //public delegate void delegateFileAdded(string filePath);
         //internal event Action<string> AfterFileAdded;
         public bool IsStart => watcher.EnableRaisingEvents;
         object _lock = new object();
-        internal string Filter 
-        { 
+        internal string Filter
+        {
             get => config.FilterString;
             set
             {
@@ -68,7 +66,7 @@ namespace RsLib.WatchFolder
                 watcher.Path = config.Folder;
                 watcher.Filter = $"{config.FilterString}";
                 watcher.NotifyFilter = NotifyFilters.LastWrite;
-                
+
                 watcher.EnableRaisingEvents = false;
                 watcher.Changed += Watcher_Changed;
                 DetectFile.Clear();
@@ -81,7 +79,7 @@ namespace RsLib.WatchFolder
         {
             lock (_lock)
             {
-                watcher.EnableRaisingEvents = false;                
+                watcher.EnableRaisingEvents = false;
                 if (!DetectFile.Contains(e.FullPath))
                 {
                     DetectFile.Enqueue(e.FullPath);

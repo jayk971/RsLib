@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using RsLib.Display3D.Properties;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-
-using RsLib.Display3D.Properties;
 namespace RsLib.Display3D
 {
     public partial class FormChangeDefaultColor : Form
@@ -22,7 +15,7 @@ namespace RsLib.Display3D
             dataGridView1.CellValueChanged += DataGridView1_CellValueChanged;
             dataGridView1.CellContentClick += DataGridView1_CellContentClick;
             dataGridView1.Rows.Clear();
-            dataGridView1.Rows.Add((int)ColorItem.SelectPoint,"Select Point", "", getSettingSize(ColorItem.SelectPoint));
+            dataGridView1.Rows.Add((int)ColorItem.SelectPoint, "Select Point", "", getSettingSize(ColorItem.SelectPoint));
             dataGridView1.Rows.Add((int)ColorItem.SelectFrame, "Select Range", "", getSettingSize(ColorItem.SelectFrame));
             dataGridView1.Rows.Add((int)ColorItem.MeasureStartP, "Measure Start Point", "", getSettingSize(ColorItem.MeasureStartP));
             dataGridView1.Rows.Add((int)ColorItem.MeasureEndP, "Measure End Point", "", getSettingSize(ColorItem.MeasureEndP));
@@ -62,7 +55,7 @@ namespace RsLib.Display3D
             int c = e.ColumnIndex;
             int id = (int)dataGridView1.Rows[r].Cells[0].Value;
 
-            if(c ==3)
+            if (c == 3)
             {
                 float newValue;
                 if (float.TryParse(dataGridView1.Rows[r].Cells[c].Value.ToString(), out newValue))
@@ -73,7 +66,7 @@ namespace RsLib.Display3D
                         dataGridView1.Rows[r].Cells[c].Value = 1;
                         return;
                     }
-                    if(oldValue != newValue)
+                    if (oldValue != newValue)
                         setSettingSize((ColorItem)id, newValue);
                 }
             }
@@ -84,10 +77,10 @@ namespace RsLib.Display3D
             int r = e.RowIndex;
             int c = e.ColumnIndex;
 
-            if(c == 3)
+            if (c == 3)
             {
                 float f;
-                if(float.TryParse(dataGridView1.Rows[r].Cells[c].Value.ToString(),out f) == false)
+                if (float.TryParse(dataGridView1.Rows[r].Cells[c].Value.ToString(), out f) == false)
                 {
                     e.Cancel = true;
                 }
@@ -132,7 +125,7 @@ namespace RsLib.Display3D
                     return 5f;
             }
         }
-        void setSettingColor(ColorItem colorItem,Color setColor)
+        void setSettingColor(ColorItem colorItem, Color setColor)
         {
             switch (colorItem)
             {
@@ -156,7 +149,7 @@ namespace RsLib.Display3D
             }
             Settings.Default.Save();
         }
-        void setSettingSize(ColorItem colorItem,float setSize)
+        void setSettingSize(ColorItem colorItem, float setSize)
         {
             switch (colorItem)
             {
@@ -180,9 +173,9 @@ namespace RsLib.Display3D
             }
             Settings.Default.Save();
         }
-        void updateBtnColor(ColorItem id,Color drawColor)
+        void updateBtnColor(ColorItem id, Color drawColor)
         {
-            if(this.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 Action<ColorItem, Color> action = new Action<ColorItem, Color>(updateBtnColor);
                 this.Invoke(action, id, drawColor);
@@ -201,7 +194,7 @@ namespace RsLib.Display3D
         {
             _isColorDialogOpen = true;
             ColorItem i = (ColorItem)obj
-;            using (ColorDialog cd = new ColorDialog())
+; using (ColorDialog cd = new ColorDialog())
             {
                 if (cd.ShowDialog() == DialogResult.OK)
                 {
@@ -229,7 +222,7 @@ namespace RsLib.Display3D
 
     }
 
-    public enum ColorItem : int 
+    public enum ColorItem : int
     {
         None = 0,
         SelectPoint,

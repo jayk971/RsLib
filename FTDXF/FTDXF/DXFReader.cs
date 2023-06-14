@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using netDxf;
 //using netDxf.Tables;
 //using netDxf.Blocks;
 //using netDxf.Collections;
 using netDxf.Entities;
-using System.Collections;
-
-using System.IO;
-using System.Threading.Tasks;
-using netDxf;
 using netDxf.Objects;
 using RsLib.PointCloud;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RsLib.DXF
 {
@@ -221,7 +217,7 @@ namespace RsLib.DXF
             //    _Items.Remove("0");
             //}
         }
-        public  Dictionary<int, List<Point2D>> ConvertItem(string InputItemName)
+        public Dictionary<int, List<Point2D>> ConvertItem(string InputItemName)
         {
             DXFItem InputItem = _Items[InputItemName];
             Dictionary<int, List<Point2D>> Output = new Dictionary<int, List<Point2D>>();
@@ -435,7 +431,7 @@ namespace RsLib.DXF
                         string mirrorfileName = ModelDXFFolder + "\\" + _layerName + "_mi.dxf";
                         if (!Directory.Exists(ModelDXFFolder)) Directory.CreateDirectory(ModelDXFFolder);
 
-                        
+
                         savingDXF.Save(fileName);
                         //savingmirrorDXF.Save(mirrorfileName);
 
@@ -475,7 +471,7 @@ namespace RsLib.DXF
                 }
 
                 savingDXF.Save(DXFFilePath);
-                
+
             }
             catch (Exception ex)
             {
@@ -511,7 +507,7 @@ namespace RsLib.DXF
             try
             {
                 List<string> LayerNames = _Items.Keys.ToList();
-                Matrix4 ScaleMatrix = Matrix4.RotationZ(inAngle/180*Math.PI);
+                Matrix4 ScaleMatrix = Matrix4.RotationZ(inAngle / 180 * Math.PI);
 
                 for (int i = 0; i < LayerNames.Count; i++)
                 {
@@ -530,7 +526,7 @@ namespace RsLib.DXF
             }
 
         }
-        public void Translate(double inX,double inY)
+        public void Translate(double inX, double inY)
         {
             try
             {
@@ -554,14 +550,14 @@ namespace RsLib.DXF
             }
 
         }
-        public void RotateShift(double inAngle,double inX,double inY)
+        public void RotateShift(double inAngle, double inX, double inY)
         {
             Rotate(inAngle);
             Translate(inX, inY);
         }
-        public void Add(string inItemName,Group inItem)
+        public void Add(string inItemName, Group inItem)
         {
-            if(!_DXFItems.ContainsKey(inItemName))
+            if (!_DXFItems.ContainsKey(inItemName))
             {
                 _DXFItems.Add(inItemName, inItem);
                 RenewDXFItem();
@@ -589,7 +585,7 @@ namespace RsLib.DXF
         }
         public void Remove(string inItemName)
         {
-            if(_DXFItems.ContainsKey(inItemName))
+            if (_DXFItems.ContainsKey(inItemName))
             {
                 _DXFItems.Remove(inItemName);
                 RenewDXFItem();

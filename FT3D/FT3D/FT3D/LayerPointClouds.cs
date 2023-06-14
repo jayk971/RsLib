@@ -7,7 +7,7 @@ using System.Text;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class LayerPointCloud:Object3D
+    public partial class LayerPointCloud : Object3D
     {
         public List<PointCloud> Layers = new List<PointCloud>();
         public int LayerCount { get { return Layers.Count; } }
@@ -949,7 +949,7 @@ namespace RsLib.PointCloud
                 sw.Close();
             }
         }
-        public void Save(string FilePath, bool WritePointTag,bool WritePointFlag,bool WritePointDt,bool SaveSplitSection = false)
+        public void Save(string FilePath, bool WritePointTag, bool WritePointFlag, bool WritePointDt, bool SaveSplitSection = false)
         {
             using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
             {

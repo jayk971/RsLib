@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-
-using System.Text;
-using System.Diagnostics;
-using System.Threading;
+﻿using Microsoft.Win32;
 using RsLib.LogMgr;
-using System.Security.Cryptography;
-using Microsoft.Win32;
-using System.Net.NetworkInformation;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 namespace RsLib.Common
 {
-    public class FT_StopWatch:Stopwatch
+    public class FT_StopWatch : Stopwatch
     {        /// <summary>
              /// T1 Elapsed Time + T2 Elapsed Time
              /// </summary>
@@ -39,14 +38,14 @@ namespace RsLib.Common
             bool isIPlegal = IPAddress.TryParse(ip, out parsedIP);
             return isIPlegal;
         }
-        public static bool PingOK(string ip,int byteSize,bool enableWriteToLog = false)
+        public static bool PingOK(string ip, int byteSize, bool enableWriteToLog = false)
         {
             bool isIPlegal = IsIPLegal(ip);
 
             if (isIPlegal)
             {
                 if (byteSize >= 65000) byteSize = 64999;
-                else if(byteSize <= 0)
+                else if (byteSize <= 0)
                 {
                     byteSize = 1;
                 }
@@ -58,7 +57,7 @@ namespace RsLib.Common
                 PingReply pingReply = ping.Send(ip, 200, pingByte);
                 if (pingReply.Status == IPStatus.Success)
                 {
-                    if(enableWriteToLog) Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
+                    if (enableWriteToLog) Log.Add($"Ping {ip} - {pingReply.RoundtripTime} ms.", MsgLevel.Trace);
                     return true;
                 }
                 else
@@ -82,7 +81,7 @@ namespace RsLib.Common
         {
             List<ShoeSize> output = new List<ShoeSize>();
             string[] name = Enum.GetNames(typeof(ShoeSize));
-            for(int i = 0; i < name.Length; i++)
+            for (int i = 0; i < name.Length; i++)
             {
                 ShoeSize ss = (ShoeSize)Enum.Parse(typeof(ShoeSize), name[i]);
                 output.Add(ss);
@@ -507,7 +506,7 @@ namespace RsLib.Common
                 throw ex;
             }
         }
-        public static bool DecryptString(string textToDecrypt,out string returnStr)
+        public static bool DecryptString(string textToDecrypt, out string returnStr)
         {
             try
             {
@@ -597,11 +596,11 @@ namespace RsLib.Common
         {
             return IsPrivateFirewallEnabled() && IsPublicFirewallEnabled() && IsDomainFirewallEnabled();
         }
-        public static bool IsTimeOut(double elapsedMilliSecond,Func<bool> waitCondition)
+        public static bool IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             bool timeOutResult = false;
-            while(true)
+            while (true)
             {
                 double elapseTime = stopwatch.ElapsedMilliseconds;
                 bool isOK = waitCondition();
@@ -610,7 +609,7 @@ namespace RsLib.Common
                     timeOutResult = false;
                     break;
                 }
-                if(elapseTime >= elapsedMilliSecond)
+                if (elapseTime >= elapsedMilliSecond)
                 {
                     timeOutResult = true;
                     break;
@@ -627,7 +626,7 @@ namespace RsLib.Common
         /// <param name="waitCondition"></param>
         /// <param name="waitStatus"></param>
         /// <returns>-2 : time out. -1 : intime</returns>
-        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition,bool waitStatus)
+        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             int retCode = -2;
@@ -654,7 +653,7 @@ namespace RsLib.Common
         /// <param name="waitStatus"></param>
         /// <param name="breakCondition"></param>
         /// <returns>-2 : time out. -1 : intime. 0 : due to break condition</returns>
-        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus,Func<bool> breakCondition)
+        public static int IsTimeOut(double elapsedMilliSecond, Func<bool> waitCondition, bool waitStatus, Func<bool> breakCondition)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             int retCode = -2;
@@ -990,14 +989,14 @@ namespace RsLib.Common
             }
         }
 
-        public static bool IsSignalRemain(Func<bool> func, bool signalRemainStatus,double continuedTimems)
+        public static bool IsSignalRemain(Func<bool> func, bool signalRemainStatus, double continuedTimems)
         {
             Stopwatch stopWatch = Stopwatch.StartNew();
             bool isSignalRemain = false;
-            while(stopWatch.Elapsed.TotalMilliseconds <= continuedTimems)
+            while (stopWatch.Elapsed.TotalMilliseconds <= continuedTimems)
             {
                 bool temp = func();
-                if(temp == signalRemainStatus)
+                if (temp == signalRemainStatus)
                 {
                     isSignalRemain = true;
                 }
@@ -1011,7 +1010,7 @@ namespace RsLib.Common
             stopWatch.Stop();
             return isSignalRemain;
         }
-        public static void DeleteOutOfDateFile(string folder,string filePattern,int days)
+        public static void DeleteOutOfDateFile(string folder, string filePattern, int days)
         {
             Log.Add($"Delete out of date files. limit {days} days", MsgLevel.Trace);
 
@@ -1098,12 +1097,12 @@ namespace RsLib.Common
         {
             if (((int)KeyChar < 48 | (int)KeyChar > 57) & (int)KeyChar != 8)
                 return true;
-            else 
+            else
                 return false;
         }
         public static bool ip_format_KeyPress(char KeyChar)
         {
-            if (((int)KeyChar < 48 | (int)KeyChar > 57) & (int)KeyChar != 8 & (int)KeyChar!=46)
+            if (((int)KeyChar < 48 | (int)KeyChar > 57) & (int)KeyChar != 8 & (int)KeyChar != 46)
                 return true;
             else
                 return false;
@@ -1179,7 +1178,7 @@ namespace RsLib.Common
         //        bDefualtValue = ((strData.ToString() == "true") || (strData.ToString() == "True") || (strData.ToString() == "TRUE") ? true : false);
         //    return bDefualtValue;
         //}
-        public static bool Read(string filePath, string section, string key, Type ValType, object defaultValue,out object val)
+        public static bool Read(string filePath, string section, string key, Type ValType, object defaultValue, out object val)
         {
             val = null;
             if (!File.Exists(filePath)) return false;

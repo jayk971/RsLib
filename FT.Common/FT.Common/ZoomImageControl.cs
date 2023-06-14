@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-using System.Drawing.Drawing2D;
 using System.IO;
+using System.Windows.Forms;
 namespace RsLib.Common
 {
     public partial class ZoomImageControl : UserControl
     {
         public float Zoom { get; set; } = 1.0f;
-        public  Point Pan;
+        public Point Pan;
         Point _panStart;
 
         public int UpdateInterval
@@ -74,7 +67,7 @@ namespace RsLib.Common
                 }
                 _isUpdateNow = false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -173,7 +166,7 @@ namespace RsLib.Common
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 _panStart = e.Location;
                 Cursor = Cursors.Hand;
@@ -195,7 +188,7 @@ namespace RsLib.Common
             int w = Width;
             int h = Height;
 
-            if(pictureBox1.Image != null)
+            if (pictureBox1.Image != null)
             {
                 w = pictureBox1.Image.Width;
                 h = pictureBox1.Image.Height;
@@ -203,7 +196,7 @@ namespace RsLib.Common
             // Clamp the image point to the bounds of the image
             imagePoint.X = Math.Max(0, Math.Min(imagePoint.X, w - 1));
             imagePoint.Y = Math.Max(0, Math.Min(imagePoint.Y, h - 1));
-            
+
             return imagePoint;
         }
         private void PictureBox1_MouseWheel(object sender, MouseEventArgs e)
@@ -232,7 +225,7 @@ namespace RsLib.Common
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(_isUpdateNow == false)
+            if (_isUpdateNow == false)
                 pictureBox1.Invalidate();
         }
     }

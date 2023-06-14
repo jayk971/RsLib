@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 using System.IO;
 namespace RsLib.Common
 {
@@ -12,7 +8,7 @@ namespace RsLib.Common
         {
             get
             {
-                if(Directory.Exists("d:\\"))
+                if (Directory.Exists("d:\\"))
                 {
                     return "d:\\";
                 }
@@ -26,7 +22,7 @@ namespace RsLib.Common
         static string Lib3rdParty = MainFolder + "\\Lib";
         public static void CheckNLog(string destFolder)
         {
-            if(Directory.Exists(destFolder))
+            if (Directory.Exists(destFolder))
             {
                 string nlogDll = $"{Lib3rdParty}\\NLog.dll";
                 string nlogConfig = $"{Lib3rdParty}\\NLog.config";

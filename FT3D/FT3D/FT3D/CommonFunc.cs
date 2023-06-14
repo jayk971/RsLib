@@ -3,8 +3,8 @@ using Accord.Math;
 using Accord.Statistics.Analysis;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Text;
 namespace RsLib.PointCloud
 {
@@ -24,7 +24,7 @@ namespace RsLib.PointCloud
         Q2,
         Q3,
         Q4
-    } 
+    }
     public class m_Func
     {
 
@@ -83,7 +83,7 @@ namespace RsLib.PointCloud
         /// </summary>
         /// <param name="Cloud"></param>
         /// <returns>EigenValue,SingularityValue</returns>
-        public static void PCA(PointCloud Cloud,out double[] eigenValue,out double[] singularityValue)
+        public static void PCA(PointCloud Cloud, out double[] eigenValue, out double[] singularityValue)
         {
             List<double[]> temp = new List<double[]>();
             for (int i = 0; i < Cloud.Count; i++)
@@ -153,7 +153,7 @@ namespace RsLib.PointCloud
         private static PointCloud Shift(PointCloud Cloud, Matrix4x4 Shift)
         {
             PointCloud Output = new PointCloud();
-            
+
             for (int i = 0; i < Cloud.Count; i++)
             {
                 Vector4 P = new Vector4((float)Cloud.Points[i].X, (float)Cloud.Points[i].Y, (float)Cloud.Points[i].Z, 1);
@@ -1226,9 +1226,9 @@ namespace RsLib.PointCloud
             }
 
         }
-        static void SaveMatrix4x4(Matrix4x4 m,string filePath)
+        static void SaveMatrix4x4(Matrix4x4 m, string filePath)
         {
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
                 sw.WriteLine($"{m.V00},{m.V01},{m.V02},{m.V03}");
                 sw.WriteLine($"{m.V10},{m.V11},{m.V12},{m.V13}");
@@ -1242,7 +1242,7 @@ namespace RsLib.PointCloud
             if (matrix4x4.GetLength(0) != 4 || matrix4x4.GetLength(1) != 4) return;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
-                sw.WriteLine($"{matrix4x4[0,0]},{matrix4x4[0, 1]},{matrix4x4[0, 2]},{matrix4x4[0, 3]}");
+                sw.WriteLine($"{matrix4x4[0, 0]},{matrix4x4[0, 1]},{matrix4x4[0, 2]},{matrix4x4[0, 3]}");
                 sw.WriteLine($"{matrix4x4[1, 0]},{matrix4x4[1, 1]},{matrix4x4[1, 2]},{matrix4x4[1, 3]}");
                 sw.WriteLine($"{matrix4x4[2, 0]},{matrix4x4[2, 1]},{matrix4x4[2, 2]},{matrix4x4[2, 3]}");
                 sw.WriteLine($"{matrix4x4[3, 0]},{matrix4x4[3, 1]},{matrix4x4[3, 2]},{matrix4x4[3, 3]}");
@@ -1263,12 +1263,12 @@ namespace RsLib.PointCloud
                         Matrix4x4 m = LoadMatrix4x4(readData);
                         output = Matrix4x4ToArray(m);
                     }
-                    else if(ext.ToUpper() == ".M44D")
+                    else if (ext.ToUpper() == ".M44D")
                     {
                         string row = "";
                         for (int i = 0; i < 4; i++)
                         {
-                            row+= (sr.ReadLine()+"\r\n");
+                            row += (sr.ReadLine() + "\r\n");
                         }
                         Matrix4x4 m = LoadMatrix4x4(row);
                         output = Matrix4x4ToArray(m);
@@ -1309,20 +1309,20 @@ namespace RsLib.PointCloud
         {
             Matrix4x4 m = Matrix4x4.Identity;
             string[] rows = data.Split('\n');
-            if(rows.Length >= 4)
+            if (rows.Length >= 4)
             {
-                string[] row0 = rows[0].Replace("\r","").Split(',');
+                string[] row0 = rows[0].Replace("\r", "").Split(',');
                 string[] row1 = rows[1].Replace("\r", "").Split(',');
                 string[] row2 = rows[2].Replace("\r", "").Split(',');
                 string[] row3 = rows[3].Replace("\r", "").Split(',');
 
-                if(row0.Length == 4 && row1.Length == 4 && row2.Length == 4 && row3.Length == 4)
+                if (row0.Length == 4 && row1.Length == 4 && row2.Length == 4 && row3.Length == 4)
                 {
                     m.V00 = float.Parse(row0[0]);
                     m.V01 = float.Parse(row0[1]);
                     m.V02 = float.Parse(row0[2]);
                     m.V03 = float.Parse(row0[3]);
-                    
+
                     m.V10 = float.Parse(row1[0]);
                     m.V11 = float.Parse(row1[1]);
                     m.V12 = float.Parse(row1[2]);
@@ -1341,11 +1341,11 @@ namespace RsLib.PointCloud
             }
             return m;
         }
-        public static string Matrix4x4ToString(double[,] matrix4x4,int digit = 2)
+        public static string Matrix4x4ToString(double[,] matrix4x4, int digit = 2)
         {
             if (matrix4x4.GetLength(0) != 4 || matrix4x4.GetLength(1) != 4) return "";
             string output = "";
-            output +=$"{Math.Round(matrix4x4[0, 0],digit)}\t{Math.Round(matrix4x4[0, 1], digit)}\t{Math.Round(matrix4x4[0, 2], digit)}\t{Math.Round(matrix4x4[0, 3], digit)}\n";
+            output += $"{Math.Round(matrix4x4[0, 0], digit)}\t{Math.Round(matrix4x4[0, 1], digit)}\t{Math.Round(matrix4x4[0, 2], digit)}\t{Math.Round(matrix4x4[0, 3], digit)}\n";
             output += $"{Math.Round(matrix4x4[1, 0], digit)}\t{Math.Round(matrix4x4[1, 1], digit)}\t{Math.Round(matrix4x4[1, 2], digit)}\t{Math.Round(matrix4x4[1, 3], digit)}\n";
             output += $"{Math.Round(matrix4x4[2, 0], digit)}\t{Math.Round(matrix4x4[2, 1], digit)}\t{Math.Round(matrix4x4[2, 2], digit)}\t{Math.Round(matrix4x4[2, 3], digit)}\n";
             output += $"{Math.Round(matrix4x4[3, 0], digit)}\t{Math.Round(matrix4x4[3, 1], digit)}\t{Math.Round(matrix4x4[3, 2], digit)}\t{Math.Round(matrix4x4[3, 3], digit)}\n";

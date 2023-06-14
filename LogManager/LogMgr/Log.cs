@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using NLog;
-using RsLib.BaseType;
-using System.Threading;
-using System.Drawing;
+﻿using NLog;
+using System;
 using System.Collections.Concurrent;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace RsLib.LogMgr
 {
@@ -42,7 +38,7 @@ namespace RsLib.LogMgr
             _logQ.Enqueue(msg);
 
         }
-        public static void Add(string Msg, MsgLevel errLevel,Color backColor,Color foreColor ,Exception ex = null)
+        public static void Add(string Msg, MsgLevel errLevel, Color backColor, Color foreColor, Exception ex = null)
         {
             //lock (_lock)
             //{
@@ -54,7 +50,7 @@ namespace RsLib.LogMgr
 
         }
 
-        public static void Add(string Msg, MsgLevel errLevel, bool updateUI,Exception ex = null)
+        public static void Add(string Msg, MsgLevel errLevel, bool updateUI, Exception ex = null)
         {
             //lock (_lock)
             //{
@@ -79,7 +75,7 @@ namespace RsLib.LogMgr
         }
         static void run(object obj)
         {
-            while(_enableTd)
+            while (_enableTd)
             {
                 _isTdRunning = true;
                 SpinWait.SpinUntil(() => false, 5);
@@ -154,7 +150,7 @@ namespace RsLib.LogMgr
             Text = text;
             Ex = ex;
         }
-        public LogMsg(MsgLevel level,string text,Color backColor,Color foreColor,Exception ex)
+        public LogMsg(MsgLevel level, string text, Color backColor, Color foreColor, Exception ex)
         {
             Time = DateTime.Now;
             Level = level;
@@ -164,7 +160,7 @@ namespace RsLib.LogMgr
             ForeColor = foreColor;
             EnableSpecialColor = true;
         }
-        public LogMsg(MsgLevel level, string text, Exception ex,bool updateUI)
+        public LogMsg(MsgLevel level, string text, Exception ex, bool updateUI)
         {
             Time = DateTime.Now;
             Level = level;

@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Accord.Math;
 using System;
-using Accord.Math;
+using System.Collections.Generic;
 
 namespace RsLib.PointCloud
 {
-    public enum MatrixType:int
+    public enum MatrixType : int
     {
         Translation = 0,
         Rotate,
-        Scale ,
+        Scale,
         //Reflection,
         //Shearing,
     }
-    public enum RefAxis:int
+    public enum RefAxis : int
     {
         X,
         Y,
@@ -63,12 +63,12 @@ namespace RsLib.PointCloud
 
         void calculateMatrix()
         {
-            switch(Type)
+            switch (Type)
             {
                 case MatrixType.Translation:
 
                     calculateTranslationMatrix();
-                    
+
                     break;
 
                 case MatrixType.Rotate:
@@ -87,7 +87,7 @@ namespace RsLib.PointCloud
         void calculateTranslationMatrix()
         {
             matrix4 = Matrix4x4.Identity;
-            switch(RefAxis)
+            switch (RefAxis)
             {
                 case RefAxis.X:
                     matrix4.V03 = (float)Value;
@@ -213,7 +213,7 @@ namespace RsLib.PointCloud
             return $"{Type} {RefAxis} Axis {Value} mm";
         }
     }
-    public class RotateUnit:MatrixUnit
+    public class RotateUnit : MatrixUnit
     {
         public double RotateAngle { get => Value / Math.PI * 180.0; }
         public double RotateRadian { get => Value; }
@@ -249,11 +249,11 @@ namespace RsLib.PointCloud
             RefAxis = inRefAxis;
             Value = 0;
         }
-        public RotateUnit(RefAxis inRefAxis, double inRotValue,bool ValueIsAngleUnit = true)
+        public RotateUnit(RefAxis inRefAxis, double inRotValue, bool ValueIsAngleUnit = true)
         {
             Type = MatrixType.Rotate;
             RefAxis = inRefAxis;
-            if (ValueIsAngleUnit) Value = inRotValue /180*Math.PI;
+            if (ValueIsAngleUnit) Value = inRotValue / 180 * Math.PI;
             else Value = inRotValue;
         }
         public Matrix4x4 Transpose()
@@ -319,7 +319,7 @@ namespace RsLib.PointCloud
                 }
                 return finalMatrix4;
             }
-        
+
         }
 
         public Matrix4x4 FinalMatrix4Inverse
@@ -327,9 +327,9 @@ namespace RsLib.PointCloud
             get
             {
                 Matrix4x4 m = Matrix4x4.Identity;
-                for(int i =0;i<seq.Count; i++)
+                for (int i = 0; i < seq.Count; i++)
                 {
-                    switch(seq[i].Type)
+                    switch (seq[i].Type)
                     {
                         case MatrixType.Rotate:
                             RotateUnit rUnit = seq[i] as RotateUnit;
@@ -338,7 +338,7 @@ namespace RsLib.PointCloud
 
                         case MatrixType.Translation:
                             TranslationUnit sUnit = seq[i] as TranslationUnit;
-                            m = Matrix4x4.Multiply(sUnit.ShiftMatrix4Inverse,m);
+                            m = Matrix4x4.Multiply(sUnit.ShiftMatrix4Inverse, m);
                             break;
 
                         default:
@@ -346,7 +346,7 @@ namespace RsLib.PointCloud
                             break;
                     }
                 }
-                return m; 
+                return m;
             }
         }
         internal bool isMatrixCalculated = false;
@@ -409,7 +409,7 @@ namespace RsLib.PointCloud
             finalMatrix4 = Matrix4x4.Identity;
             for (int i = 0; i < seq.Count; i++)
             {
-                finalMatrix4 = Matrix4x4.Multiply(seq[i].matrix4,finalMatrix4);
+                finalMatrix4 = Matrix4x4.Multiply(seq[i].matrix4, finalMatrix4);
             }
             isMatrixCalculated = true;
         }
@@ -435,7 +435,7 @@ namespace RsLib.PointCloud
             return output;
         }
     }
-    public class Rotate:CoordMatrix
+    public class Rotate : CoordMatrix
     {
         public Matrix3x3 RotateMatrix3
         {
@@ -462,7 +462,7 @@ namespace RsLib.PointCloud
             {
                 if (seq.Count == 3)
                 {
-                    return seq[0].Value / Math.PI *180;
+                    return seq[0].Value / Math.PI * 180;
                 }
                 else return 0.0;
             }
@@ -516,13 +516,13 @@ namespace RsLib.PointCloud
         /// <param name="vx">旋轉後坐標系 x 相對於世界坐標系</param>
         /// <param name="vy">旋轉後坐標系 y 相對於世界坐標系</param>
         /// <param name="vz">旋轉後坐標系 z 相對於世界坐標系</param>
-        public Rotate(Vector3D vx,Vector3D vy,Vector3D vz)
-        {            
+        public Rotate(Vector3D vx, Vector3D vy, Vector3D vz)
+        {
             finalMatrix4 = collectMatricElement(vx, vy, vz);
             List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
             seq.AddRange(rSeq);
             isMatrixCalculated = true;
-            
+
         }
         public Rotate(PointV3D p)
         {
@@ -569,7 +569,7 @@ namespace RsLib.PointCloud
         /// <param name="vy">姿態的 y 向量</param>
         /// <param name="vz">姿態的 z 向量</param>
         /// <returns>旋轉 Rz -> Ry -> Rx 順序的旋轉角</returns>
-        public static List<RotateUnit> FromVector3DZYX(Vector3D vx, Vector3D vy,Vector3D vz)
+        public static List<RotateUnit> FromVector3DZYX(Vector3D vx, Vector3D vy, Vector3D vz)
         {
             /*
             V00,V01,V02,V03
@@ -586,7 +586,7 @@ namespace RsLib.PointCloud
             vy.UnitVector();
             vz.UnitVector();
             Matrix4x4 matrix = Matrix4x4.Identity;
-           
+
             matrix.V00 = (float)vx.X;
             matrix.V10 = (float)vx.Y;
             matrix.V20 = (float)vx.Z;
@@ -660,7 +660,7 @@ namespace RsLib.PointCloud
         {
 
         }
-        public Shift(double x,double y ,double z)
+        public Shift(double x, double y, double z)
         {
             seq.Add(new TranslationUnit(RefAxis.X, x));
             seq.Add(new TranslationUnit(RefAxis.Y, y));

@@ -164,7 +164,7 @@ namespace RsLib.Common
         _170_RL,
 
         _180_L,
-        _180_R, 
+        _180_R,
         _180_RL,
 
         _190_L,

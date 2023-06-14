@@ -5,7 +5,7 @@ using System.Drawing;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class ColorPoint:Object3D
+    public partial class ColorPoint : Object3D
     {
         public float R = 0.0f;
         public float G = 0.0f;

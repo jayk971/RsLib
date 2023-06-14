@@ -3,7 +3,7 @@
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Point2D:Object3D
+    public partial class Point2D : Object3D
     {
         public double X = 0;
         public double Y = 0;

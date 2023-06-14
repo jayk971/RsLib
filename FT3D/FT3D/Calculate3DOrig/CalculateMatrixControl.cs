@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using RsLib.PointCloud.CalculateMatrix.Properties;
+using System;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-
-using System.IO;
-using RsLib.PointCloud.CalculateMatrix.Properties;
 namespace RsLib.PointCloud.CalculateMatrix
 {
     public partial class CalculateMatrixControl : UserControl
@@ -65,7 +59,7 @@ namespace RsLib.PointCloud.CalculateMatrix
                 shift.P,
                 vx.V,
                 vy.V,
-                vz.V, 
+                vz.V,
                 ref intersectP
                 );
             richTextBox1.Clear();
@@ -79,7 +73,7 @@ namespace RsLib.PointCloud.CalculateMatrix
                 {
                     string filePath = sf.FileName;
                     m_Func.SaveMatrix4x4(m, filePath);
-                    if(sf.FilterIndex == 1)
+                    if (sf.FilterIndex == 1)
                     {
                         using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.Default))
                         {
@@ -162,7 +156,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 op.Filter = "Matrix 4x4 with data|*.m44d";
-                if(op.ShowDialog() == DialogResult.OK)
+                if (op.ShowDialog() == DialogResult.OK)
                 {
                     string filepath = op.FileName;
                     double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(filepath);
@@ -176,10 +170,10 @@ namespace RsLib.PointCloud.CalculateMatrix
                         while (!sr.EndOfStream)
                         {
                             string readData = sr.ReadLine();
-                            if(readData.Contains(":"))
+                            if (readData.Contains(":"))
                             {
                                 string[] splitType = readData.Split(':');
-                                if(splitType.Length == 2)
+                                if (splitType.Length == 2)
                                 {
                                     string typeStr = splitType[0];
                                     string[] splitData = splitType[1].Split(',');

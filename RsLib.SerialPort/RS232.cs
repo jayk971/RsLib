@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.IO.Ports;
-using RsLib.LogMgr;
-using YamlDotNet.Serialization;
-using System.IO;
-using RsLib.Common;
 namespace RsLib.SerialPortLib
 {
     public class RS232
@@ -30,7 +21,7 @@ namespace RsLib.SerialPortLib
         {
         }
 
-        public RS232(string deviceName,string portName,BaudRate baudRate, Parity parity,int dataBits, StopBits stopBits)
+        public RS232(string deviceName, string portName, BaudRate baudRate, Parity parity, int dataBits, StopBits stopBits)
         {
 
             _serialPort = new SerialPort(portName, (int)baudRate, parity, dataBits, stopBits);

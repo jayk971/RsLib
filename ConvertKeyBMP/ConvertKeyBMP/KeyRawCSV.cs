@@ -1,16 +1,13 @@
-﻿using System;
+﻿using RsLib.PointCloud;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-
-using RsLib.PointCloud;
 namespace RsLib.ConvertKeyBMP
 {
     using RPointCloud = RsLib.PointCloud.PointCloud;
     public static class KeyRawCSV
     {
-        public static readonly string Extension = "_HRaw.csv"; 
+        public static readonly string Extension = "_HRaw.csv";
         const string _dataInfo_Start = "DataInfoStart";
         const string _dataInfo_End = "DataInfoEnd";
         const string _dataInfo_DataPerRow = "DataPerRow";
@@ -102,7 +99,7 @@ namespace RsLib.ConvertKeyBMP
         /// <returns>Tuple <x, y, z></returns>
         static double GetZValue(int xIndex, int yIndex)
         {
-            int dataIndex = yIndex* (int)_dataPerProfile + xIndex;
+            int dataIndex = yIndex * (int)_dataPerProfile + xIndex;
             ushort z = _heightData[dataIndex];
             double Z = _noData;
 
@@ -115,8 +112,8 @@ namespace RsLib.ConvertKeyBMP
     }
 
     public static class KeyRawBMP
-    { 
-    
+    {
+
     }
 
 }

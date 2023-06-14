@@ -1,22 +1,20 @@
-﻿using System;
+﻿using RsLib.Common;
+using RsLib.LogMgr;
+// for File I/O
+
+using RsLib.TCP.Common;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
 // for Socket
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 // for Muti-Thread
 using System.Threading;
-
-// for File I/O
-
-using RsLib.TCP.Common;
-using System.Collections.Generic;
-using System.ComponentModel;
 using YamlDotNet.Serialization;
-using YamlDotNet;
-using System.IO;
-using RsLib.Common;
-using RsLib.LogMgr;
-using System.Linq;
 namespace RsLib.TCP.Server
 {
     public class TCPServer
@@ -31,7 +29,7 @@ namespace RsLib.TCP.Server
         public List<string> ClientsName => _clientObj.Keys.ToList();
         public string Msg { get; private set; }
         //StateObject[] stateObject;
-        public event Action<string,string> DataReceived;
+        public event Action<string, string> DataReceived;
         public event Action<string> ClientAdded;
         ManualResetEvent ReceiveDone = new ManualResetEvent(false);
         public TCPServer()
@@ -45,7 +43,7 @@ namespace RsLib.TCP.Server
             if (_clientObj.Count == 0) return;
             foreach (var item in _clientObj)
             {
-                Send(item.Key,data);
+                Send(item.Key, data);
             }
         }
         public void Send(string name, string data)
@@ -60,11 +58,11 @@ namespace RsLib.TCP.Server
                     _clientObj[name].SendData(data);
                 }
         }
-        private void StateObject_DataReceived(string name,string obj)
+        private void StateObject_DataReceived(string name, string obj)
         {
             Log.Add($"TCP server receive name : {name} msg : {obj}", MsgLevel.Trace);
 
-            DataReceived?.Invoke(name,obj);
+            DataReceived?.Invoke(name, obj);
             Msg = obj;
             msgHandle();
             ReceiveDone.Set();
@@ -99,7 +97,7 @@ namespace RsLib.TCP.Server
 
                         break;
                 }
-        }
+            }
         }
         // 啟動Server
         public void Start()
@@ -127,7 +125,7 @@ namespace RsLib.TCP.Server
         {
             if (mainSocket == null) return;
             Socket handler = mainSocket.EndAccept(ar);
-            
+
             int currentClientCount = _clientObj.Count;
             if (currentClientCount >= Option.MaxClientCount)
             {
@@ -190,7 +188,7 @@ namespace RsLib.TCP.Server
                     item.Value.SendServerStop();
                     bool isInTime = ReceiveDone.WaitOne(5000);
                 }
-                if(mainSocket.Connected)
+                if (mainSocket.Connected)
                     mainSocket.Shutdown(SocketShutdown.Both);
                 mainSocket.Close();
                 mainSocket.Dispose();
@@ -200,7 +198,7 @@ namespace RsLib.TCP.Server
 
                 Log.Add($"TCP server stopped.", MsgLevel.Info);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Add("TCP server stop exception.", MsgLevel.Alarm, ex);
             }
@@ -236,7 +234,7 @@ namespace RsLib.TCP.Server
     {
         [Category("Server")]
         [DisplayName("Name")]
-        public string Name { get;set; } = "TCPServer";
+        public string Name { get; set; } = "TCPServer";
         [Category("Server")]
         [DisplayName("Max Client Count")]
         public ushort MaxClientCount { get; set; } = 4;

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 namespace RsLib.PointCloud
 {
@@ -14,13 +10,13 @@ namespace RsLib.PointCloud
 
     }
     [Serializable]
-    public  abstract class Object3D:IEnumerable<ObjectOption>
+    public abstract class Object3D : IEnumerable<ObjectOption>
     {
         public string Name = "";
 
         List<ObjectOption> _Options = new List<ObjectOption>();
         public List<ObjectOption> Options => _Options;
-        public abstract uint DataCount { get;}
+        public abstract uint DataCount { get; }
 
         public IEnumerator<ObjectOption> GetEnumerator()
         {
@@ -35,7 +31,7 @@ namespace RsLib.PointCloud
             for (int i = 0; i < _Options.Count; i++)
             {
                 Type t = option.GetType();
-                if(t == _Options[i].GetType())
+                if (t == _Options[i].GetType())
                 {
                     _Options[i] = option;
                     addNew = false;
@@ -69,7 +65,7 @@ namespace RsLib.PointCloud
             for (int i = 0; i < _Options.Count; i++)
             {
                 Type t = _Options[i].GetType();
-                if(t == optionType)
+                if (t == optionType)
                 {
                     o = _Options[i];
                     break;
@@ -116,7 +112,7 @@ namespace RsLib.PointCloud
                 foreach (var item in Objects)
                 {
                     PointCloud line = item.Value as PointCloud;
-                    if(line != null)
+                    if (line != null)
                     {
                         Point3D lineMin = line.Min;
                         if (output.X >= lineMin.X) output.X = lineMin.X;
@@ -150,7 +146,7 @@ namespace RsLib.PointCloud
         {
             base.Name = groupName;
         }
-        public void Add(string objName,Object3D object3D)
+        public void Add(string objName, Object3D object3D)
         {
             if (!Objects.ContainsKey(objName))
             {
@@ -196,7 +192,7 @@ namespace RsLib.PointCloud
             }
             total.Save(filePath);
         }
-        public void LoadMultiPathOPT(string filePath,bool buildKDTree)
+        public void LoadMultiPathOPT(string filePath, bool buildKDTree)
         {
             List<string> temp = new List<string>();
             using (StreamReader sr = new StreamReader(filePath))
@@ -217,7 +213,7 @@ namespace RsLib.PointCloud
                             lineProperty.LineIndex = Objects.Count;
                             p.Options.Add(lineProperty);
                             p.LoadFromStringList(temp, buildKDTree);
-                            Objects.Add(lineProperty.LineIndex.ToString(),p);
+                            Objects.Add(lineProperty.LineIndex.ToString(), p);
                             Sequence.Add(lineProperty.LineIndex.ToString());
                             temp.Clear();
                         }

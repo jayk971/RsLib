@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-using RsLib.TCP.Client;
+﻿using RsLib.TCP.Client;
 using RsLib.TCP.Properties;
+using System;
+using System.Windows.Forms;
 namespace RsLib.TCP.Control
 {
     public partial class TCPClientControl : UserControl
@@ -31,7 +24,7 @@ namespace RsLib.TCP.Control
 
         private void _client_DataReceived(string arg1, string arg2)
         {
-            if(this.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 Action<string, string> action = new Action<string, string>(_client_DataReceived);
                 this.Invoke(action, arg1, arg2);
@@ -48,9 +41,9 @@ namespace RsLib.TCP.Control
 
         private void btn_DisconnectServer_Click(object sender, EventArgs e)
         {
-            if(_client != null)
+            if (_client != null)
             {
-                if(_client.IsConnect)
+                if (_client.IsConnect)
                 {
                     _client.Disconnect();
                 }
@@ -59,7 +52,7 @@ namespace RsLib.TCP.Control
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(_client == null)
+            if (_client == null)
             {
                 lbl_ConnectStatus.Text = "Disconnect";
                 lbl_ConnectStatus.Image = Resources.Disconnect;
@@ -68,7 +61,7 @@ namespace RsLib.TCP.Control
             }
             else
             {
-                if(_client.IsConnect)
+                if (_client.IsConnect)
                 {
                     lbl_ConnectStatus.Text = "Connect";
                     lbl_ConnectStatus.Image = Resources.Connect;
@@ -88,9 +81,9 @@ namespace RsLib.TCP.Control
 
         private void btn_SendToServer_Click(object sender, EventArgs e)
         {
-            if(_client!= null)
+            if (_client != null)
             {
-                if(_client.IsConnect)
+                if (_client.IsConnect)
                 {
                     string data = rtbx_SendData.Text;
                     _client.Send(data);

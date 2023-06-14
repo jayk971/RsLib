@@ -1,12 +1,10 @@
-﻿using System;
+﻿using RsLib.TCP.Common;
+using System;
 // for Socket
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 // for Muti-Thread
 using System.Threading;
-
-using RsLib.TCP.Common;
 namespace RsLib.TCP.Client
 {
     public class TCPClient
@@ -16,13 +14,13 @@ namespace RsLib.TCP.Client
         StateObject stateObject;
 
         ManualResetEvent connectDone = new ManualResetEvent(false);
-        public event Action<string,string> DataReceived;
+        public event Action<string, string> DataReceived;
         public string Name { get; private set; }
         public string Msg { get; private set; }
         public bool IsConnect => stateObject != null ? stateObject.IsConnect : false;
         ManualResetEvent ReceiveDone = new ManualResetEvent(false);
 
-        public TCPClient(string clientName,string ipAddress, int port)
+        public TCPClient(string clientName, string ipAddress, int port)
         {
             Name = clientName;
             stateObject = new StateObject(Name);
@@ -31,9 +29,9 @@ namespace RsLib.TCP.Client
             stateObject.DataReceived += StateObject_DataReceived;
         }
 
-        private void StateObject_DataReceived(string name,string obj)
+        private void StateObject_DataReceived(string name, string obj)
         {
-            DataReceived?.Invoke(name,obj);
+            DataReceived?.Invoke(name, obj);
             Msg = obj;
             ReceiveDone.Set();
             msgHandle();
@@ -94,7 +92,7 @@ namespace RsLib.TCP.Client
                 ReceiveDone.Reset();
                 stateObject.Receive();
                 bool isInTime = ReceiveDone.WaitOne(5000);
-                if(Msg.Contains(Command.Welcome) && isInTime)
+                if (Msg.Contains(Command.Welcome) && isInTime)
                 {
                     stateObject.SendClientConnect();
                 }
@@ -106,7 +104,7 @@ namespace RsLib.TCP.Client
         }
         public void Send(string data)
         {
-            if(IsConnect)
+            if (IsConnect)
                 stateObject.SendData(data);
         }
     }

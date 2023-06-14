@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+﻿using RsLib.Common;
 using RsLib.LogMgr;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using RsLib.Common;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 namespace RsLib.X8000TCP
 {
     public class X8000
@@ -21,11 +19,11 @@ namespace RsLib.X8000TCP
         public string config_file_name = "X8000IP.cfg";
         bool isConnected = false;
         [YamlIgnore]
-        public bool IsConnected 
+        public bool IsConnected
         {
             get
             {
-                if(!isConnected) Log.Add($"X8000 Disconnected", MsgLevel.Alarm);
+                if (!isConnected) Log.Add($"X8000 Disconnected", MsgLevel.Alarm);
                 return isConnected;
             }
         }
@@ -39,8 +37,8 @@ namespace RsLib.X8000TCP
         {
         }
 
-        public bool Ping(int pingByteSize) =>FT_Functions.PingOK(IP, pingByteSize);
-        
+        public bool Ping(int pingByteSize) => FT_Functions.PingOK(IP, pingByteSize);
+
         public bool CheckRunMode()
         {
             Log.Add($"Check X8000 run mode", MsgLevel.Trace);
@@ -68,7 +66,7 @@ namespace RsLib.X8000TCP
             if (!IsConnected) return false;
 
             SwitchToSetting();
-            SpinWait.SpinUntil(()=>false, 1000);
+            SpinWait.SpinUntil(() => false, 1000);
             return SwitchToRun();
         }
         public bool TriggerEnable()
@@ -185,13 +183,13 @@ namespace RsLib.X8000TCP
             string[] data = sendCommand($"BC,1");
             return data[0] == "BC";
         }
-        public bool Echo(string msg,bool addLog = false)
+        public bool Echo(string msg, bool addLog = false)
         {
-            if(addLog)  Log.Add($"X8000 Echo {msg}", MsgLevel.Trace);
+            if (addLog) Log.Add($"X8000 Echo {msg}", MsgLevel.Trace);
             if (!IsConnected) return false;
 
             string[] data = sendCommand($"EC,{msg}");
-            if(data[0] == "EC")
+            if (data[0] == "EC")
             {
                 return data[1] == msg;
             }
@@ -236,7 +234,7 @@ namespace RsLib.X8000TCP
         {
             Log.Add($"Read X8000 version", MsgLevel.Trace);
 
-            if (!IsConnected) return new string[] { "-1","-1" };
+            if (!IsConnected) return new string[] { "-1", "-1" };
 
             string[] data = sendCommand($"VI");
             if (data[0] == "VI")
@@ -304,7 +302,7 @@ namespace RsLib.X8000TCP
                 try
                 {
                     IPAddress ip = IPAddress.Parse(IP);
-                    
+
                     client.Connect(ip, Port);
                     Log.Add("X8000 connected.", MsgLevel.Info);
                     status = "Connected";
@@ -314,7 +312,7 @@ namespace RsLib.X8000TCP
                 {
                     isConnected = false;
                     status = "Connect Exception";
-                    Log.Add("Cannot connect X8000.", MsgLevel.Warn,ex);
+                    Log.Add("Cannot connect X8000.", MsgLevel.Warn, ex);
                 }
             }
             else
@@ -344,14 +342,14 @@ namespace RsLib.X8000TCP
             string[] splitData = ParseRecieveData(recieveData);
             return splitData;
         }
-        void writeStream(NetworkStream stream,string command)
+        void writeStream(NetworkStream stream, string command)
         {
             byte[] bytResponse = Encoding.ASCII.GetBytes(command);
             if (stream != null)
             {
                 if (stream.CanWrite)
                 {
-                    Log.Add($"Write {command.Replace("\r","\\r")}", MsgLevel.Trace);
+                    Log.Add($"Write {command.Replace("\r", "\\r")}", MsgLevel.Trace);
                     stream.Write(bytResponse, 0, bytResponse.Length);
                 }
             }
@@ -367,7 +365,7 @@ namespace RsLib.X8000TCP
             {
                 int intCount = stream.Read(bytBuffer, 0, bytBuffer.Length);
                 string strData = System.Text.Encoding.ASCII.GetString(bytBuffer, 0, intCount);
-                Log.Add($"Recieve {strData.Replace("\r","\\r")}", MsgLevel.Trace);
+                Log.Add($"Recieve {strData.Replace("\r", "\\r")}", MsgLevel.Trace);
                 return strData;
             }
             else return "";

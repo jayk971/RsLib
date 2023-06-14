@@ -1,10 +1,8 @@
 ﻿using System;
 // for Socket
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 // for Muti-Thread
-using System.Threading;
 namespace RsLib.TCP.Common
 {
     public class StateObject
@@ -14,7 +12,7 @@ namespace RsLib.TCP.Common
         const int _bufferSize = 1024;
         byte[] _buffer = new byte[_bufferSize];
         StringBuilder sb = new StringBuilder();
-        public event Action<string,string> DataReceived;
+        public event Action<string, string> DataReceived;
         public bool IsConnect => WorkSocket != null ? WorkSocket.Connected : false;
         public StateObject(string name)
         {
@@ -43,7 +41,7 @@ namespace RsLib.TCP.Common
         {
             try
             {
-                
+
                 Socket client = (Socket)ar.AsyncState;
                 int bytesSent = client.EndSend(ar);
             }
@@ -95,9 +93,9 @@ namespace RsLib.TCP.Common
         public void Disconnect()
         {
             if (WorkSocket == null) return;
-            if(WorkSocket.Connected)
+            if (WorkSocket.Connected)
                 WorkSocket.Shutdown(SocketShutdown.Both);
-           
+
             WorkSocket.Close();
             WorkSocket.Dispose();
             WorkSocket = null;

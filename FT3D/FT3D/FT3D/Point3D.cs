@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Accord.Math;
+using RsLib.Common;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using Accord.Math;
-using RsLib.Common;
 namespace RsLib.PointCloud
 {
     [Serializable]
-    public partial class Point3D :Object3D, IComparable<Point3D>
+    public partial class Point3D : Object3D, IComparable<Point3D>
 
     {
 
@@ -31,7 +31,7 @@ namespace RsLib.PointCloud
         public bool flag;           //備用的flag(default=false)
         public int tag = 0;
         public int tag1 = 0;
-        
+
         public Point3D()
         {
             Dt = 0.0;
@@ -153,7 +153,7 @@ namespace RsLib.PointCloud
         }
         public void Save(string filePath)
         {
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
                 sw.WriteLine($"{X} {Y} {Z}");
                 sw.Flush();
@@ -353,7 +353,7 @@ namespace RsLib.PointCloud
         {
             Point3D outPt = new Point3D(pt);
             Matrix4x4 m = Matrix4x4.Identity;
-            for(int i = 0; i < matrics.Count; i++)
+            for (int i = 0; i < matrics.Count; i++)
             {
                 matrics[i].CalculateFinalMatrix();
                 m = matrics[i].FinalMatrix4 * m;
@@ -376,7 +376,7 @@ namespace RsLib.PointCloud
 
             return outPt;
         }
-        public static Point3D Multiply(Point3D pt,double[,] matrixArr)
+        public static Point3D Multiply(Point3D pt, double[,] matrixArr)
         {
             Point3D outPt = new Point3D(pt);
 
@@ -426,7 +426,7 @@ namespace RsLib.PointCloud
             double d = Distance(P, PP);
             return d;
         }
-        
+
         public static bool SameSide(Point3D p1, Point3D p2, Point3D a, Point3D b)
         {
             Vector3D v1 = new Vector3D(b.X - a.X, b.Y - a.Y, b.Z - a.Z);
@@ -783,7 +783,7 @@ namespace RsLib.PointCloud
 
             return toFind[index];
         }
-        public  string ToString(bool WriteTag,bool WriteFlag,bool WriteDt)
+        public string ToString(bool WriteTag, bool WriteFlag, bool WriteDt)
         {
             string Coord = string.Format("{0:F2} {1:F2} {2:F2}", X, Y, Z);
             if (WriteTag) Coord += string.Format(" {0}", tag);
@@ -840,7 +840,7 @@ namespace RsLib.PointCloud
 
             AddOption(src.Options);
         }
-        public PointV3D(Point3D src,Vector3D zVecSrc)
+        public PointV3D(Point3D src, Vector3D zVecSrc)
         {
             Vx = new Vector3D(0, 0, 0);
             Vy = new Vector3D(0, 0, 0);
@@ -869,7 +869,7 @@ namespace RsLib.PointCloud
             AddOption(src.Options);
 
         }
-        
+
         public static PointV3D Multiply(PointV3D pt, List<CoordMatrix> matrics)
         {
             PointV3D outPt = new PointV3D(pt);
@@ -886,7 +886,7 @@ namespace RsLib.PointCloud
 
             return outPt;
         }
-        public static PointV3D Multiply(PointV3D pt,Matrix4x4 matrix)
+        public static PointV3D Multiply(PointV3D pt, Matrix4x4 matrix)
         {
             PointV3D outPt = new PointV3D(pt);
 

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using RsLib.LogMgr;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Text;
 using System.Threading;
-using RsLib.LogMgr;
 namespace RsLib.MMF
 {
     public class MMFClient

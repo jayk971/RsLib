@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.IO;
+﻿using RsLib.LogMgr;
+using RsLib.PointCloud;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
-
+using System.Text;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-
-using RsLib.LogMgr;
-using System.Diagnostics;
-using RsLib.PointCloud;
 namespace RsLib.ConvertKeyBMP
 {
     using RPointCloud = RsLib.PointCloud.PointCloud;
@@ -30,16 +24,16 @@ namespace RsLib.ConvertKeyBMP
         public static string IntensityExt { get => config.IntensityFileExt; }
         public static void Init()
         {
-            if(!config.IsInit) config.LoadYaml();
+            if (!config.IsInit) config.LoadYaml();
         }
-        
-        public static void SetGap(double XGap,double YGap)
+
+        public static void SetGap(double XGap, double YGap)
         {
             config.XGap = Math.Abs(XGap);
             config.YGap = Math.Abs(YGap);
             config.SaveYaml();
         }
-        public static void SetHeightRange(double max,double min)
+        public static void SetHeightRange(double max, double min)
         {
             config.MaxH = max > min ? max : min;
             config.MinH = min < max ? min : max;
@@ -102,7 +96,7 @@ namespace RsLib.ConvertKeyBMP
                 bData = null;
                 Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Add("Load height image exception.", MsgLevel.Alarm, ex);
             }
@@ -217,7 +211,7 @@ namespace RsLib.ConvertKeyBMP
                         }
                     }
                 }
-                
+
                 //bmp.UnlockBits(bData);
                 bmp = null;
                 //bData = null;
@@ -279,7 +273,7 @@ namespace RsLib.ConvertKeyBMP
                 bData = null;
                 Log.Add($"Height Image Load Finished.", MsgLevel.Trace);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Add("Load height integer image exception.", MsgLevel.Alarm, ex);
             }
@@ -312,10 +306,10 @@ namespace RsLib.ConvertKeyBMP
                     byte* ptr = (byte*)ptr_scan0;
                     for (int y = 0; y < bData.Height; y++)
                     {
-                        for (int x = 0; x < bData.Width; x ++)
+                        for (int x = 0; x < bData.Width; x++)
                         {
                             byte B = *ptr;
-                            ptr ++;
+                            ptr++;
                             byte G = *ptr;
                             ptr++;
                             byte R = *ptr;
@@ -323,7 +317,7 @@ namespace RsLib.ConvertKeyBMP
 
                             if (B == 0 && G == 0 && R == 0)
                             {
-                                cloudArray[y, x ] = NoData;
+                                cloudArray[y, x] = NoData;
                                 continue;
                             }
                             else
@@ -357,12 +351,12 @@ namespace RsLib.ConvertKeyBMP
             return output;
         }
 
-        public static void SaveData(double[] x,double[] y,double[] z,string filePath)
+        public static void SaveData(double[] x, double[] y, double[] z, string filePath)
         {
             if (x.Length != y.Length || x.Length != z.Length) return;
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
-                for(int i = 0; i < x.Length;i++)
+                for (int i = 0; i < x.Length; i++)
                 {
                     if (z[i] == NoData) continue;
                     sw.WriteLine($"{x[i]:F2} {y[i]:F2} {z[i]:F2}");
@@ -414,10 +408,10 @@ namespace RsLib.ConvertKeyBMP
                         }
                         double xValue = GetXValue(x);
                         double yValue = GetYValue(y);
-                        
+
                         sw.WriteLine($"{xValue} {yValue} {zValue}");
                     }
-                    if(blankCount != cloudArray.GetLength(1)) sw.WriteLine("");
+                    if (blankCount != cloudArray.GetLength(1)) sw.WriteLine("");
                 }
                 sw.Flush();
             }
@@ -463,7 +457,7 @@ namespace RsLib.ConvertKeyBMP
                         }
                         double xValue = GetXValue(x);
                         double yValue = GetYValue(y);
-                        
+
                         sw.WriteLine($"{xValue} {yValue} {zValue}");
                     }
                     if (blankCount != cloudArray.GetLength(1)) sw.WriteLine("");
@@ -471,18 +465,18 @@ namespace RsLib.ConvertKeyBMP
                 sw.Flush();
             }
         }
-        public static double GetXValue(int xIndex) => Math.Round(xIndex * config.XGap,2);
+        public static double GetXValue(int xIndex) => Math.Round(xIndex * config.XGap, 2);
         public static double GetXValue(double xIndex) => Math.Round(xIndex * config.XGap, 2);
 
-        public static double GetYValue(int yIndex) => Math.Round((height-1 - yIndex) * config.YGap,2);
+        public static double GetYValue(int yIndex) => Math.Round((height - 1 - yIndex) * config.YGap, 2);
         public static double GetYValue(double yIndex) => Math.Round((height - 1 - yIndex) * config.YGap, 2);
 
-        public static double GetZValue(int xIndex,int yIndex) => cloudArray[yIndex,xIndex];
+        public static double GetZValue(int xIndex, int yIndex) => cloudArray[yIndex, xIndex];
         public static double GetZValue(double xIndex, double yIndex)
         {
             int ceilX = (int)Math.Ceiling(xIndex);
             int floorX = (int)Math.Floor(xIndex);
-             
+
             int ceilY = (int)Math.Ceiling(yIndex);
             int floorY = (int)Math.Floor(yIndex);
 
@@ -493,7 +487,7 @@ namespace RsLib.ConvertKeyBMP
 
             double sum = 0;
             int sumCount = 0;
-            if(z1 != NoData)
+            if (z1 != NoData)
             {
                 sum += z1;
                 sumCount++;
@@ -517,19 +511,19 @@ namespace RsLib.ConvertKeyBMP
 
         }
 
-        public static double NearestHighest(int xIndex,int yIndex, int offset)
+        public static double NearestHighest(int xIndex, int yIndex, int offset)
         {
             if (offset == 0) return GetZValue(xIndex, yIndex);
             int absOffset = Math.Abs(offset);
-            int ymin = (yIndex - absOffset) > 0 ? (yIndex-absOffset) : 0;
-            int ymax = (yIndex + absOffset) < Height ? (yIndex + absOffset) : Height -1;
+            int ymin = (yIndex - absOffset) > 0 ? (yIndex - absOffset) : 0;
+            int ymax = (yIndex + absOffset) < Height ? (yIndex + absOffset) : Height - 1;
             int xmin = (xIndex - absOffset) > 0 ? (xIndex - absOffset) : 0;
             int xmax = (xIndex + absOffset) < Width ? (xIndex + absOffset) : Width - 1;
 
             double zMax = double.MinValue;
-            for(int y = ymin ; y<=ymax ; y++)
+            for (int y = ymin; y <= ymax; y++)
             {
-                for(int x = xmin; x <= xmax ; x++)
+                for (int x = xmin; x <= xmax; x++)
                 {
                     double tryZ = GetZValue(x, y);
                     if (tryZ > zMax) zMax = tryZ;
@@ -611,7 +605,7 @@ namespace RsLib.ConvertKeyBMP
         static double IntToHeight(int value)
         {
             double output = 0;
-            output = Math.Round((config.MaxH - config.MinH) / 32768 * value + config.MinH,2);
+            output = Math.Round((config.MaxH - config.MinH) / 32768 * value + config.MinH, 2);
             return output;
         }
 
@@ -619,7 +613,7 @@ namespace RsLib.ConvertKeyBMP
     [Serializable]
     internal class KeyBMPConfig
     {
-        public  string HeightFileExt = "_IMG_HEIGHT.bmp";
+        public string HeightFileExt = "_IMG_HEIGHT.bmp";
         public string IntensityFileExt = "_IMG_INTENSITY.bmp";
 
         public double XGap = 0.15;
@@ -631,7 +625,7 @@ namespace RsLib.ConvertKeyBMP
         bool isInit = false;
         [YamlIgnore]
         public bool IsInit { get => isInit; }
-        
+
         const string config_file_name = "keyence.cfg";
 
 
@@ -658,7 +652,7 @@ namespace RsLib.ConvertKeyBMP
                 .Build();
 
             //yml contains a string containing your YAML
-            
+
             var p = deserializer.Deserialize<KeyBMPConfig>(ReadData);
             this.XGap = p.XGap;
             this.YGap = p.YGap;

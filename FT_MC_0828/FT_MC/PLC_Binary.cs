@@ -1,5 +1,5 @@
-﻿using System;
-using RsLib.LogMgr;
+﻿using RsLib.LogMgr;
+using System;
 namespace RsLib.McProtocol
 {
     public class PLC_Binary : CTCPIP
@@ -176,7 +176,7 @@ namespace RsLib.McProtocol
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Add($"{logger_ip} ReadWord exception", MsgLevel.Alarm, e);
                 //logger.ErrorException(logger_ip, e);
@@ -343,7 +343,7 @@ namespace RsLib.McProtocol
                     if (rc == 9)
                     {
                         int num1 = numArray1[7] + numArray1[8] * 256;
-                        rc  = base.ReadSocket(ref numArray1, num1);
+                        rc = base.ReadSocket(ref numArray1, num1);
                         if (rc < 0) return false;
                         else
                         {

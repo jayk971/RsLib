@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-using RsLib.TCP.Control;
-using RsLib.LogMgr;
-using RsLib.Common;
-using RsLib.AlarmMgr;
-using System.IO;
-using System.Threading;
+﻿using RsLib.Common;
 using RsLib.Display3D;
+using RsLib.LogMgr;
 using RsLib.PointCloud;
-
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using RsLib.SerialPortLib;
+using RsLib.TCP.Control;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 namespace RsLib.DemoForm
 {
     public partial class Form1 : Form
@@ -67,7 +59,7 @@ namespace RsLib.DemoForm
         }
         void traceTd(object obj)
         {
-            while(true)
+            while (true)
             {
                 Log.Add($" {Thread.CurrentThread.ManagedThreadId} - Trace", MsgLevel.Trace);
                 SpinWait.SpinUntil(() => false, 500);
@@ -93,7 +85,7 @@ namespace RsLib.DemoForm
         {
             while (true)
             {
-                
+
                 Log.Add($" {Thread.CurrentThread.ManagedThreadId} - alarm", MsgLevel.Alarm);
                 SpinWait.SpinUntil(() => false, 300);
             }
@@ -101,7 +93,7 @@ namespace RsLib.DemoForm
 
         private void Zoom1Ctrl_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Middle)
+            if (e.Button == MouseButtons.Middle)
             {
                 zoomCtrl.ResetView();
             }
@@ -123,7 +115,7 @@ namespace RsLib.DemoForm
 
         private void Zoom1Ctrl_MouseMove(object sender, MouseEventArgs e)
         {
-          if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 zoomCtrl.Zoom = zoom1Ctrl.Zoom;
                 zoomCtrl.Pan = zoom1Ctrl.Pan;
@@ -150,7 +142,7 @@ namespace RsLib.DemoForm
         bool _isDragTool = false;
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(_isDragTool)
+            if (_isDragTool)
             {
             }
         }
@@ -159,9 +151,9 @@ namespace RsLib.DemoForm
 
         void writeTxt(object obj)
         {
-            using (StreamWriter sw = new StreamWriter("d:\\test.txt",true,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter("d:\\test.txt", true, Encoding.Default))
             {
-                while(true)
+                while (true)
                 {
                     sw.WriteLine($"{DateTime.Now.ToShortTimeString()}\n");
                     sw.Flush();
@@ -177,7 +169,7 @@ namespace RsLib.DemoForm
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 op.Filter = "XYZ|*.xyz";
-                if(op.ShowDialog() == DialogResult.OK)
+                if (op.ShowDialog() == DialogResult.OK)
                 {
                     filePath = op.FileName;
                 }
@@ -189,12 +181,12 @@ namespace RsLib.DemoForm
 
             using (StreamReader sr = new StreamReader(filePath))
             {
-                while(!sr.EndOfStream)
+                while (!sr.EndOfStream)
                 {
                     string readData = sr.ReadLine();
                     string[] splitData = readData.Split('\t');
 
-                    if(splitData.Length == 6)
+                    if (splitData.Length == 6)
                     {
                         double x = double.Parse(splitData[0]);
                         double y = double.Parse(splitData[1]);
@@ -236,7 +228,7 @@ namespace RsLib.DemoForm
 
 
 
-                    List<int> nearIntCloud= cloud.GetNearestCloudIndex(new Point3D(realX, realY, 0), 1.0);
+                    List<int> nearIntCloud = cloud.GetNearestCloudIndex(new Point3D(realX, realY, 0), 1.0);
                     if (nearIntCloud.Count == 0) continue;
 
                     PointCloud.PointCloud nearCloud = new PointCloud.PointCloud();
@@ -246,7 +238,7 @@ namespace RsLib.DemoForm
                     }
                     PointCloud.PointCloud tmpCloud = nearCloud.DeepClone();
                     tmpCloud.ReduceAboveY(realY);
-                    Point3D tmpMaxZ =  tmpCloud.GetMaxZPoint();
+                    Point3D tmpMaxZ = tmpCloud.GetMaxZPoint();
                     nearCloud.ReduceBelowY(tmpMaxZ.Y);
                     Point3D findMinZ = nearCloud.GetMinZPoint();
 
@@ -262,23 +254,23 @@ namespace RsLib.DemoForm
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 op.Filter = "Halcon data|*.dat";
-                if(op.ShowDialog() == DialogResult.OK)
+                if (op.ShowDialog() == DialogResult.OK)
                 {
                     dataFilePath = op.FileName;
                 }
             }
 
-            if(File.Exists(dataFilePath))
+            if (File.Exists(dataFilePath))
             {
                 CoordMatrix cm = new CoordMatrix();
 
-                
+
                 using (StreamReader sr = new StreamReader(dataFilePath))
                 {
-                    while(!sr.EndOfStream)
+                    while (!sr.EndOfStream)
                     {
                         string readData = sr.ReadLine();
-                        if(readData.Contains("Rodriguez"))
+                        if (readData.Contains("Rodriguez"))
                         {
                             readData = sr.ReadLine();
                             string[] splitData = readData.Split(' ');
@@ -301,7 +293,7 @@ namespace RsLib.DemoForm
                             double ty = double.Parse(splitData[2]);
                             double tz = double.Parse(splitData[3]);
 
-                            Shift s = new Shift(tx,ty,tz);
+                            Shift s = new Shift(tx, ty, tz);
                             cm.AddSeq(s);
 
                         }
@@ -403,12 +395,12 @@ namespace RsLib.DemoForm
             listBox1.Items.Clear();
         }
 
-        private void EJ1500_WeightMeasured(int index,double obj)
+        private void EJ1500_WeightMeasured(int index, double obj)
         {
             if (this.InvokeRequired)
             {
-                Action<int,double> action = new Action<int,double>(EJ1500_WeightMeasured);
-                this.Invoke(action,index, obj);
+                Action<int, double> action = new Action<int, double>(EJ1500_WeightMeasured);
+                this.Invoke(action, index, obj);
             }
             else
             {

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RsLib.AlarmMgr
@@ -40,7 +37,7 @@ namespace RsLib.AlarmMgr
         {
             if (this.InvokeRequired)
             {
-                Action< Queue < AlarmItem >> updateErrorUI = new Action<Queue<AlarmItem>>(AlarmHistory_AlarmQueueUpdated);
+                Action<Queue<AlarmItem>> updateErrorUI = new Action<Queue<AlarmItem>>(AlarmHistory_AlarmQueueUpdated);
                 this?.Invoke(updateErrorUI, obj);
             }
             else

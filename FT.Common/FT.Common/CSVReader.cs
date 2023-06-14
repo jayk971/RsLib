@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 namespace RsLib.Common
 {
     public static class CSVFile
     {
-        public static List<string[]> Load(string filePath,int expectColumn,bool enableSplit)
+        public static List<string[]> Load(string filePath, int expectColumn, bool enableSplit)
         {
             List<string[]> output = new List<string[]>();
             using (StreamReader sr = new StreamReader(filePath))
             {
-                while(!sr.EndOfStream)
+                while (!sr.EndOfStream)
                 {
                     string readData = sr.ReadLine();
-                    if(enableSplit)
+                    if (enableSplit)
                     {
                         string[] splitData = readData.Split(',');
-                        if(splitData.Length == expectColumn)
+                        if (splitData.Length == expectColumn)
                         {
                             output.Add(splitData);
                         }
@@ -33,7 +30,7 @@ namespace RsLib.Common
 
             return output;
         }
-        public static List<string[]> Load(string filePath, int expectColumn, bool enableSplit,int startReadIndex,int readLength)
+        public static List<string[]> Load(string filePath, int expectColumn, bool enableSplit, int startReadIndex, int readLength)
         {
             List<string[]> output = new List<string[]>();
             int rowCount = 0;
@@ -64,9 +61,9 @@ namespace RsLib.Common
 
             return output;
         }
-        public static void Save(string filePath,List<string> saveRow)
+        public static void Save(string filePath, List<string> saveRow)
         {
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
                 for (int i = 0; i < saveRow.Count; i++)
                 {

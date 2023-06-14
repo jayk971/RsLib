@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 namespace RsLib.Common
 {
@@ -114,11 +111,11 @@ namespace RsLib.Common
             s = string.Concat(charList.ToArray());
             return s;
         }
-        public static ComboBox AddEnumItems(this ComboBox box,Type enumType)
+        public static ComboBox AddEnumItems(this ComboBox box, Type enumType)
         {
             box.Items.Clear();
             if (enumType.BaseType.FullName != "System.Enum") return box;
-            
+
             string[] names = Enum.GetNames(enumType);
             for (int i = 0; i < names.Length; i++)
             {

@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using RsLib.PointCloud.CalculateMatrix;
 using System.Windows.Forms;
-using RsLib.PointCloud;
-using RsLib.PointCloud.CalculateMatrix;
 namespace RsLib.CalculateMatrixForm
 {
     public partial class Form1 : Form
