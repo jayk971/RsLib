@@ -31,6 +31,8 @@ namespace RsLib.SerialPortLib
         bool _enableGetWeight = false;
         public bool IsSettingLoaded { get; private set; } = false;
         bool _isTriggerFromControl = false;
+
+        public string Status { get; private set; } = "Not Connect";
         public EJ1500()
         {
 
@@ -89,6 +91,8 @@ namespace RsLib.SerialPortLib
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;
+                            Status = "Weight measured";
+
                         }
                     }
                 }
@@ -100,7 +104,7 @@ namespace RsLib.SerialPortLib
             if (Setting.PortName == "") return false;
             if (Setting.DataBits == 0) return false;
             if (IsSettingLoaded == false) return false;
-
+            Status = $"{Setting.PortName} Connecting....";
             _rs232 = new RS232($"EJ1500_{Setting.Index}",
                 Setting.PortName,
                 Setting.BaudrateOption,
@@ -114,10 +118,15 @@ namespace RsLib.SerialPortLib
             _rs232.Start("Q\r",2000);
             Connected?.Invoke(IsConnected);
             if (IsConnected)
+            {
                 Log.Add($"EJ1500 {Setting.Index} is connected.", MsgLevel.Info);
+                Status = "Connected";
+            }
             else
+            {
                 Log.Add($"EJ1500 {Setting.Index} cannot connect.", MsgLevel.Alarm);
-
+                Status = "Disconnected";
+            }
             return IsConnected;
         }
         public void Disconnect()
@@ -125,6 +134,8 @@ namespace RsLib.SerialPortLib
             _rs232.Stop();
             Connected?.Invoke(IsConnected);
             Log.Add($"EJ1500 {Setting.Index} disconnect.", MsgLevel.Info);
+            Status = "Disconnected";
+
         }
         public void Measure(bool isTriggerFromControl)
         {
@@ -132,11 +143,14 @@ namespace RsLib.SerialPortLib
             if (_rs232.IsConnected == false) return;
             _isTriggerFromControl = isTriggerFromControl;
             _enableGetWeight = true;
+            Status = "Weight measuring...";
+
             ThreadPool.QueueUserWorkItem(getWeight);
         }
 
         void getWeight(object obj)
         {
+
             while (_enableGetWeight)
             {
                 _rs232.Send("Q\r");
@@ -145,6 +159,7 @@ namespace RsLib.SerialPortLib
                 {
                     Log.Add($"{Setting.PortName} read data time out.", MsgLevel.Warn);
                     _enableGetWeight = false;
+                    Status = "Read data time out";
                 }
                 else
                 {
@@ -157,6 +172,8 @@ namespace RsLib.SerialPortLib
         {
             if (_rs232 == null) return;
             if (_rs232.IsConnected == false) return;
+            Status = "Zero setting...";
+
             Log.Add("Set Zero", MsgLevel.Info);
             _rs232.Send("Z\r");
         }
