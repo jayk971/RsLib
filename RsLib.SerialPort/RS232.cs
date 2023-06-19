@@ -34,15 +34,29 @@ namespace RsLib.SerialPortLib
         {
             _serialPort.Open();
             _serialPort.DataReceived += _serialPort_DataReceived;
-            Send(testCommand);
-           int isTimeOut =  FT_Functions.IsTimeOut(waitTime, () => ReadData != "", true);
-            if (isTimeOut == (int)TimeOutType.TimeOut)
+            for (int i = 0; i < 5; i++)
             {
-                IsConnected = false;
-                Stop();
-                Log.Add($"Serial port {_serialPort.PortName} connect fail.", MsgLevel.Warn);
+                Send(testCommand);
+                int isTimeOut = FT_Functions.IsTimeOut(waitTime, () => ReadData != "", true);
+                if (isTimeOut == (int)TimeOutType.TimeOut)
+                {
+                    if (i == 4)
+                    {
+                        IsConnected = false;
+                        Stop();
+                        Log.Add($"Serial port {_serialPort.PortName} connect fail.", MsgLevel.Warn);
+                    }
+                    else
+                    {
+                        Log.Add($"Serial port {_serialPort.PortName} connect fail. Retry {i+1} / 5", MsgLevel.Warn);
+                    }
+                }
+                else
+                {
+                    IsConnected = true;
+                    break;
+                }
             }
-            else IsConnected = true;
         }
         public void Stop()
         {

@@ -87,7 +87,7 @@ namespace RsLib.SerialPortLib
                         if (_stableCount >= Setting.MeasureCount)
                         {
                             double avgWeight = Math.Round(_weightSum / (double)Setting.MeasureCount, 1);
-                            if(_isRaiseEvent == false) WeightMeasured?.Invoke(Setting.Index, avgWeight);
+                            if(_isRaiseEvent) WeightMeasured?.Invoke(Setting.Index, avgWeight);
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;
@@ -115,7 +115,7 @@ namespace RsLib.SerialPortLib
             Log.Add($"EJ1500 {Setting.Index} {Setting.PortName} {Setting.BaudrateOption} {Setting.ParityOption} {Setting.DataBits} {Setting.StopBitsOption} is connecting...", MsgLevel.Info);
             _rs232.DataUpdated += _rs232_DataUpdated;
             _isRaiseEvent = false;
-            _rs232.Start("Q\r",2000);
+            _rs232.Start("Q\r",500);
             Connected?.Invoke(IsConnected);
             if (IsConnected)
             {
@@ -165,7 +165,7 @@ namespace RsLib.SerialPortLib
                 {
 
                 }
-                //SpinWait.SpinUntil(() => false, 150);
+                SpinWait.SpinUntil(() => false, 150);
             }
         }
         public void SetSero()

@@ -425,7 +425,7 @@ namespace RsLib.DemoForm
 
         private void button4_Click(object sender, EventArgs e)
         {
-            eJ1500.Measure(true);
+            eJ1500.Measure(false);
         }
 
         private void button5_Click(object sender, EventArgs e)
