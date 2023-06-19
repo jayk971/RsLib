@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icons8_coordinate_system.ico</ApplicationIcon>
+    <ApplicationIcon>icons8_object.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -126,7 +126,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icons8_coordinate_system.ico" />
+    <Content Include="icons8_object.ico" />
     <None Include="Resources\open_document_30px.png" />
     <None Include="Resources\broom_30px.png" />
   </ItemGroup>

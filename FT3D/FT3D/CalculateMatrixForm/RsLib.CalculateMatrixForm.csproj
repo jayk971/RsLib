@@ -68,7 +68,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icons8_math.ico</ApplicationIcon>
+    <ApplicationIcon>icons8_matrix.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RsLib.PointCloud">
@@ -124,7 +124,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icons8_math.ico" />
+    <Content Include="icons8_matrix.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
