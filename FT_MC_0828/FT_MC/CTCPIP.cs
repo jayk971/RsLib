@@ -25,21 +25,12 @@ namespace RsLib.McProtocol
         private TcpConnectionInformation[] connections;
         public ThreadingTimer tdt_PLC_Connect = null;
         bool tdt_busy = false;
-<<<<<<< HEAD
+
         //bool isPLCAlarm = false;
         public event Action PLCAlarm;
         public string ConnectStatus => m_enConState.ToString();
 
-=======
-        bool isPLCAlarm = false;
-        public string ConnectStatus
-        {
-            get
-            {
-                return this.m_enConState.ToString();
-            }
-        }
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
         public CTCPIP()
         {
         }
@@ -52,20 +43,16 @@ namespace RsLib.McProtocol
                 m_ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 m_ClientSocket.Connect(IPAddress.Parse(m_sIPAddress), m_iPortNum);
                 flag = true;
-                isPLCAlarm = false;
             }
             catch (Exception e)
             {
                 m_ClientSocket = null;
                 SpinWait.SpinUntil(() => false, 500);
                 flag = false;
-<<<<<<< HEAD
 
                 Log.Add($"PLC connect exception {logger_ip}", MsgLevel.Alarm, e);
                 PLCAlarm?.Invoke();
-=======
-                isPLCAlarm = true;
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
             }
             return flag;
         }
@@ -73,25 +60,18 @@ namespace RsLib.McProtocol
         {
             try
             {
-<<<<<<< HEAD
+
                 m_ClientSocket.Shutdown(SocketShutdown.Both);
                 m_ClientSocket.Close();
                 Log.Add($"PLC {logger_ip} - Connection is already closed", MsgLevel.Trace);
-=======
-                this.m_ClientSocket.Shutdown(SocketShutdown.Both);
-                this.m_ClientSocket.Close();
-                Log.Add($"{logger_ip} - Connection is already closed", MsgLevel.Trace);
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
                 SpinWait.SpinUntil(() => false, 100);
                 if (!m_bPassive)
                     m_enConState = ConState.Opening;
                 else
-<<<<<<< HEAD
+
                     m_enConState = ConState.listen;
-=======
-                    this.m_enConState = ConState.listen;
-                isPLCAlarm = false;
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
             }
             catch (Exception e)
             {
@@ -141,12 +121,10 @@ namespace RsLib.McProtocol
                 catch (Exception e)
                 {
                     num = -1;
-<<<<<<< HEAD
+
                     Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     PLCAlarm?.Invoke();
-=======
-                    isPLCAlarm = true;
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
                 }
             }
             return num;
@@ -181,12 +159,10 @@ namespace RsLib.McProtocol
                 catch (Exception e)
                 {
                     num1 = -1;
-<<<<<<< HEAD
+
                     Log.Add($"PLC {logger_ip} read socket exception.", MsgLevel.Alarm, e);
                     PLCAlarm?.Invoke();
-=======
-                    isPLCAlarm = true;
->>>>>>> 119d896b0ddb8931faf774d7de88552395d4a250
+
                     break;
                 }
             }
