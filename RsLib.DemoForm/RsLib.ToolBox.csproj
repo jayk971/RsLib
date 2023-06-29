@@ -160,10 +160,6 @@
       <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
       <Name>RsLib.PointCloud.CalculateMatrix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FT3D\FT3D\CalculateMatrixForm\RsLib.CalculateMatrixForm.csproj">
-      <Project>{52f26a3b-447c-4ede-a5b2-c5fbb53808fd}</Project>
-      <Name>RsLib.CalculateMatrixForm</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FT3D\FT3D\FT3D\RsLib.PointCloud.csproj">
       <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
       <Name>RsLib.PointCloud</Name>
