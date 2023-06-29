@@ -494,22 +494,29 @@ namespace RsLib.Display3D
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
-                    if (objectType == typeof(Point3D))
+                    try
                     {
-                        var obj = _displayObject[_selectIndex] as Point3D;
-                        obj.Save(filePath);
+                        if (objectType == typeof(Point3D))
+                        {
+                            var obj = _displayObject[_selectIndex] as Point3D;
+                            obj.Save(filePath);
+                        }
+                        else if (objectType == typeof(ObjectGroup))
+                        {
+                            var obj = _displayObject[_selectIndex] as ObjectGroup;
+                            obj.Save(filePath);
+                        }
+                        else
+                        {
+                            var obj = _displayObject[_selectIndex] as RPointCloud;
+                            obj.Save(filePath);
+                        }
+                        MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    else if (objectType == typeof(ObjectGroup))
+                    catch(Exception ex)
                     {
-                        var obj = _displayObject[_selectIndex] as ObjectGroup;
-                        obj.Save(filePath);
+                        MessageBox.Show($"Save xyz point cloud exception.\n{ex.Message}", "Save file fail.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    else
-                    {
-                        var obj = _displayObject[_selectIndex] as RPointCloud;
-                        obj.Save(filePath);
-                    }
-
                 }
             }
 

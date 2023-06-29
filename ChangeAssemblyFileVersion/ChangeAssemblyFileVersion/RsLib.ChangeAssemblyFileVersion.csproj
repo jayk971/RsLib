@@ -140,4 +140,11 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set OutputFolder="D:\RLib\$(OutDir)RsLib.Change File Version"
+
+if not exist %25OutputFolder%25 mkdir %25OutputFolder%25
+
+copy "$(TargetDIR)" %25OutputFolder%25 /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
