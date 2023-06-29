@@ -54,6 +54,9 @@ namespace ChangeAssemblyFileVersion
                 parseSolutionFile();
 
             }
+            DateTime dt = DateTime.Now;
+            int newBuild = (dt.Year - 2000) * 1000 + dt.DayOfYear;
+            lbl_Today.Text = newBuild.ToString();
         }
 
         private void F2_VersionUpdated(string name ,int arg1, int arg2, int arg3, int arg4)
@@ -100,6 +103,7 @@ namespace ChangeAssemblyFileVersion
                         if(!config.slnFiles.Contains(op.FileName))
                         {
                             config.SlnAdd(op.FileName);
+                            Log.Add($"Add new solution {op.FileName}", MsgLevel.Info);
                         }
 
                     }
@@ -242,6 +246,8 @@ namespace ChangeAssemblyFileVersion
         }
         private void btn_UpdateAll_Click(object sender, EventArgs e)
         {
+            Log.Add("Auto update all project.", MsgLevel.Info);
+
             updateAll();
         }
         void updateAll()
@@ -269,6 +275,8 @@ namespace ChangeAssemblyFileVersion
             }
             if(assembly.ContainsKey(selectName))
             {
+                Log.Add($"Update project {selectName}.", MsgLevel.Info);
+
                 assembly[selectName].Update();
                 assembly[selectName].WriteToFile();
             }
@@ -319,22 +327,23 @@ namespace ChangeAssemblyFileVersion
         private void btn_DeleteSln_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == -1) return;
+            Log.Add("Delete solution.", MsgLevel.Info);
+
             config.SlnDelete(comboBox1.SelectedIndex);
         }
 
         private void btn_ClearSln_Click(object sender, EventArgs e)
         {
+            Log.Add("Cleam solutions.", MsgLevel.Info);
+
             config.SlnClear();
         }
 
         private void btn_ManualUpdateAll_Click(object sender, EventArgs e)
         {
+            Log.Add("Manual update all project.", MsgLevel.Info);
             _isUpdateAll = true;
-            f2.SetTextbox(_AllProject,
-               assembly[selectName].Main,
-               assembly[selectName].Sub,
-               assembly[selectName].Build,
-               assembly[selectName].Revise);
+            f2.SetTextbox(_AllProject,0,0,0,0);
             f2.ShowDialog();
         }
     }
@@ -378,7 +387,7 @@ namespace ChangeAssemblyFileVersion
         public void WriteToFile()
         {
             List<string> readData = new List<string>();
-            using (StreamReader sr = new StreamReader(AssemblyFilePath))
+            using (StreamReader sr = new StreamReader(AssemblyFilePath,Encoding.Default))
             {
                 while (!sr.EndOfStream)
                 {
