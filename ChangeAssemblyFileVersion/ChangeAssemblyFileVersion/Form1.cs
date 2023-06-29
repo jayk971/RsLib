@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using System.IO;
 using YamlDotNet.Serialization;
+using RsLib.LogMgr;
 namespace ChangeAssemblyFileVersion
 {
     public partial class Form1 : Form
@@ -19,13 +20,20 @@ namespace ChangeAssemblyFileVersion
         Dictionary<string,AssemblyVersion> assembly = new Dictionary<string,AssemblyVersion>();
         Form2 f2 = new Form2();
         SystemConfig config = new SystemConfig();
-
+        LogControl _LogCtrl = new LogControl();
         public Form1()
         {
+            Log.EnableUpdateUI = false;
             InitializeComponent();
+            _LogCtrl.Dock = DockStyle.Fill;
+            panel1.Controls.Add( _LogCtrl );
+
+
             f2.VersionUpdated += F2_VersionUpdated;
             config.FileLoaded += Config_FileLoaded;
             config.LoadYaml();
+            Log.Start();
+            Log.EnableUpdateUI = true;
 
         }
 
@@ -80,6 +88,7 @@ namespace ChangeAssemblyFileVersion
 
         private void parseSolutionFile()
         {
+            Log.Add($"Start parse solution file. {currentSlnFile}", MsgLevel.Info);
             assembly.Clear();
             Dictionary<string, string> dic_Project = new Dictionary<string, string>();
             List<string> readData = new List<string>();
@@ -97,7 +106,11 @@ namespace ChangeAssemblyFileVersion
                 if (readLine.Contains("Project(\""))
                 {
                     Tuple<string, string> temp = parseSolutionData(readLine);
-                    dic_Project.Add(temp.Item1, temp.Item2);
+                    if (dic_Project.ContainsKey(temp.Item1) == false)
+                        dic_Project.Add(temp.Item1, temp.Item2);
+                    else
+                        Log.Add($"Dictionary already contain key \"{temp.Item1}\"", MsgLevel.Warn);
+
                 }
             }
             loadAssemblyFile(dic_Project);
@@ -131,6 +144,7 @@ namespace ChangeAssemblyFileVersion
         }
         private void loadAssemblyFile(Dictionary<string, string> dic_Project)
         {
+            Log.Add($"Start load each AssemblyInfo.cs", MsgLevel.Info);
             foreach (KeyValuePair<string, string> kvp in dic_Project)
             {
                 string projectFolder = Path.GetDirectoryName($"{currentSlnFolder}\\{kvp.Value}");
@@ -191,6 +205,7 @@ namespace ChangeAssemblyFileVersion
         }
         private void updateTreeView()
         {
+            Log.Add("Update treeview", MsgLevel.Info);
             treeView1.Nodes.Clear();
             foreach (KeyValuePair<string, AssemblyVersion> kvp in assembly)
             {
@@ -266,7 +281,14 @@ namespace ChangeAssemblyFileVersion
             if (comboBox1.SelectedIndex == -1) return;
 
             currentSlnFile = comboBox1.SelectedItem.ToString();
-            parseSolutionFile();
+            try
+            {
+                parseSolutionFile();
+            }
+            catch (Exception ex) 
+            {
+                Log.Add("Parse solution file exception.", MsgLevel.Alarm, ex);
+            }
         }
 
         private void btn_DeleteSln_Click(object sender, EventArgs e)

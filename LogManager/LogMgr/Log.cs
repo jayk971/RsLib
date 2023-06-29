@@ -20,7 +20,7 @@ namespace RsLib.LogMgr
         internal static Logger m_Log = LogManager.GetLogger("Lib");
         internal static Logger m_FatalLog = LogManager.GetLogger("Lib_Fatal");
         static bool _enableTd = false;
-        static bool _isTdRunning = false;
+        public static bool IsTdRunning { get; private set; } = false;
         //public delegate void delegateUpdateUI(string msg, MsgLevel level);
         public static event Action<LogMsg> UiUpdated;
         private static readonly object _lock = new object();
@@ -77,7 +77,7 @@ namespace RsLib.LogMgr
         {
             while (_enableTd)
             {
-                _isTdRunning = true;
+                IsTdRunning = true;
                 SpinWait.SpinUntil(() => false, 5);
                 if (_logQ.Count == 0) continue;
                 LogMsg tempMsg;
@@ -129,7 +129,7 @@ namespace RsLib.LogMgr
                     }
                 }
             }
-            _isTdRunning = false;
+            IsTdRunning = false;
         }
     }
 

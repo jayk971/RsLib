@@ -378,7 +378,6 @@ namespace RsLib.Display3D
 
         private void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
-            string ss = "";
         }
 
         private void btn_Edit_Click(object sender, EventArgs e)

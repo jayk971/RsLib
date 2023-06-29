@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // 組件的一般資訊是由下列的屬性集控制。
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // 設為預設，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.23172.3")]
+[assembly: AssemblyFileVersion("1.0.23180.6")]

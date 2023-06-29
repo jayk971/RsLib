@@ -30,7 +30,7 @@ namespace RsLib.DemoForm
             _EJ1500.LoadYaml("d:\\testEj1500.yaml");
             eJ1500Ctrl = new EJ1500Control(_EJ1500);
             eJ1500Ctrl.Dock = DockStyle.Fill;
-            tabPage4.Controls.Add(eJ1500Ctrl);
+            tabPage_EJ1500.Controls.Add(eJ1500Ctrl);
 
             Log.EnableUpdateUI = false;
             Log.Start();
@@ -40,7 +40,7 @@ namespace RsLib.DemoForm
             pnl_TCPClient.Controls.Add(clientControl);
 
             displayControl.Dock = DockStyle.Fill;
-            tabPage2.Controls.Add(displayControl);
+            tabPage_XYZView.Controls.Add(displayControl);
             logControl.Dock = DockStyle.Fill;
             tableLayoutPanel1.Controls.Add(logControl, 0, 1);
             zoomCtrl.Dock = DockStyle.Fill;

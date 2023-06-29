@@ -70,10 +70,10 @@
   <PropertyGroup>
     <ApplicationIcon>icons8_matrix.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RsLib.PointCloud">
-      <HintPath>..\..\..\..\..\..\RLib\bin\Debug\RsLib.PointCloud.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -118,13 +118,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icons8_matrix.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Calculate3DOrig\RsLib.PointCloud.CalculateMatrix.csproj">
       <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
       <Name>RsLib.PointCloud.CalculateMatrix</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="icons8_matrix.ico" />
+    <ProjectReference Include="..\FT3D\RsLib.PointCloud.csproj">
+      <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
+      <Name>RsLib.PointCloud</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set OutputFolder="D:\RLib\$(OutDir)RsLib.Calculate Transform Matrix"
+
+if not exist %25OutputFolder%25 mkdir %25OutputFolder%25
+
+copy "$(TargetDIR)" %25OutputFolder%25 /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

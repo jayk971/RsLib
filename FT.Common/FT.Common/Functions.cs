@@ -532,6 +532,7 @@ namespace RsLib.Common
             }
             catch (Exception ex)
             {
+                Log.Add("Decrypt string exception.", MsgLevel.Alarm, ex);
                 returnStr = "Error";
                 return false;
             }
@@ -571,6 +572,7 @@ namespace RsLib.Common
             }
             catch (Exception ex)
             {
+                Log.Add("Check firewall exception.", MsgLevel.Alarm, ex);
                 return null;
             }
         }
