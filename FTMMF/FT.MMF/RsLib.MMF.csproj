@@ -67,9 +67,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RsLib.LogMgr">
-      <HintPath>..\..\..\..\..\RLib\bin\Release\RsLib.LogMgr.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -84,6 +81,12 @@
     <Compile Include="MMFReadWrite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LogManager\LogMgr\RsLib.LogMgr.csproj">
+      <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
+      <Name>RsLib.LogMgr</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

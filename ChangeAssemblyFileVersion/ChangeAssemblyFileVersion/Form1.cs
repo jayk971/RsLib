@@ -21,6 +21,8 @@ namespace ChangeAssemblyFileVersion
         Form2 f2 = new Form2();
         SystemConfig config = new SystemConfig();
         LogControl _LogCtrl = new LogControl();
+        bool _isUpdateAll = false;
+        const string _AllProject = "AllProject";
         public Form1()
         {
             Log.EnableUpdateUI = false;
@@ -56,15 +58,34 @@ namespace ChangeAssemblyFileVersion
 
         private void F2_VersionUpdated(string name ,int arg1, int arg2, int arg3, int arg4)
         {
-            if(assembly.ContainsKey(name))
+            if (_isUpdateAll == false)
             {
-                assembly[selectName].Main = arg1;
-                assembly[selectName].Sub = arg2;
-                assembly[selectName].Build = arg3;
-                assembly[selectName].Revise = arg4;
-                assembly[selectName].WriteToFile();
-                parseSolutionFile();
+                if (assembly.ContainsKey(name))
+                {
+                    assembly[selectName].Main = arg1;
+                    assembly[selectName].Sub = arg2;
+                    assembly[selectName].Build = arg3;
+                    assembly[selectName].Revise = arg4;
+                    assembly[selectName].WriteToFile();
+                    parseSolutionFile();
+                }
             }
+            else
+            {
+                if (name == _AllProject)
+                {
+                    foreach (KeyValuePair<string, AssemblyVersion> kvp in assembly)
+                    {
+                        assembly[kvp.Key].Main = arg1;
+                        assembly[kvp.Key].Sub = arg2;
+                        assembly[kvp.Key].Build = arg3;
+                        assembly[kvp.Key].Revise = arg4;
+                        assembly[kvp.Key].WriteToFile();
+                    }
+                    parseSolutionFile();
+                }
+            }
+            _isUpdateAll = false;
         }
 
         private void btn_SelectSLN_Click(object sender, EventArgs e)
@@ -221,6 +242,10 @@ namespace ChangeAssemblyFileVersion
         }
         private void btn_UpdateAll_Click(object sender, EventArgs e)
         {
+            updateAll();
+        }
+        void updateAll()
+        {
             foreach (KeyValuePair<string, AssemblyVersion> kvp in assembly)
             {
                 kvp.Value.Update();
@@ -228,7 +253,6 @@ namespace ChangeAssemblyFileVersion
             }
             parseSolutionFile();
         }
-
         private void btn_Update_Click(object sender, EventArgs e)
         {
             if(treeView1.SelectedNode.Level == 0)
@@ -253,6 +277,7 @@ namespace ChangeAssemblyFileVersion
 
         private void treeView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            _isUpdateAll = false;
             if (treeView1.SelectedNode.Level == 0)
             {
                 selectName = treeView1.SelectedNode.Name;
@@ -300,6 +325,17 @@ namespace ChangeAssemblyFileVersion
         private void btn_ClearSln_Click(object sender, EventArgs e)
         {
             config.SlnClear();
+        }
+
+        private void btn_ManualUpdateAll_Click(object sender, EventArgs e)
+        {
+            _isUpdateAll = true;
+            f2.SetTextbox(_AllProject,
+               assembly[selectName].Main,
+               assembly[selectName].Sub,
+               assembly[selectName].Build,
+               assembly[selectName].Revise);
+            f2.ShowDialog();
         }
     }
     internal class AssemblyVersion

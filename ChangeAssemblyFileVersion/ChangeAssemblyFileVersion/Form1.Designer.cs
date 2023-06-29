@@ -40,6 +40,7 @@ namespace ChangeAssemblyFileVersion
             this.btn_DeleteSln = new System.Windows.Forms.Button();
             this.btn_UpdateAll = new System.Windows.Forms.Button();
             this.btn_Update = new System.Windows.Forms.Button();
+            this.btn_ManualUpdateAll = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -109,25 +110,26 @@ namespace ChangeAssemblyFileVersion
             this.tableLayoutPanel2.Controls.Add(this.btn_DeleteSln, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.btn_UpdateAll, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.btn_Update, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.btn_ManualUpdateAll, 0, 6);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(627, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 6;
+            this.tableLayoutPanel2.RowCount = 7;
             this.tableLayoutPanel1.SetRowSpan(this.tableLayoutPanel2, 2);
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(94, 519);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
             // btn_ClearSln
             // 
             this.btn_ClearSln.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_ClearSln.Location = new System.Drawing.Point(3, 175);
+            this.btn_ClearSln.Location = new System.Drawing.Point(3, 151);
             this.btn_ClearSln.Name = "btn_ClearSln";
             this.btn_ClearSln.Size = new System.Drawing.Size(88, 24);
             this.btn_ClearSln.TabIndex = 7;
@@ -149,7 +151,7 @@ namespace ChangeAssemblyFileVersion
             // btn_DeleteSln
             // 
             this.btn_DeleteSln.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_DeleteSln.Location = new System.Drawing.Point(3, 89);
+            this.btn_DeleteSln.Location = new System.Drawing.Point(3, 77);
             this.btn_DeleteSln.Name = "btn_DeleteSln";
             this.btn_DeleteSln.Size = new System.Drawing.Size(88, 24);
             this.btn_DeleteSln.TabIndex = 6;
@@ -159,25 +161,36 @@ namespace ChangeAssemblyFileVersion
             // 
             // btn_UpdateAll
             // 
-            this.btn_UpdateAll.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_UpdateAll.Location = new System.Drawing.Point(3, 433);
+            this.btn_UpdateAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_UpdateAll.Location = new System.Drawing.Point(3, 373);
             this.btn_UpdateAll.Name = "btn_UpdateAll";
-            this.btn_UpdateAll.Size = new System.Drawing.Size(88, 29);
+            this.btn_UpdateAll.Size = new System.Drawing.Size(88, 68);
             this.btn_UpdateAll.TabIndex = 5;
-            this.btn_UpdateAll.Text = "Update All";
+            this.btn_UpdateAll.Text = "Auto Update All";
             this.btn_UpdateAll.UseVisualStyleBackColor = true;
             this.btn_UpdateAll.Click += new System.EventHandler(this.btn_UpdateAll_Click);
             // 
             // btn_Update
             // 
-            this.btn_Update.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_Update.Location = new System.Drawing.Point(3, 347);
+            this.btn_Update.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_Update.Location = new System.Drawing.Point(3, 299);
             this.btn_Update.Name = "btn_Update";
-            this.btn_Update.Size = new System.Drawing.Size(88, 29);
+            this.btn_Update.Size = new System.Drawing.Size(88, 68);
             this.btn_Update.TabIndex = 4;
-            this.btn_Update.Text = "Update";
+            this.btn_Update.Text = "Auto Update";
             this.btn_Update.UseVisualStyleBackColor = true;
             this.btn_Update.Click += new System.EventHandler(this.btn_Update_Click);
+            // 
+            // btn_ManualUpdateAll
+            // 
+            this.btn_ManualUpdateAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_ManualUpdateAll.Location = new System.Drawing.Point(3, 447);
+            this.btn_ManualUpdateAll.Name = "btn_ManualUpdateAll";
+            this.btn_ManualUpdateAll.Size = new System.Drawing.Size(88, 69);
+            this.btn_ManualUpdateAll.TabIndex = 8;
+            this.btn_ManualUpdateAll.Text = "Manual Update All";
+            this.btn_ManualUpdateAll.UseVisualStyleBackColor = true;
+            this.btn_ManualUpdateAll.Click += new System.EventHandler(this.btn_ManualUpdateAll_Click);
             // 
             // panel1
             // 
@@ -217,6 +230,7 @@ namespace ChangeAssemblyFileVersion
         private System.Windows.Forms.Button btn_DeleteSln;
         private System.Windows.Forms.Button btn_ClearSln;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btn_ManualUpdateAll;
     }
 }
 
