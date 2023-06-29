@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6F3C8304-DB61-4306-8189-374A8ABC06D1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RsLib.TCP</RootNamespace>
-    <AssemblyName>RsLib.TCP</AssemblyName>
+    <ProjectGuid>{52F26A3B-447C-4EDE-A5B2-C5FBB53808FD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>RsLib.CalculateMatrixForm</RootNamespace>
+    <AssemblyName>Calculate Transform Matrix</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -66,115 +67,79 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icons8_matrix.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet">
-      <HintPath>D:\RLib\Lib\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TCPClient.cs" />
-    <Compile Include="TCPClientControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="TCPClientControl.Designer.cs">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TCPServer.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="TCPServerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TCPServerControl.Designer.cs">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TCPClientControl.resx">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TCPServerControl.resx">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\play_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stop_64px.png" />
+    <Content Include="icons8_matrix.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RsLib.Common\RsLib.Common.csproj">
       <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
       <Name>RsLib.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.LogMgr\RsLib.LogMgr.csproj">
-      <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
-      <Name>RsLib.LogMgr</Name>
+    <ProjectReference Include="..\RsLib.PointCloud.CalculateMatrix\RsLib.PointCloud.CalculateMatrix.csproj">
+      <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
+      <Name>RsLib.PointCloud.CalculateMatrix</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\continueShot.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refresh_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\paper_plane_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_email_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\play_64px1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Disconnect.png" />
+    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloud.csproj">
+      <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
+      <Name>RsLib.PointCloud</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
-set twFolder="D:\RLib\$(OutDir)zh-TW"
-set viFolder="D:\RLib\$(OutDir)vi"
-set enFolder="D:\RLib\$(OutDir)en"
+    <PostBuildEvent>set OutputFolder="D:\RLib\$(OutDir)RsLib.Calculate Transform Matrix"
 
-if not exist %25twFolder%25 mkdir %25twFolder%25
-if not exist %25viFolder%25 mkdir %25viFolder%25
-if not exist %25enFolder%25 mkdir %25enFolder%25
+if not exist %25OutputFolder%25 mkdir %25OutputFolder%25
 
-copy "$(TargetDir)zh-TW\" %25twFolder%25 /Y
-copy "$(TargetDir)en\" %25enFolder%25 /Y
-copy "$(TargetDir)vi\" %25viFolder%25 /Y</PostBuildEvent>
+copy "$(TargetDIR)" %25OutputFolder%25 /Y</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

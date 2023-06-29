@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // ????@???T?O??U?C??????????C
 // ???o????????Y?i?????????
 // ??T?C
-[assembly: AssemblyTitle("RsLib.BaseType")]
+[assembly: AssemblyTitle("Calculate3DOrig")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RsLib.BaseType")]
+[assembly: AssemblyProduct("Calculate3DOrig")]
 [assembly: AssemblyCopyright("Copyright c  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // ?U?C GUID ???M????} (Expose) ?? COM ???n???? typelib ID
-[assembly: Guid("a83549cb-762b-457e-82aa-cfdb913d3cc6")]
+[assembly: Guid("77ac06ae-f764-42ce-887d-50dec1a36257")]
 
 // ?????????T??U?C?|??????: 
 //
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // ?]???w?]?A?p?U???:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.23180.11")]
+[assembly: AssemblyFileVersion("3.0.23180.16")]

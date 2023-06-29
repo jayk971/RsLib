@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // ????@???T?O??U?C??????????C
 // ???o????????Y?i?????????
 // ??T?C
-[assembly: AssemblyTitle("RsLib.BaseType")]
+[assembly: AssemblyTitle("FT.DXF2Display")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RsLib.BaseType")]
-[assembly: AssemblyCopyright("Copyright c  2022")]
+[assembly: AssemblyProduct("FT.DXF2Display")]
+[assembly: AssemblyCopyright("Copyright c  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // ?U?C GUID ???M????} (Expose) ?? COM ???n???? typelib ID
-[assembly: Guid("a83549cb-762b-457e-82aa-cfdb913d3cc6")]
+[assembly: Guid("5e709816-1155-4c38-9c9d-b2aa746c65d7")]
 
 // ?????????T??U?C?|??????: 
 //
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // ?]???w?]?A?p?U???:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.23180.11")]
+[assembly: AssemblyFileVersion("3.0.23180.14")]

@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A878A3D1-BBDC-4853-A098-C3DED6C4A39A}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>RsLib.XYZViewer</RootNamespace>
-    <AssemblyName>RsLib.XYZViewer</AssemblyName>
+    <ProjectGuid>{5E709816-1155-4C38-9C9D-B2AA746C65D7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RsLib.DXF2Display</RootNamespace>
+    <AssemblyName>RsLib.DXF2Display</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,18 +22,16 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>icons8_object.ico</ApplicationIcon>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,7 +41,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -52,7 +50,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -62,7 +59,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -72,10 +68,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -84,78 +76,24 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="ToDisplay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="icons8_object.ico" />
-    <None Include="Resources\open_document_30px.png" />
-    <None Include="Resources\broom_30px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RsLib.Common\RsLib.Common.csproj">
-      <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
-      <Name>RsLib.Common</Name>
+    <ProjectReference Include="..\RsLib.DXF\RsLib.DXF.csproj">
+      <Project>{c2d53614-9834-46f6-8608-399e5c48ebd1}</Project>
+      <Name>RsLib.DXF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.ConvertKeyBMP\RsLib.ConvertKeyBMP.csproj">
-      <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
-      <Name>RsLib.ConvertKeyBMP</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloud.csproj">
-      <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
-      <Name>RsLib.PointCloud</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RsLib.LogMgr\RsLib.LogMgr.csproj">
-      <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
-      <Name>RsLib.LogMgr</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RsLib.Display3D\RsLib.Display3D.csproj">
-      <Project>{06d831f7-418c-409f-881e-1650a4e44834}</Project>
-      <Name>RsLib.Display3D</Name>
+    <ProjectReference Include="..\RsLib.Display\RsLib.Display.csproj">
+      <Project>{8c037e99-2910-4f24-a289-8dde65b9e04f}</Project>
+      <Name>RsLib.Display</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set folder="D:\RLib\$(OutDir)RsLib.XYZViewer"
-if not exist %25folder%25 mkdir %25folder%25
-copy "$(TargetDir)" %25folder%25</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

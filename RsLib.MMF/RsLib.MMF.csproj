@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1DEBD81E-7D9D-41B7-8771-45C73E3BB54A}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A8E9830-4A01-4820-BCE5-397D98F173BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RsLib.SerialPortLib</RootNamespace>
-    <AssemblyName>RsLib.SerialPortLib</AssemblyName>
+    <RootNamespace>RsLib.MMF</RootNamespace>
+    <AssemblyName>RsLib.MMF</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,81 +69,34 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet">
-      <HintPath>D:\RLib\Lib\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EJ1500Control.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="EJ1500Control.Designer.cs">
-      <DependentUpon>EJ1500Control.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="RS232.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="FT.MMFCommon.cs" />
+    <Compile Include="MMFReadWrite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EJ1500.cs" />
+    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RsLib.Common\RsLib.Common.csproj">
-      <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
-      <Name>RsLib.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RsLib.LogMgr\RsLib.LogMgr.csproj">
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="EJ1500Control.resx">
-      <DependentUpon>EJ1500Control.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Disconnect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\toggle_off_96px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\toggle_on_96px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\industrial_scales_40px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\broom_30px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\kitchen_scales_32px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\kitchen_scales_96px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\creative_commons_zero_32px.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>
   </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

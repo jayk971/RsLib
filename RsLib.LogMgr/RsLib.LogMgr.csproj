@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6F3C8304-DB61-4306-8189-374A8ABC06D1}</ProjectGuid>
+    <ProjectGuid>{2723C5BE-D1D7-4DB3-A650-45CD7DDC4673}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RsLib.TCP</RootNamespace>
-    <AssemblyName>RsLib.TCP</AssemblyName>
+    <RootNamespace>RsLib.LogMgr</RootNamespace>
+    <AssemblyName>RsLib.LogMgr</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,24 +29,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -66,7 +48,28 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>D:\RLib\Lib\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -76,88 +79,70 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet">
-      <HintPath>D:\RLib\Lib\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
+    <Compile Include="LogControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LogControl.Designer.cs">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TCPClient.cs" />
-    <Compile Include="TCPClientControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TCPClientControl.Designer.cs">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TCPServer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="TCPServerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TCPServerControl.Designer.cs">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="NLog - 複製.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LogControl.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogControl.vi.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogControl.zh-TW.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogControl.en.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TCPClientControl.resx">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TCPServerControl.resx">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\play_64px.png" />
+    <None Include="Resources\delete.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\stop_64px.png" />
+    <None Include="Resources\icons8_broom_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RsLib.Common\RsLib.Common.csproj">
-      <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
-      <Name>RsLib.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RsLib.LogMgr\RsLib.LogMgr.csproj">
-      <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
-      <Name>RsLib.LogMgr</Name>
+    <ProjectReference Include="..\RsLib.BaseType\RsLib.BaseType.csproj">
+      <Project>{a83549cb-762b-457e-82aa-cfdb913d3cc6}</Project>
+      <Name>RsLib.BaseType</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\continueShot.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refresh_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\paper_plane_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_email_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\play_64px1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Disconnect.png" />
+    <Content Include="NLog.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y
+copy "$(TargetDir)NLog.config" "D:\RLib\$(OutDir)NLog.config" /Y
+
 set twFolder="D:\RLib\$(OutDir)zh-TW"
 set viFolder="D:\RLib\$(OutDir)vi"
 set enFolder="D:\RLib\$(OutDir)en"
@@ -170,11 +155,4 @@ copy "$(TargetDir)zh-TW\" %25twFolder%25 /Y
 copy "$(TargetDir)en\" %25enFolder%25 /Y
 copy "$(TargetDir)vi\" %25viFolder%25 /Y</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

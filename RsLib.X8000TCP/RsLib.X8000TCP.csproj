@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6F3C8304-DB61-4306-8189-374A8ABC06D1}</ProjectGuid>
+    <ProjectGuid>{2B900918-2B55-4F04-AB1E-55F06F26BB6B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RsLib.TCP</RootNamespace>
-    <AssemblyName>RsLib.TCP</AssemblyName>
+    <RootNamespace>RsLib.X8000TCP</RootNamespace>
+    <AssemblyName>RsLib.X8000TCP</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,24 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +48,24 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -86,21 +89,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TCPClient.cs" />
-    <Compile Include="TCPClientControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TCPClientControl.Designer.cs">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TCPServer.cs" />
+    <Compile Include="X8000.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common.cs" />
-    <Compile Include="TCPServerControl.cs">
+    <Compile Include="X8000Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TCPServerControl.Designer.cs">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
+    <Compile Include="X8000Control.Designer.cs">
+      <DependentUpon>X8000Control.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -108,18 +103,24 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TCPClientControl.resx">
-      <DependentUpon>TCPClientControl.cs</DependentUpon>
+    <EmbeddedResource Include="X8000Control.resx">
+      <DependentUpon>X8000Control.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TCPServerControl.resx">
-      <DependentUpon>TCPServerControl.cs</DependentUpon>
+    <EmbeddedResource Include="X8000Control.vi.resx">
+      <DependentUpon>X8000Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="X8000Control.zh-TW.resx">
+      <DependentUpon>X8000Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="X8000Control.en.resx">
+      <DependentUpon>X8000Control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\play_64px.png" />
+    <None Include="Resources\iconfinder_control-play-triangle-launch-start_3209257.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\stop_64px.png" />
+    <None Include="Resources\icons8_link_64.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RsLib.Common\RsLib.Common.csproj">
@@ -130,30 +131,6 @@
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\continueShot.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refresh_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\paper_plane_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\send_email_64px.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\play_64px1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Disconnect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -170,11 +147,4 @@ copy "$(TargetDir)zh-TW\" %25twFolder%25 /Y
 copy "$(TargetDir)en\" %25enFolder%25 /Y
 copy "$(TargetDir)vi\" %25viFolder%25 /Y</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
