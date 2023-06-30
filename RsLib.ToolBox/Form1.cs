@@ -436,12 +436,10 @@ namespace RsLib.DemoForm
 
         private void button6_Click(object sender, EventArgs e)
         {
-            runTestThread();
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            stopTestThread();
         }
     }
 }
