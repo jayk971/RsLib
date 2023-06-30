@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.SerialPortLib", "RsLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.ChangeAssemblyFileVersion", "RsLib.ChangeAssemblyFileVersion\RsLib.ChangeAssemblyFileVersion.csproj", "{2CDC9ED4-095F-43FA-A361-8AB0A35795C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.SystemControl", "RsLib.SystemControl\RsLib.SystemControl.csproj", "{1F71EA30-3976-4CAD-8A47-FA222A5E031B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +309,18 @@ Global
 		{2CDC9ED4-095F-43FA-A361-8AB0A35795C0}.Release|x64.Build.0 = Release|x64
 		{2CDC9ED4-095F-43FA-A361-8AB0A35795C0}.Release|x86.ActiveCfg = Release|x86
 		{2CDC9ED4-095F-43FA-A361-8AB0A35795C0}.Release|x86.Build.0 = Release|x86
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|x64.Build.0 = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Debug|x86.Build.0 = Debug|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x64.ActiveCfg = Release|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x64.Build.0 = Release|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
