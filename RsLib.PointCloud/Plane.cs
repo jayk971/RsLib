@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel;
 using AccPlane = Accord.Math.Plane;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class RsPlane : Object3D

@@ -1,5 +1,5 @@
 ﻿
-namespace RsLib.PointCloud.CalculateMatrix
+namespace RsLib.PointCloudLib.CalculateMatrix
 {
     partial class CalculateMatrixControl
     {
@@ -173,7 +173,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // pictureBox2
             // 
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.Image = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.ImageBase;
+            this.pictureBox2.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.ImageBase;
             this.pictureBox2.Location = new System.Drawing.Point(3, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.table_ImageBase.SetRowSpan(this.pictureBox2, 4);
@@ -185,7 +185,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.RobotBase;
+            this.pictureBox1.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.RobotBase;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.table_RobotBase.SetRowSpan(this.pictureBox1, 4);
@@ -196,7 +196,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_LoadMatrix
             // 
-            this.btn_LoadMatrix.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_opened_folder_1_64;
+            this.btn_LoadMatrix.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_opened_folder_1_64;
             this.btn_LoadMatrix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_LoadMatrix.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btn_LoadMatrix.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -207,7 +207,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_CalMatrix
             // 
-            this.btn_CalMatrix.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_save_64;
+            this.btn_CalMatrix.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_save_64;
             this.btn_CalMatrix.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_CalMatrix.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btn_CalMatrix.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -218,7 +218,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_ClearData
             // 
-            this.btn_ClearData.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_broom_64;
+            this.btn_ClearData.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_broom_64;
             this.btn_ClearData.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_ClearData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btn_ClearData.ImageTransparentColor = System.Drawing.Color.Magenta;

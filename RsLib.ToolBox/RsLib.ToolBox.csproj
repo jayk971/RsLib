@@ -159,13 +159,13 @@
       <Project>{21be27b5-a3d0-4f9d-b780-386e980f713c}</Project>
       <Name>RsLib.ConvertKeyBMP</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.PointCloud.CalculateMatrix\RsLib.PointCloud.CalculateMatrix.csproj">
+    <ProjectReference Include="..\RsLib.PointCloud.CalculateMatrix\RsLib.PointCloudLib.CalculateMatrix.csproj">
       <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
-      <Name>RsLib.PointCloud.CalculateMatrix</Name>
+      <Name>RsLib.PointCloudLib.CalculateMatrix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloud.csproj">
+    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloudLib.csproj">
       <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
-      <Name>RsLib.PointCloud</Name>
+      <Name>RsLib.PointCloudLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\RsLib.DXF\RsLib.DXF.csproj">
       <Project>{c2d53614-9834-46f6-8608-399e5c48ebd1}</Project>

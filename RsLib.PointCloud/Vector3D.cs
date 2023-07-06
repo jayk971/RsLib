@@ -2,7 +2,7 @@
 using Accord.Math;
 using System;
 using System.Collections.Generic;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class Vector3D : Object3D

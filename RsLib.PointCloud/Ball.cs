@@ -1,7 +1,7 @@
 ﻿using System;
 
 using System.ComponentModel;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class Ball : Point3D

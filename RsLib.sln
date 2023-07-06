@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.ConvertKeyBMP", "RsLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.Common", "RsLib.Common\RsLib.Common.csproj", "{17F62326-ECA7-428B-80BC-216F77C54394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.PointCloud", "RsLib.PointCloud\RsLib.PointCloud.csproj", "{EA96D3AC-D147-48AA-92D9-681757E30ABC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.PointCloudLib", "RsLib.PointCloud\RsLib.PointCloudLib.csproj", "{EA96D3AC-D147-48AA-92D9-681757E30ABC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.PointCloud.CalculateMatrix", "RsLib.PointCloud.CalculateMatrix\RsLib.PointCloud.CalculateMatrix.csproj", "{77AC06AE-F764-42CE-887D-50DEC1A36257}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.PointCloudLib.CalculateMatrix", "RsLib.PointCloud.CalculateMatrix\RsLib.PointCloudLib.CalculateMatrix.csproj", "{77AC06AE-F764-42CE-887D-50DEC1A36257}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.DXF", "RsLib.DXF\RsLib.DXF.csproj", "{C2D53614-9834-46F6-8608-399E5C48EBD1}"
 EndProject

@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
 
     [Serializable]
@@ -941,7 +941,7 @@ namespace RsLib.PointCloud
         //    return output;
         //}
 
-        public void GetNearPlanePoints(RsLib.PointCloud.RsPlane plane, double Dis)
+        public void GetNearPlanePoints(RsPlane plane, double Dis)
         {
             PointCloud cloud = new PointCloud();
 
@@ -974,7 +974,7 @@ namespace RsLib.PointCloud
             Points.Clear();
             Points = cloud.Points;
         }
-        public PointCloud ReturnNearPlanePoints(RsLib.PointCloud.RsPlane plane, double Dis)
+        public PointCloud ReturnNearPlanePoints(RsPlane plane, double Dis)
         {
             PointCloud cloud = new PointCloud();
 
@@ -993,7 +993,7 @@ namespace RsLib.PointCloud
 
 
         }
-        public void Project2Plane(RsLib.PointCloud.RsPlane plane)
+        public void Project2Plane(RsPlane plane)
         {
             PointCloud cloud = new PointCloud();
 
@@ -1015,7 +1015,7 @@ namespace RsLib.PointCloud
             Points = cloud.Points;
 
         }
-        public PointCloud GetProject2Plane(RsLib.PointCloud.RsPlane plane)
+        public PointCloud GetProject2Plane(RsPlane plane)
         {
             PointCloud cloud = new PointCloud();
 

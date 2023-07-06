@@ -7,8 +7,8 @@
     <ProjectGuid>{EA96D3AC-D147-48AA-92D9-681757E30ABC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RsLib.PointCloud</RootNamespace>
-    <AssemblyName>RsLib.PointCloud</AssemblyName>
+    <RootNamespace>RsLib.PointCloudLib</RootNamespace>
+    <AssemblyName>RsLib.PointCloudLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

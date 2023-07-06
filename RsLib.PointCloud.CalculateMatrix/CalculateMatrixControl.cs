@@ -1,9 +1,9 @@
-﻿using RsLib.PointCloud.CalculateMatrix.Properties;
+﻿using RsLib.PointCloudLib.CalculateMatrix.Properties;
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-namespace RsLib.PointCloud.CalculateMatrix
+namespace RsLib.PointCloudLib.CalculateMatrix
 {
     public partial class CalculateMatrixControl : UserControl
     {

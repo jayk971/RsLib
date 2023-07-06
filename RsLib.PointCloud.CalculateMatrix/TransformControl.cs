@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-namespace RsLib.PointCloud.CalculateMatrix
+namespace RsLib.PointCloudLib.CalculateMatrix
 {
     public partial class TransformControl : UserControl
     {

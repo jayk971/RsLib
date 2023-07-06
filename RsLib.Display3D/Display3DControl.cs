@@ -1,14 +1,12 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using RsLib.Display3D.Properties;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 namespace RsLib.Display3D
 {
-    using RPointCloud = RsLib.PointCloud.PointCloud;
-
     public partial class Display3DControl : UserControl
     {
         public event Action<Polyline> AfterPointsSelected;
@@ -123,7 +121,7 @@ namespace RsLib.Display3D
                     switch (option.DisplayType)
                     {
                         case DisplayObjectType.PointCloud:
-                            BuildPointCloud((RPointCloud)_displayObject[id], id, false, false);
+                            BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Vector_z:
                             BuildVector((Polyline)_displayObject[id], id, false, false);
@@ -508,7 +506,7 @@ namespace RsLib.Display3D
                         }
                         else
                         {
-                            var obj = _displayObject[_selectIndex] as RPointCloud;
+                            var obj = _displayObject[_selectIndex] as PointCloud;
                             obj.Save(filePath);
                         }
                         MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);

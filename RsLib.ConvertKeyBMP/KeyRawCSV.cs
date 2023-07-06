@@ -1,10 +1,9 @@
-﻿using RsLib.PointCloud;
+﻿using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
 namespace RsLib.ConvertKeyBMP
 {
-    using RPointCloud = RsLib.PointCloud.PointCloud;
     public static class KeyRawCSV
     {
         public static readonly string Extension = "_HRaw.csv";
@@ -26,7 +25,7 @@ namespace RsLib.ConvertKeyBMP
             if (split.Length == 2) return split[1];
             else return string.Empty;
         }
-        public static RPointCloud LoadHeightRawData(string filePath, int downSampleX, int downSampleY)
+        public static PointCloud LoadHeightRawData(string filePath, int downSampleX, int downSampleY)
         {
             _heightData.Clear();
             using (StreamReader sr = new StreamReader(filePath))
@@ -61,9 +60,9 @@ namespace RsLib.ConvertKeyBMP
             }
             return saveHeightPointCloud(downSampleX, downSampleY);
         }
-        static RPointCloud saveHeightPointCloud(int downSampleX, int downSampleY)
+        static PointCloud saveHeightPointCloud(int downSampleX, int downSampleY)
         {
-            RPointCloud p = new RPointCloud();
+            PointCloud p = new PointCloud();
             for (int i = 0; i < _heightData.Count; i++)
             {
                 int x = i % (int)_dataPerProfile;

@@ -1,5 +1,5 @@
 ﻿
-namespace RsLib.PointCloud.CalculateMatrix
+namespace RsLib.PointCloudLib.CalculateMatrix
 {
     partial class TransformControl
     {
@@ -107,7 +107,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_OpenXYZ
             // 
-            this.btn_OpenXYZ.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_opened_folder_64;
+            this.btn_OpenXYZ.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_opened_folder_64;
             this.btn_OpenXYZ.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_OpenXYZ.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_OpenXYZ.Location = new System.Drawing.Point(490, 3);
@@ -119,7 +119,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_openM44
             // 
-            this.btn_openM44.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_opened_folder_64;
+            this.btn_openM44.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_opened_folder_64;
             this.btn_openM44.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_openM44.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_openM44.Location = new System.Drawing.Point(490, 53);
@@ -131,7 +131,7 @@ namespace RsLib.PointCloud.CalculateMatrix
             // 
             // btn_Calculate
             // 
-            this.btn_Calculate.BackgroundImage = global::RsLib.PointCloud.CalculateMatrix.Properties.Resources.icons8_calculator_64;
+            this.btn_Calculate.BackgroundImage = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.icons8_calculator_64;
             this.btn_Calculate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.tableLayoutPanel1.SetColumnSpan(this.btn_Calculate, 3);
             this.btn_Calculate.Dock = System.Windows.Forms.DockStyle.Fill;

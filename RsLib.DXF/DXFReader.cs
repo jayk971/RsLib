@@ -4,7 +4,7 @@
 //using netDxf.Collections;
 using netDxf.Entities;
 using netDxf.Objects;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -123,18 +123,18 @@ namespace RsLib.DXF
                 return ex;
             }
         }
-        public List<RsLib.PointCloud.Polyline> Get3DPolyline()
+        public List<RsLib.PointCloudLib.Polyline> Get3DPolyline()
         {
-            List<RsLib.PointCloud.Polyline> Output = new List<RsLib.PointCloud.Polyline>();
+            List<RsLib.PointCloudLib.Polyline> Output = new List<RsLib.PointCloudLib.Polyline>();
             foreach (KeyValuePair<string, DXFItem> kvp in _Items)
             {
                 Output.AddRange(kvp.Value.Get3DPolylines());
             }
             return Output;
         }
-        public List<RsLib.PointCloud.Polyline> Get3DPolyline(string ItemName)
+        public List<RsLib.PointCloudLib.Polyline> Get3DPolyline(string ItemName)
         {
-            List<RsLib.PointCloud.Polyline> Output = new List<RsLib.PointCloud.Polyline>();
+            List<RsLib.PointCloudLib.Polyline> Output = new List<RsLib.PointCloudLib.Polyline>();
 
             if (_Items.ContainsKey(ItemName)) return _Items[ItemName].Get3DPolylines();
             else return null;
@@ -143,7 +143,7 @@ namespace RsLib.DXF
         {
             foreach (KeyValuePair<string, DXFItem> kvp in _Items)
             {
-                List<RsLib.PointCloud.Polyline> tmp = kvp.Value.Get3DPolylines();
+                List<RsLib.PointCloudLib.Polyline> tmp = kvp.Value.Get3DPolylines();
                 for (int i = 0; i < tmp.Count; i++)
                 {
                     tmp[i].SaveAsOpt(OutputFilePath, true);

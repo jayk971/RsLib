@@ -125,13 +125,13 @@
       <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
       <Name>RsLib.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.PointCloud.CalculateMatrix\RsLib.PointCloud.CalculateMatrix.csproj">
+    <ProjectReference Include="..\RsLib.PointCloud.CalculateMatrix\RsLib.PointCloudLib.CalculateMatrix.csproj">
       <Project>{77ac06ae-f764-42ce-887d-50dec1a36257}</Project>
-      <Name>RsLib.PointCloud.CalculateMatrix</Name>
+      <Name>RsLib.PointCloudLib.CalculateMatrix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloud.csproj">
+    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloudLib.csproj">
       <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
-      <Name>RsLib.PointCloud</Name>
+      <Name>RsLib.PointCloudLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

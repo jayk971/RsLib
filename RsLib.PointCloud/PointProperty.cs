@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public class ObjectOption

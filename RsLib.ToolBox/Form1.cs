@@ -1,7 +1,7 @@
 ﻿using RsLib.Common;
 using RsLib.Display3D;
 using RsLib.LogMgr;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using RsLib.SerialPortLib;
 using RsLib.TCP.Control;
 using System;
@@ -55,7 +55,6 @@ namespace RsLib.DemoForm
             Log.EnableUpdateUI = true;
             comboBox1.AddEnumItems(typeof(LogControl));
             //ThreadPool.QueueUserWorkItem(new WaitCallback(writeTxt));
-            button1.Text = Properties.Settings.Default.TestSetting;
             this.MouseMove += Form1_MouseMove;
 
             //ThreadPool.QueueUserWorkItem(traceTd);
@@ -170,219 +169,6 @@ namespace RsLib.DemoForm
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            string filePath = "";
-            using (OpenFileDialog op = new OpenFileDialog())
-            {
-                op.Filter = "XYZ|*.xyz";
-                if (op.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = op.FileName;
-                }
-            }
-            if (File.Exists(filePath) == false) return;
-
-
-            PointCloud.PointCloud cloud = new PointCloud.PointCloud();
-
-            using (StreamReader sr = new StreamReader(filePath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    string readData = sr.ReadLine();
-                    string[] splitData = readData.Split('\t');
-
-                    if (splitData.Length == 6)
-                    {
-                        double x = double.Parse(splitData[0]);
-                        double y = double.Parse(splitData[1]);
-                        double z = double.Parse(splitData[2]);
-
-                        int r = int.Parse(splitData[3]);
-                        int g = int.Parse(splitData[4]);
-                        int b = int.Parse(splitData[5]);
-
-                        Point3D p = new Point3D(x, y, z);
-                        DisplayOption display = new DisplayOption();
-                        display.Color = Color.FromArgb(r, g, b);
-                        p.AddOption(display);
-                        cloud.Add(p);
-                    }
-                }
-            }
-            cloud.BuildIndexKDtree(true);
-#if !ConvertPxStitchPath
-
-            PointCloud.PointCloud findStitch3D = new PointCloud.PointCloud();
-            PointCloud.PointCloud finalStitch = new PointCloud.PointCloud();
-
-            string pxFilePath = filePath.Replace(".xyz", ".txt");
-            string stitchRealPath = filePath.Replace(".xyz", "stitch.xyz");
-            string findRealPath = filePath.Replace(".xyz", "find.xyz");
-
-            using (StreamReader sr = new StreamReader(pxFilePath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    string readData = sr.ReadLine();
-                    string[] splitData = readData.Split(',');
-                    double pxX = double.Parse(splitData[0]);
-                    double pxY = double.Parse(splitData[1]);
-
-                    double realX = -200 + pxX * 0.2;
-                    double realY = -80 + (799 - pxY) * 0.2;
-
-
-
-                    List<int> nearIntCloud = cloud.GetNearestCloudIndex(new Point3D(realX, realY, 0), 1.0);
-                    if (nearIntCloud.Count == 0) continue;
-
-                    PointCloud.PointCloud nearCloud = new PointCloud.PointCloud();
-                    for (int i = 0; i < nearIntCloud.Count; i++)
-                    {
-                        nearCloud.Add(cloud.Points[nearIntCloud[i]]);
-                    }
-                    PointCloud.PointCloud tmpCloud = nearCloud.DeepClone();
-                    tmpCloud.ReduceAboveY(realY);
-                    Point3D tmpMaxZ = tmpCloud.GetMaxZPoint();
-                    nearCloud.ReduceBelowY(tmpMaxZ.Y);
-                    Point3D findMinZ = nearCloud.GetMinZPoint();
-
-                    finalStitch.Add(findMinZ);
-
-                }
-                finalStitch.Save(findRealPath);
-
-                Log.Add(findRealPath, MsgLevel.Info, Color.Black, Color.LimeGreen);
-            }
-
-            string dataFilePath = "";
-            using (OpenFileDialog op = new OpenFileDialog())
-            {
-                op.Filter = "Halcon data|*.dat";
-                if (op.ShowDialog() == DialogResult.OK)
-                {
-                    dataFilePath = op.FileName;
-                }
-            }
-
-            if (File.Exists(dataFilePath))
-            {
-                CoordMatrix cm = new CoordMatrix();
-
-
-                using (StreamReader sr = new StreamReader(dataFilePath))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string readData = sr.ReadLine();
-                        if (readData.Contains("Rodriguez"))
-                        {
-                            readData = sr.ReadLine();
-                            string[] splitData = readData.Split(' ');
-                            Rotate r = new Rotate();
-                            double rz = double.Parse(splitData[3]);
-                            double ry = double.Parse(splitData[2]);
-                            double rx = double.Parse(splitData[1]);
-
-                            r.AddRotateSeq(RefAxis.Z, rz);
-                            r.AddRotateSeq(RefAxis.Y, ry);
-                            r.AddRotateSeq(RefAxis.X, rx);
-                            cm.AddSeq(r);
-
-                        }
-                        if (readData.Contains("Translation vector"))
-                        {
-                            readData = sr.ReadLine();
-                            string[] splitData = readData.Split(' ');
-                            double tx = double.Parse(splitData[1]);
-                            double ty = double.Parse(splitData[2]);
-                            double tz = double.Parse(splitData[3]);
-
-                            Shift s = new Shift(tx, ty, tz);
-                            cm.AddSeq(s);
-
-                        }
-                    }
-                }
-
-                PointCloud.PointCloud finalCloud = finalStitch.Multiply(cm.FinalMatrix4);
-                finalCloud.Save(stitchRealPath);
-            }
-#endif
-#if convertBMP
-            int width = 2000;
-            int height = 800;
-            string bmpFilePath = filePath.Replace(".xyz", ".bmp");
-
-            Rectangle rec = new Rectangle(0, 0, width, height);
-            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            BitmapData bitmapData = bmp.LockBits(rec, ImageLockMode.WriteOnly, bmp.PixelFormat);
-            List<byte> byteList = new List<byte>();
-
-            for (int y = 799; y >=0; y--)
-            {
-                double dY = -80 + y * 0.2;
-                for (int x =0; x <2000; x++)
-                {
-                    double dX = -200 + x * 0.2;
-                    Point3D target = new Point3D(dX, dY, 0);
-                    int findI = cloud.FindClosePointIndex(target, 0.2);
-                    if(findI >= 0)
-                    {
-                        Point3D tmpP = cloud.Points[findI];
-                        DisplayOption o =  tmpP.GetOption(typeof(DisplayOption)) as DisplayOption;
-                        if(o != null)
-                        {
-                            byteList.Add(o.Color.B);
-                            byteList.Add(o.Color.G);
-                            byteList.Add(o.Color.R);
-                        }
-                        else
-                        {
-                            byteList.Add(0);
-                            byteList.Add(0);
-                            byteList.Add(0);
-                        }
-                    }
-                    else
-                    {
-                        byteList.Add(0);
-                        byteList.Add(0);
-                        byteList.Add(0);
-                    }
-                }
-            }
-            byte[] byteArr = byteList.ToArray();
-
-            Marshal.Copy(byteArr, 0, bitmapData.Scan0, byteArr.Length);
-            
-            bmp.UnlockBits(bitmapData);
-            bmp.Save(bmpFilePath);
-            Log.Add("Convert to BMP done.", MsgLevel.Info, Color.White, Color.LimeGreen);
-
-#endif
-
-#if transformMatrix
-            cloud.LoadFromFile(filePath, DigitFormat.XYZ, '\t');
-
-            Rotate r = new Rotate();
-            r.AddRotateSeq(RefAxis.Z, 95.0250352976598);
-            r.AddRotateSeq(RefAxis.Y, 70.3304675358202);
-            r.AddRotateSeq(RefAxis.X, 355.815193115526);
-
-            Shift s = new Shift(16.0686951767622, 121.255767387646, 178.63285793135);
-
-            CoordMatrix cm = new CoordMatrix();
-            cm.AddSeq(r);
-            cm.AddSeq(s);
-
-            PointCloud.PointCloud finalCloud = cloud.Multiply(cm.FinalMatrix4);
-            finalCloud.Save("D:\\20230221_AF1大底線\\test.xyz");
-#endif
-        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -437,8 +223,8 @@ namespace RsLib.DemoForm
         private void button6_Click(object sender, EventArgs e)
         {
 
-            PointCloud.PointCloud p = new PointCloud.PointCloud();
-            PointCloud.PointCloud p2 = new PointCloud.PointCloud();
+            PointCloud p = new PointCloud();
+            PointCloud p2 = new PointCloud();
 
             p = p2.DeepClone();
         }

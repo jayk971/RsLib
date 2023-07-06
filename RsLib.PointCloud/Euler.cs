@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     public enum MatrixType : int
     {

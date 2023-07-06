@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class Point2D : Object3D

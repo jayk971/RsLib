@@ -1,5 +1,5 @@
 ﻿
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     partial class Point3DControl
     {

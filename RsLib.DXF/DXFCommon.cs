@@ -1,5 +1,5 @@
 ﻿using netDxf.Entities;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -72,9 +72,9 @@ namespace RsLib.DXF
         {
             _Segment.Add(Input);
         }
-        public List<RsLib.PointCloud.Polyline> Get3DPolylines()
+        public List<RsLib.PointCloudLib.Polyline> Get3DPolylines()
         {
-            List<RsLib.PointCloud.Polyline> Output = new List<RsLib.PointCloud.Polyline>();
+            List<RsLib.PointCloudLib.Polyline> Output = new List<RsLib.PointCloudLib.Polyline>();
             for (int i = 0; i < _Segment.Count; i++)
             {
                 Output.Add(_Segment[i].Get3DPolyline());
@@ -97,9 +97,9 @@ namespace RsLib.DXF
         {
 
         }
-        public RsLib.PointCloud.Polyline Get3DPolyline()
+        public RsLib.PointCloudLib.Polyline Get3DPolyline()
         {
-            RsLib.PointCloud.Polyline Output = new RsLib.PointCloud.Polyline();
+            RsLib.PointCloudLib.Polyline Output = new RsLib.PointCloudLib.Polyline();
             if (_Type == SegmentType.PolyLine)
             {
                 for (int i = 0; i < _Points.Count; i++)

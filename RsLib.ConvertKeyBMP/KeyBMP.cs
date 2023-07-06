@@ -1,5 +1,5 @@
 ﻿using RsLib.LogMgr;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -10,7 +10,6 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 namespace RsLib.ConvertKeyBMP
 {
-    using RPointCloud = RsLib.PointCloud.PointCloud;
     public class KeyBMP
     {
         static KeyBMPConfig config = new KeyBMPConfig();
@@ -364,9 +363,9 @@ namespace RsLib.ConvertKeyBMP
                 sw.Flush();
             }
         }
-        public static RPointCloud ConvertToXYZ()
+        public static PointCloud ConvertToXYZ()
         {
-            RPointCloud p = new RPointCloud();
+            PointCloud p = new PointCloud();
             int yCount = cloudArray.GetLength(0);
             int xCount = cloudArray.GetLength(1);
             for (int y = 0; y < yCount; y++)

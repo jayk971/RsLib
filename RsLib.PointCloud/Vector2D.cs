@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     public partial class Vector2D : Object3D
     {

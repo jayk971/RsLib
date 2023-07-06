@@ -1,7 +1,7 @@
 ﻿using System;
 
 using System.Drawing;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class DisplayOption : ObjectOption

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     public partial class Point3DControl : UserControl
     {

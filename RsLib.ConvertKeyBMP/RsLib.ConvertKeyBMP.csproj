@@ -91,9 +91,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloud.csproj">
+    <ProjectReference Include="..\RsLib.PointCloud\RsLib.PointCloudLib.csproj">
       <Project>{ea96d3ac-d147-48aa-92d9-681757e30abc}</Project>
-      <Name>RsLib.PointCloud</Name>
+      <Name>RsLib.PointCloudLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\RsLib.LogMgr\RsLib.LogMgr.csproj">
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>

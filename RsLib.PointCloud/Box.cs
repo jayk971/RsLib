@@ -3,7 +3,7 @@ using RsLib.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class Box : Object3D

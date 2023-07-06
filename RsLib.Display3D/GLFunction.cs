@@ -1,7 +1,7 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using RsLib.Display3D.Properties;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Windows.Forms;
 namespace RsLib.Display3D
 {
-    using RPointCloud = RsLib.PointCloud.PointCloud;
     public partial class Display3DControl : UserControl
     {
         GLControl _glControl;
@@ -420,7 +419,7 @@ namespace RsLib.Display3D
                 var obj = _displayObject[_selectIndex] as ObjectGroup;
                 foreach (var item in obj.Objects)
                 {
-                    var subObj = item.Value as RPointCloud;
+                    var subObj = item.Value as PointCloud;
                     Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, subObj.Points);
                     if (result.Item1 < closestDistance)
                     {
@@ -433,7 +432,7 @@ namespace RsLib.Display3D
             }
             else
             {
-                var obj = _displayObject[_selectIndex] as RPointCloud;
+                var obj = _displayObject[_selectIndex] as PointCloud;
                 Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
                 closestDistance = result.Item1;
                 closestPoint = result.Item2;
@@ -575,9 +574,9 @@ namespace RsLib.Display3D
             Point3D max = new Point3D();
 
             Type objectType = _displayObject[_selectIndex].GetType();
-            if (objectType == typeof(RPointCloud))
+            if (objectType == typeof(PointCloud))
             {
-                RPointCloud selectCandidate = _displayObject[_selectIndex] as RPointCloud;
+                PointCloud selectCandidate = _displayObject[_selectIndex] as PointCloud;
                 min = selectCandidate.Min;
                 max = selectCandidate.Max;
             }
@@ -904,7 +903,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-        void drawPointCloud(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
+        void drawPointCloud(PointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
         {
             GL.PointSize(drawSize);
             GL.Begin(PrimitiveType.Points);
@@ -922,7 +921,7 @@ namespace RsLib.Display3D
             }
             GL.End();
         }
-        public void BuildPointCloud(RPointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
+        public void BuildPointCloud(PointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
         {
             if (id > _maxDisplayList) return;
             if (_displayOption.ContainsKey(id) == false)
@@ -1167,7 +1166,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-        void drawQuad(RPointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
+        void drawQuad(PointCloud cloud, float drawSize, Color drawColor, bool checkMaxMin)
         {
             GL.PointSize(drawSize);
             GL.Color4(drawColor);
@@ -1195,7 +1194,7 @@ namespace RsLib.Display3D
             }
             GL.End();
         }
-        public void BuildQuad(RPointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
+        public void BuildQuad(PointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
         {
             if (id > _maxDisplayList) return;
             if (_displayOption.ContainsKey(id) == false)
@@ -1234,7 +1233,7 @@ namespace RsLib.Display3D
                     switch (subOption.DisplayType)
                     {
                         case DisplayObjectType.PointCloud:
-                            RPointCloud cloud = item.Value as RPointCloud;
+                            PointCloud cloud = item.Value as PointCloud;
                             if (cloud != null) drawPointCloud(cloud, subOption.DrawSize, subOption.DrawColor, checkMaxMin);
                             break;
 

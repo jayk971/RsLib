@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using System.Drawing;
-namespace RsLib.PointCloud
+namespace RsLib.PointCloudLib
 {
     [Serializable]
     public partial class ColorPoint : Object3D

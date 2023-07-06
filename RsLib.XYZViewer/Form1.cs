@@ -1,7 +1,7 @@
 ﻿using RsLib.Common;
 using RsLib.ConvertKeyBMP;
 using RsLib.Display3D;
-using RsLib.PointCloud;
+using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,6 @@ using System.Threading;
 using System.Windows.Forms;
 namespace RsLib.XYZViewer
 {
-    using RPointCloud = RsLib.PointCloud.PointCloud;
     public partial class Form1 : Form
     {
         const int MaxXYZCount = 5;
@@ -116,7 +115,7 @@ namespace RsLib.XYZViewer
             switch (ext)
             {
                 case ".xyz":
-                    RPointCloud cloud = new RPointCloud();
+                    PointCloud cloud = new PointCloud();
                     cloud.LoadFromFile(filePath, true);
                     _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                     _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
@@ -140,14 +139,14 @@ namespace RsLib.XYZViewer
 
                     break;
                 case ".csv":
-                    RPointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
+                    PointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
                     _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                     _displayCtrl.BuildPointCloud(cloud2, (int)drawItem, true, true);
 
                     break;
                 case ".bmp":
                     KeyBMP.Load(filePath);
-                    RPointCloud cloud3 = KeyBMP.ConvertToXYZ();
+                    PointCloud cloud3 = KeyBMP.ConvertToXYZ();
                     _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                     _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
 
