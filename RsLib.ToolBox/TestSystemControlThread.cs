@@ -16,7 +16,7 @@ namespace RsLib.DemoForm
 {
     public partial class Form1 : Form
     {
-        SystemThread thread;
+        BasicThread thread;
         void testII()
         {
         }

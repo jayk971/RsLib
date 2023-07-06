@@ -436,6 +436,11 @@ namespace RsLib.DemoForm
 
         private void button6_Click(object sender, EventArgs e)
         {
+
+            PointCloud.PointCloud p = new PointCloud.PointCloud();
+            PointCloud.PointCloud p2 = new PointCloud.PointCloud();
+
+            p = p2.DeepClone();
         }
 
         private void button7_Click(object sender, EventArgs e)

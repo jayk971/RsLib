@@ -1,6 +1,6 @@
 ﻿namespace RsLib.Common
 {
-    public enum SystemStatus : int
+    public enum MachineStatus : int
     {
         NotInitial = 0,      //尚未初始化
         InitialBusy,     //初始化中
@@ -8,7 +8,7 @@
         Auto,            //自動模式
         Run,             //啟動運轉
     }
-    public enum UserLevel : int
+    public enum User : int
     {
         OP = 0,
         Engineer,
@@ -19,7 +19,7 @@
         TimeOut = -2,
         InTime = -1,
     }
-    public partial struct ErrorCode
+    public partial struct Error
     {
         public enum System : int 
         {
