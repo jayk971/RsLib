@@ -96,9 +96,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NLog - 複製.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -154,5 +151,10 @@ if not exist %25enFolder%25 mkdir %25enFolder%25
 copy "$(TargetDir)zh-TW\" %25twFolder%25 /Y
 copy "$(TargetDir)en\" %25enFolder%25 /Y
 copy "$(TargetDir)vi\" %25viFolder%25 /Y</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>set NLogFile="D:\RLib\Lib\NLog.dll"
+set NLogConfigFile="D:\RLib\Lib\NLog.config"
+</PreBuildEvent>
   </PropertyGroup>
 </Project>
