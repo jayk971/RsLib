@@ -128,14 +128,14 @@ namespace RsLib.XYZViewer
                     //Polyline line = new Polyline();
                     //line.LoadFromOPTFile(filePath, true);
                     _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                    _displayCtrl.BuildMultiPath(group, (int)drawItem, true, true);
+                    _displayCtrl.BuildPath(group, (int)drawItem, true, true);
 
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
                     _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
 
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
                     _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
-                    _displayCtrl.BuildMultiPathVector(group, (int)drawItem + 6, false, true);
+                    _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
 
                     break;
                 case ".csv":

@@ -118,16 +118,28 @@ namespace RsLib.Display3D
                 if (_displayOption.ContainsKey(id))
                 {
                     DisplayObjectOption option = _displayOption[id];
+                    Type objectType = _displayObject[id].GetType();
+
                     switch (option.DisplayType)
                     {
                         case DisplayObjectType.PointCloud:
-                            BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
+                            if (objectType == typeof(ObjectGroup))
+                                BuildPointCloud((ObjectGroup)_displayObject[id], id, false, false);
+                            else if (objectType == typeof(PointCloud))
+                                BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Vector_z:
-                            BuildVector((Polyline)_displayObject[id], id, false, false);
+                            if (objectType == typeof(ObjectGroup))
+                                BuildVector((ObjectGroup)_displayObject[id], id, false, false);
+                            else if (objectType == typeof(Polyline))
+                                BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Path:
-                            BuildPath((Polyline)_displayObject[id], id, false, false);
+                            if (objectType == typeof(ObjectGroup))
+                                BuildPath((ObjectGroup)_displayObject[id], id, false, false);
+
+                            else if (objectType == typeof(Polyline))
+                                BuildPath((Polyline)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Point:
                             BuildPoint((Point3D)_displayObject[id], id, false, false);
@@ -331,6 +343,7 @@ namespace RsLib.Display3D
                         {
                             _displayOption[id].DrawColor = selectColor;
                             ReBuild_ChangeColorSize(id);
+                            UpdateDataGridView();
                         }
 
                     }

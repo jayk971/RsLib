@@ -1033,7 +1033,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-        public void BuildMultiPath(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
+        public void BuildPath(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
         {
             if (id > _maxDisplayList) return;
             if (polyLines.DataCount == 0) return;
@@ -1131,7 +1131,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-        public void BuildMultiPathVector(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
+        public void BuildVector(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject)
         {
             if (id > _maxDisplayList) return;
             if (_displayOption.ContainsKey(id) == false)
