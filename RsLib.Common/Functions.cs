@@ -88,6 +88,11 @@ namespace RsLib.Common
             }
             return output;
         }
+        public static byte ConvertColorToMono(byte r,byte g ,byte b)
+        {
+            byte grayValue = (byte)((r * 38 + g * 75 + b * 15) >> 7);
+            return grayValue;
+        }
         public static List<ShoeSizeIndex> GetAllShoeSizeIndexEnum()
         {
             List<ShoeSizeIndex> output = new List<ShoeSizeIndex>();

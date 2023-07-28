@@ -792,6 +792,16 @@ namespace RsLib.PointCloudLib
 
             return Coord;
         }
+        public string ToStringWithColor(bool WriteTag, bool WriteFlag, bool WriteDt)
+        {
+            string Coord = string.Format("{0:F2} {1:F2} {2:F2} {3} {4} {5}", X, Y, Z,Color.R,Color.G,Color.B);
+            if (WriteTag) Coord += string.Format(" {0}", tag);
+            if (WriteFlag) Coord += string.Format(" {0}", flag);
+            if (WriteDt) Coord += string.Format(" {0}", Dt);
+
+            return Coord;
+        }
+
     }
     [Serializable]
     public partial class PointV3D : Point3D

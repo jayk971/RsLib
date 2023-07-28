@@ -55,6 +55,27 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+        public PointCloud (float[] floatArr,float ignoreValue,float xPitch,float yPitch,int dataPerRow,bool reverseX,bool reverseY)
+        {
+            Points.Clear();
+            for (int i = 0; i < floatArr.Length; i++)
+            {
+                int x = i % dataPerRow;
+                int y = i / dataPerRow;
+                float realX = x * xPitch;
+                float realY = y * yPitch;
+                float realZ = floatArr[i];
+
+                if (reverseX) realX *= -1;
+                if (reverseY) realY *= -1;
+
+                if(realZ != ignoreValue)
+                {
+                    Points.Add(new Point3D(realX, realY, realZ));
+                }
+
+            }
+        }
         public PointCloud(List<Point3D> Cloud)
         {
             Points = Cloud.DeepClone();
@@ -2672,6 +2693,30 @@ namespace RsLib.PointCloudLib
                 sw.Close();
             }
         }
+        public void Save(string FilePath,bool enableOuptutColor = false)
+        {
+
+            using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
+            {
+                string WriteData = "";
+                for (int i = 0; i < Points.Count; i++)
+                {
+                    if (enableOuptutColor)
+                    {
+                        WriteData = Points[i].ToStringWithColor(false, false, false);
+                    }
+                    else
+                    {
+                        WriteData = Points[i].ToString(false, false, false);
+                    }
+                    sw.WriteLine(WriteData);
+                }
+
+                sw.Flush();
+                sw.Close();
+            }
+        }
+
         public void Save(string FilePath, bool WritePointTag, bool WritePointFlag, bool WritePointDt)
         {
 
