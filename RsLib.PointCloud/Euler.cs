@@ -1,6 +1,8 @@
 ﻿using Accord.Math;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace RsLib.PointCloudLib
 {
@@ -433,6 +435,58 @@ namespace RsLib.PointCloudLib
             output.V32 = finalMatrix4.V23;
             output.V33 = finalMatrix4.V33;
             return output;
+        }
+
+        public void LoadFromHalconPoseDat(string datFilePath)
+        {
+            string strExt = Path.GetExtension(datFilePath).ToUpper();
+            if (strExt != ".DAT") return;
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(datFilePath, Encoding.Default))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string readData = sr.ReadLine();
+                        string[] splitData;
+                        if (readData[0] == 'r')
+                        {
+                            splitData = readData.Split(' ');
+                            if (splitData.Length >= 4)
+                            {
+                                double dRx = double.Parse(splitData[1]);
+                                double dRy = double.Parse(splitData[2]);
+                                double dRz = double.Parse(splitData[3]);
+
+                                AddSeq(RefAxis.Z, MatrixType.Rotate, dRz);
+                                AddSeq(RefAxis.Y, MatrixType.Rotate, dRy);
+                                AddSeq(RefAxis.X, MatrixType.Rotate, dRx);
+
+                            }
+                        }
+                        else if (readData[1] == 't')
+                        {
+                            splitData = readData.Split(' ');
+                            if (splitData.Length >= 4)
+                            {
+                                double dTx = double.Parse(splitData[1]);
+                                double dTy = double.Parse(splitData[2]);
+                                double dTz = double.Parse(splitData[3]);
+
+                                AddSeq(RefAxis.Z, MatrixType.Translation, dTz);
+                                AddSeq(RefAxis.Y, MatrixType.Translation, dTy);
+                                AddSeq(RefAxis.X, MatrixType.Translation, dTx);
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
     public class Rotate : CoordMatrix
