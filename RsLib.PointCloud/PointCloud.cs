@@ -386,6 +386,22 @@ namespace RsLib.PointCloudLib
 
             return output;
         }
+        public Tuple<double[],double[],double[]> ToDoubleArrayTuple()
+        {
+            double[] x = new double[Points.Count];
+            double[] y = new double[Points.Count];
+            double[] z = new double[Points.Count];
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Point3D p = Points[i];
+                x[i] = p.X;
+                y[i] = p.Y;
+                z[i] = p.Z;
+            }
+
+            return new Tuple<double[], double[], double[]>(x, y, z);
+        }
         //public Polyline SortCloudByKDTree(double Radius, Point3D P_Start,bool IsClosed = true)
         //{
         //    Polyline output = new Polyline();
