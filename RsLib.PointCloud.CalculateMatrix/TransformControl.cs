@@ -46,7 +46,7 @@ namespace RsLib.PointCloudLib.CalculateMatrix
         {
             using (OpenFileDialog op = new OpenFileDialog())
             {
-                op.Filter = "Matrix 4x4 with data|*.m44d|Matrix4x4 File|*.m44";
+                op.Filter = "Matrix 4x4 with data|*.m44d|Matrix4x4 File|*.m44|Halcon pose dat file|*.dat";
                 if (op.ShowDialog() == DialogResult.OK)
                 {
                     lbl_M44FilePath.Text = op.FileName;
@@ -123,13 +123,28 @@ namespace RsLib.PointCloudLib.CalculateMatrix
             Tuple<string, string> data = (Tuple<string, string>)obj;
             string xyzFile = data.Item1;
             string matrixFile = data.Item2;
+            string ext = Path.GetExtension(matrixFile).ToUpper();
             PointCloud pc = new PointCloud();
             pc.LoadFromFile(xyzFile, false);
-            double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(matrixFile);
-            PointCloud p = pc.Multiply(mArr);
-            string filePath = xyzFile.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
-            p.Save(filePath);
+            double[,] mArr = null;
+            if (ext == ".M44" || ext == ".M44D")
+            {
+                 mArr = m_Func.LoadMatrix4x4ArrayFromFile(matrixFile);
+            }
+            else if (ext == ".DAT")
+            {
+                mArr = m_Func.LoadMatrix4x4ArrayFromHalconDatFile(matrixFile);
+
+            }
+
+            if (mArr != null)
+            {
+                PointCloud p = pc.Multiply(mArr);
+                string filePath = xyzFile.Replace(".xyz", $"_{DateTime.Now:yyMMddHHmmss}.xyz");
+                p.Save(filePath);
+            }
             _convertDone = true;
+
         }
 
     }
