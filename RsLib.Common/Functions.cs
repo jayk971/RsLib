@@ -32,7 +32,7 @@ namespace RsLib.Common
     }
     public class FT_Functions
     {
-        public static string GetFileVersion(string filePath) => FileVersionInfo.GetVersionInfo(filePath).FileVersion;
+        public static string GetFileVersion(string fileName) => FileVersionInfo.GetVersionInfo(fileName).FileVersion;
         public static bool IsIPLegal(string ip)
         {
             IPAddress parsedIP = new IPAddress(new byte[] { 127, 0, 0, 1 });
