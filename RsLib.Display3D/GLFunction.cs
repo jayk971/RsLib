@@ -273,6 +273,8 @@ namespace RsLib.Display3D
         void showSelectPointData(bool haveClosetPoint, Point3D closetP)
         {
             treeView1.Nodes.Clear();
+            PointV3D ptv3D = closetP as PointV3D;
+
             if (_haveClosestPoint)
             {
                 treeView1.Nodes.Add("Location", "Location");
@@ -280,6 +282,25 @@ namespace RsLib.Display3D
                 treeView1.Nodes["Location"].Nodes.Add($"X : {closetP.X:F2}");
                 treeView1.Nodes["Location"].Nodes.Add($"Y : {closetP.Y:F2}");
                 treeView1.Nodes["Location"].Nodes.Add($"Z : {closetP.Z:F2}");
+
+                if(ptv3D != null)
+                {
+                    treeView1.Nodes.Add("Vector Z", "Vector Z");
+                    treeView1.Nodes["Vector Z"].Nodes.Add($"X : {ptv3D.Vz.X:F2}");
+                    treeView1.Nodes["Vector Z"].Nodes.Add($"Y : {ptv3D.Vz.Y:F2}");
+                    treeView1.Nodes["Vector Z"].Nodes.Add($"Z : {ptv3D.Vz.Z:F2}");
+
+                    treeView1.Nodes.Add("Vector Y", "Vector Y");
+                    treeView1.Nodes["Vector Y"].Nodes.Add($"X : {ptv3D.Vy.X:F2}");
+                    treeView1.Nodes["Vector Y"].Nodes.Add($"Y : {ptv3D.Vy.Y:F2}");
+                    treeView1.Nodes["Vector Y"].Nodes.Add($"Z : {ptv3D.Vy.Z:F2}");
+
+                    treeView1.Nodes.Add("Vector X", "Vector X");
+                    treeView1.Nodes["Vector X"].Nodes.Add($"X : {ptv3D.Vx.X:F2}");
+                    treeView1.Nodes["Vector X"].Nodes.Add($"Y : {ptv3D.Vx.Y:F2}");
+                    treeView1.Nodes["Vector X"].Nodes.Add($"Z : {ptv3D.Vx.Z:F2}");
+                }
+
                 treeView1.Nodes.Add("Property", "Property");
 
                 List<string> propString = getPointProperty(closetP);
@@ -536,6 +557,7 @@ namespace RsLib.Display3D
             GL.Color3(Settings.Default.Color_SelectPoint);
             GL.Vertex3(_closetPoint.PArray);
             GL.End();
+            drawVector(_closetPoint);
         }
         void drawMeasureLine()
         {
@@ -544,6 +566,7 @@ namespace RsLib.Display3D
             for (int i = 0; i < _multiSelectPoints.Count; i++)
             {
                 Point3D p = _multiSelectPoints.Points[i];
+
                 if (i == 0) GL.Color4(Settings.Default.Color_StartPoint);
                 else GL.Color4(Settings.Default.Color_EndPoint);
                 GL.Vertex3(p.PArray);
@@ -1068,6 +1091,33 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
+        void drawVector(Point3D pt)
+        {
+            PointV3D ptV3D = pt as PointV3D;
+            if (ptV3D != null)
+            {
+                GL.LineWidth(3f);
+
+                GL.Begin(PrimitiveType.Lines);
+
+
+                GL.Color4(Color.Blue);
+                GL.Vertex3(ptV3D.PArray);
+                GL.Vertex3(ptV3D.GetVzExtendPoint(10).PArray);
+
+                GL.Color4(Color.LimeGreen);
+                GL.Vertex3(ptV3D.PArray);
+                GL.Vertex3(ptV3D.GetVyExtendPoint(10).PArray);
+
+                GL.Color4(Color.Red);
+                GL.Vertex3(ptV3D.PArray);
+                GL.Vertex3(ptV3D.GetVxExtendPoint(10).PArray);
+
+
+                GL.End();
+            }
+        }
+
         void drawVector(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin, DisplayObjectType objectType)
         {
             GL.LineWidth(drawSize);

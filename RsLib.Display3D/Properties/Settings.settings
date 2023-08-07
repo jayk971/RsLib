@@ -18,16 +18,16 @@
       <Value Profile="(Default)">Pink</Value>
     </Setting>
     <Setting Name="Size_SelectPoint" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="Size_SelectRange" Type="System.Single" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="Size_StartPoint" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="Size_EndPoint" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="Size_MeasureLine" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
