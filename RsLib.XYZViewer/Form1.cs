@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using RsLib.LogMgr;
 namespace RsLib.XYZViewer
 {
     public partial class Form1 : Form
@@ -15,7 +16,7 @@ namespace RsLib.XYZViewer
         const int MaxXYZCount = 5;
         const int MaxOPTCount = 3;
 
-        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount + MaxOPTCount * 3);
+        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount + MaxOPTCount * 5);
 
         Dictionary<DrawItem, Button> xyzButtons = new Dictionary<DrawItem, Button>();
         Dictionary<DrawItem, Button> optButtons = new Dictionary<DrawItem, Button>();
@@ -23,12 +24,15 @@ namespace RsLib.XYZViewer
         FormProcessing _processForm;
         public Form1()
         {
+            Log.Start();
             InitializeComponent();
             KeyBMP.Init();
             _displayCtrl.Dock = DockStyle.Fill;
             tableLayoutPanel2.Controls.Add(_displayCtrl, 1, 0);
             _displayCtrl.AfterClearButtonPressed += _displayCtrl_AfterCleared;
             init();
+
+            this.Text += " " + FT_Functions.GetFileVersion("RsLib.XYZViewer.exe");
         }
 
         private void _displayCtrl_AfterCleared()
@@ -45,6 +49,8 @@ namespace RsLib.XYZViewer
             DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f, false);
             DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f, true);
             DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
+            DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, DisplayObjectType.Vector_y, 1.0f, false);
+            DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, DisplayObjectType.Vector_x, 1.0f, false);
 
             XYZOptions[0].DrawColor = Color.Gray;
             XYZOptions[1].DrawColor = Color.DarkGray;
@@ -64,10 +70,21 @@ namespace RsLib.XYZViewer
             vzVectorOptions[1].DrawColor = Color.Blue;
             vzVectorOptions[2].DrawColor = Color.Blue;
 
+            vyVectorOptions[0].DrawColor = Color.LimeGreen;
+            vyVectorOptions[1].DrawColor = Color.LimeGreen;
+            vyVectorOptions[2].DrawColor = Color.LimeGreen;
+
+            vxVectorOptions[0].DrawColor = Color.Red;
+            vxVectorOptions[1].DrawColor = Color.Red;
+            vxVectorOptions[2].DrawColor = Color.Red;
+
             _displayCtrl.AddDisplayOption(XYZOptions);
             _displayCtrl.AddDisplayOption(PathOptions);
             _displayCtrl.AddDisplayOption(PointOptions);
             _displayCtrl.AddDisplayOption(vzVectorOptions);
+            _displayCtrl.AddDisplayOption(vyVectorOptions);
+            _displayCtrl.AddDisplayOption(vxVectorOptions);
+
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor);
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor);
@@ -112,50 +129,67 @@ namespace RsLib.XYZViewer
             ThreadPool.QueueUserWorkItem(new WaitCallback(showProcessForm_td));
             string ext = Path.GetExtension(filePath).ToLower();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
-            switch (ext)
+            Log.Add($"Load {filePath}.", MsgLevel.Info);
+            try
             {
-                case ".xyz":
-                    PointCloud cloud = new PointCloud();
-                    cloud.LoadFromFile(filePath, true);
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                    _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
-                    break;
+                switch (ext)
+                {
+                    case ".xyz":
+                        PointCloud cloud = new PointCloud();
+                        cloud.LoadFromFile(filePath, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
+                        break;
 
-                case ".opt":
-                    ObjectGroup group = new ObjectGroup(fileName);
-                    group.LoadMultiPathOPT(filePath, true);
+                    case ".opt":
+                        ObjectGroup group = new ObjectGroup(fileName);
+                        group.LoadMultiPathOPT(filePath, true);
 
-                    //Polyline line = new Polyline();
-                    //line.LoadFromOPTFile(filePath, true);
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                    _displayCtrl.BuildPath(group, (int)drawItem, true, true);
+                        //Polyline line = new Polyline();
+                        //line.LoadFromOPTFile(filePath, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        _displayCtrl.BuildPath(group, (int)drawItem, true, true);
 
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
-                    _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+                        _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
 
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
-                    _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
+                        _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
 
-                    break;
-                case ".csv":
-                    PointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                    _displayCtrl.BuildPointCloud(cloud2, (int)drawItem, true, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
+                        _displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
 
-                    break;
-                case ".bmp":
-                    KeyBMP.Load(filePath);
-                    PointCloud cloud3 = KeyBMP.ConvertToXYZ();
-                    _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                    _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
+                        _displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
 
-                    break;
-                default:
 
-                    break;
+                        break;
+                    case ".csv":
+                        PointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        _displayCtrl.BuildPointCloud(cloud2, (int)drawItem, true, true);
+
+                        break;
+                    case ".bmp":
+                        KeyBMP.Load(filePath);
+                        PointCloud cloud3 = KeyBMP.ConvertToXYZ();
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
+
+                        break;
+                    default:
+
+                        break;
+                }
+
             }
-
+            catch(Exception ex)
+            {
+                Log.Add("Load file exception.", MsgLevel.Alarm, ex);
+            }
             if (_processForm != null)
             {
                 _processForm.BeginInvoke(new Action(
@@ -269,5 +303,14 @@ namespace RsLib.XYZViewer
         OPT1vzVector,
         OPT2vzVector,
         OPT3vzVector,
+
+        OPT1vyVector,
+        OPT2vyVector,
+        OPT3vyVector,
+
+        OPT1vxVector,
+        OPT2vxVector,
+        OPT3vxVector,
+
     }
 }

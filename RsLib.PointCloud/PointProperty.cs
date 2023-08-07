@@ -209,10 +209,15 @@ namespace RsLib.PointCloudLib
                         if (temp.Count > 0)
                         {
                             Polyline p = new Polyline();
-                            LineOption lineProperty = new LineOption();
-                            lineProperty.LineIndex = Objects.Count;
+                            LineOption lineProperty = new LineOption()
+                            {
+                                LineIndex = Objects.Count,
+                            };
+
                             p.Options.Add(lineProperty);
                             p.LoadFromStringList(temp, buildKDTree);
+                            p.CalculatePathDirectionAsVy();
+
                             Objects.Add(lineProperty.LineIndex.ToString(), p);
                             Sequence.Add(lineProperty.LineIndex.ToString());
                             temp.Clear();
@@ -223,16 +228,105 @@ namespace RsLib.PointCloudLib
             if (temp.Count > 0)
             {
                 Polyline p = new Polyline();
-                LineOption lineProperty = new LineOption();
-                lineProperty.LineIndex = Objects.Count;
+                LineOption lineProperty = new LineOption()
+                {
+                    LineIndex = Objects.Count
+                };
                 p.Options.Add(lineProperty);
                 p.LoadFromStringList(temp, buildKDTree);
+                p.CalculatePathDirectionAsVy();
+
                 Objects.Add(lineProperty.LineIndex.ToString(), p);
                 Sequence.Add(lineProperty.LineIndex.ToString());
                 temp.Clear();
             }
         }
+        public void SaveABBModPath(string filePath)
+        {
+            ABBPath aBBPath = ConvertABBModPath();
+            string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
+            using (StreamWriter sw = new StreamWriter(filePath,false,System.Text.Encoding.Default))
+            {
+                sw.WriteLine($"MODULE {fileName}");
+                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
+                sw.WriteLine("");
+                sw.WriteLine($"LOCAL VAR num {fileName}_Pose{{{aBBPath.Count} ,7}} := [");
+                for (int i = 0;i<aBBPath.Count;i++)
+                {
+                    ABBPathPoint abbPt = aBBPath.Pts[i];
+                    sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                    if (i == aBBPath.Count - 1)
+                    {
+                        sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                    }
+                }
+                sw.WriteLine("");
+                sw.WriteLine($"ENDMODULE");
+            }
+        }
+        public ABBPath ConvertABBModPath()
+        {
+            int segmentIndex = 0;
+            ABBPath aBBPath = new ABBPath();
+            foreach (var item in Objects)
+            {
+                string name = item.Key;
+                Object3D obj = item.Value;
+                Polyline pLine = obj as Polyline;
+                if (pLine != null)
+                {
+                    for (int i = 0; i < pLine.Count; i++)
+                    {
+                        PointV3D pV3D = pLine.Points[i] as PointV3D;
+                        if(pV3D != null)
+                        {
+                            ABBPathPoint abbPt = new ABBPathPoint(pV3D)
+                            {
+                                LapIndex = segmentIndex,
+                                SegmentIndex = segmentIndex,
+                            };
+                            aBBPath.Add(abbPt);
+                        }
+                    }
+                    segmentIndex++;
+                }
 
+            }
+            return aBBPath;
+        }
+        public void SaveABBMod(string filePath)
+        {
+            foreach (var item in Objects)
+            {
+                string name = item.Key;
+                Object3D obj = item.Value;
+                Type objType = obj.GetType();
+                if(objType == typeof(PointCloud))
+                {
+
+                }
+                else if (objType == typeof(Polyline))
+                {
+                    Polyline pLine = obj as Polyline;
+                    pLine.GetOption(typeof(LineOption));
+                    if(pLine != null)
+                    {
+                        for (int i = 0; i < pLine.Count; i++)
+                        {
+
+                        }
+                    }
+                }
+                else if (objType == typeof(ObjectGroup))
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+        }
     }
 
 }

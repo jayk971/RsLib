@@ -65,8 +65,11 @@ namespace RsLib.LogMgr
             string LogFolder = string.Format("{0}\\Log", System.Environment.CurrentDirectory);
             if (!Directory.Exists(LogFolder)) Directory.CreateDirectory(LogFolder);
 
-            _enableTd = true;
-            ThreadPool.QueueUserWorkItem(run);
+            if (IsTdRunning == false)
+            {
+                _enableTd = true;
+                ThreadPool.QueueUserWorkItem(run);
+            }
         }
         public static void Stop()
         {

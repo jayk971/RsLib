@@ -232,5 +232,30 @@ namespace RsLib.DemoForm
         private void button7_Click(object sender, EventArgs e)
         {
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog op = new OpenFileDialog())
+            {
+                op.Filter = "OPT file|*.opt";
+                if(op.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = op.FileName;
+                    string fileName  = Path.GetFileName(filePath);
+                    ObjectGroup group = new ObjectGroup(fileName);
+                    group.LoadMultiPathOPT(filePath, true);
+                    using (SaveFileDialog sf = new SaveFileDialog())
+                    {
+                        sf.Filter = "ABB mod File|*.mod";
+                        if(sf.ShowDialog() == DialogResult.OK)
+                        {
+                            string outputFilePath = sf.FileName;
+                            group.SaveABBModPath(outputFilePath);
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

@@ -101,6 +101,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ABBPathPoint.cs" />
     <Compile Include="Ball.cs" />
     <Compile Include="Box.cs" />
     <Compile Include="ColorPoint.cs" />

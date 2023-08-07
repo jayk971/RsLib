@@ -1,6 +1,7 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using RsLib.Display3D.Properties;
+using RsLib.LogMgr;
 using RsLib.PointCloudLib;
 using System;
 using System.Drawing;
@@ -53,6 +54,8 @@ namespace RsLib.Display3D
             //GlControl_Load(null, null);
             splitContainer1.Panel1Collapsed = true;
             splitContainer2.Panel2Collapsed = true;
+
+            Log.Start();
 
         }
         public bool AddDisplayOption(DisplayObjectOption option)
@@ -305,6 +308,8 @@ namespace RsLib.Display3D
                     bool oldCheck = _displayOption[id].IsDisplay;
                     if (oldCheck != isCheck)
                     {
+                        Log.Add($"Change ID {id} is visible. {isCheck}.", MsgLevel.Trace);
+
                         _displayOption[id].IsDisplay = isCheck;
                     }
                 }
@@ -319,6 +324,8 @@ namespace RsLib.Display3D
                     if (oldValue != newValue)
                     {
                         _displayOption[id].DrawSize = newValue;
+                        Log.Add($"Change ID {id} 's size. {newValue}.", MsgLevel.Trace);
+
                         ReBuild_ChangeColorSize(id);
                     }
                 }
@@ -342,6 +349,7 @@ namespace RsLib.Display3D
                         if (selectColor != oldColor)
                         {
                             _displayOption[id].DrawColor = selectColor;
+                            Log.Add($"Change ID {id} 's color. {selectColor.A} {selectColor.R} {selectColor.G} {selectColor.B}.", MsgLevel.Trace);
                             ReBuild_ChangeColorSize(id);
                             UpdateDataGridView();
                         }
@@ -489,50 +497,57 @@ namespace RsLib.Display3D
         {
             if (_selectIndex <= 1)
             {
+                Log.Add("Select index = -1. Didn't select object.", MsgLevel.Warn);
                 MessageBox.Show("Please select object first.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (_displayObject.ContainsKey(_selectIndex) == false)
             {
+                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
                 MessageBox.Show("No data to be saved.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            Type objectType = _displayObject[_selectIndex].GetType();
-
-            using (SaveFileDialog sf = new SaveFileDialog())
+            try
             {
-                sf.Filter = "XYZ point cloud|*.xyz";
-                if (sf.ShowDialog() == DialogResult.OK)
+                Type objectType = _displayObject[_selectIndex].GetType();
+
+                using (SaveFileDialog sf = new SaveFileDialog())
                 {
-                    string filePath = sf.FileName;
-                    try
+                    sf.Filter = "XYZ point cloud|*.xyz";
+                    if (sf.ShowDialog() == DialogResult.OK)
                     {
-                        if (objectType == typeof(Point3D))
+                        string filePath = sf.FileName;
+                        try
                         {
-                            var obj = _displayObject[_selectIndex] as Point3D;
-                            obj.Save(filePath);
+                            if (objectType == typeof(Point3D))
+                            {
+                                var obj = _displayObject[_selectIndex] as Point3D;
+                                obj.Save(filePath);
+                            }
+                            else if (objectType == typeof(ObjectGroup))
+                            {
+                                var obj = _displayObject[_selectIndex] as ObjectGroup;
+                                obj.Save(filePath);
+                            }
+                            else
+                            {
+                                var obj = _displayObject[_selectIndex] as PointCloud;
+                                obj.Save(filePath);
+                            }
+                            Log.Add($"Save xyz cloud.{filePath}", MsgLevel.Info);
+                            MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        else if (objectType == typeof(ObjectGroup))
+                        catch (Exception ex)
                         {
-                            var obj = _displayObject[_selectIndex] as ObjectGroup;
-                            obj.Save(filePath);
+                            Log.Add($"Save xyz cloud exception.", MsgLevel.Alarm, ex);
                         }
-                        else
-                        {
-                            var obj = _displayObject[_selectIndex] as PointCloud;
-                            obj.Save(filePath);
-                        }
-                        MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch(Exception ex)
-                    {
-                        MessageBox.Show($"Save xyz point cloud exception.\n{ex.Message}", "Save file fail.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-
-
-
+            catch (Exception ex)
+            {
+                Log.Add($"Save XYZ cloud exception.", MsgLevel.Alarm, ex);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -540,6 +555,49 @@ namespace RsLib.Display3D
             if (_GLUpdateDone)
                 _glControl.Invalidate();
             GC.Collect();
+        }
+
+        private void saveABBModFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_selectIndex == -1)
+            {
+                Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
+                MessageBox.Show($"Didn't select any path yet.", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+            if (_displayObject.ContainsKey(_selectIndex) == false)
+            {
+                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
+                MessageBox.Show($"Display object didn't conatin {_selectIndex} object", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            try
+            {
+                var obj = _displayObject[_selectIndex] as ObjectGroup;
+
+                if (obj == null)
+                {
+                    Log.Add($"Select index = {_selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
+                    MessageBox.Show($"Selected objec cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                using (SaveFileDialog sf = new SaveFileDialog())
+                {
+                    sf.Filter = "ABB mod File|*.mod";
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string outputFilePath = sf.FileName;
+                        obj.SaveABBModPath(outputFilePath);
+                        Log.Add($"Save mod. {outputFilePath}", MsgLevel.Info);
+                        MessageBox.Show($"ABB Path Mod is saved.\n{outputFilePath}", "MOD file saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
+            }
         }
     }
 }

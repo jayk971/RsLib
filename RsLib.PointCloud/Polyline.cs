@@ -706,6 +706,33 @@ namespace RsLib.PointCloudLib
                 Points.Add(p);
             }
         }
+        public void CalculatePathDirectionAsVy()
+        {
+            for (int i = 0; i < Points.Count -1; i++)
+            {
+                int curr = i;
+                int next = i + 1;
+                PointV3D currP = Points[curr] as PointV3D;
+                PointV3D nextP = Points[next] as PointV3D;
+
+                Vector3D Vpath = new Vector3D(currP, nextP);
+                currP.Vz.UnitVector();
+                Vpath.UnitVector();
+                currP.Vx = Vector3D.Cross(Vpath, currP.Vz).DeepClone();
+                currP.Vx.UnitVector();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy.UnitVector();
+
+                if(i == Points.Count-2)
+                {
+                    nextP.Vz.UnitVector();
+                    nextP.Vx = Vector3D.Cross(Vpath, nextP.Vz).DeepClone();
+                    nextP.Vx.UnitVector();
+                    nextP.Vy = Vector3D.Cross(nextP.Vz, nextP.Vx).DeepClone();
+                    nextP.Vy.UnitVector();
+                }
+            }
+        }
         public void RemovePoint(double percent)
         {
             if (percent < 0 || percent > 1) return;
