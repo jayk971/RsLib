@@ -83,6 +83,12 @@
     <Compile Include="CSVReader.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Extension.cs" />
+    <Compile Include="FileVersionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FileVersionControl.Designer.cs">
+      <DependentUpon>FileVersionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormProcessing.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +115,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FileVersionControl.resx">
+      <DependentUpon>FileVersionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormProcessing.resx">
       <DependentUpon>FormProcessing.cs</DependentUpon>
     </EmbeddedResource>

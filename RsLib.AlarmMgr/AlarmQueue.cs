@@ -15,7 +15,6 @@ namespace RsLib.AlarmMgr
         static bool isInit = false;
         public static bool IsInit => isInit;
         public static AlarmTable alarmTable = new AlarmTable();
-
         public static void Initial(LangCode lang)
         {
             isInit = false;
