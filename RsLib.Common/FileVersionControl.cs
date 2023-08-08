@@ -15,6 +15,9 @@ namespace RsLib.Common
         public FileVersionControl(string folder)
         {
             InitializeComponent();
+            dataGridView1.Columns[0].Width = dataGridView1.Width / 2;
+            dataGridView1.Columns[1].Width = dataGridView1.Width / 2;
+
             showVersionInFolder(folder);
         }
         void showVersionInFolder(string folder)
