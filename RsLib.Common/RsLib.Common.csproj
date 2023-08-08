@@ -95,6 +95,12 @@
     <Compile Include="FormProcessing.Designer.cs">
       <DependentUpon>FormProcessing.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormShowVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormShowVersion.Designer.cs">
+      <DependentUpon>FormShowVersion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Functions.cs" />
     <Compile Include="MultiLanguage.cs" />
     <Compile Include="PinnedObject.cs" />
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormProcessing.resx">
       <DependentUpon>FormProcessing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormShowVersion.resx">
+      <DependentUpon>FormShowVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShoeIndexControl.resx">
       <DependentUpon>ShoeIndexControl.cs</DependentUpon>
