@@ -386,7 +386,7 @@ namespace RsLib.PointCloudLib
 
             return output;
         }
-        public Tuple<double[],double[],double[]> ToDoubleArrayTuple()
+        public Tuple<double[],double[],double[]> ToXYZArrayTuple()
         {
             double[] x = new double[Points.Count];
             double[] y = new double[Points.Count];

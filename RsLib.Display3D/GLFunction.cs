@@ -1005,7 +1005,6 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-
         void drawPolyline(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin)
         {
             GL.LineWidth(drawSize);

@@ -41,7 +41,7 @@ namespace RsLib.Common
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormShowVersion";
-            this.Text = "File Version";
+            this.Text = "Component Version";
             this.ResumeLayout(false);
 
         }

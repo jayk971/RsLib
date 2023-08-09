@@ -177,6 +177,62 @@ namespace RsLib.PointCloudLib
             else
                 throw new Exception($"object name : {objName} is not in the group.");
         }
+        public Tuple<double[],double[],double[],int[]> ToXYZIArrayTuple()
+        {
+            List<double> xList = new List<double>();
+            List<double> yList = new List<double>();
+            List<double> zLIst = new List<double>();
+            List<int> iLIst = new List<int>();
+
+            foreach (var item in Objects)
+            {
+                string name = item.Key;
+                Object3D obj = item.Value;
+                Type objType = obj.GetType();
+                if(objType == typeof(Polyline))
+                {
+                    Polyline pLine = obj as Polyline;
+                    LineOption lineOption =  pLine.GetOption(typeof(LineOption)) as LineOption;
+   
+                    if(pLine!= null)
+                    {
+                        for (int i = 0; i < pLine.Count; i++)
+                        {
+                            Point3D pt = pLine.Points[i];
+                            xList.Add(pt.X);
+                            yList.Add(pt.Y);
+                            zLIst.Add(pt.Z);
+                            if (lineOption != null)
+                            {
+                                iLIst.Add(lineOption.LineIndex);
+                            }
+                            else iLIst.Add(0);
+                        }
+                    }
+                }
+                else if(objType == typeof(PointCloud))
+                {
+                    PointCloud pCloud = obj as PointCloud;
+                    if(pCloud != null)
+                    {
+                        for (int i = 0; i < pCloud.Count; i++)
+                        {
+                            Point3D pt = pCloud.Points[i];
+                            xList.Add(pt.X);
+                            yList.Add(pt.Y);
+                            zLIst.Add(pt.Z);
+                            iLIst.Add(0);
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+            return new Tuple<double[], double[], double[], int[]>(xList.ToArray(), yList.ToArray(), zLIst.ToArray(), iLIst.ToArray());
+        }
         public void Clear()
         {
             Objects.Clear();

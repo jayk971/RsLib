@@ -24,6 +24,20 @@ namespace RsLib.PointCloudLib
             Percent = new List<double>();
 
         }
+        public Polyline(double[] x,double[]y,double[]z)
+        {
+            Points.Clear();
+            kdTree.Clear();
+            if (x.Length == y.Length && x.Length == z.Length)
+            {
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Point3D point = new Point3D(Math.Round(x[i], 2), Math.Round(y[i], 2), Math.Round(z[i], 2));
+
+                    Points.Add(point);
+                }
+            }
+        }
         public bool LoadFromStringList(List<string> fileContent, bool IsAddKdTree, int ResampleCount = 0)
         {
             Points.Clear();
