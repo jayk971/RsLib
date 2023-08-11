@@ -129,11 +129,11 @@ namespace RsLib.PointCloudLib.CalculateMatrix
             double[,] mArr = null;
             if (ext == ".M44" || ext == ".M44D")
             {
-                 mArr = m_Func.LoadMatrix4x4ArrayFromFile(matrixFile);
+                 mArr = PointCloudCommon.LoadMatrix4x4ArrayFromFile(matrixFile);
             }
             else if (ext == ".DAT")
             {
-                mArr = m_Func.LoadMatrix4x4ArrayFromHalconDatFile(matrixFile);
+                mArr = PointCloudCommon.LoadMatrix4x4ArrayFromHalconDatFile(matrixFile);
 
             }
 

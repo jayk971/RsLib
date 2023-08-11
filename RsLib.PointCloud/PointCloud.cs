@@ -227,7 +227,7 @@ namespace RsLib.PointCloudLib
         public PointCloud Multiply(double[,] matrixArr)
         {
             PointCloud output = new PointCloud();
-            Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
+            Matrix4x4 matrix = PointCloudCommon.ArrayToMatrix4x4(matrixArr);
             for (int i = 0; i < Points.Count; i++)
             {
                 Type type = Points[i].GetType();
@@ -324,7 +324,7 @@ namespace RsLib.PointCloudLib
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             for (int i = 0; i < Points.Count; i++)
             {
-                PointCloud temp = m_Func.GetNearestPointCloud(kdTree, Points[i], Radius);
+                PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, Points[i], Radius);
 
                 if (SmoothX) Points[i].X = temp.Average.X;
                 if (SmoothY) Points[i].Y = temp.Average.Y;
@@ -340,7 +340,7 @@ namespace RsLib.PointCloudLib
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             for (int i = 0; i < Points.Count; i++)
             {
-                PointCloud temp = m_Func.GetNearestPointCloud(kdTree, Points[i], PointCount);
+                PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, Points[i], PointCount);
                 Point3D avg = temp.Average;
 
                 if (SmoothX) Points[i].X = avg.X;
@@ -571,12 +571,12 @@ namespace RsLib.PointCloudLib
             {
                 double SetRadius = Radius;
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 while (NearestCloud.Count == 0)
                 {
                     SetRadius += 0.5;
-                    NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                    NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 }
                 for (int i = 0; i < Points.Count; i++)
                 {
@@ -602,7 +602,7 @@ namespace RsLib.PointCloudLib
                     }
                     else
                     {
-                        PointCloud MaxPNear = m_Func.GetNearestPointCloud(temp2, MaxP, SmoothRad, out FoundIndex);
+                        PointCloud MaxPNear = PointCloudCommon.GetNearestPointCloud(temp2, MaxP, SmoothRad, out FoundIndex);
                         Point3D AvgMapP = MaxPNear.Average;
 
                         double tempD = Math.Round(Point3D.Distance(StartP, AvgMapP), 2);
@@ -649,7 +649,7 @@ namespace RsLib.PointCloudLib
             Polyline FinalOutput = new Polyline();
             for (int i = 0; i < output.Count; i++)
             {
-                PointCloud N = m_Func.GetNearestPointCloud(temp, output.Points[i], 2.0 * Radius);
+                PointCloud N = PointCloudCommon.GetNearestPointCloud(temp, output.Points[i], 2.0 * Radius);
 
                 if (N.Count > 1)
                 {
@@ -757,7 +757,7 @@ namespace RsLib.PointCloudLib
             while (true)
             {
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, ClosePointCount, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, ClosePointCount, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 //while (NearestCloud.Count == 0)
                 //{
@@ -791,7 +791,7 @@ namespace RsLib.PointCloudLib
                     }
                     else
                     {
-                        PointCloud MaxPNear = m_Func.GetNearestPointCloud(temp2, MaxP, SmoothRad, out FoundIndex);
+                        PointCloud MaxPNear = PointCloudCommon.GetNearestPointCloud(temp2, MaxP, SmoothRad, out FoundIndex);
                         Point3D AvgMapP = MaxPNear.Average;
                         P_Start = AvgMapP;
                     }
@@ -854,12 +854,12 @@ namespace RsLib.PointCloudLib
             {
                 double SetRadius = Radius;
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 while (NearestCloud.Count == 0)
                 {
                     SetRadius += 0.5;
-                    NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                    NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 }
                 for (int i = 0; i < Points.Count; i++)
                 {
@@ -904,7 +904,7 @@ namespace RsLib.PointCloudLib
             Polyline FinalOutput = new Polyline();
             for (int i = 0; i < output.Count; i++)
             {
-                PointCloud N = m_Func.GetNearestPointCloud(temp, output.Points[i], 2.0 * Radius);
+                PointCloud N = PointCloudCommon.GetNearestPointCloud(temp, output.Points[i], 2.0 * Radius);
 
                 if (N.Count > 1)
                 {
@@ -1086,7 +1086,7 @@ namespace RsLib.PointCloudLib
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             double KdTreeR = Boundary.GetFarestCornerFromCenter();
 
-            PointCloud Collection = m_Func.GetNearestPointCloud(kdTree, Boundary.BaseCenter, KdTreeR);
+            PointCloud Collection = PointCloudCommon.GetNearestPointCloud(kdTree, Boundary.BaseCenter, KdTreeR);
 
 
             for (int i = 0; i < Collection.Points.Count; i++)
@@ -1922,7 +1922,7 @@ namespace RsLib.PointCloudLib
             for (int i = 0; i < Target.Count; i++)
             {
                 double tmpMinDis = double.MaxValue;
-                Point3D tmp = m_Func.GetNearestPoint(kdTree, Target.Points[i], out tmpMinDis);
+                Point3D tmp = PointCloudCommon.GetNearestPoint(kdTree, Target.Points[i], out tmpMinDis);
                 if (tmpMinDis < minDis)
                 {
                     TargetIndex = i;
@@ -1940,7 +1940,7 @@ namespace RsLib.PointCloudLib
             for (int i = 0; i < Target.Count; i++)
             {
                 double tmpMinDis = double.MaxValue;
-                int tmp = m_Func.GetNearestPointIndex(kdTree, Target.Points[i], out tmpMinDis);
+                int tmp = PointCloudCommon.GetNearestPointIndex(kdTree, Target.Points[i], out tmpMinDis);
                 if (tmpMinDis < minDis)
                 {
                     MinPointIndex = tmp;
@@ -1957,7 +1957,7 @@ namespace RsLib.PointCloudLib
             for (int i = 0; i < Target.Count; i++)
             {
                 double tmpMinDis = double.MaxValue;
-                int tmp = m_Func.GetNearestPointIndex(kdTree, Target.Points[i], out tmpMinDis);
+                int tmp = PointCloudCommon.GetNearestPointIndex(kdTree, Target.Points[i], out tmpMinDis);
                 if (tmpMinDis < minDis)
                 {
                     MinPointIndex = tmp;
@@ -1969,7 +1969,7 @@ namespace RsLib.PointCloudLib
         public int FindClosePointIndex(Point3D Target, double radius)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
-            return m_Func.GetInRadiusPoint(kdTree, Target, radius);
+            return PointCloudCommon.GetInRadiusPoint(kdTree, Target, radius);
         }
 
         public Accord.Collections.KDTree<int> GetIndexKDtree(bool MakeZequal0 = false)
@@ -2421,8 +2421,8 @@ namespace RsLib.PointCloudLib
             {
                 Point3D tempP = new Point3D(Points[i]);
                 tempP.Z = 0;
-                Point3D NearP1 = m_Func.GetNearestPoint(kdTree, tempP);
-                PointCloud NearCloud = m_Func.GetNearestPointCloud(kdTree, NearP1, 2);
+                Point3D NearP1 = PointCloudCommon.GetNearestPoint(kdTree, tempP);
+                PointCloud NearCloud = PointCloudCommon.GetNearestPointCloud(kdTree, NearP1, 2);
                 Point3D NearP2 = NearCloud.Points[1];
 
                 Vector3D tmpV = new Vector3D(NearP2, NearP1);
@@ -2687,7 +2687,6 @@ namespace RsLib.PointCloudLib
                         }
                     }
                 }
-                sr.Close();
             }
             return true;
 
@@ -2706,13 +2705,12 @@ namespace RsLib.PointCloudLib
                 }
 
                 sw.Flush();
-                sw.Close();
             }
         }
         public void Save(string FilePath,bool enableOuptutColor = false)
         {
 
-            using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(FilePath, true, Encoding.Default,65535))
             {
                 string WriteData = "";
                 for (int i = 0; i < Points.Count; i++)
@@ -2727,9 +2725,7 @@ namespace RsLib.PointCloudLib
                     }
                     sw.WriteLine(WriteData);
                 }
-
                 sw.Flush();
-                sw.Close();
             }
         }
 
@@ -2744,9 +2740,8 @@ namespace RsLib.PointCloudLib
                     WriteData = Points[i].ToString(WritePointTag, WritePointFlag, WritePointDt);//string.Format("{0:F2} {1:F2} {2:F2}", Points[i].X, Points[i].Y, Points[i].Z);
                     sw.WriteLine(WriteData);
                 }
-
+               
                 sw.Flush();
-                sw.Close();
             }
         }
 
@@ -2939,9 +2934,9 @@ namespace RsLib.PointCloudLib
         public void Norm()
         {
             Vector3D Vx, Vy, Vz;
-            m_Func.PCA(this, out Vx, out Vy, out Vz);
+            PointCloudCommon.PCA(this, out Vx, out Vy, out Vz);
 
-            PointCloud After = m_Func.ShiftRotate(this, Average.X, Average.Y, Average.Z, Vx, Vy, Vz, m_Func.VoX, m_Func.VoY, m_Func.VoZ);
+            PointCloud After = PointCloudCommon.ShiftRotate(this, Average.X, Average.Y, Average.Z, Vx, Vy, Vz, PointCloudCommon.VoX, PointCloudCommon.VoY, PointCloudCommon.VoZ);
 
             Points.Clear();
             Points = After.Points;
@@ -2951,7 +2946,7 @@ namespace RsLib.PointCloudLib
             Vector3D v = new Vector3D(PBefore, PAfter);
 
 
-            PointCloud After = m_Func.ShiftRotate(this, v.X, v.Y, v.Z, VxBefore, VyBefore, VzBefore, VxAfter, VyAfter, VzAfter);
+            PointCloud After = PointCloudCommon.ShiftRotate(this, v.X, v.Y, v.Z, VxBefore, VyBefore, VzBefore, VxAfter, VyAfter, VzAfter);
 
             Points.Clear();
             Points = After.Points;
@@ -2959,23 +2954,23 @@ namespace RsLib.PointCloudLib
 
         public void PCA(out Vector3D Vx, out Vector3D Vy, out Vector3D Vz)
         {
-            m_Func.PCA(this, out Vx, out Vy, out Vz);
+            PointCloudCommon.PCA(this, out Vx, out Vy, out Vz);
         }
         public void PCA(out Vector3D Vx, out Vector3D Vy, out Vector3D Vz, out Point3D Center)
         {
-            m_Func.PCA(this, out Vx, out Vy, out Vz, out Center);
+            PointCloudCommon.PCA(this, out Vx, out Vy, out Vz, out Center);
         }
         public void RotateRz90()
         {
 
-            PointCloud After = m_Func.Rotate(this, Vector3D.ZAxis, 90);
+            PointCloud After = PointCloudCommon.Rotate(this, Vector3D.ZAxis, 90);
 
             Points.Clear();
             Points = After.Points;
         }
         public void RotateRy90()
         {
-            PointCloud After = m_Func.Rotate(this, Vector3D.YAxis, 90);
+            PointCloud After = PointCloudCommon.Rotate(this, Vector3D.YAxis, 90);
 
             Points.Clear();
             Points = After.Points;
@@ -2983,7 +2978,7 @@ namespace RsLib.PointCloudLib
         }
         public void RotateRx90()
         {
-            PointCloud After = m_Func.Rotate(this, Vector3D.XAxis, 90);
+            PointCloud After = PointCloudCommon.Rotate(this, Vector3D.XAxis, 90);
 
             Points.Clear();
             Points = After.Points;
@@ -3253,7 +3248,7 @@ namespace RsLib.PointCloudLib
         public Point3D GetNearest(Point3D refP)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
-            PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP, 1);
+            PointCloud tree = PointCloudCommon.GetNearestPointCloud(kdTree, refP, 1);
             if (tree.Count == 1)
             {
                 return tree.Points[0];
@@ -3263,7 +3258,7 @@ namespace RsLib.PointCloudLib
         public PointCloud GetNearestCloud(Point3D refP, double radius)
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
-            PointCloud tree = m_Func.GetNearestPointCloud(kdTree, refP, radius);
+            PointCloud tree = PointCloudCommon.GetNearestPointCloud(kdTree, refP, radius);
 
             return tree;
         }
@@ -3271,7 +3266,7 @@ namespace RsLib.PointCloudLib
         {
             if (IsKdTreeBuilded == false) BuildIndexKDtree();
             List<int> output = new List<int>();
-            m_Func.GetNearestPointCloud(kdTree, refP, radius, out output);
+            PointCloudCommon.GetNearestPointCloud(kdTree, refP, radius, out output);
 
             return output;
         }
@@ -3287,7 +3282,7 @@ namespace RsLib.PointCloudLib
             PointCloud Output = new PointCloud();
             ParallelLoopResult PResult1 = Parallel.For(0, SplitBoxs.Count, (int i, ParallelLoopState PLS) =>
             {
-                PointCloud temp = m_Func.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
+                PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
                 temp.RemoveOutsideBox(SplitBoxs[i]);
                 if (temp.Count > 0)
                 {
@@ -3312,7 +3307,7 @@ namespace RsLib.PointCloudLib
             PointCloud Output = new PointCloud();
             ParallelLoopResult PResult1 = Parallel.For(0, SplitBoxs.Count, (int i, ParallelLoopState PLS) =>
             {
-                PointCloud temp = m_Func.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
+                PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
                 temp.RemoveOutsideBox(SplitBoxs[i]);
                 if (temp.Count > MinCount)
                 {
@@ -3339,7 +3334,7 @@ namespace RsLib.PointCloudLib
             {
                 ParallelLoopResult PResult1 = Parallel.For(0, SplitBoxs.Count, (int i, ParallelLoopState PLS) =>
                 {
-                    PointCloud temp = m_Func.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
+                    PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
                     temp.RemoveOutsideBox(SplitBoxs[i]);
                     Point3D CloseP = temp.Average;
                     //temp.Save($"d:\\test\\{DateTime.Now:HHmmss}_{i}.xyz");
@@ -3362,7 +3357,7 @@ namespace RsLib.PointCloudLib
             {
                 for (int i = 0; i < SplitBoxs.Count; i++)
                 {
-                    PointCloud temp = m_Func.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
+                    PointCloud temp = PointCloudCommon.GetNearestPointCloud(kdTree, SplitBoxs[i].Center, SplitBoxs[i].ContactBallR);
                     temp.RemoveOutsideBox(SplitBoxs[i]);
                     Point3D CloseP = temp.Average;
 

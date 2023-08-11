@@ -175,6 +175,8 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
+        public bool IsInsideBox(double x, double y, double z) => x >= MinP.X && x <= MaxP.X && y >= MinP.Y && y <= MaxP.Y && z >= MinP.Z && z <= MaxP.Z;
+        
     }
 
     [Serializable]

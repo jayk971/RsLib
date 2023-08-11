@@ -380,7 +380,7 @@ namespace RsLib.PointCloudLib
         {
             Point3D outPt = new Point3D(pt);
 
-            Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
+            Matrix4x4 matrix = PointCloudCommon.ArrayToMatrix4x4(matrixArr);
 
             Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
             outPt.X = output.X;
@@ -911,7 +911,7 @@ namespace RsLib.PointCloudLib
         {
             PointV3D outPt = new PointV3D(pt);
 
-            Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
+            Matrix4x4 matrix = PointCloudCommon.ArrayToMatrix4x4(matrixArr);
             Vector4 output = Matrix4x4.Multiply(matrix, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
             outPt.X = output.X;
             outPt.Y = output.Y;

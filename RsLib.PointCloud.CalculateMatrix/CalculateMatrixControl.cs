@@ -51,7 +51,7 @@ namespace RsLib.PointCloudLib.CalculateMatrix
         private void btn_CalculateMatrix_Click(object sender, EventArgs e)
         {
             Point3D intersectP = new Point3D();
-            double[,] m = m_Func.CalculateTransformMatrix(
+            double[,] m = PointCloudCommon.CalculateTransformMatrix(
                 x1.P,
                 x2.P,
                 y1.P,
@@ -65,14 +65,14 @@ namespace RsLib.PointCloudLib.CalculateMatrix
             richTextBox1.Clear();
             richTextBox1.AppendText("Calculate matrix done\n");
             richTextBox1.AppendText($"Intersect : {intersectP.X:F2} {intersectP.Y:F2} {intersectP.Z:F2}\n");
-            richTextBox1.AppendText(m_Func.Matrix4x4ToString(m));
+            richTextBox1.AppendText(PointCloudCommon.Matrix4x4ToString(m));
             using (SaveFileDialog sf = new SaveFileDialog())
             {
                 sf.Filter = "Matrix 4x4 with data|*.m44d|Matrix 4x4|*.m44";
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
-                    m_Func.SaveMatrix4x4(m, filePath);
+                    PointCloudCommon.SaveMatrix4x4(m, filePath);
                     if (sf.FilterIndex == 1)
                     {
                         using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.Default))
@@ -159,10 +159,10 @@ namespace RsLib.PointCloudLib.CalculateMatrix
                 if (op.ShowDialog() == DialogResult.OK)
                 {
                     string filepath = op.FileName;
-                    double[,] mArr = m_Func.LoadMatrix4x4ArrayFromFile(filepath);
+                    double[,] mArr = PointCloudCommon.LoadMatrix4x4ArrayFromFile(filepath);
                     richTextBox1.Clear();
                     richTextBox1.AppendText("Load matrix done.\n");
-                    richTextBox1.AppendText(m_Func.Matrix4x4ToString(mArr));
+                    richTextBox1.AppendText(PointCloudCommon.Matrix4x4ToString(mArr));
 
                     using (StreamReader sr = new StreamReader(filepath))
                     {

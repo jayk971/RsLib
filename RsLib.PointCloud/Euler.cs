@@ -285,16 +285,16 @@ namespace RsLib.PointCloudLib
             switch (RefAxis)
             {
                 case RefAxis.X:
-                    Coord.Vy = m_Func.Rotate(Coord.Vy, Coord.Vx, RotateAngle);
-                    Coord.Vz = m_Func.Rotate(Coord.Vz, Coord.Vx, RotateAngle);
+                    Coord.Vy = PointCloudCommon.Rotate(Coord.Vy, Coord.Vx, RotateAngle);
+                    Coord.Vz = PointCloudCommon.Rotate(Coord.Vz, Coord.Vx, RotateAngle);
                     break;
                 case RefAxis.Y:
-                    Coord.Vx = m_Func.Rotate(Coord.Vx, Coord.Vy, RotateAngle);
-                    Coord.Vz = m_Func.Rotate(Coord.Vz, Coord.Vy, RotateAngle);
+                    Coord.Vx = PointCloudCommon.Rotate(Coord.Vx, Coord.Vy, RotateAngle);
+                    Coord.Vz = PointCloudCommon.Rotate(Coord.Vz, Coord.Vy, RotateAngle);
                     break;
                 case RefAxis.Z:
-                    Coord.Vx = m_Func.Rotate(Coord.Vx, Coord.Vz, RotateAngle);
-                    Coord.Vy = m_Func.Rotate(Coord.Vy, Coord.Vz, RotateAngle);
+                    Coord.Vx = PointCloudCommon.Rotate(Coord.Vx, Coord.Vz, RotateAngle);
+                    Coord.Vy = PointCloudCommon.Rotate(Coord.Vy, Coord.Vz, RotateAngle);
                     break;
                 default:
                     break;
@@ -548,14 +548,14 @@ namespace RsLib.PointCloudLib
         {
             get
             {
-                return m_Func.Matrix4x4ToFloatArray(finalMatrix4);
+                return PointCloudCommon.Matrix4x4ToFloatArray(finalMatrix4);
             }
         }
         public float[,] FloatArray2dTranspose
         {
             get
             {
-                return m_Func.Matrix4x4ToFloatArray(Transpose());
+                return PointCloudCommon.Matrix4x4ToFloatArray(Transpose());
             }
         }
 

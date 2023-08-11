@@ -689,7 +689,7 @@ namespace RsLib.PointCloudLib
                 {
                     Point3D tempP = new Point3D(Layers[j].Points[i]);
                     tempP.Z = 0;
-                    PointCloud NearCloud = m_Func.GetNearestPointCloud(tmp, tempP, 2);
+                    PointCloud NearCloud = PointCloudCommon.GetNearestPointCloud(tmp, tempP, 2);
                     Vector3D tmpV = new Vector3D(NearCloud.Points[1], NearCloud.Points[0]);
 
                     Point3D CalP = tmpV.ShortestPoint(tempP, NearCloud.Points[1]);

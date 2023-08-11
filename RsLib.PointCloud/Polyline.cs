@@ -188,7 +188,7 @@ namespace RsLib.PointCloudLib
         public new Polyline Multiply(double[,] matrixArr)
         {
             Polyline output = new Polyline();
-            Matrix4x4 matrix = m_Func.ArrayToMatrix4x4(matrixArr);
+            Matrix4x4 matrix = PointCloudCommon.ArrayToMatrix4x4(matrixArr);
             for (int i = 0; i < Points.Count; i++)
             {
                 Type type = Points[i].GetType();
@@ -214,7 +214,7 @@ namespace RsLib.PointCloudLib
             Dictionary<string, Point3D> CollectCloud = new Dictionary<string, Point3D>();
             for (int i = 0; i < Points.Count; i++)
             {
-                PointCloud tmp = m_Func.GetNearestPointCloud(Tree, Points[i], Radius);
+                PointCloud tmp = PointCloudCommon.GetNearestPointCloud(Tree, Points[i], Radius);
 
                 for (int j = 0; j < tmp.Count; j++)
                 {
@@ -391,12 +391,12 @@ namespace RsLib.PointCloudLib
             {
                 double SetRadius = Radius;
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 while (NearestCloud.Count == 0)
                 {
                     SetRadius += 1;
-                    NearestCloud = m_Func.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
+                    NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
                 }
 
                 for (int i = 0; i < Points.Count; i++)
@@ -429,12 +429,12 @@ namespace RsLib.PointCloudLib
             {
                 double SetRadius = Radius;
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 while (NearestCloud.Count == 0)
                 {
                     SetRadius += 1;
-                    NearestCloud = m_Func.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
+                    NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, refP, SetRadius, out FoundIndex);
                 }
 
                 for (int i = 0; i < Points.Count; i++)
@@ -467,12 +467,12 @@ namespace RsLib.PointCloudLib
             {
                 double SetRadius = Radius;
                 List<int> FoundIndex = new List<int>();
-                PointCloud NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                PointCloud NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 List<Point3D> NewCloud = new List<Point3D>();
                 while (NearestCloud.Count == 0)
                 {
                     SetRadius += 1;
-                    NearestCloud = m_Func.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
+                    NearestCloud = PointCloudCommon.GetNearestPointCloud(temp, P_Start, SetRadius, out FoundIndex);
                 }
 
                 for (int i = 0; i < Points.Count; i++)
@@ -707,10 +707,10 @@ namespace RsLib.PointCloudLib
                 Vector3D vZ = new Vector3D();
                 Point3D center = new Point3D();
 
-                PointCloud surfaceCloud = m_Func.GetNearestPointCloud((KDTree<int>)tree, target, searchRadius);
+                PointCloud surfaceCloud = PointCloudCommon.GetNearestPointCloud((KDTree<int>)tree, target, searchRadius);
                 if (surfaceCloud.Count > 0)
                 {
-                    m_Func.PCA(surfaceCloud, out vX, out vY, out vZ, out center);
+                    PointCloudCommon.PCA(surfaceCloud, out vX, out vY, out vZ, out center);
                     double dot = Vector3D.Dot(vZ, positiveDir);
                     if (dot < 0) vZ.Reverse();
                     p.Vz = vZ.GetUnitVector();

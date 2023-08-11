@@ -25,7 +25,7 @@ namespace RsLib.PointCloudLib
         Q3,
         Q4
     }
-    public class m_Func
+    public static class PointCloudCommon
     {
 
         private static Vector4 V1000 = new Vector4(1F, 0F, 0F, 0F);
@@ -38,6 +38,24 @@ namespace RsLib.PointCloudLib
         public static Vector3D VoZ = new Vector3D(0, 0, 1);
 
         public static Point3D Po = new Point3D();
+        public static void SaveXYZ(double[] xArr,double[] yArr,double[] zArr,string filePath)
+        {
+            bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);
+            if(arrayEqual)
+            {
+                using (StreamWriter sw = new StreamWriter(filePath,true,Encoding.Default,65535))
+                {
+                    for (int i = 0; i < xArr.Length; i++)
+                    {
+                        double x = xArr[i];
+                        double y = yArr[i];
+                        double z = zArr[i];
+                        sw.WriteLine($"{x:F2} {y:F2} {z:F2}");
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 使用 PCA 取得坐標系 3 個向量
         /// </summary>
