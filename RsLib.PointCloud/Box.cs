@@ -8,20 +8,25 @@ namespace RsLib.PointCloudLib
     [Serializable]
     public partial class Box : Object3D
     {
-        [DefaultValue(null)]
-        public Point3D MinP { get; set; }
+        public double XMin { get; set; } = -999;
+        public double XMax { get; set; } = 999;
+        public double YMin { get; set; } = -999;
+        public double YMax { get; set; } = 999;
+        public double ZMin { get; set; } = -999;
+        public double ZMax { get; set; } = 999;
 
-        [DefaultValue(null)]
-        public Point3D MaxP { get; set; }
+        public Point3D MinP => new Point3D(XMin, YMin, ZMin);
+
+        public Point3D MaxP => new Point3D(XMax, YMax, ZMax);
 
         [JsonIgnore]
-        public double Volumn { get { return GetVolume(); } }
+        public double Volumn =>GetVolume(); 
 
         [JsonIgnore]
-        public Point3D Center { get { return GetCenter(); } }
+        public Point3D Center =>GetCenter();
 
         [JsonIgnore]
-        public double ContactBallR { get { return Point3D.Distance(Center, MinP); } }
+        public double ContactBallR => Point3D.Distance(Center, MinP);
 
         public override uint DataCount => 1;
 
@@ -30,8 +35,6 @@ namespace RsLib.PointCloudLib
         /// </summary>
         public Box()
         {
-            MinP = new Point3D();
-            MaxP = new Point3D();
         }
         /// <summary>
         /// 初始化 box 類別, 以兩點拉出長方體
@@ -40,16 +43,14 @@ namespace RsLib.PointCloudLib
         /// <param name="P2">第 2 點</param>
         public Box(Point3D P1, Point3D P2)
         {
-            double MaxX = Math.Max(P1.X, P2.X);
-            double MaxY = Math.Max(P1.Y, P2.Y);
-            double MaxZ = Math.Max(P1.Z, P2.Z);
+            XMax = Math.Max(P1.X, P2.X);
+            YMax = Math.Max(P1.Y, P2.Y);
+            ZMax = Math.Max(P1.Z, P2.Z);
 
-            double MinX = Math.Min(P1.X, P2.X);
-            double MinY = Math.Min(P1.Y, P2.Y);
-            double MinZ = Math.Min(P1.Z, P2.Z);
+            XMin = Math.Min(P1.X, P2.X);
+            YMin = Math.Min(P1.Y, P2.Y);
+            ZMin = Math.Min(P1.Z, P2.Z);
 
-            MinP = new Point3D(MinX, MinY, MinZ);
-            MaxP = new Point3D(MaxX, MaxY, MaxZ);
         }
         /// <summary>
         /// 初始化 box 類別, 以兩點拉出長方體
@@ -62,16 +63,14 @@ namespace RsLib.PointCloudLib
         /// <param name="z2">第 2 點 Z 座標</param>
         public Box(double x1, double x2, double y1, double y2, double z1, double z2)
         {
-            double MaxX = Math.Max(x1, x2);
-            double MaxY = Math.Max(y1, y2);
-            double MaxZ = Math.Max(z1, z2);
+            XMax = Math.Max(x1, x2);
+            YMax = Math.Max(y1, y2);
+            ZMax = Math.Max(z1, z2);
 
-            double MinX = Math.Min(x1, x2);
-            double MinY = Math.Min(y1, y2);
-            double MinZ = Math.Min(z1, z2);
+            XMin = Math.Min(x1, x2);
+            YMin = Math.Min(y1, y2);
+            ZMin = Math.Min(z1, z2);
 
-            MinP = new Point3D(MinX, MinY, MinZ);
-            MaxP = new Point3D(MaxX, MaxY, MaxZ);
         }
         /// <summary>
         /// 將長方體依照 X 方向等距切分成若干長方體
@@ -172,7 +171,7 @@ namespace RsLib.PointCloudLib
             Output.Add(new Point3D(MinP.X, MaxP.Y, MaxP.Z));
             Output.Add(new Point3D(MaxP.X, MaxP.Y, MaxP.Z));
             Output.Add(new Point3D(MaxP.X, MinP.Y, MaxP.Z));
-
+            
             return Output;
         }
         public bool IsInsideBox(double x, double y, double z) => x >= MinP.X && x <= MaxP.X && y >= MinP.Y && y <= MaxP.Y && z >= MinP.Z && z <= MaxP.Z;

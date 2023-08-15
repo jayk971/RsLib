@@ -83,7 +83,7 @@ namespace RsLib.Display3D
                 }
             }
         }
-        public void Clear(bool clearOptions = true)
+        public void Clear(bool clearOptions = false)
         {
             _displayObject.Clear();
             foreach (var item in _displayOption)
