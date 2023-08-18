@@ -44,7 +44,15 @@ namespace RsLib.PointCloudLib
         public PointCloud()
         {
         }
+        public PointCloud(Tuple<double[], double[], double[]> dataTuple)
+        {
+            parseXYZArray(dataTuple.Item1,dataTuple.Item2,dataTuple.Item3);
+        }
         public PointCloud(double[] x, double[] y, double[] z)
+        {
+            parseXYZArray(x, y, z);
+        }
+        void parseXYZArray(double[] x, double[] y, double[] z)
         {
             if (x.Length == y.Length && x.Length == z.Length)
             {

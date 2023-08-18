@@ -38,7 +38,7 @@ namespace RsLib.PointCloudLib
         public static Vector3D VoZ = new Vector3D(0, 0, 1);
 
         public static Point3D Po = new Point3D();
-        public static void SaveXYZ(double[] xArr,double[] yArr,double[] zArr,string filePath)
+        public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath)
         {
             bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);
             if(arrayEqual)
@@ -54,6 +54,102 @@ namespace RsLib.PointCloudLib
                     }
                 }
             }
+        }
+        public static void LoadXYZToArray(string filePath,char cplitChar,out double[] xArr,out double[] yArr,out double[] zArr)
+        {
+            List<double> xList = new List<double>();
+            List<double> yList = new List<double>();
+            List<double> zList = new List<double>();
+
+            xArr = new double[0];
+            yArr = new double[0];
+            zArr = new double[0];
+
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                while(!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    string[] splitData = readData.Split(cplitChar);
+                    if(splitData.Length>=3)
+                    {
+                        if (double.TryParse(splitData[0], out double x) == false) continue;
+                        if (double.TryParse(splitData[1], out double y) == false) continue;
+                        if (double.TryParse(splitData[2], out double z) == false) continue;
+
+                        xList.Add(x);
+                        yList.Add(y);
+                        zList.Add(z);
+                    }
+                }
+            }
+
+            xArr = xList.ToArray();
+            yArr = yList.ToArray();
+            zArr = zList.ToArray();
+        }
+        public static void LoadOPTToXYZIndexNormalArray(string filePath, 
+            char cplitChar, 
+            out double[] xArr, 
+            out double[] yArr, 
+            out double[] zArr,
+            out double[] nXArr,
+            out double[] nYArr,
+            out double[] nZArr,
+            out int[] indexArr)
+        {
+            List<double> xList = new List<double>();
+            List<double> yList = new List<double>();
+            List<double> zList = new List<double>();
+            List<double> nxList = new List<double>();
+            List<double> nyList = new List<double>();
+            List<double> nzList = new List<double>();
+            List<int> indexList = new List<int>();
+
+            xArr = new double[0];
+            yArr = new double[0];
+            zArr = new double[0];
+            nXArr = new double[0];
+            nYArr = new double[0];
+            nZArr = new double[0];
+            indexArr = new int[0];
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                int currIndex = 0;
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    if (readData == "") currIndex++;
+                    string[] splitData = readData.Split(cplitChar);
+                    if (splitData.Length >= 3)
+                    {
+                        if (double.TryParse(splitData[0], out double x) == false) continue;
+                        if (double.TryParse(splitData[1], out double y) == false) continue;
+                        if (double.TryParse(splitData[2], out double z) == false) continue;
+                        if (double.TryParse(splitData[3], out double nX) == false) continue;
+                        if (double.TryParse(splitData[4], out double nY) == false) continue;
+                        if (double.TryParse(splitData[5], out double nZ) == false) continue;
+
+                        xList.Add(x);
+                        yList.Add(y);
+                        zList.Add(z);
+                        nxList.Add(nX);
+                        nyList.Add(nY);
+                        nzList.Add(nZ);
+                        indexList.Add(currIndex);
+                    }
+                }
+            }
+
+            xArr = xList.ToArray();
+            yArr = yList.ToArray();
+            zArr = zList.ToArray();
+            nXArr = nxList.ToArray();
+            nYArr = nyList.ToArray();
+            nZArr = nzList.ToArray();
+            indexArr = indexList.ToArray();
         }
 
         /// <summary>
@@ -1374,7 +1470,81 @@ namespace RsLib.PointCloudLib
             return output;
 
         }
+        public static double[,] LoadMatrix4x4ArrayFromHalconDatFile(string filePath,double dX,double dY,double dZ,double rX,double rY, double rZ)
+        {
+            double[,] output = new double[4, 4];
+            if (File.Exists(filePath))
+            {
+                string ext = Path.GetExtension(filePath);
+                CoordMatrix coordMatrix = new CoordMatrix();
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    if (ext.ToUpper() == ".DAT")
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            string readData = sr.ReadLine();
+                            if (readData == "") continue;
+                            char firstChar = readData[0];
+                            string[] splitData;
+                            if (firstChar == 'r')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    double rx = double.Parse(splitData[1]);
+                                    double ry = double.Parse(splitData[2]);
+                                    double rz = double.Parse(splitData[3]);
+                                    Rotate r = new Rotate();
+                                    r.AddRotateSeq(RefAxis.Z, rz);
+                                    r.AddRotateSeq(RefAxis.Y, ry);
+                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    coordMatrix.AddSeq(r);
+                                }
+                            }
+                            else if (firstChar == 't')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    double tx = double.Parse(splitData[1]);
+                                    double ty = double.Parse(splitData[2]);
+                                    double tz = double.Parse(splitData[3]);
+                                    Shift s = new Shift(tx, ty, tz);
+                                    coordMatrix.AddSeq(s);
+                                }
 
+                            }
+                            else continue;
+                        }
+                        Rotate r_Compensate = new Rotate();
+                        r_Compensate.AddRotateSeq(RefAxis.Z, rZ);
+                        r_Compensate.AddRotateSeq(RefAxis.Y, rY);
+                        r_Compensate.AddRotateSeq(RefAxis.X, rX);
+                        coordMatrix.AddSeq(r_Compensate);
+
+                        Shift s_Compensate = new Shift(dX, dY, dZ);
+                        coordMatrix.AddSeq(s_Compensate);
+
+                        coordMatrix.CalculateFinalMatrix();
+                        output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);
+                    }
+                    else
+                    {
+                        Matrix4x4 m = Matrix4x4.Identity;
+                        output = Matrix4x4ToArray(m);
+
+                    }
+                }
+            }
+            else
+            {
+                Matrix4x4 m = Matrix4x4.Identity;
+                output = Matrix4x4ToArray(m);
+            }
+            return output;
+
+        }
         public static Matrix4x4 LoadMatrix4x4FromFile(string filePath)
         {
             Matrix4x4 m;

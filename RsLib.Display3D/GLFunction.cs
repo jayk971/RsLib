@@ -67,7 +67,7 @@ namespace RsLib.Display3D
             GL.Enable(EnableCap.Blend);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             GL.Enable(EnableCap.DepthTest);
-
+            //GL.Disable(EnableCap.Lighting);
             _headList = GL.GenLists(_maxDisplayList);
             BuildAxis();
             timer1.Enabled = true;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -144,7 +145,69 @@ namespace RsLib.PointCloudLib
         }
         public ObjectGroup(string groupName)
         {
-            base.Name = groupName;
+            Name = groupName;
+        }
+        public ObjectGroup(string groupName, Tuple<double[] , double[] , double[] , int[] , double[] , double[] , double[]> dataTuple)
+        {
+            Name = groupName;
+            parseArray(dataTuple.Item1,
+                dataTuple.Item2,
+                dataTuple.Item3,
+                dataTuple.Item4,
+                dataTuple.Item5,
+                dataTuple.Item6,
+                dataTuple.Item7);
+        }
+
+        public ObjectGroup(string groupName,double[] xArray,double[] yArray,double[] zArray,int[] objIndexArray, double[] nXArr, double[] nYArr, double[] nZArr)
+        {
+            Name = groupName;
+            parseArray(xArray, yArray, zArray, objIndexArray, nXArr, nYArr, nZArr);
+        }
+        void parseArray(double[] xArray, double[] yArray, double[] zArray, int[] objIndexArray, double[] nXArr, double[] nYArr, double[] nZArr)
+        {
+            int lastIndex = 0;
+            Polyline p = new Polyline();
+            LineOption lineOption = new LineOption() { LineIndex = lastIndex };
+            p.AddOption(lineOption);
+            for (int i = 0; i < objIndexArray.Length; i++)
+            {
+                double x = xArray[i];
+                double y = yArray[i];
+                double z = zArray[i];
+                int index = objIndexArray[i];
+                double nx = nXArr[i];
+                double ny = nYArr[i];
+                double nz = nZArr[i];
+
+
+                if (lastIndex == index)
+                {
+                    p.Add(new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(nx, ny, nz)
+                    });
+                }
+                else
+                {
+                    Add($"{Name}_{lastIndex}", p);
+                    lastIndex = index;
+                    p = new Polyline();
+                    lineOption = new LineOption() { LineIndex = lastIndex };
+                    p.AddOption(lineOption);
+                    p.Add(new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(nx, ny, nz)
+                    });
+                }
+            }
+            Add($"{Name}_{lastIndex}", p);
         }
         public void Add(string objName, Object3D object3D)
         {
