@@ -1500,6 +1500,12 @@ namespace RsLib.PointCloudLib
                                     r.AddRotateSeq(RefAxis.Y, ry);
                                     r.AddRotateSeq(RefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
+
+                                    Rotate r_Compensate = new Rotate();
+                                    r_Compensate.AddRotateSeq(RefAxis.Z, rZ);
+                                    r_Compensate.AddRotateSeq(RefAxis.Y, rY);
+                                    r_Compensate.AddRotateSeq(RefAxis.X, rX);
+                                    coordMatrix.AddSeq(r_Compensate);
                                 }
                             }
                             else if (firstChar == 't')
@@ -1512,19 +1518,17 @@ namespace RsLib.PointCloudLib
                                     double tz = double.Parse(splitData[3]);
                                     Shift s = new Shift(tx, ty, tz);
                                     coordMatrix.AddSeq(s);
+
+                                    Shift s_Compensate = new Shift(dX, dY, dZ);
+                                    coordMatrix.AddSeq(s_Compensate);
                                 }
 
                             }
                             else continue;
                         }
-                        Rotate r_Compensate = new Rotate();
-                        r_Compensate.AddRotateSeq(RefAxis.Z, rZ);
-                        r_Compensate.AddRotateSeq(RefAxis.Y, rY);
-                        r_Compensate.AddRotateSeq(RefAxis.X, rX);
-                        coordMatrix.AddSeq(r_Compensate);
 
-                        Shift s_Compensate = new Shift(dX, dY, dZ);
-                        coordMatrix.AddSeq(s_Compensate);
+
+
 
                         coordMatrix.CalculateFinalMatrix();
                         output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);
