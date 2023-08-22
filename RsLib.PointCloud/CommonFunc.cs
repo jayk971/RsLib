@@ -151,7 +151,44 @@ namespace RsLib.PointCloudLib
             nZArr = nzList.ToArray();
             indexArr = indexList.ToArray();
         }
+        public static void SaveOPTFromXYZIndexNormalArray(string filePath,
+    double[] xArr,
+    double[] yArr,
+    double[] zArr,
+    double[] nXArr,
+    double[] nYArr,
+    double[] nZArr,
+    int[] indexArr)
+        {
+            if (xArr.Length != yArr.Length ||
+                xArr.Length != zArr.Length ||
+                xArr.Length != nXArr.Length ||
+                xArr.Length != nYArr.Length ||
+                xArr.Length != nZArr.Length ||
+                xArr.Length != indexArr.Length) return;
 
+            int id = 0;
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65525))
+            {
+                for (int i = 0; i < xArr.Length; i++)
+                {
+                    if (id != indexArr[i])
+                    {
+                        id = indexArr[i];
+                        sw.WriteLine("");
+                    }
+                    string writeLine = string.Format("{0:F2},{1:F2},{2:F2},{3:F3},{4:F3},{5:F3}",
+                        xArr[i],
+                        yArr[i],
+                        zArr[i],
+                        nXArr[i],
+                        nYArr[i],
+                        nZArr[i]);
+                    sw.WriteLine(writeLine);
+                }
+            }
+
+        }
         /// <summary>
         /// 使用 PCA 取得坐標系 3 個向量
         /// </summary>
@@ -1470,7 +1507,13 @@ namespace RsLib.PointCloudLib
             return output;
 
         }
-        public static double[,] LoadMatrix4x4ArrayFromHalconDatFile(string filePath,double dX,double dY,double dZ,double rX,double rY, double rZ)
+        public static double[,] LoadMatrix4x4ArrayFromHalconDatFile(string filePath,
+            double compensate_dX,
+            double compensate_dY,
+            double compensate_dZ,
+            double compensate_rX,
+            double compensate_rY,
+            double compensate_rZ)
         {
             double[,] output = new double[4, 4];
             if (File.Exists(filePath))
@@ -1501,11 +1544,7 @@ namespace RsLib.PointCloudLib
                                     r.AddRotateSeq(RefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
 
-                                    Rotate r_Compensate = new Rotate();
-                                    r_Compensate.AddRotateSeq(RefAxis.Z, rZ);
-                                    r_Compensate.AddRotateSeq(RefAxis.Y, rY);
-                                    r_Compensate.AddRotateSeq(RefAxis.X, rX);
-                                    coordMatrix.AddSeq(r_Compensate);
+
                                 }
                             }
                             else if (firstChar == 't')
@@ -1519,16 +1558,20 @@ namespace RsLib.PointCloudLib
                                     Shift s = new Shift(tx, ty, tz);
                                     coordMatrix.AddSeq(s);
 
-                                    Shift s_Compensate = new Shift(dX, dY, dZ);
-                                    coordMatrix.AddSeq(s_Compensate);
+
                                 }
 
                             }
                             else continue;
                         }
+                        Rotate r_Compensate = new Rotate();
+                        r_Compensate.AddRotateSeq(RefAxis.Z, compensate_rZ);
+                        r_Compensate.AddRotateSeq(RefAxis.Y, compensate_rY);
+                        r_Compensate.AddRotateSeq(RefAxis.X, compensate_rX);
+                        coordMatrix.AddSeq(r_Compensate);
 
-
-
+                        Shift s_Compensate = new Shift(compensate_dX, compensate_dY, compensate_dZ);
+                        coordMatrix.AddSeq(s_Compensate);
 
                         coordMatrix.CalculateFinalMatrix();
                         output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);

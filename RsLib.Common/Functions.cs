@@ -32,6 +32,74 @@ namespace RsLib.Common
     }
     public class FT_Functions
     {
+        public static bool ParseDateTime_yyyyMMdd_HHmmss(string parseStr, out DateTime parsedDateTime)
+        {
+            bool parseOK = true;
+            parsedDateTime = DateTime.MinValue;
+
+            string[] splitData = parseStr.Split('_');
+            if (splitData.Length < 2) return false;
+            string date = splitData[0];
+            string time = splitData[1];
+
+            if (date.Length != 8) return false;
+            if (time.Length != 6) return false;
+
+            string str_yy = date.Substring(0, 4);
+            string str_MM = date.Substring(4, 2);
+            string str_dd = date.Substring(6, 2);
+
+            string str_HH = time.Substring(0, 2);
+            string str_mm = time.Substring(2, 2);
+            string str_ss = time.Substring(4, 2);
+
+            parseOK &= int.TryParse(str_yy, out int y);
+            parseOK &= int.TryParse(str_MM, out int M);
+            parseOK &= int.TryParse(str_dd, out int d);
+            parseOK &= int.TryParse(str_HH, out int H);
+            parseOK &= int.TryParse(str_mm, out int m);
+            parseOK &= int.TryParse(str_ss, out int s);
+
+            if (parseOK)
+                parsedDateTime = new DateTime( y, M, d, H, m, s);
+
+            return parseOK;
+        }
+
+        public static bool ParseDateTime_yyMMdd_HHmmss(string parseStr, out DateTime parsedDateTime)
+        {
+            bool parseOK = true;
+            parsedDateTime = DateTime.MinValue;
+
+            string[] splitData = parseStr.Split('_');
+            if (splitData.Length < 2) return false;
+            string date = splitData[0];
+            string time = splitData[1];
+
+            if (date.Length != 6) return false;
+            if (time.Length != 6) return false;
+
+            string str_yy = date.Substring(0, 2);
+            string str_MM = date.Substring(2, 2);
+            string str_dd = date.Substring(4, 2);
+
+            string str_HH = time.Substring(0, 2);
+            string str_mm = time.Substring(2, 2);
+            string str_ss = time.Substring(4, 2);
+
+            parseOK &= int.TryParse(str_yy, out int y);
+            parseOK &= int.TryParse(str_MM, out int M);
+            parseOK &= int.TryParse(str_dd, out int d);
+            parseOK &= int.TryParse(str_HH, out int H);
+            parseOK &= int.TryParse(str_mm, out int m);
+            parseOK &= int.TryParse(str_ss, out int s);
+
+            if (parseOK)
+                parsedDateTime = new DateTime(2000 + y, M, d, H, m, s);
+
+            return parseOK;
+        }
+
         public static string GetFileVersion(string fileName) => FileVersionInfo.GetVersionInfo(fileName).FileVersion;
         public static bool IsIPLegal(string ip)
         {

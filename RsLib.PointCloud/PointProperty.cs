@@ -147,7 +147,7 @@ namespace RsLib.PointCloudLib
         {
             Name = groupName;
         }
-        public ObjectGroup(string groupName, Tuple<double[] , double[] , double[] , int[] , double[] , double[] , double[]> dataTuple)
+        public ObjectGroup(string groupName, Tuple<double[] , double[] , double[], double[] , double[] , double[], int[]> dataTuple)
         {
             Name = groupName;
             parseArray(dataTuple.Item1,
@@ -162,9 +162,9 @@ namespace RsLib.PointCloudLib
         public ObjectGroup(string groupName,double[] xArray,double[] yArray,double[] zArray,int[] objIndexArray, double[] nXArr, double[] nYArr, double[] nZArr)
         {
             Name = groupName;
-            parseArray(xArray, yArray, zArray, objIndexArray, nXArr, nYArr, nZArr);
+            parseArray(xArray, yArray, zArray, nXArr, nYArr, nZArr, objIndexArray);
         }
-        void parseArray(double[] xArray, double[] yArray, double[] zArray, int[] objIndexArray, double[] nXArr, double[] nYArr, double[] nZArr)
+        void parseArray(double[] xArray, double[] yArray, double[] zArray, double[] nXArr, double[] nYArr, double[] nZArr, int[] objIndexArray)
         {
             int lastIndex = 0;
             Polyline p = new Polyline();
