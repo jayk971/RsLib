@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.AccessControl;
 using System.Windows.Forms;
 namespace RsLib.Display3D
 {
@@ -25,8 +27,10 @@ namespace RsLib.Display3D
         const int _idIndex = 3;
         const int _colorIndex = 4;
         const int _sizeIndex = 5;
-        FormAddSelectPath formAdd;
-        List<int> selectSegmentIndex = new List<int>();
+        FormAddSelectPath formAdd = new FormAddSelectPath();
+        // key : object ID, value : list of select paths;
+        Dictionary<int, List<int>> _SelectedPathIndex = new Dictionary<int, List<int>>();
+        int _CurrentSelectLineIndex = -1;
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
@@ -57,6 +61,10 @@ namespace RsLib.Display3D
             //GlControl_Load(null, null);
             splitContainer1.Panel1Collapsed = true;
             splitContainer2.Panel2Collapsed = true;
+
+            formAdd.SaveSelectPathMOD += FormAdd_SaveSelectPathMod;
+            formAdd.SaveSelectPathOPT += FormAdd_SaveSelectPathOPT;
+            formAdd.ClearSelectPath += FormAdd_ClearSelectPath;
 
             Log.Start();
 
@@ -91,6 +99,7 @@ namespace RsLib.Display3D
         public void Clear(bool clearOptions = false)
         {
             _displayObject.Clear();
+            treeView1.Nodes.Clear();
             foreach (var item in _displayOption)
             {
                 DisplayObjectOption objOption = item.Value;
@@ -126,6 +135,7 @@ namespace RsLib.Display3D
                 if (_displayOption.ContainsKey(id))
                 {
                     DisplayObjectOption option = _displayOption[id];
+                    if (_displayObject.ContainsKey(id) == false) return;
                     Type objectType = _displayObject[id].GetType();
 
                     switch (option.DisplayType)
@@ -137,6 +147,18 @@ namespace RsLib.Display3D
                                 BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
                             break;
                         case DisplayObjectType.Vector_z:
+                            if (objectType == typeof(ObjectGroup))
+                                BuildVector((ObjectGroup)_displayObject[id], id, false, false);
+                            else if (objectType == typeof(Polyline))
+                                BuildVector((Polyline)_displayObject[id], id, false, false);
+                            break;
+                        case DisplayObjectType.Vector_y:
+                            if (objectType == typeof(ObjectGroup))
+                                BuildVector((ObjectGroup)_displayObject[id], id, false, false);
+                            else if (objectType == typeof(Polyline))
+                                BuildVector((Polyline)_displayObject[id], id, false, false);
+                            break;
+                        case DisplayObjectType.Vector_x:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
@@ -241,8 +263,8 @@ namespace RsLib.Display3D
             {
                 if (_displayOption[id].IsSelectable)
                 {
-                    if (_selectIndex != id) _haveClosestPoint = false;
-                    _selectIndex = id;
+                    if (_CurrentSelectObjectIndex != id) _haveClosestPoint = false;
+                    _CurrentSelectObjectIndex = id;
                     lbl_Selectable.Visible = false;
                 }
                 else
@@ -256,10 +278,42 @@ namespace RsLib.Display3D
                 lbl_Selectable.Visible = false;
                 clearDataGridSelection();
             }
+            updateLineIndexComboBox();
+        }
+        private void updateLineIndexComboBox()
+        {
+            toolCmb_LineIndex.Items.Clear();
+            toolCmb_LineIndex.Items.Add("None");
+            _haveSelectPath = false;
+            if (_CurrentSelectObjectIndex < 0) return;
+            var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
+            if (obj != null)
+            {
+                foreach (var item in obj.Objects)
+                {
+                    string name = item.Key;
+                    Polyline p = item.Value as Polyline;
+                    if(p != null)
+                    {
+                        LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
+                        if(lineOption != null)
+                        {
+                            if(toolCmb_LineIndex.Items.Contains(lineOption.LineIndex) == false)
+                            {
+                                toolCmb_LineIndex.Items.Add(lineOption.LineIndex);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
         }
         void clearDataGridSelection()
         {
-            _selectIndex = 0;
+            _CurrentSelectObjectIndex = -1;
+            _CurrentSelectLineIndex = -1;
             _haveClosestPoint = false;
             dataGridView1.ClearSelection();
         }
@@ -268,8 +322,9 @@ namespace RsLib.Display3D
             if (_isMouseOnCell == false)
             {
                 clearDataGridSelection();
-                lbl_Selectable.Visible = false;
 
+                lbl_Selectable.Visible = false;
+                updateLineIndexComboBox();
             }
         }
 
@@ -336,6 +391,15 @@ namespace RsLib.Display3D
                 }
             }
 
+        }
+        public void ClearSelectedObjectList(int id)
+        {
+            if (id == -1) return;
+            if (_displayObject.ContainsKey(id) == false) return;
+            if (_displayOption.ContainsKey(id) == false) return;
+            if (_SelectedPathIndex.ContainsKey(id) == false) return;
+
+            _SelectedPathIndex[id].Clear();
         }
         void showColorDialogTd(object obj)
         {
@@ -500,21 +564,21 @@ namespace RsLib.Display3D
 
         private void btn_SaveAs_Click(object sender, EventArgs e)
         {
-            if (_selectIndex <= 1)
+            if (_CurrentSelectObjectIndex <= 1)
             {
                 Log.Add("Select index = -1. Didn't select object.", MsgLevel.Warn);
                 MessageBox.Show("Please select object first.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (_displayObject.ContainsKey(_selectIndex) == false)
+            if (_displayObject.ContainsKey(_CurrentSelectObjectIndex) == false)
             {
-                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
+                Log.Add($"Select index = {_CurrentSelectObjectIndex}. Display objects didn't contain {_CurrentSelectObjectIndex}.", MsgLevel.Warn);
                 MessageBox.Show("No data to be saved.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
             {
-                Type objectType = _displayObject[_selectIndex].GetType();
+                Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
 
                 using (SaveFileDialog sf = new SaveFileDialog())
                 {
@@ -526,18 +590,21 @@ namespace RsLib.Display3D
                         {
                             if (objectType == typeof(Point3D))
                             {
-                                var obj = _displayObject[_selectIndex] as Point3D;
-                                obj.Save(filePath);
+                                var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
+                                if (obj != null)
+                                    obj.Save(filePath);
                             }
                             else if (objectType == typeof(ObjectGroup))
                             {
-                                var obj = _displayObject[_selectIndex] as ObjectGroup;
-                                obj.Save(filePath);
+                                var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
+                                if (obj != null)
+                                    obj.SaveXYZ(filePath);
                             }
                             else
                             {
-                                var obj = _displayObject[_selectIndex] as PointCloud;
-                                obj.Save(filePath);
+                                var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
+                                if (obj != null)
+                                    obj.Save(filePath);
                             }
                             Log.Add($"Save xyz cloud.{filePath}", MsgLevel.Info);
                             MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -559,39 +626,56 @@ namespace RsLib.Display3D
         {
             if (_GLUpdateDone)
                 _glControl.Invalidate();
+
+            toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
+            toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
             GC.Collect();
         }
 
         private void saveABBModFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveABBMod(false);
+            ObjectGroup selectGroup = selectObjectGroup(_CurrentSelectObjectIndex);
+            saveABBMod(selectGroup, false);
         }
-
-        private void saveABBMod(bool isSaveRobTarget)
+        private ObjectGroup selectObjectGroup(int selectIndex)
         {
-            if (_selectIndex == -1)
-            {
-                Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
-                MessageBox.Show($"Didn't select any path yet.", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                return;
-            }
-            if (_displayObject.ContainsKey(_selectIndex) == false)
-            {
-                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
-                MessageBox.Show($"Display object didn't conatin {_selectIndex} object", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
             try
             {
-                var obj = _displayObject[_selectIndex] as ObjectGroup;
-
-                if (obj == null)
+                ObjectGroup output = null;
+                if (selectIndex == -1)
                 {
-                    Log.Add($"Select index = {_selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
-                    MessageBox.Show($"Selected objec cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
+                    MessageBox.Show($"Didn't select any path yet.", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
                 }
+                if (_displayObject.ContainsKey(selectIndex) == false)
+                {
+                    Log.Add($"Select index = {selectIndex}. Display objects didn't contain {selectIndex}.", MsgLevel.Warn);
+                    MessageBox.Show($"Display object didn't conatin {selectIndex} object", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
+
+                }
+                output = _displayObject[selectIndex] as ObjectGroup;
+
+                if (output == null)
+                {
+                    Log.Add($"Select index = {selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
+                    MessageBox.Show($"Selected object is not a path. Cannot be saved!", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                return output;
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Select object group exception.", MsgLevel.Alarm, ex);
+                return null;
+            }
+        }
+        private void saveABBMod(ObjectGroup selectObjGroup, bool isSaveRobTarget)
+        {
+            try
+            {
+                ObjectGroup obj = selectObjGroup;
+                if (obj == null) return;
                 using (SaveFileDialog sf = new SaveFileDialog())
                 {
                     sf.Filter = "ABB mod File|*.mod";
@@ -612,70 +696,122 @@ namespace RsLib.Display3D
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-
+            //TreeNode selectNode = e.Node;
+            //if (selectNode.Text.Contains("LineIndex"))
+            //{
+            //    string nodeText = selectNode.Text;
+            //    string[] splitData = nodeText.Split(':');
+            //    if (splitData.Length == 2)
+            //    {
+            //        if (int.TryParse(splitData[1], out _CurrentSelectLineIndex) == false)
+            //        {
+            //            _CurrentSelectLineIndex = -1;
+            //        }
+            //    }
+            //    else _CurrentSelectLineIndex = -1;
+            //}
+            //else _CurrentSelectLineIndex = -1;
         }
-
-        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addSelectLine(int selectIndex)
         {
-            if(formAdd == null)
+            if (_CurrentSelectObjectIndex < 0) return;
+            if (selectIndex < 0) return;
+            if (_SelectedPathIndex.ContainsKey(_CurrentSelectObjectIndex) == false)
             {
-                formAdd = new FormAddSelectPath();
-                formAdd.UpdateSelectPath(selectSegmentIndex);
-                formAdd.SaveSelectPath += FormAdd_SaveSelectPath;
-                formAdd.ClearSelectPath += FormAdd_ClearSelectPath;
-                formAdd.Show();
+                _SelectedPathIndex.Add(_CurrentSelectObjectIndex, new List<int>() { selectIndex });
             }
             else
             {
-                formAdd.Show();
+                if (_SelectedPathIndex[_CurrentSelectObjectIndex].Contains(selectIndex) == false) 
+                {
+                    _SelectedPathIndex[_CurrentSelectObjectIndex].Add (selectIndex);
+                }
             }
+            formAdd.UpdateSelectPath(_SelectedPathIndex);
 
         }
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            addSelectLine(_CurrentSelectLineIndex);
+            if(formAdd.Visible == false)
+                formAdd.Show();
+        }
 
+        private void FormAdd_SaveSelectPathOPT()
+        {
+            try
+            {
+                ObjectGroup output = selectPartPaths();
+                if (output != null)
+                    SaveOPT(output);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Save ABB Path OPT exception.", MsgLevel.Alarm, ex);
+            }
+        }
+
+        private void SaveOPT(ObjectGroup obj)
+        {
+            using (SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Filter = "OPT file|*.opt";
+                if(sf.ShowDialog() == DialogResult.OK)
+                {
+                    obj.SaveOPT(sf.FileName);
+                }
+            }
+        }
         private void FormAdd_ClearSelectPath()
         {
             clearSelectPathIndex();
         }
 
-        private void FormAdd_SaveSelectPath()
+        private void FormAdd_SaveSelectPathMod(bool isSaveRobtarget)
         {
-            if (_selectIndex == -1)
-            {
-                Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
-                MessageBox.Show($"Didn't select any path yet.", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (_displayObject.ContainsKey(_selectIndex) == false)
-            {
-                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
-                MessageBox.Show($"Display object didn't conatin {_selectIndex} object", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+
+
             try
             {
-                var obj = _displayObject[_selectIndex] as ObjectGroup;
+                ObjectGroup output = selectPartPaths();
+                if (output != null)
+                    saveABBMod(output, isSaveRobtarget);
 
-                if (obj == null)
-                {
-                    Log.Add($"Select index = {_selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
-                    MessageBox.Show($"Selected object cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
+            }
+
+        }
+        private ObjectGroup selectPartPaths()
+        {
+            try
+            {
                 ObjectGroup output = new ObjectGroup("SelectPath");
-                int outputLineIndex = 0;
-                foreach (var item in obj.Objects)
+
+                foreach (var item in _SelectedPathIndex)
                 {
-                    string name = item.Key;
-                    Polyline p = item.Value as Polyline; 
-                    if(p != null)
+                    int selectObjIndex = item.Key;
+                    List<int> selectPartPath = item.Value;
+                    ObjectGroup selectObj = selectObjectGroup(selectObjIndex);
+                    if (selectObj == null) return null;
+                    int outputLineIndex = 0;
+                    foreach (var item2 in selectObj.Objects)
                     {
-                        LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
-                        if(lineOption != null)
+                        string name = item2.Key;
+                        Polyline p = item2.Value as Polyline;
+                        if (p != null)
                         {
-                            if (selectSegmentIndex.Contains(lineOption.LineIndex))
+                            LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
+                            if (lineOption != null)
                             {
-                                output.Add($"SelectPath{outputLineIndex}", p);
-                                outputLineIndex++;
+                                if (selectPartPath.Contains(lineOption.LineIndex))
+                                {
+                                    output.Add($"{selectObjIndex}_{outputLineIndex}", p);
+                                    outputLineIndex++;
+                                }
                             }
                         }
                     }
@@ -683,40 +819,139 @@ namespace RsLib.Display3D
 
                 if (output.DataCount <= 0)
                 {
-                    MessageBox.Show($"No selected path cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    MessageBox.Show($"Selected path data is empty. Cannot be saved as OPT", "OPT file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
                 }
-
-                using (SaveFileDialog sf = new SaveFileDialog())
-                {
-                    sf.Filter = "ABB mod File|*.mod";
-                    if (sf.ShowDialog() == DialogResult.OK)
-                    {
-                        string outputFilePath = sf.FileName;
-                        output.SaveABBModPath(outputFilePath,false);
-                        Log.Add($"Save mod. {outputFilePath}", MsgLevel.Info);
-                        MessageBox.Show($"ABB Path Mod is saved.\n{outputFilePath}", "MOD file saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
+                return output;
             }
             catch (Exception ex)
             {
-                Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
+                Log.Add($"Select part of paths exception.", MsgLevel.Alarm, ex);
+                return null;
             }
         }
-
         private void clearSelectPathIndex()
         {
-            selectSegmentIndex.Clear();
+            _SelectedPathIndex.Clear();
         }
         private void saveABBModFileWithRobTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveABBMod(true);
+            ObjectGroup selectGroup = selectObjectGroup(_CurrentSelectObjectIndex);
+            saveABBMod(selectGroup, true);
         }
 
         private void clearCollectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             clearSelectPathIndex();
+        }
+
+        private void reversePathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selectObj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectObj == null) return;
+            Polyline p = selectObj.SelectPolyine(_CurrentSelectLineIndex);
+            if (p != null)
+            {
+                p.Reverse();
+                p.CalculatePathDirectionAsVy();
+                ReBuildAll();
+            }
+        }
+
+        private void treeView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+
+            }
+        }
+
+        private void saveOPTFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selects = selectPartPaths();
+            if (selects != null)
+            {
+                using (SaveFileDialog sf = new SaveFileDialog())
+                {
+                    sf.Filter = "OPT file|*.opt";
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string filePath = sf.FileName;
+                        selects.SaveOPT(filePath);
+                    }
+                }
+            }
+        }
+
+        private void saveSelectedXYZPointCloudToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selects = selectPartPaths();
+            if (selects != null)
+            {
+                using (SaveFileDialog sf = new SaveFileDialog())
+                {
+                    sf.Filter = "XYZ point cloud|*.xyz";
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string filePath = sf.FileName;
+                        try
+                        {
+                            selects.SaveXYZ(filePath);
+                            Log.Add($"Save xyz cloud.{filePath}", MsgLevel.Info);
+                            MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Add($"Save xyz cloud exception.", MsgLevel.Alarm, ex);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void toolBtn_ShowAddPathForm_Click(object sender, EventArgs e)
+        {
+            formAdd.Show();
+        }
+
+        private void toolCmb_LineIndex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _haveSelectPath = false;
+
+            if (toolCmb_LineIndex.Items.Count == 0) return;
+            if (toolCmb_LineIndex.SelectedIndex <= 0) return;
+
+            _CurrentSelectLineIndex = toolCmb_LineIndex.SelectedIndex - 1;
+            ObjectGroup obj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (obj != null)
+            {
+                Polyline p = obj.SelectPolyine(_CurrentSelectLineIndex);
+                if (p != null)
+                {
+                    _SelectPath = p;
+                    _haveSelectPath = true;
+                }
+            }
+            
+
+        }
+
+        private void addAllToCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup obj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (obj == null) return;
+            foreach (var item in obj.Objects)
+            {
+                Polyline p = item.Value as Polyline;
+                if(p != null)
+                {
+                    LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
+                    if(lineOption != null)
+                    {
+                        addSelectLine(lineOption.LineIndex);
+                    }
+                }
+            }
         }
     }
 }

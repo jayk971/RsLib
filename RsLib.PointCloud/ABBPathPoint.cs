@@ -58,9 +58,9 @@ namespace RsLib.PointCloudLib
         public void SaveABBModPath(string filePath)
         {
             string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
-            using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
-                sw.WriteLine($"MODULE {fileName}");
+                sw.WriteLine($"MODULE {fileName.Replace(" ","_")}");
                 sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
                 sw.WriteLine("");
                 sw.WriteLine($"VAR num {fileName}_Pose{{{Count} ,7}} := [");
@@ -85,7 +85,7 @@ namespace RsLib.PointCloudLib
             string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
-                sw.WriteLine($"MODULE {fileName}");
+                sw.WriteLine($"MODULE {fileName.Replace(" ","_")}");
                 sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
                 sw.WriteLine("");
                 for (int i = 0; i < Count; i++)
@@ -94,11 +94,14 @@ namespace RsLib.PointCloudLib
                     sw.WriteLine(abbPt.ToString_RobTarget($"t_{abbPt.SegmentIndex}_{i}"));
                 }
                 sw.WriteLine("");
-                sw.WriteLine($"PROC Path{fileName.Replace(" ","_")}");
+
+                sw.WriteLine("PERS tooldata LocalTool:=[TRUE,[[0,0,0],[1,0,0,0]],[1,[0,0,0],[1,0,0,0],0,0,0]];");
+                sw.WriteLine("PERS wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
+
+                sw.WriteLine("");
+                sw.WriteLine($"PROC Path{fileName.Replace(" ","_")}()");
                 sw.WriteLine("");
                 sw.WriteLine("\tVAR speeddata LocalSpeed := v100;");
-                sw.WriteLine("\tVAR tooldata LocalTool:=[TRUE,[[0,0,0],[1,0,0,0]],[1,[0,0,0],[1,0,0,0],0,0,0]];");
-                sw.WriteLine("\tVAR wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
                 sw.WriteLine("");
                 for (int i = 0; i < Count; i++)
                 {

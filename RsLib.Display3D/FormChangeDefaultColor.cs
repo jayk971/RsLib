@@ -20,6 +20,8 @@ namespace RsLib.Display3D
             dataGridView1.Rows.Add((int)ColorItem.MeasureStartP, "Measure Start Point", "", getSettingSize(ColorItem.MeasureStartP));
             dataGridView1.Rows.Add((int)ColorItem.MeasureEndP, "Measure End Point", "", getSettingSize(ColorItem.MeasureEndP));
             dataGridView1.Rows.Add((int)ColorItem.MeasureLine, "Measure Line", "", getSettingSize(ColorItem.MeasureLine));
+            dataGridView1.Rows.Add((int)ColorItem.SelectPath, "Select Path", "", getSettingSize(ColorItem.SelectPath));
+
 
             string[] names = Enum.GetNames(typeof(ColorItem));
             for (int i = 0; i < names.Length; i++)
@@ -103,6 +105,8 @@ namespace RsLib.Display3D
                     return Settings.Default.Color_EndPoint;
                 case ColorItem.MeasureLine:
                     return Settings.Default.Color_MeasureLine;
+                case ColorItem.SelectPath:
+                    return Settings.Default.Color_SelectPath;
                 default:
                     return Color.White;
             }
@@ -121,6 +125,8 @@ namespace RsLib.Display3D
                     return Settings.Default.Size_EndPoint;
                 case ColorItem.MeasureLine:
                     return Settings.Default.Size_MeasureLine;
+                case ColorItem.SelectPath:
+                    return Settings.Default.Size_SelectPath;
                 default:
                     return 5f;
             }
@@ -143,6 +149,9 @@ namespace RsLib.Display3D
                     break;
                 case ColorItem.MeasureLine:
                     Settings.Default.Color_MeasureLine = setColor;
+                    break;
+                case ColorItem.SelectPath:
+                    Settings.Default.Color_SelectPath = setColor;
                     break;
                 default:
                     break;
@@ -167,6 +176,9 @@ namespace RsLib.Display3D
                     break;
                 case ColorItem.MeasureLine:
                     Settings.Default.Size_MeasureLine = setSize;
+                    break;
+                case ColorItem.SelectPath:
+                    Settings.Default.Size_SelectPath = setSize;
                     break;
                 default:
                     break;
@@ -230,6 +242,7 @@ namespace RsLib.Display3D
         MeasureStartP,
         MeasureEndP,
         MeasureLine,
+        SelectPath,
     }
 
 }

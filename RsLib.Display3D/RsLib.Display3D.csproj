@@ -239,6 +239,12 @@
   <ItemGroup>
     <None Include="Resources\minus_48px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reversed_numerical_sorting_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\list_48px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y

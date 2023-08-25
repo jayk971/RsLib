@@ -1239,7 +1239,25 @@ namespace RsLib.PointCloudLib
                 sw.Close();
             }
         }
-
+        public List<string> GetOptPathStringList()
+        {
+            List<string> output = new List<string>();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if (Points[i].GetType() == typeof(PointV3D))
+                {
+                    PointV3D p = Points[i] as PointV3D;
+                    output.Add(string.Format("{0:F2},{1:F2},{2:F2},{3:F2},{4:F2},{5:F2}", p.X, p.Y, p.Z, p.Vz.X, p.Vz.Y, p.Vz.Z));
+                }
+                else
+                {
+                    Point3D p = Points[i];
+                    output.Add(string.Format("{0:F2},{1:F2},{2:F2},0,0,0", p.X, p.Y, p.Z));
+                }
+            }
+            output.Add("");
+            return output;
+        }
         public void SaveAsTxt(string FilePath, bool Append = false)
         {
             if (Path.GetExtension(FilePath).ToUpper() == ".XYZ") FilePath = FilePath.Replace(".xyz", ".txt");

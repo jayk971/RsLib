@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Accord.Statistics.Kernels;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -303,15 +304,40 @@ namespace RsLib.PointCloudLib
             Objects.Clear();
             Sequence.Clear();
         }
-        public void Save(string filePath)
+        public void SaveXYZ(string filePath)
         {
             PointCloud total = new PointCloud();
             foreach (var item in Objects)
             {
                 var subObj = item.Value as PointCloud;
-                total.Add(subObj);
+                if(subObj != null)
+                    total.Add(subObj);
             }
-            total.Save(filePath);
+            if(total.DataCount >0)
+                total.Save(filePath);
+            else
+            {
+                throw new Exception("Output cloud data count = 0");
+            }
+        }
+        public void SaveOPT(string filePath)
+        {
+            List<string> finalString = new List<string>();
+            foreach (var item in Objects)
+            {
+                var subObj = item.Value as Polyline;
+                if (subObj != null)
+                {
+                    finalString.AddRange(subObj.GetOptPathStringList());
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default, 65535))
+            {
+                for (int i = 0; i < finalString.Count; i++)
+                {
+                    sw.WriteLine(finalString[i]);
+                }
+            }
         }
         public void LoadMultiPathOPT(string filePath, bool buildKDTree)
         {
@@ -400,6 +426,21 @@ namespace RsLib.PointCloudLib
 
             }
             return aBBPath;
+        }
+        public Polyline SelectPolyine(int selectLineIndex)
+        {
+            foreach (var item in Objects)
+            {
+                string name = item.Key;
+                Object3D obj = item.Value;
+                Polyline pLine = obj as Polyline;
+                if(pLine != null)
+                {
+                    LineOption lineOption = pLine.GetOption(typeof(LineOption)) as LineOption;
+                    if (lineOption.LineIndex == selectLineIndex) return pLine;
+                }
+            }
+            return null;
         }
     }
 

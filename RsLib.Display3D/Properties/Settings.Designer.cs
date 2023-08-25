@@ -142,5 +142,29 @@ namespace RsLib.Display3D.Properties {
                 this["Size_MeasureLine"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color Color_SelectPath {
+            get {
+                return ((global::System.Drawing.Color)(this["Color_SelectPath"]));
+            }
+            set {
+                this["Color_SelectPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public float Size_SelectPath {
+            get {
+                return ((float)(this["Size_SelectPath"]));
+            }
+            set {
+                this["Size_SelectPath"] = value;
+            }
+        }
     }
 }

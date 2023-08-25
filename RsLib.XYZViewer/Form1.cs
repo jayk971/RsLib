@@ -20,6 +20,7 @@ namespace RsLib.XYZViewer
 
         Dictionary<DrawItem, Button> xyzButtons = new Dictionary<DrawItem, Button>();
         Dictionary<DrawItem, Button> optButtons = new Dictionary<DrawItem, Button>();
+        Dictionary<DrawItem, string> loadedFiles = new Dictionary<DrawItem, string>();
 
         FormProcessing _processForm;
         public Form1()
@@ -45,6 +46,7 @@ namespace RsLib.XYZViewer
             xyzButtons.Clear();
             optButtons.Clear();
             panel1.Controls.Clear();
+            loadedFiles.Clear();
             init();
         }
 
@@ -101,6 +103,15 @@ namespace RsLib.XYZViewer
             createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor);
             createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor);
 
+            loadedFiles.Add(DrawItem.XYZ1, "");
+            loadedFiles.Add(DrawItem.XYZ2, "");
+            loadedFiles.Add(DrawItem.XYZ3, "");
+            loadedFiles.Add(DrawItem.XYZ4, "");
+            loadedFiles.Add(DrawItem.XYZ5, "");
+            loadedFiles.Add(DrawItem.OPT1Path, "");
+            loadedFiles.Add(DrawItem.OPT2Path, "");
+            loadedFiles.Add(DrawItem.OPT3Path, "");
+
         }
 
         void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor)
@@ -137,6 +148,7 @@ namespace RsLib.XYZViewer
             Log.Add($"Load {filePath}.", MsgLevel.Info);
             try
             {
+                _displayCtrl.ClearSelectedObjectList((int)drawItem);
                 switch (ext)
                 {
                     case ".xyz":
@@ -229,6 +241,14 @@ namespace RsLib.XYZViewer
                 DrawItem dropedBtn = getPressedButton((Button)sender);
 
                 loadFile(dropedBtn, files[0]);
+                if(loadedFiles.ContainsKey(dropedBtn) == false)
+                {
+                    loadedFiles.Add(dropedBtn, files[0]);
+                }
+                else
+                {
+                    loadedFiles[dropedBtn] = files[0];
+                }
             }
         }
 
@@ -284,6 +304,19 @@ namespace RsLib.XYZViewer
                 if (op.ShowDialog() == DialogResult.OK)
                 {
                     loadFile(dropedBtn, op.FileName);
+                }
+            }
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var item in loadedFiles)
+            {
+                DrawItem drawItem = item.Key;
+                string filePath = item.Value;
+                if (File.Exists(filePath)) 
+                {
+                    loadFile(drawItem, filePath);
                 }
             }
         }

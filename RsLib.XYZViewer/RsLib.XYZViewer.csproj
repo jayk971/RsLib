@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons8_object.ico" />
+    <None Include="Resources\available_updates_80px.png" />
     <None Include="Resources\open_document_30px.png" />
     <None Include="Resources\broom_30px.png" />
   </ItemGroup>

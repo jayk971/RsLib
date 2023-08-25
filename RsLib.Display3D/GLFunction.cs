@@ -26,15 +26,18 @@ namespace RsLib.Display3D
         int _maxDisplayList;
         PointPickMode _pickMode = PointPickMode.None;
         bool _haveClosestPoint = false;
-        int _selectIndex = -1;
+        bool _haveSelectPath = false;
+        int _CurrentSelectObjectIndex = -1;
         Dictionary<int, Object3D> _displayObject = new Dictionary<int, Object3D>();
         Dictionary<int, DisplayObjectOption> _displayOption = new Dictionary<int, DisplayObjectOption>();
         const float _closetDisLimit = 1.0f;
         bool _GLUpdateDone = true;
-        public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_selectIndex);
-        public Object3D CurrentSelectObj => GetDisplayObject(_selectIndex);
+        public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_CurrentSelectObjectIndex);
+        public Object3D CurrentSelectObj => GetDisplayObject(_CurrentSelectObjectIndex);
         Point3D _closetPoint = new Point3D();
         Polyline _multiSelectPoints = new Polyline();
+        Polyline _SelectPath = new Polyline();
+
 
         Vector3 _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
         Vector3 _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -99,6 +102,10 @@ namespace RsLib.Display3D
                 DisplayObjectOption option = item.Value;
                 if (option.IsDisplay) GL.CallList(option.ID);
             }
+            if(_haveSelectPath)
+            {
+                drawSelectPath();
+            }
             if (_pickMode == PointPickMode.Single)
             {
                 if (_haveClosestPoint)
@@ -110,7 +117,7 @@ namespace RsLib.Display3D
                     drawMeasureLine();
             }
 
-            if (_selectIndex > 1)
+            if (_CurrentSelectObjectIndex > 1)
                 drawSelectRangeFrame();
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -308,8 +315,21 @@ namespace RsLib.Display3D
                 {
                     treeView1.Nodes["Property"].Nodes.Add(propString[i]);
                 }
-
+                LineOption lineOption =  closetP.GetOption(typeof(LineOption)) as LineOption;
+                if(lineOption != null)
+                {
+                    _CurrentSelectLineIndex = lineOption.LineIndex;
+                }
+                else
+                {
+                    _CurrentSelectLineIndex = -1;
+                }
             }
+            else
+            {
+                _CurrentSelectLineIndex = -1;
+            }
+
             treeView1.ExpandAll();
         }
         List<string> getPointProperty(Point3D p)
@@ -415,21 +435,21 @@ namespace RsLib.Display3D
             float closestDistance = float.MaxValue;
             bool hasClosetPoint = false;
             if (_displayObject.Count == 0) return false;
-            if (_selectIndex == -1) return false;
-            if (_displayObject.ContainsKey(_selectIndex) == false) return false;
-            if (_displayOption.ContainsKey(_selectIndex) == false) return false;
+            if (_CurrentSelectObjectIndex == -1) return false;
+            if (_displayObject.ContainsKey(_CurrentSelectObjectIndex) == false) return false;
+            if (_displayOption.ContainsKey(_CurrentSelectObjectIndex) == false) return false;
 
-            DisplayObjectType displayObjectType = _displayOption[_selectIndex].DisplayType;
+            DisplayObjectType displayObjectType = _displayOption[_CurrentSelectObjectIndex].DisplayType;
             if (displayObjectType == DisplayObjectType.None) return false;
-            DisplayObjectOption objectOption = _displayOption[_selectIndex];
+            DisplayObjectOption objectOption = _displayOption[_CurrentSelectObjectIndex];
             if (objectOption.IsDisplay == false) return false;
 
-            Type objectType = _displayObject[_selectIndex].GetType();
+            Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
 
 
             if (objectType == typeof(Point3D))
             {
-                var obj = _displayObject[_selectIndex] as Point3D;
+                var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
                 float result = calculatePointMinDistance(rayOrig, rayDir, obj);
                 closestDistance = result;
                 closestPoint = obj;
@@ -437,7 +457,7 @@ namespace RsLib.Display3D
             }
             else if (objectType == typeof(ObjectGroup))
             {
-                var obj = _displayObject[_selectIndex] as ObjectGroup;
+                var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
                 foreach (var item in obj.Objects)
                 {
                     var subObj = item.Value as PointCloud;
@@ -453,7 +473,7 @@ namespace RsLib.Display3D
             }
             else
             {
-                var obj = _displayObject[_selectIndex] as PointCloud;
+                var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
                 Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
                 closestDistance = result.Item1;
                 closestPoint = result.Item2;
@@ -559,6 +579,30 @@ namespace RsLib.Display3D
             GL.End();
             drawVector(_closetPoint);
         }
+        void drawSelectPath()
+        {
+            int count = _SelectPath.Count;
+            if (count < 2) return;
+            Point3D pLast = _SelectPath.Points[count - 1];
+            Point3D pBeforeLast = _SelectPath.Points[count - 2];
+            Vector3 pos = new Vector3()
+            { 
+                X = (float)pLast.X,
+                Y = (float)pLast.Y,
+                Z = (float)pLast.Z,
+            };
+
+            Vector3 dir = new Vector3()
+            {
+                X = (float)(pLast.X - pBeforeLast.X),
+                Y = (float)(pLast.Y - pBeforeLast.Y),
+                Z = (float)(pLast.Z - pBeforeLast.Z),
+            };
+
+            drawPolyline(_SelectPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
+            drawCone(pos, 10, dir, 3, Settings.Default.Color_SelectPath);
+
+        }
         void drawMeasureLine()
         {
             GL.PointSize(Settings.Default.Size_SelectPoint);
@@ -589,29 +633,29 @@ namespace RsLib.Display3D
 
         void drawSelectRangeFrame()
         {
-            if (_selectIndex <= 1) return;
+            if (_CurrentSelectObjectIndex <= 1) return;
             if (_displayObject.Count == 0) return;
-            if (_displayObject.ContainsKey(_selectIndex) == false) return;
+            if (_displayObject.ContainsKey(_CurrentSelectObjectIndex) == false) return;
 
             Point3D min = new Point3D();
             Point3D max = new Point3D();
 
-            Type objectType = _displayObject[_selectIndex].GetType();
+            Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
             if (objectType == typeof(PointCloud))
             {
-                PointCloud selectCandidate = _displayObject[_selectIndex] as PointCloud;
+                PointCloud selectCandidate = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
                 min = selectCandidate.Min;
                 max = selectCandidate.Max;
             }
             else if (objectType == typeof(Polyline))
             {
-                Polyline selectCandidate = _displayObject[_selectIndex] as Polyline;
+                Polyline selectCandidate = _displayObject[_CurrentSelectObjectIndex] as Polyline;
                 min = selectCandidate.Min;
                 max = selectCandidate.Max;
             }
             else if (objectType == typeof(ObjectGroup))
             {
-                ObjectGroup selectCandidate = _displayObject[_selectIndex] as ObjectGroup;
+                ObjectGroup selectCandidate = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
                 min = selectCandidate.Min;
                 max = selectCandidate.Max;
             }
@@ -675,6 +719,52 @@ namespace RsLib.Display3D
             GL.End();
             GL.PopMatrix();
         }
+        void drawArrow(Point3D pStart,Point3D pEnd, float cylinderHeight, float cylynderRadius, float topCapHeight, float topCapRadius, Vector3 normalDir, Color drawColor)
+        {
+            GL.PushMatrix();
+            Vector3 dir = new Vector3()
+            {
+                X = (float)(pEnd.X - pStart.X),
+                Y = (float)(pEnd.Y - pStart.Y),
+                Z = (float)(pEnd.Z - pStart.Z),
+            };
+            Matrix4 rotate = getRotationMatrix(dir);
+            rotate *= Matrix4.CreateTranslation(dir);
+
+            GL.MultMatrix(ref rotate);
+            // 畫圓柱
+            GL.Begin(PrimitiveType.QuadStrip);
+            GL.Color3(drawColor);
+            for (int i = 0; i <= 360; i++)
+            {
+                double angle = i * Math.PI / 180;
+                GL.Vertex3(cylynderRadius * Math.Cos(angle), cylynderRadius * Math.Sin(angle), 0);
+                GL.Vertex3(cylynderRadius * Math.Cos(angle), cylynderRadius * Math.Sin(angle), cylinderHeight);
+            }
+            GL.End();
+            // 畫下圓形
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Color3(drawColor);
+            for (int i = 0; i <= 32; i++)
+            {
+                double angle = 2 * Math.PI * i / 32;
+                GL.Vertex3(cylynderRadius * Math.Cos(angle), cylynderRadius * Math.Sin(angle), 0);
+            }
+            GL.End();
+
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Vertex3(0, 0, cylinderHeight + topCapHeight);
+            int numSegments = 45;
+            for (int i = 0; i <= numSegments; i++)
+            {
+                float angle = i * 2.0f * (float)Math.PI / numSegments;
+                GL.Vertex3(topCapRadius * (float)Math.Cos(angle), topCapRadius * (float)Math.Sin(angle), cylinderHeight);
+            }
+            GL.End();
+            GL.PopMatrix();
+
+        }
+
         void drawArrow(Vector3 baseCenter, float cylinderHeight, float cylynderRadius, float topCapHeight, float topCapRadius, Vector3 normalDir, Color drawColor)
         {
             GL.PushMatrix();
@@ -954,7 +1044,6 @@ namespace RsLib.Display3D
 
             DisplayObjectOption option = _displayOption[id];
             if (option.DisplayType != DisplayObjectType.PointCloud) return;
-
             if (_displayObject.ContainsKey(option.ID))
             {
                 if (isUpdateObject)

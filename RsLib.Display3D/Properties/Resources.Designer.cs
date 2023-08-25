@@ -123,6 +123,16 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap list_48px {
+            get {
+                object obj = ResourceManager.GetObject("list_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap minus_48px {
             get {
                 object obj = ResourceManager.GetObject("minus_48px", resourceCulture);
@@ -156,6 +166,16 @@ namespace RsLib.Display3D.Properties {
         internal static System.Drawing.Bitmap resize_30px {
             get {
                 object obj = ResourceManager.GetObject("resize_30px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap reversed_numerical_sorting_48px {
+            get {
+                object obj = ResourceManager.GetObject("reversed_numerical_sorting_48px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

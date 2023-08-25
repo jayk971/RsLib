@@ -32,9 +32,11 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolBtn_Clear = new System.Windows.Forms.ToolStripButton();
+            this.toolDropDownBtn_Save = new System.Windows.Forms.ToolStripDropDownButton();
+            this.saveOPTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMODToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMODWithRobtargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.toolBtn_OK = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -61,9 +63,8 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolBtn_OK,
-            this.toolStripSeparator1,
-            this.toolBtn_Clear});
+            this.toolBtn_Clear,
+            this.toolDropDownBtn_Save});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(556, 35);
@@ -79,6 +80,45 @@
             this.toolBtn_Clear.Name = "toolBtn_Clear";
             this.toolBtn_Clear.Size = new System.Drawing.Size(36, 32);
             this.toolBtn_Clear.Text = "Clear";
+            this.toolBtn_Clear.Click += new System.EventHandler(this.toolBtn_Clear_Click);
+            // 
+            // toolDropDownBtn_Save
+            // 
+            this.toolDropDownBtn_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolDropDownBtn_Save.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveOPTToolStripMenuItem,
+            this.saveMODToolStripMenuItem,
+            this.saveMODWithRobtargetToolStripMenuItem});
+            this.toolDropDownBtn_Save.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
+            this.toolDropDownBtn_Save.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolDropDownBtn_Save.Name = "toolDropDownBtn_Save";
+            this.toolDropDownBtn_Save.Size = new System.Drawing.Size(45, 32);
+            this.toolDropDownBtn_Save.Text = "Save";
+            this.toolDropDownBtn_Save.Click += new System.EventHandler(this.toolDropDownBtn_Save_Click);
+            // 
+            // saveOPTToolStripMenuItem
+            // 
+            this.saveOPTToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveOPTToolStripMenuItem.Image")));
+            this.saveOPTToolStripMenuItem.Name = "saveOPTToolStripMenuItem";
+            this.saveOPTToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.saveOPTToolStripMenuItem.Text = "Save OPT";
+            this.saveOPTToolStripMenuItem.Click += new System.EventHandler(this.saveOPTToolStripMenuItem_Click);
+            // 
+            // saveMODToolStripMenuItem
+            // 
+            this.saveMODToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveMODToolStripMenuItem.Image")));
+            this.saveMODToolStripMenuItem.Name = "saveMODToolStripMenuItem";
+            this.saveMODToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.saveMODToolStripMenuItem.Text = "Save MOD";
+            this.saveMODToolStripMenuItem.Click += new System.EventHandler(this.saveMODToolStripMenuItem_Click);
+            // 
+            // saveMODWithRobtargetToolStripMenuItem
+            // 
+            this.saveMODWithRobtargetToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveMODWithRobtargetToolStripMenuItem.Image")));
+            this.saveMODWithRobtargetToolStripMenuItem.Name = "saveMODWithRobtargetToolStripMenuItem";
+            this.saveMODWithRobtargetToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+            this.saveMODWithRobtargetToolStripMenuItem.Text = "Save MOD with Robtarget";
+            this.saveMODWithRobtargetToolStripMenuItem.Click += new System.EventHandler(this.saveMODWithRobtargetToolStripMenuItem_Click);
             // 
             // treeView1
             // 
@@ -87,20 +127,6 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(550, 424);
             this.treeView1.TabIndex = 1;
-            // 
-            // toolBtn_OK
-            // 
-            this.toolBtn_OK.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtn_OK.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
-            this.toolBtn_OK.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtn_OK.Name = "toolBtn_OK";
-            this.toolBtn_OK.Size = new System.Drawing.Size(36, 32);
-            this.toolBtn_OK.Text = "toolStripButton1";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 35);
             // 
             // FormAddSelectPath
             // 
@@ -113,6 +139,7 @@
             this.MinimizeBox = false;
             this.Name = "FormAddSelectPath";
             this.Text = "Add Select Path";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAddSelectPath_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -127,7 +154,9 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolBtn_Clear;
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolBtn_OK;
+        private System.Windows.Forms.ToolStripDropDownButton toolDropDownBtn_Save;
+        private System.Windows.Forms.ToolStripMenuItem saveOPTToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveMODToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveMODWithRobtargetToolStripMenuItem;
     }
 }
