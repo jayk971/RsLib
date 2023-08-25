@@ -15,6 +15,7 @@ namespace RsLib.PointCloudLib
         public int PtIndex { get; set; } = 0;
         public int LapIndex { get; set; } = 0;
         public int SegmentIndex { get; set; } = 0;
+        public Quaternion Q { get; set; } = new Quaternion();
 
         public ABBPathPoint() 
         {
@@ -30,11 +31,12 @@ namespace RsLib.PointCloudLib
             Rx = r.Rx;
             Ry= r.Ry; 
             Rz = r.Rz;
+            Q = r.Q;
         }
         public string ToString_XYZRxRyRz() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2}]";
         public string ToString_XYZRxRyRzLapSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{LapIndex},{SegmentIndex}]";
         public string ToString_XYZRxRyRzSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{SegmentIndex}]";
-        public string ToString_RobTarget(string targetName) => $"CONST robtarget {targetName} :=[[{X:F2},{Y:F2},{Z:F2}],[0.198562,0.633744,0.709806,0.23477],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
+        public string ToString_RobTarget(string targetName) => $"CONST robtarget {targetName} :=[[{X:F2},{Y:F2},{Z:F2}],[{Q.W:F6},{Q.V.X:F6},{Q.V.Y:F6},{Q.V.Z:F6}],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
     }
 
     [Serializable]
@@ -81,7 +83,7 @@ namespace RsLib.PointCloudLib
         public void SaveABBModPathWithRobTarget(string filePath)
         {
             string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
-            using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
                 sw.WriteLine($"MODULE {fileName}");
                 sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
@@ -91,6 +93,20 @@ namespace RsLib.PointCloudLib
                     ABBPathPoint abbPt = Pts[i];
                     sw.WriteLine(abbPt.ToString_RobTarget($"t_{abbPt.SegmentIndex}_{i}"));
                 }
+                sw.WriteLine("");
+                sw.WriteLine($"PROC Path{fileName.Replace(" ","_")}");
+                sw.WriteLine("");
+                sw.WriteLine("\tVAR speeddata LocalSpeed := v100;");
+                sw.WriteLine("\tVAR tooldata LocalTool:=[TRUE,[[0,0,0],[1,0,0,0]],[1,[0,0,0],[1,0,0,0],0,0,0]];");
+                sw.WriteLine("\tVAR wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
+                sw.WriteLine("");
+                for (int i = 0; i < Count; i++)
+                {
+                    ABBPathPoint abbPt = Pts[i];
+                    sw.WriteLine($"\tMOVEL t_{abbPt.SegmentIndex}_{i}, LocalSpeed, z1, LocalTool\\WObj:=LocalWork;");
+                }
+                sw.WriteLine("");
+                sw.WriteLine($"ENDPROC");
                 sw.WriteLine("");
                 sw.WriteLine($"ENDMODULE");
             }

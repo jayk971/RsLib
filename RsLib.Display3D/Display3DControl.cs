@@ -564,6 +564,11 @@ namespace RsLib.Display3D
 
         private void saveABBModFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            saveABBMod(false);
+        }
+
+        private void saveABBMod(bool isSaveRobTarget)
+        {
             if (_selectIndex == -1)
             {
                 Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
@@ -593,19 +598,17 @@ namespace RsLib.Display3D
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
                         string outputFilePath = sf.FileName;
-                        obj.SaveABBModPath(outputFilePath);
+                        obj.SaveABBModPath(outputFilePath, isSaveRobTarget);
                         Log.Add($"Save mod. {outputFilePath}", MsgLevel.Info);
                         MessageBox.Show($"ABB Path Mod is saved.\n{outputFilePath}", "MOD file saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
             }
         }
-
-
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -690,7 +693,7 @@ namespace RsLib.Display3D
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
                         string outputFilePath = sf.FileName;
-                        output.SaveABBModPath(outputFilePath);
+                        output.SaveABBModPath(outputFilePath,false);
                         Log.Add($"Save mod. {outputFilePath}", MsgLevel.Info);
                         MessageBox.Show($"ABB Path Mod is saved.\n{outputFilePath}", "MOD file saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -708,6 +711,7 @@ namespace RsLib.Display3D
         }
         private void saveABBModFileWithRobTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            saveABBMod(true);
         }
 
         private void clearCollectionToolStripMenuItem_Click(object sender, EventArgs e)

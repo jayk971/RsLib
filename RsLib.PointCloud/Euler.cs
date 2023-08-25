@@ -755,13 +755,13 @@ namespace RsLib.PointCloudLib
 #endif
         public void SolveQ()
         {
-            Quaternion finalQ = new Quaternion();
+            Q = new Quaternion();
             for (int i = 0; i < seq.Count; i++)
             {
                  if(seq[i].Type == MatrixType.Rotate)
                 {
                     Quaternion tempQ = new Quaternion(seq[i]);
-                    finalQ *= tempQ;
+                    Q *= tempQ;
                 }
             }
         }

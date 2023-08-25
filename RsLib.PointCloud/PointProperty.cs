@@ -362,10 +362,13 @@ namespace RsLib.PointCloudLib
                 temp.Clear();
             }
         }
-        public void SaveABBModPath(string filePath)
+        public void SaveABBModPath(string filePath,bool isRobTargetMode)
         {
             ABBPath aBBPath = ConvertABBModPath();
-            aBBPath.SaveABBModPath(filePath);
+            if (isRobTargetMode) 
+                aBBPath.SaveABBModPathWithRobTarget(filePath);
+            else
+                aBBPath.SaveABBModPath(filePath);
         }
         public ABBPath ConvertABBModPath()
         {
@@ -397,39 +400,6 @@ namespace RsLib.PointCloudLib
 
             }
             return aBBPath;
-        }
-        public void SaveABBMod(string filePath)
-        {
-            foreach (var item in Objects)
-            {
-                string name = item.Key;
-                Object3D obj = item.Value;
-                Type objType = obj.GetType();
-                if(objType == typeof(PointCloud))
-                {
-
-                }
-                else if (objType == typeof(Polyline))
-                {
-                    Polyline pLine = obj as Polyline;
-                    pLine.GetOption(typeof(LineOption));
-                    if(pLine != null)
-                    {
-                        for (int i = 0; i < pLine.Count; i++)
-                        {
-
-                        }
-                    }
-                }
-                else if (objType == typeof(ObjectGroup))
-                {
-
-                }
-                else
-                {
-
-                }
-            }
         }
     }
 
