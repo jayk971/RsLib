@@ -193,6 +193,7 @@ namespace RsLib.PointCloudLib
                 }
                 else
                 {
+                    p.CalculatePathDirectionAsVy();
                     Add($"{Name}_{lastIndex}", p);
                     lastIndex = index;
                     p = new Polyline();
@@ -207,6 +208,7 @@ namespace RsLib.PointCloudLib
                     });
                 }
             }
+            p.CalculatePathDirectionAsVy();
             Add($"{Name}_{lastIndex}", p);
         }
         public void Add(string objName, Object3D object3D)
@@ -363,25 +365,7 @@ namespace RsLib.PointCloudLib
         public void SaveABBModPath(string filePath)
         {
             ABBPath aBBPath = ConvertABBModPath();
-            string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
-            using (StreamWriter sw = new StreamWriter(filePath,false,System.Text.Encoding.Default))
-            {
-                sw.WriteLine($"MODULE {fileName}");
-                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
-                sw.WriteLine("");
-                sw.WriteLine($"LOCAL VAR num {fileName}_Pose{{{aBBPath.Count} ,7}} := [");
-                for (int i = 0;i<aBBPath.Count;i++)
-                {
-                    ABBPathPoint abbPt = aBBPath.Pts[i];
-                    sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()},");
-                    if (i == aBBPath.Count - 1)
-                    {
-                        sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
-                    }
-                }
-                sw.WriteLine("");
-                sw.WriteLine($"ENDMODULE");
-            }
+            aBBPath.SaveABBModPath(filePath);
         }
         public ABBPath ConvertABBModPath()
         {
@@ -401,6 +385,7 @@ namespace RsLib.PointCloudLib
                         {
                             ABBPathPoint abbPt = new ABBPathPoint(pV3D)
                             {
+                                PtIndex = i,
                                 LapIndex = segmentIndex,
                                 SegmentIndex = segmentIndex,
                             };

@@ -1,5 +1,7 @@
 ﻿using Accord.Math;
+using Accord.Statistics.Distributions.Reflection;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -317,7 +319,7 @@ namespace RsLib.PointCloudLib
             {
                 if (!isMatrixCalculated)
                 {
-                    CalculateFinalMatrix();
+                    EndAddMatrix();
                 }
                 return finalMatrix4;
             }
@@ -355,10 +357,6 @@ namespace RsLib.PointCloudLib
         public bool IsMatrixCalculated { get => isMatrixCalculated; }
 
         public CoordMatrix()
-        {
-
-        }
-        void calculateQ()
         {
 
         }
@@ -406,7 +404,7 @@ namespace RsLib.PointCloudLib
             finalMatrix4 = Matrix4x4.Identity;
             isMatrixCalculated = false;
         }
-        public void CalculateFinalMatrix()
+        public void EndAddMatrix()
         {
             finalMatrix4 = Matrix4x4.Identity;
             for (int i = 0; i < seq.Count; i++)
@@ -559,7 +557,7 @@ namespace RsLib.PointCloudLib
             }
         }
 
-
+        public Quaternion Q = new Quaternion();
         public Rotate()
         {
 
@@ -573,16 +571,20 @@ namespace RsLib.PointCloudLib
         public Rotate(Vector3D vx, Vector3D vy, Vector3D vz)
         {
             finalMatrix4 = collectMatricElement(vx, vy, vz);
-            List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            seq.AddRange(rSeq);
+            solveRzRyRx();
+            SolveQ();
+            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
+            //seq.AddRange(rSeq);
             isMatrixCalculated = true;
 
         }
         public Rotate(PointV3D p)
         {
             finalMatrix4 = collectMatricElement(p.Vx, p.Vy, p.Vz);
-            List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            seq.AddRange(rSeq);
+            solveRzRyRx();
+            SolveQ();
+            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
+            //seq.AddRange(rSeq);
             isMatrixCalculated = true;
 
         }
@@ -605,8 +607,10 @@ namespace RsLib.PointCloudLib
         public Rotate(Vector3 vx, Vector3 vy, Vector3 vz)
         {
             finalMatrix4 = collectMatricElement(vx, vy, vz);
-            List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            seq.AddRange(rSeq);
+            solveRzRyRx();
+            SolveQ();
+            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
+            //seq.AddRange(rSeq);
             isMatrixCalculated = true;
 
         }
@@ -614,6 +618,7 @@ namespace RsLib.PointCloudLib
         {
             RotateUnit rotateEulerUnit = new RotateUnit(rotSeq, rotateAngle);
             seq.Add(rotateEulerUnit);
+            Q*=new Quaternion(rotateEulerUnit);
             isMatrixCalculated = false;
         }
         /// <summary>
@@ -623,7 +628,7 @@ namespace RsLib.PointCloudLib
         /// <param name="vy">姿態的 y 向量</param>
         /// <param name="vz">姿態的 z 向量</param>
         /// <returns>旋轉 Rz -> Ry -> Rx 順序的旋轉角</returns>
-        public static List<RotateUnit> FromVector3DZYX(Vector3D vx, Vector3D vy, Vector3D vz)
+        public static List<RotateUnit> SolveRzRyRxFromVector3DZYX(Vector3D vx, Vector3D vy, Vector3D vz)
         {
             /*
             V00,V01,V02,V03
@@ -632,7 +637,7 @@ namespace RsLib.PointCloudLib
             V30,V31,V32,V33
             */
             Matrix4x4 after = collectMatricElement(vx, vy, vz);
-            return solveRzRyRx(after);
+            return SolveRzRyRx(after);
         }
         static Matrix4x4 collectMatricElement(Vector3D vx, Vector3D vy, Vector3D vz)
         {
@@ -674,7 +679,93 @@ namespace RsLib.PointCloudLib
             matrix.V22 = (float)vz.Z;
             return matrix;
         }
-        static List<RotateUnit> solveRzRyRx(Matrix4x4 inMatrix)
+
+#if m
+        public static double[] SolveQ(Matrix4x4 inMatrix)
+        {
+            double q00 = Math.Sqrt(1 + inMatrix.V00 + inMatrix.V11 + inMatrix.V22);
+
+            double q11 = Math.Sqrt(1 + inMatrix.V00 - inMatrix.V11 - inMatrix.V22);
+
+
+            double q22 = Math.Sqrt(1 - inMatrix.V00 + inMatrix.V11 - inMatrix.V22);
+
+            double q33 = Math.Sqrt(1 - inMatrix.V00 - inMatrix.V11 + inMatrix.V22);
+
+
+            double[] q0R = new double[]
+            {
+                q00/2,
+                (inMatrix.V12-inMatrix.V21)/q00/2,
+                (inMatrix.V20 - inMatrix.V02)/q00/2,
+                (inMatrix.V01 - inMatrix.V10)/q00/2
+            };
+            double[] q1R = new double[]
+            {
+                (inMatrix.V12-inMatrix.V21)/q11/2,
+                q11/2,
+                (inMatrix.V01 + inMatrix.V10)/q11/2,
+                (inMatrix.V20 + inMatrix.V02)/q11/2
+               };
+            double[] q2R = new double[]
+            {
+                (inMatrix.V20 - inMatrix.V02)/q22/2,
+                (inMatrix.V01 + inMatrix.V10)/q22/2,
+                q22/2,
+                (inMatrix.V12+inMatrix.V21)/q22/2
+            };
+            double[] q3R = new double[]
+            {
+                (inMatrix.V01 - inMatrix.V10)/q33/2,
+                (inMatrix.V20 + inMatrix.V02)/q33/2,
+                (inMatrix.V12+inMatrix.V21)/q33/2,
+               q33/2
+            };
+
+            if ((inMatrix.V11 > -1 * inMatrix.V22) &&
+                (inMatrix.V00 > -1 * inMatrix.V11) &&
+                (inMatrix.V00 > -1 * inMatrix.V22))
+            {
+                return q0R;
+            }
+            else if ((inMatrix.V11 < -1 * inMatrix.V22) &&
+                (inMatrix.V00 > inMatrix.V11) &&
+                (inMatrix.V00 > inMatrix.V22))
+            {
+                return q1R;
+            }
+            else if ((inMatrix.V11 > inMatrix.V22) &&
+                (inMatrix.V00 < inMatrix.V11) &&
+                (inMatrix.V00 < -1 * inMatrix.V22))
+            {
+                return q2R;
+            }
+            else if ((inMatrix.V11 < inMatrix.V22) &&
+                (inMatrix.V00 < -1 * inMatrix.V11) &&
+                (inMatrix.V00 < inMatrix.V22))
+            {
+                return q3R;
+            }
+            else
+            {
+                return new double[] { 1, 0, 0, 0 };
+            }
+
+        }
+#endif
+        public void SolveQ()
+        {
+            Quaternion finalQ = new Quaternion();
+            for (int i = 0; i < seq.Count; i++)
+            {
+                 if(seq[i].Type == MatrixType.Rotate)
+                {
+                    Quaternion tempQ = new Quaternion(seq[i]);
+                    finalQ *= tempQ;
+                }
+            }
+        }
+        public static List<RotateUnit> SolveRzRyRx(Matrix4x4 inMatrix)
         {
             RotateUnit rx = new RotateUnit(RefAxis.X);
             RotateUnit ry = new RotateUnit(RefAxis.Y);
@@ -707,6 +798,11 @@ namespace RsLib.PointCloudLib
             output.Add(rx);
             return output;
         }
+        void solveRzRyRx()
+        {
+            seq.AddRange(SolveRzRyRx(finalMatrix4));
+        }
+
     }
     public class Shift : CoordMatrix
     {
@@ -719,8 +815,69 @@ namespace RsLib.PointCloudLib
             seq.Add(new TranslationUnit(RefAxis.X, x));
             seq.Add(new TranslationUnit(RefAxis.Y, y));
             seq.Add(new TranslationUnit(RefAxis.Z, z));
-            CalculateFinalMatrix();
+            EndAddMatrix();
         }
+    }
+
+    public class Quaternion
+    {
+        public double W { get; set; } = 1;
+   
+        public Vector3D V { get; set; } = new Vector3D();
+        public double[] QArray => new double[] { W, V.X, V.Y, V.Z };
+        public Quaternion()
+        {
+
+        }
+        public Quaternion(MatrixUnit matrixUnit)
+        {
+            if(matrixUnit.Type == MatrixType.Rotate)
+            {
+                RotateUnit rotateUnit = matrixUnit as RotateUnit;
+                if(rotateUnit != null)
+                {
+                    calculateQ(rotateUnit.RotateRadian, rotateUnit.RefAxis);
+                }
+            }
+        }
+        public Quaternion(double rotateRad,RefAxis refAxis)
+        {
+            calculateQ(rotateRad, refAxis);
+        }
+        private void calculateQ(double rotateRad,RefAxis refAxis)
+        {
+            W = Math.Cos(rotateRad/2);
+            V = Math.Sin(rotateRad/2) * Vector3D.GetRefAxis(refAxis);
+            Normalize();
+        }
+        /// <summary>
+        /// output = left * right
+        /// </summary>
+        /// <param name="left">left side of the *</param>
+        /// <param name="right">right side of the *</param>
+        /// <returns>result Q</returns>
+        public static Quaternion operator *(Quaternion left, Quaternion right) 
+        {
+            Quaternion q = new Quaternion();
+            double resultW = left.W * right.W - Vector3D.Dot(left.V,right.V);
+            q.W = resultW;
+
+            Vector3D result1 = left.W * right.V;
+            Vector3D result2 = right.W * left.V;
+            Vector3D result3 = Vector3D.Cross(left.V, right.V);
+            q.V = result1 + result2 + result3;
+            q.Normalize();
+            return q;
+        }
+        public void Normalize()
+        {
+            double sum = Math.Sqrt(Math.Pow(W, 2) + Math.Pow(V.X, 2) + Math.Pow(V.Y, 2) + Math.Pow(V.Z, 2));
+            W /= sum;
+            V.X /= sum;
+            V.Y /= sum;
+            V.Z /= sum;
+        }
+
     }
 
 

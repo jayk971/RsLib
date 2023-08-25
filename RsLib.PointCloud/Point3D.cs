@@ -355,7 +355,7 @@ namespace RsLib.PointCloudLib
             Matrix4x4 m = Matrix4x4.Identity;
             for (int i = 0; i < matrics.Count; i++)
             {
-                matrics[i].CalculateFinalMatrix();
+                matrics[i].EndAddMatrix();
                 m = matrics[i].FinalMatrix4 * m;
             }
             Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));
@@ -886,7 +886,7 @@ namespace RsLib.PointCloudLib
             Matrix4x4 m = Matrix4x4.Identity;
             for (int i = 0; i < matrics.Count; i++)
             {
-                matrics[i].CalculateFinalMatrix();
+                matrics[i].EndAddMatrix();
                 m = matrics[i].FinalMatrix4 * m;
             }
             Vector4 output = Matrix4x4.Multiply(m, new Vector4((float)pt.X, (float)pt.Y, (float)pt.Z, 1f));

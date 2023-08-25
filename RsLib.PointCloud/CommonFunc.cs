@@ -1488,7 +1488,7 @@ namespace RsLib.PointCloudLib
                             }
                             else continue;
                         }
-                        coordMatrix.CalculateFinalMatrix();
+                        coordMatrix.EndAddMatrix();
                         output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);
                     }
                     else
@@ -1573,7 +1573,7 @@ namespace RsLib.PointCloudLib
                         Shift s_Compensate = new Shift(compensate_dX, compensate_dY, compensate_dZ);
                         coordMatrix.AddSeq(s_Compensate);
 
-                        coordMatrix.CalculateFinalMatrix();
+                        coordMatrix.EndAddMatrix();
                         output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);
                     }
                     else

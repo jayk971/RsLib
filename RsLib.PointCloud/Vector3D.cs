@@ -45,7 +45,12 @@ namespace RsLib.PointCloudLib
             Y = Math.Round(endP.Y - startP.Y, 2);
             Z = Math.Round(endP.Z - startP.Z, 2);
         }
-
+        public static Vector3D GetRefAxis(RefAxis refAxis)
+        {
+            if (refAxis == RefAxis.X) return XAxis;
+            else if (refAxis == RefAxis.Y) return YAxis;
+            else return ZAxis;
+        }
         public override string ToString()
         {
             return $"{X:F2},{Y:F2},{Z:F2}";
@@ -179,7 +184,10 @@ namespace RsLib.PointCloudLib
         {
             return new Vector3D(A.X - B.X, A.Y - B.Y, A.Z - B.Z);
         }
-
+        public static Vector3D operator *(double A, Vector3D B)
+        {
+            return new Vector3D(A * B.X, A* B.Y, A*B.Z);
+        }
         /// <summary>
         /// 計算向量A-B
         /// </summary>

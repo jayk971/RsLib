@@ -91,6 +91,12 @@
     <Compile Include="Display3DControl.Designer.cs">
       <DependentUpon>Display3DControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAddSelectPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddSelectPath.Designer.cs">
+      <DependentUpon>FormAddSelectPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormChangeDefaultColor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Display3DControl.resx">
       <DependentUpon>Display3DControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddSelectPath.resx">
+      <DependentUpon>FormAddSelectPath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormChangeDefaultColor.resx">
       <DependentUpon>FormChangeDefaultColor.cs</DependentUpon>
@@ -223,6 +232,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\settings_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus_48px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

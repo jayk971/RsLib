@@ -27,7 +27,7 @@ namespace RsLib.DemoForm
         public Form1()
         {
             InitializeComponent();
-            _EJ1500.LoadYaml("d:\\testEj1500.yaml");
+            //_EJ1500.LoadYaml("d:\\testEj1500.yaml");
             eJ1500Ctrl = new EJ1500Control(_EJ1500);
             eJ1500Ctrl.Dock = DockStyle.Fill;
             tabPage_EJ1500.Controls.Add(eJ1500Ctrl);
@@ -235,27 +235,21 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog op = new OpenFileDialog())
-            {
-                op.Filter = "OPT file|*.opt";
-                if(op.ShowDialog() == DialogResult.OK)
-                {
-                    string filePath = op.FileName;
-                    string fileName  = Path.GetFileName(filePath);
-                    ObjectGroup group = new ObjectGroup(fileName);
-                    group.LoadMultiPathOPT(filePath, true);
-                    using (SaveFileDialog sf = new SaveFileDialog())
-                    {
-                        sf.Filter = "ABB mod File|*.mod";
-                        if(sf.ShowDialog() == DialogResult.OK)
-                        {
-                            string outputFilePath = sf.FileName;
-                            group.SaveABBModPath(outputFilePath);
-                        }
-                    }
-                }
-            }
+            Rotate r = new Rotate();
+            r.AddRotateSeq(RefAxis.Z, -11.59);
+            r.AddRotateSeq(RefAxis.Y, 0);
+            r.AddRotateSeq(RefAxis.X, 0);
+            r.EndAddMatrix();
 
+            double[] Q = r.Q.QArray;
+
+            Rotate r2 = new Rotate();
+            r2.AddRotateSeq(RefAxis.Z, -11.48);
+            r2.AddRotateSeq(RefAxis.Y, 4.32);
+            r2.AddRotateSeq(RefAxis.X, -0.88);
+            r2.EndAddMatrix();
+
+            double[] Q2 = r2.Q.QArray;
         }
     }
 }

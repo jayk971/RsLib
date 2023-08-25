@@ -4,7 +4,9 @@ using RsLib.Display3D.Properties;
 using RsLib.LogMgr;
 using RsLib.PointCloudLib;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 namespace RsLib.Display3D
 {
@@ -23,7 +25,8 @@ namespace RsLib.Display3D
         const int _idIndex = 3;
         const int _colorIndex = 4;
         const int _sizeIndex = 5;
-
+        FormAddSelectPath formAdd;
+        List<int> selectSegmentIndex = new List<int>();
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
@@ -58,6 +61,8 @@ namespace RsLib.Display3D
             Log.Start();
 
         }
+
+
         public bool AddDisplayOption(DisplayObjectOption option)
         {
             if (_displayOption.ContainsKey(option.ID))
@@ -598,6 +603,116 @@ namespace RsLib.Display3D
             {
                 Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
             }
+        }
+
+
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(formAdd == null)
+            {
+                formAdd = new FormAddSelectPath();
+                formAdd.UpdateSelectPath(selectSegmentIndex);
+                formAdd.SaveSelectPath += FormAdd_SaveSelectPath;
+                formAdd.ClearSelectPath += FormAdd_ClearSelectPath;
+                formAdd.Show();
+            }
+            else
+            {
+                formAdd.Show();
+            }
+
+        }
+
+        private void FormAdd_ClearSelectPath()
+        {
+            clearSelectPathIndex();
+        }
+
+        private void FormAdd_SaveSelectPath()
+        {
+            if (_selectIndex == -1)
+            {
+                Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
+                MessageBox.Show($"Didn't select any path yet.", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_displayObject.ContainsKey(_selectIndex) == false)
+            {
+                Log.Add($"Select index = {_selectIndex}. Display objects didn't contain {_selectIndex}.", MsgLevel.Warn);
+                MessageBox.Show($"Display object didn't conatin {_selectIndex} object", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            try
+            {
+                var obj = _displayObject[_selectIndex] as ObjectGroup;
+
+                if (obj == null)
+                {
+                    Log.Add($"Select index = {_selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
+                    MessageBox.Show($"Selected object cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                ObjectGroup output = new ObjectGroup("SelectPath");
+                int outputLineIndex = 0;
+                foreach (var item in obj.Objects)
+                {
+                    string name = item.Key;
+                    Polyline p = item.Value as Polyline; 
+                    if(p != null)
+                    {
+                        LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
+                        if(lineOption != null)
+                        {
+                            if (selectSegmentIndex.Contains(lineOption.LineIndex))
+                            {
+                                output.Add($"SelectPath{outputLineIndex}", p);
+                                outputLineIndex++;
+                            }
+                        }
+                    }
+                }
+
+                if (output.DataCount <= 0)
+                {
+                    MessageBox.Show($"No selected path cannot be saved as MOD", "MOD file save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                using (SaveFileDialog sf = new SaveFileDialog())
+                {
+                    sf.Filter = "ABB mod File|*.mod";
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string outputFilePath = sf.FileName;
+                        output.SaveABBModPath(outputFilePath);
+                        Log.Add($"Save mod. {outputFilePath}", MsgLevel.Info);
+                        MessageBox.Show($"ABB Path Mod is saved.\n{outputFilePath}", "MOD file saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Save ABB Path Mod exception.", MsgLevel.Alarm, ex);
+            }
+        }
+
+        private void clearSelectPathIndex()
+        {
+            selectSegmentIndex.Clear();
+        }
+        private void saveABBModFileWithRobTargetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void clearCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            clearSelectPathIndex();
         }
     }
 }

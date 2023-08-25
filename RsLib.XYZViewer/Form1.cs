@@ -31,8 +31,13 @@ namespace RsLib.XYZViewer
             tableLayoutPanel2.Controls.Add(_displayCtrl, 1, 0);
             _displayCtrl.AfterClearButtonPressed += _displayCtrl_AfterCleared;
             init();
-
+            SizeChanged += Form1_SizeChanged;
             this.Text += " " + FT_Functions.GetFileVersion("RsLib.XYZViewer.exe");
+        }
+
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
         }
 
         private void _displayCtrl_AfterCleared()
