@@ -278,9 +278,9 @@ namespace RsLib.Display3D
                 lbl_Selectable.Visible = false;
                 clearDataGridSelection();
             }
-            updateLineIndexComboBox();
+            UpdateLineIndexComboBox();
         }
-        private void updateLineIndexComboBox()
+        public void UpdateLineIndexComboBox()
         {
             toolCmb_LineIndex.Items.Clear();
             toolCmb_LineIndex.Items.Add("None");
@@ -324,7 +324,7 @@ namespace RsLib.Display3D
                 clearDataGridSelection();
 
                 lbl_Selectable.Visible = false;
-                updateLineIndexComboBox();
+                UpdateLineIndexComboBox();
             }
         }
 
@@ -400,6 +400,7 @@ namespace RsLib.Display3D
             if (_SelectedPathIndex.ContainsKey(id) == false) return;
 
             _SelectedPathIndex[id].Clear();
+
         }
         void showColorDialogTd(object obj)
         {
@@ -438,6 +439,7 @@ namespace RsLib.Display3D
             }
             else
             {
+
                 dataGridView1.Rows.Clear();
                 foreach (var item in _displayOption)
                 {
@@ -460,6 +462,9 @@ namespace RsLib.Display3D
                         }
                     }
                 }
+                _CurrentSelectObjectIndex = -1;
+                _CurrentSelectLineIndex = -1;
+                UpdateLineIndexComboBox();
             }
         }
 

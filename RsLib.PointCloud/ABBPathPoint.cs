@@ -57,13 +57,14 @@ namespace RsLib.PointCloudLib
         }
         public void SaveABBModPath(string filePath)
         {
-            string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
+            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
+            string moduleName = "ABB_" + fileName;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
-                sw.WriteLine($"MODULE {fileName.Replace(" ","_")}");
+                sw.WriteLine($"MODULE {moduleName}");
                 sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
                 sw.WriteLine("");
-                sw.WriteLine($"VAR num {fileName}_Pose{{{Count} ,7}} := [");
+                sw.WriteLine($"VAR num {moduleName}_Pose{{{Count} ,7}} := [");
                 for (int i = 0; i < Count; i++)
                 {
                     ABBPathPoint abbPt = Pts[i];
@@ -82,16 +83,17 @@ namespace RsLib.PointCloudLib
         }
         public void SaveABBModPathWithRobTarget(string filePath)
         {
-            string fileName = "ABB_" + Path.GetFileNameWithoutExtension(filePath);
+            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
+            string moduleName = "ABB_" + fileName;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
-                sw.WriteLine($"MODULE {fileName.Replace(" ","_")}");
+                sw.WriteLine($"MODULE {moduleName}");
                 sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
                 sw.WriteLine("");
                 for (int i = 0; i < Count; i++)
                 {
                     ABBPathPoint abbPt = Pts[i];
-                    sw.WriteLine(abbPt.ToString_RobTarget($"t_{abbPt.SegmentIndex}_{i}"));
+                    sw.WriteLine(abbPt.ToString_RobTarget($"{fileName}_{abbPt.SegmentIndex}_{i}"));
                 }
                 sw.WriteLine("");
 
@@ -99,14 +101,14 @@ namespace RsLib.PointCloudLib
                 sw.WriteLine("PERS wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
 
                 sw.WriteLine("");
-                sw.WriteLine($"PROC Path{fileName.Replace(" ","_")}()");
+                sw.WriteLine($"PROC Path{moduleName}()");
                 sw.WriteLine("");
                 sw.WriteLine("\tVAR speeddata LocalSpeed := v100;");
                 sw.WriteLine("");
                 for (int i = 0; i < Count; i++)
                 {
                     ABBPathPoint abbPt = Pts[i];
-                    sw.WriteLine($"\tMOVEL t_{abbPt.SegmentIndex}_{i}, LocalSpeed, z1, LocalTool\\WObj:=LocalWork;");
+                    sw.WriteLine($"\tMOVEL {fileName}_{abbPt.SegmentIndex}_{i}, LocalSpeed, z1, LocalTool\\WObj:=LocalWork;");
                 }
                 sw.WriteLine("");
                 sw.WriteLine($"ENDPROC");
