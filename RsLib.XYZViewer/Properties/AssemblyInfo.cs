@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // 設為預設，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.23240.4")]
+[assembly: AssemblyFileVersion("2.1.23250.3")]

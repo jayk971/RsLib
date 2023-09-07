@@ -107,6 +107,7 @@
     <Compile Include="ColorPoint.cs" />
     <Compile Include="DisplayProperty.cs" />
     <Compile Include="Euler.cs" />
+    <Compile Include="JsonParser.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Point2D.cs" />
     <Compile Include="Point3DControl.cs">

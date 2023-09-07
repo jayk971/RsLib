@@ -231,6 +231,17 @@ namespace RsLib.DemoForm
 
         private void button7_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog op = new OpenFileDialog())
+            {
+                op.Filter = "Json file|*.json";
+                if(op.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = op.FileName;
+                    NikePath nike =  NikePath.Parse(filePath);
+
+                    List<ObjectGroup> oo = nike.ToObjectGroups();
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

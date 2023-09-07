@@ -161,26 +161,26 @@ namespace RsLib.XYZViewer
                     case ".opt":
                         ObjectGroup group = new ObjectGroup(fileName);
                         group.LoadMultiPathOPT(filePath, true);
-
+                        drawObjectGroup(group, drawItem,fileName);
                         //Polyline line = new Polyline();
                         //line.LoadFromOPTFile(filePath, true);
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
-                        _displayCtrl.BuildPath(group, (int)drawItem, true, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        //_displayCtrl.BuildPath(group, (int)drawItem, true, true);
 
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
-                        _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+                        //_displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
 
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
-                        _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
 
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
-                        _displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
 
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
-                        _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
-                        _displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
 
 
                         break;
@@ -196,6 +196,15 @@ namespace RsLib.XYZViewer
                         _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                         _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
 
+                        break;
+
+                    case ".json":
+                        NikePath nike = NikePath.Parse(filePath);
+                        List<ObjectGroup> groups = nike.ToObjectGroups();
+                        if (groups.Count > 0)
+                        {
+                            drawObjectGroup(groups[0], drawItem, fileName);
+                        }
                         break;
                     default:
 
@@ -217,6 +226,28 @@ namespace RsLib.XYZViewer
                     }));
             }
             _displayCtrl.UpdateDataGridView();
+        }
+
+        private void drawObjectGroup(ObjectGroup group,DrawItem drawItem,string fileName)
+        {
+            _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+            _displayCtrl.BuildPath(group, (int)drawItem, true, true);
+
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+            _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
+
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
+            _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
+
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
+            _displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
+
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
+            _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
+            _displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
+
         }
         DrawItem getPressedButton(Button btn)
         {
@@ -280,13 +311,19 @@ namespace RsLib.XYZViewer
                         {
                             if (fileName.Contains(KeyBMP.HeightExt.ToLower())) canDrop = true;
                         }
+
+
                         else
                         {
                             canDrop = false;
                         }
                     }
-                    if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path && ext == ".opt") canDrop = true;
-
+                    if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path)
+                    {
+                        if(ext == ".opt") canDrop = true;
+                        else if(ext == ".json")canDrop = true;
+                        else canDrop = false;
+                    }
 
                     if (canDrop) e.Effect = DragDropEffects.Move;
                 }
