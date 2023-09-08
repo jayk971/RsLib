@@ -634,6 +634,8 @@ namespace RsLib.Display3D
 
             toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
             toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
+
+            toolLbl_TransformValue.Text = string.Format("{0} , {1} , {2} , {3} , {4} , {5}", _translation.X, _translation.Y, _translation.Z, _rotation.X, _rotation.Y, _rotation.Z);
             GC.Collect();
         }
 
@@ -922,7 +924,7 @@ namespace RsLib.Display3D
         private void toolCmb_LineIndex_SelectedIndexChanged(object sender, EventArgs e)
         {
             _haveSelectPath = false;
-
+            _haveClosestPoint = false;
             if (toolCmb_LineIndex.Items.Count == 0) return;
             if (toolCmb_LineIndex.SelectedIndex <= 0) return;
 

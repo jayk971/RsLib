@@ -93,15 +93,15 @@ namespace RsLib.XYZViewer
             _displayCtrl.AddDisplayOption(vxVectorOptions);
 
 
-            createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor);
-            createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor);
-            createButton(optButtons, DrawItem.OPT1Path, PathOptions[0].DrawColor);
+            createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3");
+            createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2");
+            createButton(optButtons, DrawItem.OPT1Path, PathOptions[0].DrawColor,"Path 1");
 
-            createButton(xyzButtons, DrawItem.XYZ5, XYZOptions[4].DrawColor);
-            createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor);
-            createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor);
-            createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor);
-            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor);
+            createButton(xyzButtons, DrawItem.XYZ5, XYZOptions[4].DrawColor,"Point Cloud 5");
+            createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor, "Point Cloud 4");
+            createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor, "Point Cloud 3");
+            createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor, "Point Cloud 2");
+            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor, "Point Cloud 1");
 
             loadedFiles.Add(DrawItem.XYZ1, "");
             loadedFiles.Add(DrawItem.XYZ2, "");
@@ -114,11 +114,11 @@ namespace RsLib.XYZViewer
 
         }
 
-        void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor)
+        void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor,string displayText)
         {
             Button btn = new Button();
             btn.BackColor = backColor;
-            btn.Text = drawItem.ToString();
+            btn.Text = displayText;
             btn.Dock = DockStyle.Top;
             btn.Height = 50;
             btn.AllowDrop = true;

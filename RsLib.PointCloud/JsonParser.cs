@@ -7,11 +7,6 @@ using System.Text;
 using Newtonsoft.Json;
 namespace RsLib.PointCloudLib
 {
-    public class JsonParser
-    {
-
-    }
-
     public class NikePath
     {
         public string SchemaVersion { get; set; }
@@ -86,7 +81,7 @@ namespace RsLib.PointCloudLib
         public ObjectGroup ToObjectGroup(int selectIndex)
         {
             ObjectGroup objects = new ObjectGroup($"Nike_{selectIndex}");
-            for(int i = 0; i < toolPaths.Count;i++)
+            for (int i = 0; i < toolPaths.Count; i++)
             {
                 ToolPathInfo toolPathInfo = toolPaths[i];
                 objects.Add($"Nike_{selectIndex}_{i}", toolPathInfo.ToPolyline(i));
@@ -96,7 +91,7 @@ namespace RsLib.PointCloudLib
     }
     [Serializable]
     public class ToolPathInfo
-    { 
+    {
         public string StartType { get; set; }
         public string StopType { get; set; }
         public string Texture { get; set; }
@@ -107,10 +102,10 @@ namespace RsLib.PointCloudLib
             LineOption lineOption = new LineOption();
             lineOption.LineIndex = lineIndex;
             poly.AddOption(lineOption);
-            for(int i = 0;i  < Poses.Count; i++)
+            for (int i = 0; i < Poses.Count; i++)
             {
                 Pose p = Poses[i];
-                poly.Add(p.Pt);
+                poly.Add(p.ToPoint3D(lineIndex,i));
             }
 
             return poly;
@@ -123,27 +118,32 @@ namespace RsLib.PointCloudLib
         public double Y { get; set; }
         public double Z { get; set; }
         public double[] XAxis { get; set; }
-        public double[] YAxis { get; set;}
-        public PointV3D Pt
-        { 
-            get
-            {
-                PointV3D p = new PointV3D();
-                p.X = X;
-                p.Y = Y;
-                p.Z = Z;
-                p.Vx = new Vector3D(XAxis[0], XAxis[1], XAxis[2]);
-                p.Vy = new Vector3D(YAxis[0], YAxis[1], YAxis[2]);
-                p.Vz = Vector3D.Cross(p.Vx, p.Vy);
+        public double[] YAxis { get; set; }
+        public PointV3D ToPoint3D(int lineIndex, int ptIndex)
+        {
 
-                return p;
-            } 
+            PointV3D p = new PointV3D();
+            p.X = X;
+            p.Y = Y;
+            p.Z = Z;
+            p.Vx = new Vector3D(XAxis[0], XAxis[1], XAxis[2]);
+            p.Vy = new Vector3D(YAxis[0], YAxis[1], YAxis[2]);
+            p.Vz = Vector3D.Cross(p.Vx, p.Vy);
+            LineOption lineOption = new LineOption();
+            lineOption.LineIndex = lineIndex;
+            LocateIndexOption locateIndexOption = new LocateIndexOption();
+            locateIndexOption.Index = ptIndex;
+            p.AddOption(lineOption);
+            p.AddOption(locateIndexOption);
+
+            return p;
         }
     }
-
-
-
 }
+
+
+
+
 
 
 
