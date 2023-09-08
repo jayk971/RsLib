@@ -979,5 +979,10 @@ namespace RsLib.Display3D
             Settings.Default.Sensitivity = fSensitivity;
             Settings.Default.Save();
         }
+
+        private void upToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+        }
     }
 }
