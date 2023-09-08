@@ -67,6 +67,7 @@ namespace RsLib.Display3D
             formAdd.ClearSelectPath += FormAdd_ClearSelectPath;
 
             Log.Start();
+            trackBar_RotateSensitivity.Value = (int)Settings.Default.Sensitivity * 10;
 
         }
 
@@ -211,6 +212,7 @@ namespace RsLib.Display3D
         //}
         public void ResetView()
         {
+            _rotationMatrix = Matrix4.Identity;
             _translation = new Vector3();
             _rotation = new Vector3();
             _scale = 1.0f;
@@ -635,7 +637,6 @@ namespace RsLib.Display3D
             toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
             toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
 
-            toolLbl_TransformValue.Text = string.Format("{0} , {1} , {2} , {3} , {4} , {5}", _translation.X, _translation.Y, _translation.Z, _rotation.X, _rotation.Y, _rotation.Z);
             GC.Collect();
         }
 
@@ -959,6 +960,24 @@ namespace RsLib.Display3D
                     }
                 }
             }
+        }
+
+        private void trackBar_RotateSensitivity_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeRotateSensitivityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            trackBar_RotateSensitivity.Visible = !trackBar_RotateSensitivity.Visible;
+        }
+
+        private void trackBar_RotateSensitivity_MouseUp(object sender, MouseEventArgs e)
+        {
+            int sensitivity = trackBar_RotateSensitivity.Value;
+            float fSensitivity = (float)sensitivity / 10f;
+            Settings.Default.Sensitivity = fSensitivity;
+            Settings.Default.Save();
         }
     }
 }

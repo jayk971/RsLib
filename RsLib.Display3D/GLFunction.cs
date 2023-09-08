@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using RsLib.Display3D.Properties;
 using RsLib.PointCloudLib;
 using System;
@@ -19,7 +20,7 @@ namespace RsLib.Display3D
         bool _rightButtonPressed = false;
 
         int _middleMouseCount = 0;
-
+        Matrix4 _rotationMatrix = Matrix4.Identity;
         int _lastX, _lastY;
         int _lastRotX, _lastRotY;
         int _headList;
@@ -127,14 +128,14 @@ namespace RsLib.Display3D
             //SpinWait.SpinUntil(() => false, 100);
             //_glControl.Invalidate();
         }
-        private void GlControl_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void GlControl_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
             {
                 ResetView();
             }
         }
-        private void GlControl_MouseClick(object sender, MouseEventArgs e)
+        private void GlControl_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
             {
@@ -214,7 +215,7 @@ namespace RsLib.Display3D
         }
 
 
-        private void GlControl_MouseMove(object sender, MouseEventArgs e)
+        private void GlControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (_leftButtonPressed)
             {
@@ -223,9 +224,9 @@ namespace RsLib.Display3D
             else if (_rightButtonPressed)
             {
                 shift(e.X, e.Y);
-            }
+            }   
         }
-        private void GlControl_MouseUp(object sender, MouseEventArgs e)
+        private void GlControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -236,7 +237,7 @@ namespace RsLib.Display3D
                 _rightButtonPressed = false;
             }
         }
-        private void GlControl_MouseWheel(object sender, MouseEventArgs e)
+        private void GlControl_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             int step = e.Delta / SystemInformation.MouseWheelScrollDelta;
             _scale *= (float)(1.0 + step * 0.1);
@@ -244,7 +245,24 @@ namespace RsLib.Display3D
             //_scale += (float)e.Delta / SystemInformation.MouseWheelScrollDelta / 10.0f;
             if (_scale <= 0.1f) _scale = 0.1f;
         }
-        private void GlControl_MouseDown(object sender, MouseEventArgs e)
+        private Vector3 ScreenToTrackball(int mousePositionX,int mousePositionY)
+        {
+            float radius = Math.Min(Width, Height) * 0.5f;
+            Vector3 point = new Vector3(
+                (mousePositionX - Width * 0.5f) / radius,
+                (Height * 0.5f - mousePositionY) / radius,
+                0.0f
+            );
+
+            float lengthSquared = point.LengthSquared;
+            if (lengthSquared <= 1.0f)
+                point.Z = (float)Math.Sqrt(1.0f - lengthSquared);
+            else
+                point.Normalize();
+
+            return point;
+        }
+        private void GlControl_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -267,9 +285,10 @@ namespace RsLib.Display3D
         void multiMatrix()
         {
             Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _avgPoint);
-            localTranslate *= Matrix4.CreateRotationX(_rotation.Y);
-            localTranslate *= Matrix4.CreateRotationY(_rotation.X);
-            localTranslate *= Matrix4.CreateRotationZ(_rotation.Z);
+            localTranslate *= _rotationMatrix;
+            //localTranslate *= Matrix4.CreateRotationX(_rotation.Y);
+            //localTranslate *= Matrix4.CreateRotationY(_rotation.X);
+            //localTranslate *= Matrix4.CreateRotationZ(_rotation.Z);
             localTranslate *= Matrix4.CreateScale(_scale, _scale, _scale);
             localTranslate *= Matrix4.CreateTranslation(_avgPoint);
             localTranslate *= Matrix4.CreateTranslation(_translation.X, _translation.Y, 0.0f);
@@ -405,12 +424,18 @@ namespace RsLib.Display3D
         }
         void rotate(int mouseX, int mouseY)
         {
-            //_rotation.X += (mouseX - _lastRotX) / (float)_glControl.Width * 180.0f;
-            //_rotation.Y += 1 * (mouseY - _lastRotY) / (float)_glControl.Height * 180.0f;
-            _rotation.X += (mouseX - _lastRotX) / (float)_glControl.Width * 10.0f;
-            _rotation.Y += 1 * (mouseY - _lastRotY) / (float)_glControl.Height * 10.0f;
-            //GL.Rotate(dx * 180.0f, Vector3.UnitY);
-            //GL.Rotate(-dy * 180.0f, Vector3.UnitX);
+
+            Vector3 trackballStart = ScreenToTrackball(_lastRotX, _lastRotY);
+            Vector3 trackballCurrent = ScreenToTrackball(mouseX, mouseY);
+            Vector3 axis = Vector3.Cross(trackballStart, trackballCurrent);
+            float angle = (float)Math.Acos(Vector3.Dot(trackballStart, trackballCurrent));
+            angle *= Settings.Default.Sensitivity;
+
+            Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(axis, angle);
+            _rotationMatrix *= deltaRotation;
+            //_rotation.X += (mouseX - _lastRotX) / (float)_glControl.Width * 10.0f;
+            //_rotation.Y += 1 * (mouseY - _lastRotY) / (float)_glControl.Height * 10.0f;
+
             _glControl.Invalidate();
             _lastRotX = mouseX;
             _lastRotY = mouseY;

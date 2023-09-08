@@ -166,5 +166,17 @@ namespace RsLib.Display3D.Properties {
                 this["Size_SelectPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public float Sensitivity {
+            get {
+                return ((float)(this["Sensitivity"]));
+            }
+            set {
+                this["Sensitivity"] = value;
+            }
+        }
     }
 }
