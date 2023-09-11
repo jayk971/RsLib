@@ -641,6 +641,7 @@ namespace RsLib.Display3D
 
             drawPolyline(_SelectPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
             drawPointCloud(_SelectPath, Settings.Default.Size_SelectPath*3, Settings.Default.Color_SelectPath, false);
+            drawVector(_SelectPath, Settings.Default.Size_SelectPath, Color.Blue, false, DisplayObjectType.Vector_z);
             drawCone(pos, 10, dir, 3, Settings.Default.Color_SelectPath);
 
         }
