@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+
 namespace RsLib.Display3D
 {
     public partial class Display3DControl : UserControl
@@ -15,7 +17,6 @@ namespace RsLib.Display3D
         GLControl _glControl;
         private float _scale = 1.0f;
         private Vector3 _translation = Vector3.Zero;
-        private Vector3 _rotation = Vector3.Zero;
         bool _leftButtonPressed = false;
         bool _rightButtonPressed = false;
 
@@ -216,7 +217,6 @@ namespace RsLib.Display3D
             }
         }
 
-
         private void GlControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (_leftButtonPressed)
@@ -226,10 +226,11 @@ namespace RsLib.Display3D
             else if (_rightButtonPressed)
             {
                 shift(e.X, e.Y);
-            }   
+            }
         }
         private void GlControl_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+
             if (e.Button == MouseButtons.Left)
             {
                 _leftButtonPressed = false;
@@ -472,43 +473,52 @@ namespace RsLib.Display3D
             DisplayObjectType displayObjectType = _displayOption[_CurrentSelectObjectIndex].DisplayType;
             if (displayObjectType == DisplayObjectType.None) return false;
             DisplayObjectOption objectOption = _displayOption[_CurrentSelectObjectIndex];
-            if (objectOption.IsDisplay == false) return false;
+            //if (objectOption.IsDisplay == false) return false;
 
             Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
 
-
-            if (objectType == typeof(Point3D))
+            if (_haveSelectPath == false)
             {
-                var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
-                float result = calculatePointMinDistance(rayOrig, rayDir, obj);
-                closestDistance = result;
-                closestPoint = obj;
-                hasClosetPoint = closestDistance <= _closetDisLimit;
-            }
-            else if (objectType == typeof(ObjectGroup))
-            {
-                var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
-                foreach (var item in obj.Objects)
+                if (objectType == typeof(Point3D))
                 {
-                    var subObj = item.Value as PointCloud;
-                    Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, subObj.Points);
-                    if (result.Item1 < closestDistance)
+                    var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
+                    float result = calculatePointMinDistance(rayOrig, rayDir, obj);
+                    closestDistance = result;
+                    closestPoint = obj;
+                    hasClosetPoint = closestDistance <= _closetDisLimit;
+                }
+                else if (objectType == typeof(ObjectGroup))
+                {
+                    var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
+                    foreach (var item in obj.Objects)
                     {
-                        closestDistance = result.Item1;
-                        closestPoint = result.Item2;
-                        hasClosetPoint = closestDistance <= _closetDisLimit;
+                        var subObj = item.Value as PointCloud;
+                        Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, subObj.Points);
+                        if (result.Item1 < closestDistance)
+                        {
+                            closestDistance = result.Item1;
+                            closestPoint = result.Item2;
+                            hasClosetPoint = closestDistance <= _closetDisLimit;
+                        }
                     }
                 }
+                else
+                {
+                    var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
+                    Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
+                    closestDistance = result.Item1;
+                    closestPoint = result.Item2;
+                    hasClosetPoint = closestDistance <= _closetDisLimit;
 
+                }
             }
             else
             {
-                var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
+                var obj = _SelectPath as PointCloud;
                 Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
                 closestDistance = result.Item1;
                 closestPoint = result.Item2;
                 hasClosetPoint = closestDistance <= _closetDisLimit;
-
             }
             return hasClosetPoint;
         }
@@ -630,6 +640,7 @@ namespace RsLib.Display3D
             };
 
             drawPolyline(_SelectPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
+            drawPointCloud(_SelectPath, Settings.Default.Size_SelectPath*3, Settings.Default.Color_SelectPath, false);
             drawCone(pos, 10, dir, 3, Settings.Default.Color_SelectPath);
 
         }

@@ -245,6 +245,12 @@
   <ItemGroup>
     <None Include="Resources\list_48px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\orthogonal_view_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\unavailable_48px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y

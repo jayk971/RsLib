@@ -214,7 +214,7 @@ namespace RsLib.Display3D
         {
             _rotationMatrix = Matrix4.Identity;
             _translation = new Vector3();
-            _rotation = new Vector3();
+            //_rotation = new Vector3();
             _scale = 1.0f;
         }
         private void DataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -545,7 +545,7 @@ namespace RsLib.Display3D
         {
             _pickMode = PointPickMode.None;
             lbl_PickPointMode.Text = "None";
-            lbl_PickPointMode.Image = Resources.shutdown_30px;
+            lbl_PickPointMode.Image = Resources.unavailable_48px;
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = true;
 
@@ -980,9 +980,54 @@ namespace RsLib.Display3D
             Settings.Default.Save();
         }
 
+
+
+        private void nud_ShiftX_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void manualShiftRotateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tlp_LocalTransform.Visible = !tlp_LocalTransform.Visible;
+        }
+
         private void upToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _rotationMatrix = Matrix4.Identity;
+        }
+
+        private void bottomViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *=Matrix4.CreateFromAxisAngle(new Vector3(0,1,0), (float)Math.PI);
+        }
+
+        private void rightViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), -1*(float)Math.PI/2);
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI / 2);
+        }
+
+        private void leftViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)Math.PI / 2);
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0),  -1*(float)Math.PI / 2);
+        }
+
+        private void frontViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1),  (float)Math.PI);
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI / 2);
+        }
+
+        private void backViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI / 2);
         }
     }
 }

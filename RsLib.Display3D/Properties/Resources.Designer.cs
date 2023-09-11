@@ -143,6 +143,16 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap orthogonal_view_48px {
+            get {
+                object obj = ResourceManager.GetObject("orthogonal_view_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap paint_palette_30px {
             get {
                 object obj = ResourceManager.GetObject("paint_palette_30px", resourceCulture);
@@ -206,6 +216,16 @@ namespace RsLib.Display3D.Properties {
         internal static System.Drawing.Bitmap shutdown_30px {
             get {
                 object obj = ResourceManager.GetObject("shutdown_30px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap unavailable_48px {
+            get {
+                object obj = ResourceManager.GetObject("unavailable_48px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
