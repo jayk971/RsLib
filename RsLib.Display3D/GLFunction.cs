@@ -42,6 +42,7 @@ namespace RsLib.Display3D
 
         Vector3 _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
         Vector3 _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        Vector3 _oldAvgPoint = new Vector3();
         Vector3 _avgPoint
         {
             get
@@ -53,6 +54,7 @@ namespace RsLib.Display3D
                 return new Vector3(avgX, avgY, avgZ);
             }
         }
+        bool _isCheckedMaxMin = false;
         #region event
 
         private void _glControl_SizeChanged(object sender, EventArgs e)
@@ -284,16 +286,17 @@ namespace RsLib.Display3D
 
         void multiMatrix()
         {
-            Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _avgPoint);
+            Matrix4 localTranslate = Matrix4.CreateTranslation(-1 * _oldAvgPoint);
             localTranslate *= _rotationMatrix;
-            //localTranslate *= Matrix4.CreateRotationX(_rotation.Y);
-            //localTranslate *= Matrix4.CreateRotationY(_rotation.X);
-            //localTranslate *= Matrix4.CreateRotationZ(_rotation.Z);
             localTranslate *= Matrix4.CreateScale(_scale, _scale, _scale);
             localTranslate *= Matrix4.CreateTranslation(_avgPoint);
             localTranslate *= Matrix4.CreateTranslation(_translation.X, _translation.Y, 0.0f);
             localTranslate *= Matrix4.CreateTranslation(-1 * _avgPoint);
-
+            if(_isCheckedMaxMin)
+            {
+                _oldAvgPoint = _avgPoint;
+                _isCheckedMaxMin = false;
+            }
             GL.MultMatrix(ref localTranslate);
         }
         void showSelectPointData(bool haveClosetPoint, Point3D closetP)
@@ -431,6 +434,7 @@ namespace RsLib.Display3D
             float angle = (float)Math.Acos(Vector3.Dot(trackballStart, trackballCurrent));
             angle *= Settings.Default.Sensitivity;
 
+            if (axis.X == 0 && axis.Y == 0 && axis.Z == 0) return;
             Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(axis, angle);
             _rotationMatrix *= deltaRotation;
             //_rotation.X += (mouseX - _lastRotX) / (float)_glControl.Width * 10.0f;
@@ -442,6 +446,7 @@ namespace RsLib.Display3D
         }
         void checkMaxMinPoint(Point3D p)
         {
+            _oldAvgPoint = _avgPoint;
             if (p.X >= _maxPoint.X) _maxPoint.X = (float)p.X;
             if (p.Y >= _maxPoint.Y) _maxPoint.Y = (float)p.Y;
             if (p.Z >= _maxPoint.Z) _maxPoint.Z = (float)p.Z;
@@ -449,7 +454,7 @@ namespace RsLib.Display3D
             if (p.X <= _minPoint.X) _minPoint.X = (float)p.X;
             if (p.Y <= _minPoint.Y) _minPoint.Y = (float)p.Y;
             if (p.Z <= _minPoint.Z) _minPoint.Z = (float)p.Z;
-
+            _isCheckedMaxMin = true;
         }
         bool closestPoint(Vector3 nearWorld, Vector3 farWorld, out Point3D closestPoint)
         {
