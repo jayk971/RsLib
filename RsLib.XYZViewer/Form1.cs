@@ -52,9 +52,9 @@ namespace RsLib.XYZViewer
 
         void init()
         {
-            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 1.0f, true);
-            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 3.0f, false);
-            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 9.0f, true);
+            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 2.0f, true);
+            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 2.0f, false);
+            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 5.0f, true);
             DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
             DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, DisplayObjectType.Vector_y, 1.0f, false);
             DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, DisplayObjectType.Vector_x, 1.0f, false);
@@ -65,11 +65,11 @@ namespace RsLib.XYZViewer
             XYZOptions[3].DrawColor = Color.LightGray;
             XYZOptions[4].DrawColor = Color.Gainsboro;
 
-            PathOptions[0].DrawColor = Color.LimeGreen;
+            PathOptions[0].DrawColor = Color.DarkOrange;
             PathOptions[1].DrawColor = Color.Cyan;
             PathOptions[2].DrawColor = Color.Gold;
 
-            PointOptions[0].DrawColor = Color.LimeGreen;
+            PointOptions[0].DrawColor = Color.DarkOrange;
             PointOptions[1].DrawColor = Color.Cyan;
             PointOptions[2].DrawColor = Color.Gold;
 

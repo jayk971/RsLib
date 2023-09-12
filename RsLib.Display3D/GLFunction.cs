@@ -1011,7 +1011,7 @@ namespace RsLib.Display3D
             drawCylinder(Vector3.Zero, Vector3.UnitX, cylinderRadius, cylinderHeight, Color.Red);
             drawCylinder(Vector3.Zero, Vector3.UnitY, cylinderRadius, cylinderHeight, Color.Green);
             drawCylinder(Vector3.Zero, Vector3.UnitZ, cylinderRadius, cylinderHeight, Color.Blue);
-            drawSphere(Vector3.Zero, 2.0f, Color.White);
+            drawSphere(Vector3.Zero, 3.0f, Color.White);
             drawCone(new Vector3(cylinderHeight, 0, 0), capHeight, Vector3.UnitX, capRadius, Color.Red);
             drawCone(new Vector3(0, cylinderHeight, 0), capHeight, Vector3.UnitY, capRadius, Color.Green);
             drawCone(new Vector3(0, 0, cylinderHeight), capHeight, Vector3.UnitZ, capRadius, Color.Blue);
@@ -1231,7 +1231,7 @@ namespace RsLib.Display3D
                 GL.Begin(PrimitiveType.Lines);
 
 
-                GL.Color4(Color.Blue);
+                GL.Color4(Color.DodgerBlue);
                 GL.Vertex3(ptV3D.PArray);
                 GL.Vertex3(ptV3D.GetVzExtendPoint(10).PArray);
 
