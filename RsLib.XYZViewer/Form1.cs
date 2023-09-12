@@ -66,12 +66,12 @@ namespace RsLib.XYZViewer
             XYZOptions[4].DrawColor = Color.Gainsboro;
 
             PathOptions[0].DrawColor = Color.DarkOrange;
-            PathOptions[1].DrawColor = Color.Cyan;
-            PathOptions[2].DrawColor = Color.Gold;
+            PathOptions[1].DrawColor = Color.SteelBlue;
+            PathOptions[2].DrawColor = Color.DarkOrchid;
 
             PointOptions[0].DrawColor = Color.DarkOrange;
-            PointOptions[1].DrawColor = Color.Cyan;
-            PointOptions[2].DrawColor = Color.Gold;
+            PointOptions[1].DrawColor = Color.SteelBlue;
+            PointOptions[2].DrawColor = Color.DarkOrchid;
 
             vzVectorOptions[0].DrawColor = Color.Blue;
             vzVectorOptions[1].DrawColor = Color.Blue;

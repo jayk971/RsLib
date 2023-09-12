@@ -997,7 +997,10 @@ namespace RsLib.Display3D
         {
 
         }
+        private void manualShiftRotateItem()
+        {
 
+        }
         private void manualShiftRotateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             tlp_LocalTransform.Visible = !tlp_LocalTransform.Visible;

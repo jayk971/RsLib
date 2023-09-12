@@ -911,6 +911,7 @@ namespace RsLib.Display3D
             Vector3 p7 = new Vector3(maxPoint.X, maxPoint.Y, maxPoint.Z);
             Vector3 p8 = new Vector3(minPoint.X, maxPoint.Y, maxPoint.Z);
 
+            if (lineWidth <= 0f) return;
             if (useDashedLine)
             {
                 #region dashed line

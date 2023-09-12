@@ -36,7 +36,6 @@ namespace RsLib.Display3D
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
-            this.btn_ResizeView = new System.Windows.Forms.ToolStripButton();
             this.btn_ClearObject = new System.Windows.Forms.ToolStripButton();
             this.btn_Update = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -137,7 +136,6 @@ namespace RsLib.Display3D
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_Edit,
-            this.btn_ResizeView,
             this.btn_ClearObject,
             this.btn_Update,
             this.toolStripSeparator1,
@@ -164,17 +162,6 @@ namespace RsLib.Display3D
             this.btn_Edit.Size = new System.Drawing.Size(32, 32);
             this.btn_Edit.Text = "Edit";
             this.btn_Edit.Click += new System.EventHandler(this.btn_Edit_Click);
-            // 
-            // btn_ResizeView
-            // 
-            this.btn_ResizeView.AutoSize = false;
-            this.btn_ResizeView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btn_ResizeView.Image = global::RsLib.Display3D.Properties.Resources.resize_30px;
-            this.btn_ResizeView.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_ResizeView.Name = "btn_ResizeView";
-            this.btn_ResizeView.Size = new System.Drawing.Size(32, 32);
-            this.btn_ResizeView.Text = "Reset View";
-            this.btn_ResizeView.Click += new System.EventHandler(this.btn_ResizeView_Click);
             // 
             // btn_ClearObject
             // 
@@ -997,7 +984,6 @@ namespace RsLib.Display3D
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.ToolStripButton btn_ResizeView;
         private System.Windows.Forms.ToolStripButton btn_Edit;
         private System.Windows.Forms.ToolStripButton btn_ClearObject;
         private System.Windows.Forms.ToolStripButton btn_Update;
