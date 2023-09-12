@@ -885,7 +885,18 @@ namespace RsLib.Display3D
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
                         string filePath = sf.FileName;
-                        selects.SaveOPT(filePath);
+                        try
+                        {
+                            selects.SaveOPT(filePath);
+                            Log.Add($"Save opt path. {filePath}", MsgLevel.Info);
+                            MessageBox.Show($"Save opt path done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Add($"Save opt path exception.", MsgLevel.Alarm, ex);
+
+                        }
                     }
                 }
             }

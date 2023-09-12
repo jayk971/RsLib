@@ -1,5 +1,6 @@
 ﻿using Accord.Math;
 using Accord.Statistics.Distributions.Reflection;
+using Accord.Statistics.Kernels;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -219,7 +220,7 @@ namespace RsLib.PointCloudLib
     }
     public class RotateUnit : MatrixUnit
     {
-        public double RotateAngle { get => Value / Math.PI * 180.0; }
+        public double RotateAngle { get => Math.Round(Value / Math.PI * 180.0,2); }
         public double RotateRadian { get => Value; }
         public Matrix4x4 RotateMatrix4 { get => matrix4; }
         Matrix3x3 RotateMatrix3
@@ -409,7 +410,7 @@ namespace RsLib.PointCloudLib
             finalMatrix4 = Matrix4x4.Identity;
             for (int i = 0; i < seq.Count; i++)
             {
-                finalMatrix4 = Matrix4x4.Multiply(seq[i].matrix4, finalMatrix4);
+                finalMatrix4 *=  seq[i].matrix4;
             }
             isMatrixCalculated = true;
         }
@@ -680,13 +681,12 @@ namespace RsLib.PointCloudLib
             return matrix;
         }
 
-#if m
+#if !m
         public static double[] SolveQ(Matrix4x4 inMatrix)
         {
             double q00 = Math.Sqrt(1 + inMatrix.V00 + inMatrix.V11 + inMatrix.V22);
 
             double q11 = Math.Sqrt(1 + inMatrix.V00 - inMatrix.V11 - inMatrix.V22);
-
 
             double q22 = Math.Sqrt(1 - inMatrix.V00 + inMatrix.V11 - inMatrix.V22);
 
@@ -695,31 +695,31 @@ namespace RsLib.PointCloudLib
 
             double[] q0R = new double[]
             {
-                q00/2,
-                (inMatrix.V12-inMatrix.V21)/q00/2,
-                (inMatrix.V20 - inMatrix.V02)/q00/2,
-                (inMatrix.V01 - inMatrix.V10)/q00/2
+                Math.Round(q00/2,7),
+                Math.Round((inMatrix.V21-inMatrix.V12)/q00/2,7),
+                Math.Round((inMatrix.V02 - inMatrix.V20) / q00 / 2, 7),
+                Math.Round((inMatrix.V10 - inMatrix.V01) / q00 / 2, 7)
             };
             double[] q1R = new double[]
             {
-                (inMatrix.V12-inMatrix.V21)/q11/2,
-                q11/2,
-                (inMatrix.V01 + inMatrix.V10)/q11/2,
-                (inMatrix.V20 + inMatrix.V02)/q11/2
+                Math.Round((inMatrix.V21 - inMatrix.V12) / q11 / 2, 7),
+                Math.Round(q11 / 2, 7),
+                Math.Round((inMatrix.V10 + inMatrix.V01) / q11 / 2, 7),
+                Math.Round((inMatrix.V02 + inMatrix.V20) / q11 / 2, 7)
                };
             double[] q2R = new double[]
             {
-                (inMatrix.V20 - inMatrix.V02)/q22/2,
-                (inMatrix.V01 + inMatrix.V10)/q22/2,
-                q22/2,
-                (inMatrix.V12+inMatrix.V21)/q22/2
+                Math.Round((inMatrix.V02 - inMatrix.V20) / q22 / 2, 7),
+                Math.Round((inMatrix.V10 + inMatrix.V01) / q22 / 2, 7),
+                Math.Round(q22 / 2, 7),
+                Math.Round((inMatrix.V21 + inMatrix.V12) / q22 / 2, 7)
             };
             double[] q3R = new double[]
             {
-                (inMatrix.V01 - inMatrix.V10)/q33/2,
-                (inMatrix.V20 + inMatrix.V02)/q33/2,
-                (inMatrix.V12+inMatrix.V21)/q33/2,
-               q33/2
+                Math.Round((inMatrix.V10 - inMatrix.V01) / q33 / 2, 7),
+                Math.Round((inMatrix.V02 + inMatrix.V20) / q33 / 2, 7),
+                Math.Round((inMatrix.V21 + inMatrix.V12) / q33 / 2, 7),
+               Math.Round(q33 / 2, 7)
             };
 
             if ((inMatrix.V11 > -1 * inMatrix.V22) &&
@@ -822,9 +822,35 @@ namespace RsLib.PointCloudLib
     public class Quaternion
     {
         public double W { get; set; } = 1;
-   
         public Vector3D V { get; set; } = new Vector3D();
-        public double[] QArray => new double[] { W, V.X, V.Y, V.Z };
+
+        public double[] QArray => new double[] { Q0, Q1, Q2, Q3 };
+        public double Q0 => Math.Round(W,7);
+        public double Q1 => Math.Round(V.X,7);
+        public double Q2 => Math.Round(V.Y,7);
+        public double Q3 => Math.Round(V.Z,7);
+        public double Determin => Math.Round(Math.Sqrt(Math.Pow(Q0, 2) + Math.Pow(Q1, 2) + Math.Pow(Q2, 2) + Math.Pow(Q3, 2)),7);
+
+        public Matrix4x4 Matrix44
+        {
+            get
+            {
+                Normalize();
+                Matrix4x4 output = Matrix4x4.Identity;
+                output.V00 = (float)(Math.Pow(Q0,2)+Math.Pow(Q1,2)-Math.Pow(Q2,2)-Math.Pow(Q3,2));
+                output.V01 = (float)(2 * (Q1 * Q2 - Q0 * Q3));
+                output.V02 = (float)(2 * (Q1 * Q3 + Q0 * Q2));
+                
+                output.V10 = (float)(2 * (Q1 * Q2 + Q0 * Q3));
+                output.V11 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) + Math.Pow(Q2, 2) - Math.Pow(Q3, 2));
+                output.V12 = (float)(2 * (Q2 * Q3 - Q0 * Q1));
+
+                output.V20 = (float)(2 * (Q3 * Q1 - Q0 * Q2));
+                output.V21 = (float)(2 * (Q3 * Q2 + Q0 * Q1));
+                output.V22 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) - Math.Pow(Q2, 2) + Math.Pow(Q3, 2));
+                return output;
+            }
+        }
         public Quaternion()
         {
 
@@ -844,6 +870,7 @@ namespace RsLib.PointCloudLib
         {
             calculateQ(rotateRad, refAxis);
         }
+        
         private void calculateQ(double rotateRad,RefAxis refAxis)
         {
             W = Math.Cos(rotateRad/2);

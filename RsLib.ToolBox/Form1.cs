@@ -247,13 +247,15 @@ namespace RsLib.DemoForm
         private void button1_Click(object sender, EventArgs e)
         {
             Rotate r = new Rotate();
-            r.AddRotateSeq(RefAxis.Z, -11.59);
-            r.AddRotateSeq(RefAxis.Y, 0);
-            r.AddRotateSeq(RefAxis.X, 0);
+            r.AddRotateSeq(RefAxis.Z, 85);
+            r.AddRotateSeq(RefAxis.Y, 60);
+            r.AddRotateSeq(RefAxis.X, 50);
             r.EndAddMatrix();
-
+            double[] solvedQ = Rotate.SolveQ(r.FinalMatrix4);
+            List<RotateUnit> rr = Rotate.SolveRzRyRx(r.FinalMatrix4);
             double[] Q = r.Q.QArray;
-
+            Accord.Math.Matrix4x4 m = r.Q.Matrix44;
+            List<RotateUnit> rr2 = Rotate.SolveRzRyRx(m);
             Rotate r2 = new Rotate();
             r2.AddRotateSeq(RefAxis.Z, -11.48);
             r2.AddRotateSeq(RefAxis.Y, 4.32);
