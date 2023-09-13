@@ -72,7 +72,7 @@ namespace RsLib.PointCloudLib.CalculateMatrix
                 if (sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
-                    PointCloudCommon.SaveMatrix4x4(m, filePath);
+                    PointCloudCommon.SaveMatrix4x4(m, filePath, ',');
                     if (sf.FilterIndex == 1)
                     {
                         using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.Default))

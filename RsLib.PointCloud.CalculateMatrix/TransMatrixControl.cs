@@ -100,19 +100,25 @@ namespace RsLib.PointCloudLib.CalculateMatrix
         {
             getMatrix(out Matrix4x4 m);
             CoordMatrix.SolveMatrixRzRyRxShift(m, out Rotate r, out Shift s);
-            updateEuler(r, s);
+            updateEulerTextBox(r, s);
+            updateQ(r.Q);
         }
-        void updateEuler(Rotate r,Shift s)
+        void updateEulerTextBox(Rotate r,Shift s)
         {
-            tbx_RX.Text = r.Rx.ToString();
-            tbx_RY.Text = r.Ry.ToString();
-            tbx_RZ.Text = r.Rz.ToString();
+            updateEulerTextBox(s.X, s.Y, s.Z, r.Rx, r.Ry, r.Rz);
+        }
+        void updateEulerTextBox(double tx,double ty,double tz,double rx,double ry,double rz)
+        {
+            tbx_RX.Text = rx.ToString();
+            tbx_RY.Text = ry.ToString();
+            tbx_RZ.Text = rz.ToString();
 
-            tbx_SX.Text = s.X.ToString();
-            tbx_SY.Text = s.Y.ToString();
-            tbx_SZ.Text = s.Z.ToString();
+            tbx_SX.Text = tx.ToString();
+            tbx_SY.Text = ty.ToString();
+            tbx_SZ.Text = tz.ToString();
 
         }
+
         private void btn_ResetIdentity_Click(object sender, EventArgs e)
         {
             updateMatrixTextbox(Matrix4x4.Identity);
@@ -133,6 +139,36 @@ namespace RsLib.PointCloudLib.CalculateMatrix
             tbx_SX.Text = "0";
             tbx_SY.Text = "0";
             tbx_SZ.Text = "0";
+        }
+
+        private void btn_SaveMatrix_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Filter = "Matrix 4x4 File|*.m44";
+                if(sf.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = sf.FileName;
+                    getMatrix(out Matrix4x4 m);
+                    PointCloudCommon.SaveMatrix4x4(m, filePath,',');
+                }
+            }
+        }
+
+        private void btn_LoadEulerData_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog op = new OpenFileDialog())
+            {
+                op.Filter = "Halcon Transform Dat File|*.dat";
+                if (op.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = op.FileName;
+                    PointCloudCommon.LoadMatrix4x4ArrayFromHalconDatFile(filePath, out Matrix4x4 m, out Tuple<double, double, double, double, double, double> t);
+                    updateMatrixTextbox(m);
+                    updateEulerTextBox(t.Item1, t.Item2, t.Item3, t.Item4, t.Item5, t.Item6);
+                }
+
+            }
         }
     }
 }

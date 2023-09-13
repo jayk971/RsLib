@@ -1377,26 +1377,26 @@ namespace RsLib.PointCloudLib
             }
 
         }
-        static void SaveMatrix4x4(Matrix4x4 m, string filePath)
+        public static void SaveMatrix4x4(Matrix4x4 m, string filePath,char splitChar)
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
-                sw.WriteLine($"{m.V00},{m.V01},{m.V02},{m.V03}");
-                sw.WriteLine($"{m.V10},{m.V11},{m.V12},{m.V13}");
-                sw.WriteLine($"{m.V20},{m.V21},{m.V22},{m.V23}");
-                sw.WriteLine($"{m.V30},{m.V31},{m.V32},{m.V33}");
+                sw.WriteLine($"{m.V00}{splitChar}{m.V01}{splitChar}{m.V02}{splitChar}{m.V03}");
+                sw.WriteLine($"{m.V10}{splitChar}{m.V11}{splitChar}{m.V12}{splitChar}{m.V13}");
+                sw.WriteLine($"{m.V20}{splitChar}{m.V21}{splitChar}{m.V22}{splitChar}{m.V23}");
+                sw.WriteLine($"{m.V30}{splitChar}{m.V31}{splitChar}{m.V32}{splitChar}{m.V33}");
                 sw.Flush();
             }
         }
-        public static void SaveMatrix4x4(double[,] matrix4x4, string filePath)
+        public static void SaveMatrix4x4(double[,] matrix4x4, string filePath, char splitChar)
         {
             if (matrix4x4.GetLength(0) != 4 || matrix4x4.GetLength(1) != 4) return;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {
-                sw.WriteLine($"{matrix4x4[0, 0]},{matrix4x4[0, 1]},{matrix4x4[0, 2]},{matrix4x4[0, 3]}");
-                sw.WriteLine($"{matrix4x4[1, 0]},{matrix4x4[1, 1]},{matrix4x4[1, 2]},{matrix4x4[1, 3]}");
-                sw.WriteLine($"{matrix4x4[2, 0]},{matrix4x4[2, 1]},{matrix4x4[2, 2]},{matrix4x4[2, 3]}");
-                sw.WriteLine($"{matrix4x4[3, 0]},{matrix4x4[3, 1]},{matrix4x4[3, 2]},{matrix4x4[3, 3]}");
+                sw.WriteLine($"{matrix4x4[0, 0]}{splitChar}{matrix4x4[0, 1]}{splitChar}{matrix4x4[0, 2]}{splitChar}{matrix4x4[0, 3]}");
+                sw.WriteLine($"{matrix4x4[1, 0]}{splitChar}{matrix4x4[1, 1]}{splitChar}{matrix4x4[1, 2]}{splitChar}{matrix4x4[1, 3]}");
+                sw.WriteLine($"{matrix4x4[2, 0]}{splitChar}{matrix4x4[2, 1]}{splitChar}{matrix4x4[2, 2]}{splitChar}{matrix4x4[2, 3]}");
+                sw.WriteLine($"{matrix4x4[3, 0]}{splitChar}{matrix4x4[3, 1]}{splitChar}{matrix4x4[3, 2]}{splitChar}{matrix4x4[3, 3]}");
                 sw.Flush();
             }
         }
@@ -1441,6 +1441,137 @@ namespace RsLib.PointCloudLib
             return output;
 
         }
+        public static double[,] LoadMatrix4x4ArrayFromHalconDatFile(string filePath,out Tuple<double,double,double,double,double,double> shiftRotate)
+        {
+            double[,] output = new double[4, 4];
+            double rx = 0, ry = 0, rz = 0, tx = 0, ty = 0, tz = 0;
+
+            if (File.Exists(filePath))
+            {
+                string ext = Path.GetExtension(filePath);
+                CoordMatrix coordMatrix = new CoordMatrix();
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    if (ext.ToUpper() == ".DAT")
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            string readData = sr.ReadLine();
+                            if (readData == "") continue;
+                            char firstChar = readData[0];
+                            string[] splitData;
+                            if (firstChar == 'r')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    rx = double.Parse(splitData[1]);
+                                    ry = double.Parse(splitData[2]);
+                                    rz = double.Parse(splitData[3]);
+                                    Rotate r = new Rotate();
+                                    r.AddRotateSeq(RefAxis.Z, rz);
+                                    r.AddRotateSeq(RefAxis.Y, ry);
+                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    coordMatrix.AddSeq(r);
+                                }
+                            }
+                            else if (firstChar == 't')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    tx = double.Parse(splitData[1]);
+                                    ty = double.Parse(splitData[2]);
+                                    tz = double.Parse(splitData[3]);
+                                    Shift s = new Shift(tx, ty, tz);
+                                    coordMatrix.AddSeq(s);
+                                }
+
+                            }
+                            else continue;
+                        }
+                        coordMatrix.EndAddMatrix();
+                        output = Matrix4x4ToArray(coordMatrix.FinalMatrix4);
+                    }
+                    else
+                    {
+                        Matrix4x4 m = Matrix4x4.Identity;
+                        output = Matrix4x4ToArray(m);
+
+                    }
+                }
+            }
+            else
+            {
+                Matrix4x4 m = Matrix4x4.Identity;
+                output = Matrix4x4ToArray(m);
+            }
+            shiftRotate = new Tuple<double, double, double, double, double, double>(tx, ty, tz, rx, ry, rz);
+
+            return output;
+
+        }
+        public static void LoadMatrix4x4ArrayFromHalconDatFile(string filePath,out Matrix4x4 m, out Tuple<double, double, double, double, double, double> shiftRotate)
+        {
+            
+            double rx = 0, ry = 0, rz = 0, tx = 0, ty = 0, tz = 0;
+            m = Matrix4x4.Identity;
+            if (File.Exists(filePath))
+            {
+                string ext = Path.GetExtension(filePath);
+                CoordMatrix coordMatrix = new CoordMatrix();
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    if (ext.ToUpper() == ".DAT")
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            string readData = sr.ReadLine();
+                            if (readData == "") continue;
+                            char firstChar = readData[0];
+                            string[] splitData;
+                            if (firstChar == 'r')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    rx = double.Parse(splitData[1]);
+                                    ry = double.Parse(splitData[2]);
+                                    rz = double.Parse(splitData[3]);
+                                    Rotate r = new Rotate();
+                                    r.AddRotateSeq(RefAxis.Z, rz);
+                                    r.AddRotateSeq(RefAxis.Y, ry);
+                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    coordMatrix.AddSeq(r);
+                                }
+                            }
+                            else if (firstChar == 't')
+                            {
+                                splitData = readData.Split(' ');
+                                if (splitData.Length >= 4)
+                                {
+                                    tx = double.Parse(splitData[1]);
+                                    ty = double.Parse(splitData[2]);
+                                    tz = double.Parse(splitData[3]);
+                                    Shift s = new Shift(tx, ty, tz);
+                                    coordMatrix.AddSeq(s);
+                                }
+
+                            }
+                            else continue;
+                        }
+                        coordMatrix.EndAddMatrix();
+                        m = coordMatrix.FinalMatrix4;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            shiftRotate = new Tuple<double, double, double, double, double, double>(tx, ty, tz, rx, ry, rz);
+        }
+
         public static double[,] LoadMatrix4x4ArrayFromHalconDatFile(string filePath)
         {
             double[,] output = new double[4, 4];

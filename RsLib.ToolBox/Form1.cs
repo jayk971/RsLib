@@ -1,4 +1,5 @@
-﻿using RsLib.Common;
+﻿using Accord.Math;
+using RsLib.Common;
 using RsLib.Display3D;
 using RsLib.LogMgr;
 using RsLib.PointCloudLib;
@@ -249,7 +250,16 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            using (OpenFileDialog op = new OpenFileDialog())
+            {
+                op.Filter = "Halcon Transform Dat File|*.dat";
+                if(op.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = op.FileName;
+                    PointCloudCommon.LoadMatrix4x4ArrayFromHalconDatFile(filePath, out Matrix4x4 m, out Tuple<double, double, double, double, double, double> t);
+                    PointCloudCommon.SaveMatrix4x4(m, "d:\\aa.m44", ' ');
+                }
+            }
             
 
         }

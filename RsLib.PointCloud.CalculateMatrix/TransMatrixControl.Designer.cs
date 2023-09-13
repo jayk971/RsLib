@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransMatrixControl));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btn_ResetEuler = new System.Windows.Forms.Button();
             this.tbx_RX = new System.Windows.Forms.TextBox();
@@ -73,14 +72,13 @@
             this.lbl_Q2 = new System.Windows.Forms.Label();
             this.btn_ResetIdentity = new System.Windows.Forms.Button();
             this.lbl_Q3 = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.btn_EulerToMatrix = new System.Windows.Forms.Button();
             this.btn_MatrixToEuler = new System.Windows.Forms.Button();
+            this.btn_SaveMatrix = new System.Windows.Forms.Button();
+            this.btn_LoadEulerData = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -102,8 +100,9 @@
             this.tableLayoutPanel1.Controls.Add(this.tbx_SY, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.tbx_SZ, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.tbx_SX, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.btn_LoadEulerData, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 35);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel2.SetRowSpan(this.tableLayoutPanel1, 4);
@@ -112,7 +111,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 306);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 338);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // btn_ResetEuler
@@ -128,7 +127,7 @@
             // tbx_RX
             // 
             this.tbx_RX.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_RX.Location = new System.Drawing.Point(53, 138);
+            this.tbx_RX.Location = new System.Drawing.Point(53, 154);
             this.tbx_RX.Name = "tbx_RX";
             this.tbx_RX.Size = new System.Drawing.Size(60, 22);
             this.tbx_RX.TabIndex = 24;
@@ -140,7 +139,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Location = new System.Drawing.Point(53, 100);
+            this.label9.Location = new System.Drawing.Point(53, 116);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 35);
             this.label9.TabIndex = 8;
@@ -151,7 +150,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Location = new System.Drawing.Point(119, 100);
+            this.label10.Location = new System.Drawing.Point(119, 116);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(60, 35);
             this.label10.TabIndex = 9;
@@ -162,7 +161,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Location = new System.Drawing.Point(185, 100);
+            this.label11.Location = new System.Drawing.Point(185, 116);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(60, 35);
             this.label11.TabIndex = 10;
@@ -173,7 +172,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Location = new System.Drawing.Point(3, 135);
+            this.label12.Location = new System.Drawing.Point(3, 151);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(44, 35);
             this.label12.TabIndex = 11;
@@ -184,7 +183,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label13.Location = new System.Drawing.Point(3, 170);
+            this.label13.Location = new System.Drawing.Point(3, 186);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(44, 35);
             this.label13.TabIndex = 12;
@@ -194,7 +193,7 @@
             // tbx_RY
             // 
             this.tbx_RY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_RY.Location = new System.Drawing.Point(119, 138);
+            this.tbx_RY.Location = new System.Drawing.Point(119, 154);
             this.tbx_RY.Name = "tbx_RY";
             this.tbx_RY.Size = new System.Drawing.Size(60, 22);
             this.tbx_RY.TabIndex = 25;
@@ -205,7 +204,7 @@
             // tbx_RZ
             // 
             this.tbx_RZ.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_RZ.Location = new System.Drawing.Point(185, 138);
+            this.tbx_RZ.Location = new System.Drawing.Point(185, 154);
             this.tbx_RZ.Name = "tbx_RZ";
             this.tbx_RZ.Size = new System.Drawing.Size(60, 22);
             this.tbx_RZ.TabIndex = 26;
@@ -216,7 +215,7 @@
             // tbx_SY
             // 
             this.tbx_SY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_SY.Location = new System.Drawing.Point(119, 173);
+            this.tbx_SY.Location = new System.Drawing.Point(119, 189);
             this.tbx_SY.Name = "tbx_SY";
             this.tbx_SY.Size = new System.Drawing.Size(60, 22);
             this.tbx_SY.TabIndex = 28;
@@ -227,7 +226,7 @@
             // tbx_SZ
             // 
             this.tbx_SZ.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_SZ.Location = new System.Drawing.Point(185, 173);
+            this.tbx_SZ.Location = new System.Drawing.Point(185, 189);
             this.tbx_SZ.Name = "tbx_SZ";
             this.tbx_SZ.Size = new System.Drawing.Size(60, 22);
             this.tbx_SZ.TabIndex = 29;
@@ -238,7 +237,7 @@
             // tbx_SX
             // 
             this.tbx_SX.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_SX.Location = new System.Drawing.Point(53, 173);
+            this.tbx_SX.Location = new System.Drawing.Point(53, 189);
             this.tbx_SX.Name = "tbx_SX";
             this.tbx_SX.Size = new System.Drawing.Size(60, 22);
             this.tbx_SX.TabIndex = 27;
@@ -252,20 +251,19 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 2, 1);
-            this.tableLayoutPanel2.Controls.Add(this.toolStrip1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn_EulerToMatrix, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.btn_MatrixToEuler, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btn_EulerToMatrix, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.btn_MatrixToEuler, 1, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel2.RowCount = 4;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(567, 344);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
@@ -306,8 +304,9 @@
             this.tableLayoutPanel3.Controls.Add(this.lbl_Q2, 3, 6);
             this.tableLayoutPanel3.Controls.Add(this.btn_ResetIdentity, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.lbl_Q3, 4, 6);
+            this.tableLayoutPanel3.Controls.Add(this.btn_SaveMatrix, 4, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(315, 35);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(315, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 7;
             this.tableLayoutPanel2.SetRowSpan(this.tableLayoutPanel3, 4);
@@ -319,14 +318,14 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(249, 306);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(249, 338);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(41, 73);
+            this.label1.Location = new System.Drawing.Point(41, 89);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 20);
             this.label1.TabIndex = 0;
@@ -337,7 +336,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(93, 73);
+            this.label2.Location = new System.Drawing.Point(93, 89);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 20);
             this.label2.TabIndex = 1;
@@ -348,7 +347,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(145, 73);
+            this.label3.Location = new System.Drawing.Point(145, 89);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 20);
             this.label3.TabIndex = 2;
@@ -359,7 +358,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(197, 73);
+            this.label4.Location = new System.Drawing.Point(197, 89);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 20);
             this.label4.TabIndex = 3;
@@ -370,7 +369,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(3, 93);
+            this.label5.Location = new System.Drawing.Point(3, 109);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(32, 35);
             this.label5.TabIndex = 4;
@@ -381,7 +380,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 128);
+            this.label6.Location = new System.Drawing.Point(3, 144);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(32, 35);
             this.label6.TabIndex = 5;
@@ -392,7 +391,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 163);
+            this.label7.Location = new System.Drawing.Point(3, 179);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(32, 35);
             this.label7.TabIndex = 6;
@@ -403,7 +402,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Location = new System.Drawing.Point(3, 198);
+            this.label8.Location = new System.Drawing.Point(3, 214);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(32, 35);
             this.label8.TabIndex = 7;
@@ -413,7 +412,7 @@
             // tbx_M00
             // 
             this.tbx_M00.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M00.Location = new System.Drawing.Point(41, 96);
+            this.tbx_M00.Location = new System.Drawing.Point(41, 112);
             this.tbx_M00.Name = "tbx_M00";
             this.tbx_M00.Size = new System.Drawing.Size(46, 22);
             this.tbx_M00.TabIndex = 8;
@@ -424,7 +423,7 @@
             // tbx_M10
             // 
             this.tbx_M10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M10.Location = new System.Drawing.Point(41, 131);
+            this.tbx_M10.Location = new System.Drawing.Point(41, 147);
             this.tbx_M10.Name = "tbx_M10";
             this.tbx_M10.Size = new System.Drawing.Size(46, 22);
             this.tbx_M10.TabIndex = 9;
@@ -435,7 +434,7 @@
             // tbx_M20
             // 
             this.tbx_M20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M20.Location = new System.Drawing.Point(41, 166);
+            this.tbx_M20.Location = new System.Drawing.Point(41, 182);
             this.tbx_M20.Name = "tbx_M20";
             this.tbx_M20.Size = new System.Drawing.Size(46, 22);
             this.tbx_M20.TabIndex = 10;
@@ -446,7 +445,7 @@
             // tbx_M30
             // 
             this.tbx_M30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M30.Location = new System.Drawing.Point(41, 201);
+            this.tbx_M30.Location = new System.Drawing.Point(41, 217);
             this.tbx_M30.Name = "tbx_M30";
             this.tbx_M30.Size = new System.Drawing.Size(46, 22);
             this.tbx_M30.TabIndex = 11;
@@ -457,7 +456,7 @@
             // tbx_M01
             // 
             this.tbx_M01.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M01.Location = new System.Drawing.Point(93, 96);
+            this.tbx_M01.Location = new System.Drawing.Point(93, 112);
             this.tbx_M01.Name = "tbx_M01";
             this.tbx_M01.Size = new System.Drawing.Size(46, 22);
             this.tbx_M01.TabIndex = 12;
@@ -468,7 +467,7 @@
             // tbx_M11
             // 
             this.tbx_M11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M11.Location = new System.Drawing.Point(93, 131);
+            this.tbx_M11.Location = new System.Drawing.Point(93, 147);
             this.tbx_M11.Name = "tbx_M11";
             this.tbx_M11.Size = new System.Drawing.Size(46, 22);
             this.tbx_M11.TabIndex = 13;
@@ -479,7 +478,7 @@
             // tbx_M21
             // 
             this.tbx_M21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M21.Location = new System.Drawing.Point(93, 166);
+            this.tbx_M21.Location = new System.Drawing.Point(93, 182);
             this.tbx_M21.Name = "tbx_M21";
             this.tbx_M21.Size = new System.Drawing.Size(46, 22);
             this.tbx_M21.TabIndex = 14;
@@ -490,7 +489,7 @@
             // tbx_M31
             // 
             this.tbx_M31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M31.Location = new System.Drawing.Point(93, 201);
+            this.tbx_M31.Location = new System.Drawing.Point(93, 217);
             this.tbx_M31.Name = "tbx_M31";
             this.tbx_M31.Size = new System.Drawing.Size(46, 22);
             this.tbx_M31.TabIndex = 15;
@@ -501,7 +500,7 @@
             // tbx_M02
             // 
             this.tbx_M02.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M02.Location = new System.Drawing.Point(145, 96);
+            this.tbx_M02.Location = new System.Drawing.Point(145, 112);
             this.tbx_M02.Name = "tbx_M02";
             this.tbx_M02.Size = new System.Drawing.Size(46, 22);
             this.tbx_M02.TabIndex = 16;
@@ -512,7 +511,7 @@
             // tbx_M12
             // 
             this.tbx_M12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M12.Location = new System.Drawing.Point(145, 131);
+            this.tbx_M12.Location = new System.Drawing.Point(145, 147);
             this.tbx_M12.Name = "tbx_M12";
             this.tbx_M12.Size = new System.Drawing.Size(46, 22);
             this.tbx_M12.TabIndex = 17;
@@ -523,7 +522,7 @@
             // tbx_M22
             // 
             this.tbx_M22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M22.Location = new System.Drawing.Point(145, 166);
+            this.tbx_M22.Location = new System.Drawing.Point(145, 182);
             this.tbx_M22.Name = "tbx_M22";
             this.tbx_M22.Size = new System.Drawing.Size(46, 22);
             this.tbx_M22.TabIndex = 18;
@@ -534,7 +533,7 @@
             // tbx_M32
             // 
             this.tbx_M32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M32.Location = new System.Drawing.Point(145, 201);
+            this.tbx_M32.Location = new System.Drawing.Point(145, 217);
             this.tbx_M32.Name = "tbx_M32";
             this.tbx_M32.Size = new System.Drawing.Size(46, 22);
             this.tbx_M32.TabIndex = 19;
@@ -545,7 +544,7 @@
             // tbx_M03
             // 
             this.tbx_M03.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M03.Location = new System.Drawing.Point(197, 96);
+            this.tbx_M03.Location = new System.Drawing.Point(197, 112);
             this.tbx_M03.Name = "tbx_M03";
             this.tbx_M03.Size = new System.Drawing.Size(49, 22);
             this.tbx_M03.TabIndex = 20;
@@ -556,7 +555,7 @@
             // tbx_M13
             // 
             this.tbx_M13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M13.Location = new System.Drawing.Point(197, 131);
+            this.tbx_M13.Location = new System.Drawing.Point(197, 147);
             this.tbx_M13.Name = "tbx_M13";
             this.tbx_M13.Size = new System.Drawing.Size(49, 22);
             this.tbx_M13.TabIndex = 21;
@@ -567,7 +566,7 @@
             // tbx_M23
             // 
             this.tbx_M23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M23.Location = new System.Drawing.Point(197, 166);
+            this.tbx_M23.Location = new System.Drawing.Point(197, 182);
             this.tbx_M23.Name = "tbx_M23";
             this.tbx_M23.Size = new System.Drawing.Size(49, 22);
             this.tbx_M23.TabIndex = 22;
@@ -578,7 +577,7 @@
             // tbx_M33
             // 
             this.tbx_M33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M33.Location = new System.Drawing.Point(197, 201);
+            this.tbx_M33.Location = new System.Drawing.Point(197, 217);
             this.tbx_M33.Name = "tbx_M33";
             this.tbx_M33.Size = new System.Drawing.Size(49, 22);
             this.tbx_M33.TabIndex = 23;
@@ -590,7 +589,7 @@
             // 
             this.lbl_Q0.AutoSize = true;
             this.lbl_Q0.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q0.Location = new System.Drawing.Point(41, 233);
+            this.lbl_Q0.Location = new System.Drawing.Point(41, 249);
             this.lbl_Q0.Name = "lbl_Q0";
             this.lbl_Q0.Size = new System.Drawing.Size(46, 12);
             this.lbl_Q0.TabIndex = 25;
@@ -601,7 +600,7 @@
             // 
             this.lbl_Q1.AutoSize = true;
             this.lbl_Q1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q1.Location = new System.Drawing.Point(93, 233);
+            this.lbl_Q1.Location = new System.Drawing.Point(93, 249);
             this.lbl_Q1.Name = "lbl_Q1";
             this.lbl_Q1.Size = new System.Drawing.Size(46, 12);
             this.lbl_Q1.TabIndex = 26;
@@ -612,7 +611,7 @@
             // 
             this.lbl_Q2.AutoSize = true;
             this.lbl_Q2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q2.Location = new System.Drawing.Point(145, 233);
+            this.lbl_Q2.Location = new System.Drawing.Point(145, 249);
             this.lbl_Q2.Name = "lbl_Q2";
             this.lbl_Q2.Size = new System.Drawing.Size(46, 12);
             this.lbl_Q2.TabIndex = 27;
@@ -633,41 +632,18 @@
             // 
             this.lbl_Q3.AutoSize = true;
             this.lbl_Q3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q3.Location = new System.Drawing.Point(197, 233);
+            this.lbl_Q3.Location = new System.Drawing.Point(197, 249);
             this.lbl_Q3.Name = "lbl_Q3";
             this.lbl_Q3.Size = new System.Drawing.Size(49, 12);
             this.lbl_Q3.TabIndex = 28;
             this.lbl_Q3.Text = "0";
             this.lbl_Q3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // toolStrip1
-            // 
-            this.tableLayoutPanel2.SetColumnSpan(this.toolStrip1, 3);
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(567, 32);
-            this.toolStrip1.TabIndex = 2;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(36, 29);
-            this.toolStripButton1.Text = "toolStripButton1";
-            // 
             // btn_EulerToMatrix
             // 
             this.btn_EulerToMatrix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_EulerToMatrix.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.right_48px;
-            this.btn_EulerToMatrix.Location = new System.Drawing.Point(257, 151);
+            this.btn_EulerToMatrix.Location = new System.Drawing.Point(257, 135);
             this.btn_EulerToMatrix.Name = "btn_EulerToMatrix";
             this.btn_EulerToMatrix.Size = new System.Drawing.Size(52, 34);
             this.btn_EulerToMatrix.TabIndex = 3;
@@ -678,12 +654,33 @@
             // 
             this.btn_MatrixToEuler.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_MatrixToEuler.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.left_48px;
-            this.btn_MatrixToEuler.Location = new System.Drawing.Point(257, 191);
+            this.btn_MatrixToEuler.Location = new System.Drawing.Point(257, 175);
             this.btn_MatrixToEuler.Name = "btn_MatrixToEuler";
             this.btn_MatrixToEuler.Size = new System.Drawing.Size(52, 34);
             this.btn_MatrixToEuler.TabIndex = 4;
             this.btn_MatrixToEuler.UseVisualStyleBackColor = true;
             this.btn_MatrixToEuler.Click += new System.EventHandler(this.btn_MatrixToEuler_Click);
+            // 
+            // btn_SaveMatrix
+            // 
+            this.btn_SaveMatrix.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_SaveMatrix.Location = new System.Drawing.Point(197, 3);
+            this.btn_SaveMatrix.Name = "btn_SaveMatrix";
+            this.btn_SaveMatrix.Size = new System.Drawing.Size(49, 23);
+            this.btn_SaveMatrix.TabIndex = 29;
+            this.btn_SaveMatrix.Text = "Save";
+            this.btn_SaveMatrix.UseVisualStyleBackColor = true;
+            this.btn_SaveMatrix.Click += new System.EventHandler(this.btn_SaveMatrix_Click);
+            // 
+            // btn_LoadEulerData
+            // 
+            this.btn_LoadEulerData.Location = new System.Drawing.Point(119, 3);
+            this.btn_LoadEulerData.Name = "btn_LoadEulerData";
+            this.btn_LoadEulerData.Size = new System.Drawing.Size(46, 23);
+            this.btn_LoadEulerData.TabIndex = 30;
+            this.btn_LoadEulerData.Text = "Load";
+            this.btn_LoadEulerData.UseVisualStyleBackColor = true;
+            this.btn_LoadEulerData.Click += new System.EventHandler(this.btn_LoadEulerData_Click);
             // 
             // TransMatrixControl
             // 
@@ -695,11 +692,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -709,8 +703,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Button btn_EulerToMatrix;
         private System.Windows.Forms.Button btn_MatrixToEuler;
         private System.Windows.Forms.Label label9;
@@ -754,5 +746,7 @@
         private System.Windows.Forms.Label lbl_Q2;
         private System.Windows.Forms.Label lbl_Q3;
         private System.Windows.Forms.Button btn_ResetEuler;
+        private System.Windows.Forms.Button btn_SaveMatrix;
+        private System.Windows.Forms.Button btn_LoadEulerData;
     }
 }
