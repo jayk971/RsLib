@@ -49,11 +49,12 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage_EJ1500 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -246,6 +247,7 @@ namespace RsLib.DemoForm
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.button7);
             this.tabPage1.Controls.Add(this.button6);
@@ -257,9 +259,19 @@ namespace RsLib.DemoForm
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 127);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(126, 126);
+            this.button7.Location = new System.Drawing.Point(6, 66);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 1;
@@ -269,7 +281,7 @@ namespace RsLib.DemoForm
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(126, 72);
+            this.button6.Location = new System.Drawing.Point(6, 23);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 0;
@@ -297,15 +309,12 @@ namespace RsLib.DemoForm
             this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // button1
+            // panel1
             // 
-            this.button1.Location = new System.Drawing.Point(341, 214);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.panel1.Location = new System.Drawing.Point(100, 23);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(650, 399);
+            this.panel1.TabIndex = 3;
             // 
             // Form1
             // 
@@ -353,6 +362,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

@@ -133,6 +133,26 @@ namespace RsLib.PointCloudLib.CalculateMatrix.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap left_48px {
+            get {
+                object obj = ResourceManager.GetObject("left_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap right_48px {
+            get {
+                object obj = ResourceManager.GetObject("right_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap RobotBase {
             get {
                 object obj = ResourceManager.GetObject("RobotBase", resourceCulture);

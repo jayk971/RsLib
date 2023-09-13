@@ -109,6 +109,12 @@
     <Compile Include="TransformControl.Designer.cs">
       <DependentUpon>TransformControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="TransMatrixControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TransMatrixControl.Designer.cs">
+      <DependentUpon>TransMatrixControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CalculateMatrixControl.resx">
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TransformControl.resx">
       <DependentUpon>TransformControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TransMatrixControl.resx">
+      <DependentUpon>TransMatrixControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +169,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8_opened_folder_1_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\right_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left_48px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

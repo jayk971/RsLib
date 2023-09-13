@@ -2,6 +2,7 @@
 using RsLib.Display3D;
 using RsLib.LogMgr;
 using RsLib.PointCloudLib;
+using RsLib.PointCloudLib.CalculateMatrix;
 using RsLib.SerialPortLib;
 using RsLib.TCP.Control;
 using System;
@@ -24,6 +25,7 @@ namespace RsLib.DemoForm
 
         EJ1500 _EJ1500 = new EJ1500(0);
         EJ1500Control eJ1500Ctrl;
+        TransMatrixControl transMatrixControl = new TransMatrixControl();
         public Form1()
         {
             InitializeComponent();
@@ -48,7 +50,8 @@ namespace RsLib.DemoForm
 
             tableLayoutPanel2.Controls.Add(zoomCtrl, 0, 0);
             tableLayoutPanel2.Controls.Add(zoom1Ctrl, 1, 0);
-
+            transMatrixControl.Dock = DockStyle.Fill;
+            panel1.Controls.Add(transMatrixControl);
             double test = 70;
             double tt = Math.Round(test / 100, 2);
             label1.Text = tt.ToString("F2");
@@ -246,23 +249,9 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Rotate r = new Rotate();
-            r.AddRotateSeq(RefAxis.Z, 85);
-            r.AddRotateSeq(RefAxis.Y, 60);
-            r.AddRotateSeq(RefAxis.X, 50);
-            r.EndAddMatrix();
-            double[] solvedQ = Rotate.SolveQ(r.FinalMatrix4);
-            List<RotateUnit> rr = Rotate.SolveRzRyRx(r.FinalMatrix4);
-            double[] Q = r.Q.QArray;
-            Accord.Math.Matrix4x4 m = r.Q.Matrix44;
-            List<RotateUnit> rr2 = Rotate.SolveRzRyRx(m);
-            Rotate r2 = new Rotate();
-            r2.AddRotateSeq(RefAxis.Z, -11.48);
-            r2.AddRotateSeq(RefAxis.Y, 4.32);
-            r2.AddRotateSeq(RefAxis.X, -0.88);
-            r2.EndAddMatrix();
 
-            double[] Q2 = r2.Q.QArray;
+            
+
         }
     }
 }

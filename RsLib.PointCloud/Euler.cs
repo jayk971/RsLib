@@ -410,7 +410,7 @@ namespace RsLib.PointCloudLib
             finalMatrix4 = Matrix4x4.Identity;
             for (int i = 0; i < seq.Count; i++)
             {
-                finalMatrix4 *=  seq[i].matrix4;
+                finalMatrix4 = Matrix4x4.Multiply( seq[i].matrix4,finalMatrix4);
             }
             isMatrixCalculated = true;
         }
@@ -486,6 +486,20 @@ namespace RsLib.PointCloudLib
             {
                 throw ex;
             }
+        }
+        public static void SolveMatrixRzRyRxShift(Matrix4x4 m,out Rotate r, out Shift s)
+        {
+            s = new Shift(m.V03,m.V13,m.V23);
+            Vector3D vx = new Vector3D(m.V00,m.V10,m.V20);
+            Vector3D vy = new Vector3D(m.V01, m.V11, m.V21);
+            Vector3D vz = new Vector3D(m.V02, m.V12, m.V22);
+
+            vx.UnitVector();
+            vy.UnitVector();
+            vz.UnitVector();
+
+            r = new Rotate(vx, vy, vz);
+
         }
     }
     public class Rotate : CoordMatrix
@@ -681,7 +695,7 @@ namespace RsLib.PointCloudLib
             return matrix;
         }
 
-#if !m
+#if m
         public static double[] SolveQ(Matrix4x4 inMatrix)
         {
             double q00 = Math.Sqrt(1 + inMatrix.V00 + inMatrix.V11 + inMatrix.V22);
@@ -771,26 +785,26 @@ namespace RsLib.PointCloudLib
             RotateUnit ry = new RotateUnit(RefAxis.Y);
             RotateUnit rz = new RotateUnit(RefAxis.Z);
 
-            if (inMatrix.V20 < 1)
+            if (inMatrix.V02 < 1)
             {
-                if (inMatrix.V20 > -1)
+                if (inMatrix.V02 > -1)
                 {
-                    ry.Value = Math.Asin(-inMatrix.V20);
-                    rz.Value = Math.Atan2(inMatrix.V10, inMatrix.V00);
-                    rx.Value = Math.Atan2(inMatrix.V21, inMatrix.V22);
+                    ry.Value = Math.Asin(inMatrix.V02);
+                    rx.Value = Math.Atan2(-inMatrix.V12, inMatrix.V22);
+                    rz.Value = Math.Atan2(-inMatrix.V01, inMatrix.V00);
                 }
                 else
                 {
-                    ry.Value = Math.PI / 2;
-                    rz.Value = -Math.Atan2(-inMatrix.V12, inMatrix.V11);
-                    rx.Value = 0;
+                    ry.Value = -Math.PI / 2;
+                    rx.Value = -Math.Atan2(inMatrix.V10, inMatrix.V11);
+                    rz.Value = 0;
                 }
             }
             else
             {
-                ry.Value = -Math.PI / 2;
-                rz.Value = Math.Atan2(-inMatrix.V12, inMatrix.V11);
-                rx.Value = 0;
+                ry.Value = Math.PI / 2;
+                rx.Value = Math.Atan2(inMatrix.V10, inMatrix.V11);
+                rz.Value = 0;
             }
             List<RotateUnit> output = new List<RotateUnit>();
             output.Add(rz);
@@ -806,6 +820,39 @@ namespace RsLib.PointCloudLib
     }
     public class Shift : CoordMatrix
     {
+        public double X
+        {
+            get
+            {
+                foreach (var item in seq)
+                {
+                    if (item.RefAxis == RefAxis.X) return item.Value;
+                }
+                return 0;
+            }
+        }
+        public double Y
+        {
+            get
+            {
+                foreach (var item in seq)
+                {
+                    if (item.RefAxis == RefAxis.Y) return item.Value;
+                }
+                return 0;
+            }
+        }
+        public double Z
+        {
+            get
+            {
+                foreach (var item in seq)
+                {
+                    if (item.RefAxis == RefAxis.Z) return item.Value;
+                }
+                return 0;
+            }
+        }
         public Shift()
         {
 
@@ -831,26 +878,26 @@ namespace RsLib.PointCloudLib
         public double Q3 => Math.Round(V.Z,7);
         public double Determin => Math.Round(Math.Sqrt(Math.Pow(Q0, 2) + Math.Pow(Q1, 2) + Math.Pow(Q2, 2) + Math.Pow(Q3, 2)),7);
 
-        public Matrix4x4 Matrix44
-        {
-            get
-            {
-                Normalize();
-                Matrix4x4 output = Matrix4x4.Identity;
-                output.V00 = (float)(Math.Pow(Q0,2)+Math.Pow(Q1,2)-Math.Pow(Q2,2)-Math.Pow(Q3,2));
-                output.V01 = (float)(2 * (Q1 * Q2 - Q0 * Q3));
-                output.V02 = (float)(2 * (Q1 * Q3 + Q0 * Q2));
+        //public Matrix4x4 Matrix44
+        //{
+        //    get
+        //    {
+        //        Normalize();
+        //        Matrix4x4 output = Matrix4x4.Identity;
+        //        output.V00 = (float)(Math.Pow(Q0,2)+Math.Pow(Q1,2)-Math.Pow(Q2,2)-Math.Pow(Q3,2));
+        //        output.V01 = (float)(2 * (Q1 * Q2 - Q0 * Q3));
+        //        output.V02 = (float)(2 * (Q1 * Q3 + Q0 * Q2));
                 
-                output.V10 = (float)(2 * (Q1 * Q2 + Q0 * Q3));
-                output.V11 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) + Math.Pow(Q2, 2) - Math.Pow(Q3, 2));
-                output.V12 = (float)(2 * (Q2 * Q3 - Q0 * Q1));
+        //        output.V10 = (float)(2 * (Q1 * Q2 + Q0 * Q3));
+        //        output.V11 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) + Math.Pow(Q2, 2) - Math.Pow(Q3, 2));
+        //        output.V12 = (float)(2 * (Q2 * Q3 - Q0 * Q1));
 
-                output.V20 = (float)(2 * (Q3 * Q1 - Q0 * Q2));
-                output.V21 = (float)(2 * (Q3 * Q2 + Q0 * Q1));
-                output.V22 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) - Math.Pow(Q2, 2) + Math.Pow(Q3, 2));
-                return output;
-            }
-        }
+        //        output.V20 = (float)(2 * (Q3 * Q1 - Q0 * Q2));
+        //        output.V21 = (float)(2 * (Q3 * Q2 + Q0 * Q1));
+        //        output.V22 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) - Math.Pow(Q2, 2) + Math.Pow(Q3, 2));
+        //        return output;
+        //    }
+        //}
         public Quaternion()
         {
 
