@@ -4,8 +4,10 @@ using Accord.Statistics.Kernels;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace RsLib.PointCloudLib
 {
@@ -609,17 +611,20 @@ namespace RsLib.PointCloudLib
             vy.UnitVector();
             vz.UnitVector();
             Matrix4x4 matrix = Matrix4x4.Identity;
-
+            /*
+             Row : Fix body coordinate relate to world coordinate
+            Column : World coordinate relate to fix body coordinate
+             */
             matrix.V00 = (float)vx.X;
-            matrix.V10 = (float)vx.Y;
-            matrix.V20 = (float)vx.Z;
+            matrix.V01 = (float)vx.Y;
+            matrix.V02 = (float)vx.Z;
 
-            matrix.V01 = (float)vy.X;
+            matrix.V10 = (float)vy.X;
             matrix.V11 = (float)vy.Y;
-            matrix.V21 = (float)vy.Z;
+            matrix.V12 = (float)vy.Z;
 
-            matrix.V02 = (float)vz.X;
-            matrix.V12 = (float)vz.Y;
+            matrix.V20 = (float)vz.X;
+            matrix.V21 = (float)vz.Y;
             matrix.V22 = (float)vz.Z;
             return matrix;
         }
@@ -629,17 +634,20 @@ namespace RsLib.PointCloudLib
             vy.Normalize();
             vz.Normalize();
             Matrix4x4 matrix = Matrix4x4.Identity;
-
+            /*
+             Row : Fix body coordinate relate to world coordinate
+            Column : World coordinate relate to fix body coordinate
+             */
             matrix.V00 = (float)vx.X;
-            matrix.V10 = (float)vx.Y;
-            matrix.V20 = (float)vx.Z;
+            matrix.V01 = (float)vx.Y;
+            matrix.V02 = (float)vx.Z;
 
-            matrix.V01 = (float)vy.X;
+            matrix.V10 = (float)vy.X;
             matrix.V11 = (float)vy.Y;
-            matrix.V21 = (float)vy.Z;
+            matrix.V12 = (float)vy.Z;
 
-            matrix.V02 = (float)vz.X;
-            matrix.V12 = (float)vz.Y;
+            matrix.V20 = (float)vz.X;
+            matrix.V21 = (float)vz.Y;
             matrix.V22 = (float)vz.Z;
             return matrix;
         }
@@ -738,21 +746,21 @@ namespace RsLib.PointCloudLib
             {
                 if (inMatrix.V02 > -1)
                 {
-                    ry.Value = Math.Asin(inMatrix.V02);
-                    rx.Value = Math.Atan2(-inMatrix.V12, inMatrix.V22);
-                    rz.Value = Math.Atan2(-inMatrix.V01, inMatrix.V00);
+                    rx.Value = Math.Atan2(inMatrix.V12, inMatrix.V22);
+                    ry.Value = -Math.Asin(inMatrix.V02);
+                    rz.Value = Math.Atan2(inMatrix.V01, inMatrix.V00);
                 }
-                else
+                else // inMatrix.V02 == -1
                 {
-                    ry.Value = -Math.PI / 2;
-                    rx.Value = -Math.Atan2(inMatrix.V10, inMatrix.V11);
+                    rx.Value = Math.Atan2(inMatrix.V10, inMatrix.V11);
+                    ry.Value = Math.PI / 2;
                     rz.Value = 0;
                 }
             }
-            else
+            else // inMatrix.V02 == 1
             {
-                ry.Value = Math.PI / 2;
-                rx.Value = Math.Atan2(inMatrix.V10, inMatrix.V11);
+                rx.Value = -Math.Atan2(inMatrix.V10, inMatrix.V11);
+                ry.Value = -Math.PI / 2;
                 rz.Value = 0;
             }
             List<RotateUnit> output = new List<RotateUnit>();

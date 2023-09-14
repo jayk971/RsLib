@@ -250,17 +250,22 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog op = new OpenFileDialog())
-            {
-                op.Filter = "Halcon Transform Dat File|*.dat";
-                if(op.ShowDialog() == DialogResult.OK)
-                {
-                    string filePath = op.FileName;
-                    PointCloudCommon.LoadMatrix4x4ArrayFromHalconDatFile(filePath, out Matrix4x4 m, out Tuple<double, double, double, double, double, double> t);
-                    PointCloudCommon.SaveMatrix4x4(m, "d:\\aa.m44", ' ');
-                }
-            }
-            
+            // Y 90 X -45
+
+            Vector3 vx = new Vector3(0f, 0f, -1f);
+            Vector3 vy = new Vector3(-0.707f, 0.707f, 0f);
+            Vector3 vz = new Vector3(0.707f, 0.707f, 0f);
+
+            Rotate r = new Rotate(vx,vy,vz);
+
+            //Y -90 X -45
+
+            Vector3 vx2 = new Vector3(0f, 0f, 1f);
+            Vector3 vy2 = new Vector3(0.707f, 0.707f, 0f);
+            Vector3 vz2 = new Vector3(-0.707f, 0.707f, 0f);
+
+            Rotate r2 = new Rotate(vx2, vy2, vz2);
+
 
         }
     }
