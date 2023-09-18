@@ -87,6 +87,8 @@ namespace RsLib.Display3D
             this.addAllToCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reversePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smoothVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smoothVzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolCmb_LineIndex = new System.Windows.Forms.ToolStripComboBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -105,6 +107,7 @@ namespace RsLib.Display3D
             this.trackBar_RotateSensitivity = new System.Windows.Forms.TrackBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.smoothVyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -628,9 +631,10 @@ namespace RsLib.Display3D
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToolStripMenuItem,
             this.clearCollectionToolStripMenuItem,
-            this.reversePathToolStripMenuItem});
+            this.reversePathToolStripMenuItem,
+            this.smoothVectorToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(177, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(177, 92);
             // 
             // addToolStripMenuItem
             // 
@@ -665,6 +669,22 @@ namespace RsLib.Display3D
             this.reversePathToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.reversePathToolStripMenuItem.Text = "Reverse Path";
             this.reversePathToolStripMenuItem.Click += new System.EventHandler(this.reversePathToolStripMenuItem_Click);
+            // 
+            // smoothVectorToolStripMenuItem
+            // 
+            this.smoothVectorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smoothVzToolStripMenuItem,
+            this.smoothVyToolStripMenuItem});
+            this.smoothVectorToolStripMenuItem.Name = "smoothVectorToolStripMenuItem";
+            this.smoothVectorToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.smoothVectorToolStripMenuItem.Text = "Smooth Vector";
+            // 
+            // smoothVzToolStripMenuItem
+            // 
+            this.smoothVzToolStripMenuItem.Name = "smoothVzToolStripMenuItem";
+            this.smoothVzToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smoothVzToolStripMenuItem.Text = "Smooth Vx";
+            this.smoothVzToolStripMenuItem.Click += new System.EventHandler(this.smoothVxToolStripMenuItem_Click);
             // 
             // toolStripLabel1
             // 
@@ -936,6 +956,13 @@ namespace RsLib.Display3D
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // smoothVyToolStripMenuItem
+            // 
+            this.smoothVyToolStripMenuItem.Name = "smoothVyToolStripMenuItem";
+            this.smoothVyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smoothVyToolStripMenuItem.Text = "Smooth Vy";
+            this.smoothVyToolStripMenuItem.Click += new System.EventHandler(this.smoothVyToolStripMenuItem_Click);
+            // 
             // Display3DControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1050,5 +1077,8 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripMenuItem lefeViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frontViewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smoothVectorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smoothVzToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smoothVyToolStripMenuItem;
     }
 }

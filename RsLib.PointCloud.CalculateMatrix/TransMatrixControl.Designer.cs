@@ -41,43 +41,23 @@
             this.tbx_SY = new System.Windows.Forms.TextBox();
             this.tbx_SZ = new System.Windows.Forms.TextBox();
             this.tbx_SX = new System.Windows.Forms.TextBox();
+            this.btn_LoadEulerData = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.tbx_M00 = new System.Windows.Forms.TextBox();
-            this.tbx_M10 = new System.Windows.Forms.TextBox();
-            this.tbx_M20 = new System.Windows.Forms.TextBox();
-            this.tbx_M30 = new System.Windows.Forms.TextBox();
-            this.tbx_M01 = new System.Windows.Forms.TextBox();
-            this.tbx_M11 = new System.Windows.Forms.TextBox();
-            this.tbx_M21 = new System.Windows.Forms.TextBox();
-            this.tbx_M31 = new System.Windows.Forms.TextBox();
-            this.tbx_M02 = new System.Windows.Forms.TextBox();
-            this.tbx_M12 = new System.Windows.Forms.TextBox();
-            this.tbx_M22 = new System.Windows.Forms.TextBox();
-            this.tbx_M32 = new System.Windows.Forms.TextBox();
-            this.tbx_M03 = new System.Windows.Forms.TextBox();
-            this.tbx_M13 = new System.Windows.Forms.TextBox();
-            this.tbx_M23 = new System.Windows.Forms.TextBox();
-            this.tbx_M33 = new System.Windows.Forms.TextBox();
-            this.lbl_Q0 = new System.Windows.Forms.Label();
-            this.lbl_Q1 = new System.Windows.Forms.Label();
-            this.lbl_Q2 = new System.Windows.Forms.Label();
-            this.btn_ResetIdentity = new System.Windows.Forms.Button();
-            this.lbl_Q3 = new System.Windows.Forms.Label();
             this.btn_EulerToMatrix = new System.Windows.Forms.Button();
             this.btn_MatrixToEuler = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.rbn_RigidBody = new System.Windows.Forms.RadioButton();
+            this.rbn_Axis = new System.Windows.Forms.RadioButton();
             this.btn_SaveMatrix = new System.Windows.Forms.Button();
-            this.btn_LoadEulerData = new System.Windows.Forms.Button();
+            this.btn_ResetIdentity = new System.Windows.Forms.Button();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.rtbx_M = new System.Windows.Forms.RichTextBox();
+            this.rtbx_Q = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,7 +91,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(248, 338);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(208, 338);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // btn_ResetEuler
@@ -129,7 +109,7 @@
             this.tbx_RX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbx_RX.Location = new System.Drawing.Point(53, 154);
             this.tbx_RX.Name = "tbx_RX";
-            this.tbx_RX.Size = new System.Drawing.Size(60, 22);
+            this.tbx_RX.Size = new System.Drawing.Size(46, 22);
             this.tbx_RX.TabIndex = 24;
             this.tbx_RX.Text = "0";
             this.tbx_RX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -141,7 +121,7 @@
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Location = new System.Drawing.Point(53, 116);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(60, 35);
+            this.label9.Size = new System.Drawing.Size(46, 35);
             this.label9.TabIndex = 8;
             this.label9.Text = "X";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -150,9 +130,9 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Location = new System.Drawing.Point(119, 116);
+            this.label10.Location = new System.Drawing.Point(105, 116);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(60, 35);
+            this.label10.Size = new System.Drawing.Size(46, 35);
             this.label10.TabIndex = 9;
             this.label10.Text = "Y";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -161,9 +141,9 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Location = new System.Drawing.Point(185, 116);
+            this.label11.Location = new System.Drawing.Point(157, 116);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(60, 35);
+            this.label11.Size = new System.Drawing.Size(48, 35);
             this.label11.TabIndex = 10;
             this.label11.Text = "Z";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -193,9 +173,9 @@
             // tbx_RY
             // 
             this.tbx_RY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_RY.Location = new System.Drawing.Point(119, 154);
+            this.tbx_RY.Location = new System.Drawing.Point(105, 154);
             this.tbx_RY.Name = "tbx_RY";
-            this.tbx_RY.Size = new System.Drawing.Size(60, 22);
+            this.tbx_RY.Size = new System.Drawing.Size(46, 22);
             this.tbx_RY.TabIndex = 25;
             this.tbx_RY.Text = "0";
             this.tbx_RY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -204,9 +184,9 @@
             // tbx_RZ
             // 
             this.tbx_RZ.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_RZ.Location = new System.Drawing.Point(185, 154);
+            this.tbx_RZ.Location = new System.Drawing.Point(157, 154);
             this.tbx_RZ.Name = "tbx_RZ";
-            this.tbx_RZ.Size = new System.Drawing.Size(60, 22);
+            this.tbx_RZ.Size = new System.Drawing.Size(48, 22);
             this.tbx_RZ.TabIndex = 26;
             this.tbx_RZ.Text = "0";
             this.tbx_RZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -215,9 +195,9 @@
             // tbx_SY
             // 
             this.tbx_SY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_SY.Location = new System.Drawing.Point(119, 189);
+            this.tbx_SY.Location = new System.Drawing.Point(105, 189);
             this.tbx_SY.Name = "tbx_SY";
-            this.tbx_SY.Size = new System.Drawing.Size(60, 22);
+            this.tbx_SY.Size = new System.Drawing.Size(46, 22);
             this.tbx_SY.TabIndex = 28;
             this.tbx_SY.Text = "0";
             this.tbx_SY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -226,9 +206,9 @@
             // tbx_SZ
             // 
             this.tbx_SZ.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_SZ.Location = new System.Drawing.Point(185, 189);
+            this.tbx_SZ.Location = new System.Drawing.Point(157, 189);
             this.tbx_SZ.Name = "tbx_SZ";
-            this.tbx_SZ.Size = new System.Drawing.Size(60, 22);
+            this.tbx_SZ.Size = new System.Drawing.Size(48, 22);
             this.tbx_SZ.TabIndex = 29;
             this.tbx_SZ.Text = "0";
             this.tbx_SZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -239,22 +219,33 @@
             this.tbx_SX.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbx_SX.Location = new System.Drawing.Point(53, 189);
             this.tbx_SX.Name = "tbx_SX";
-            this.tbx_SX.Size = new System.Drawing.Size(60, 22);
+            this.tbx_SX.Size = new System.Drawing.Size(46, 22);
             this.tbx_SX.TabIndex = 27;
             this.tbx_SX.Text = "0";
             this.tbx_SX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbx_SX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
             // 
+            // btn_LoadEulerData
+            // 
+            this.btn_LoadEulerData.Location = new System.Drawing.Point(105, 3);
+            this.btn_LoadEulerData.Name = "btn_LoadEulerData";
+            this.btn_LoadEulerData.Size = new System.Drawing.Size(46, 23);
+            this.btn_LoadEulerData.TabIndex = 30;
+            this.btn_LoadEulerData.Text = "Load";
+            this.btn_LoadEulerData.UseVisualStyleBackColor = true;
+            this.btn_LoadEulerData.Click += new System.EventHandler(this.btn_LoadEulerData_Click);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btn_EulerToMatrix, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.btn_MatrixToEuler, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.groupBox1, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -263,360 +254,96 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(567, 344);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
-            // tableLayoutPanel3
+            // btn_EulerToMatrix
             // 
-            this.tableLayoutPanel3.ColumnCount = 5;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.Controls.Add(this.label1, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label2, 2, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label3, 3, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label4, 4, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label5, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.label6, 0, 3);
-            this.tableLayoutPanel3.Controls.Add(this.label7, 0, 4);
-            this.tableLayoutPanel3.Controls.Add(this.label8, 0, 5);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M00, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M10, 1, 3);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M20, 1, 4);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M30, 1, 5);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M01, 2, 2);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M11, 2, 3);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M21, 2, 4);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M31, 2, 5);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M02, 3, 2);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M12, 3, 3);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M22, 3, 4);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M32, 3, 5);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M03, 4, 2);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M13, 4, 3);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M23, 4, 4);
-            this.tableLayoutPanel3.Controls.Add(this.tbx_M33, 4, 5);
-            this.tableLayoutPanel3.Controls.Add(this.lbl_Q0, 1, 6);
-            this.tableLayoutPanel3.Controls.Add(this.lbl_Q1, 2, 6);
-            this.tableLayoutPanel3.Controls.Add(this.lbl_Q2, 3, 6);
-            this.tableLayoutPanel3.Controls.Add(this.btn_ResetIdentity, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lbl_Q3, 4, 6);
-            this.tableLayoutPanel3.Controls.Add(this.btn_SaveMatrix, 4, 0);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(315, 3);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 7;
-            this.tableLayoutPanel2.SetRowSpan(this.tableLayoutPanel3, 4);
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(249, 338);
-            this.tableLayoutPanel3.TabIndex = 1;
+            this.btn_EulerToMatrix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_EulerToMatrix.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.right_48px;
+            this.btn_EulerToMatrix.Location = new System.Drawing.Point(217, 135);
+            this.btn_EulerToMatrix.Name = "btn_EulerToMatrix";
+            this.btn_EulerToMatrix.Size = new System.Drawing.Size(84, 34);
+            this.btn_EulerToMatrix.TabIndex = 3;
+            this.btn_EulerToMatrix.UseVisualStyleBackColor = true;
+            this.btn_EulerToMatrix.Click += new System.EventHandler(this.btn_EulerToMatrix_Click);
             // 
-            // label1
+            // btn_MatrixToEuler
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(41, 89);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "0";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btn_MatrixToEuler.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_MatrixToEuler.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.left_48px;
+            this.btn_MatrixToEuler.Location = new System.Drawing.Point(217, 175);
+            this.btn_MatrixToEuler.Name = "btn_MatrixToEuler";
+            this.btn_MatrixToEuler.Size = new System.Drawing.Size(84, 34);
+            this.btn_MatrixToEuler.TabIndex = 4;
+            this.btn_MatrixToEuler.UseVisualStyleBackColor = true;
+            this.btn_MatrixToEuler.Click += new System.EventHandler(this.btn_MatrixToEuler_Click);
             // 
-            // label2
+            // groupBox1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(93, 89);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 20);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "1";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.groupBox1.Controls.Add(this.tableLayoutPanel4);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(217, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(84, 126);
+            this.groupBox1.TabIndex = 30;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Type";
             // 
-            // label3
+            // tableLayoutPanel4
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(145, 89);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 20);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "2";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tableLayoutPanel4.ColumnCount = 1;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.rbn_RigidBody, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.rbn_Axis, 0, 1);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 18);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 2;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(78, 105);
+            this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // label4
+            // rbn_RigidBody
             // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(197, 89);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 20);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "3";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rbn_RigidBody.Appearance = System.Windows.Forms.Appearance.Button;
+            this.rbn_RigidBody.AutoSize = true;
+            this.rbn_RigidBody.Checked = true;
+            this.rbn_RigidBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbn_RigidBody.Location = new System.Drawing.Point(3, 3);
+            this.rbn_RigidBody.Name = "rbn_RigidBody";
+            this.rbn_RigidBody.Size = new System.Drawing.Size(72, 46);
+            this.rbn_RigidBody.TabIndex = 0;
+            this.rbn_RigidBody.TabStop = true;
+            this.rbn_RigidBody.Text = "Rigid Body";
+            this.rbn_RigidBody.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rbn_RigidBody.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // rbn_Axis
             // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(3, 109);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(32, 35);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "0";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rbn_Axis.Appearance = System.Windows.Forms.Appearance.Button;
+            this.rbn_Axis.AutoSize = true;
+            this.rbn_Axis.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbn_Axis.Location = new System.Drawing.Point(3, 55);
+            this.rbn_Axis.Name = "rbn_Axis";
+            this.rbn_Axis.Size = new System.Drawing.Size(72, 47);
+            this.rbn_Axis.TabIndex = 1;
+            this.rbn_Axis.TabStop = true;
+            this.rbn_Axis.Text = "Axis";
+            this.rbn_Axis.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rbn_Axis.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // btn_SaveMatrix
             // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 144);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 35);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "1";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 179);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(32, 35);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "2";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Location = new System.Drawing.Point(3, 214);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(32, 35);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "3";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tbx_M00
-            // 
-            this.tbx_M00.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M00.Location = new System.Drawing.Point(41, 112);
-            this.tbx_M00.Name = "tbx_M00";
-            this.tbx_M00.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M00.TabIndex = 8;
-            this.tbx_M00.Text = "1";
-            this.tbx_M00.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M00.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M10
-            // 
-            this.tbx_M10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M10.Location = new System.Drawing.Point(41, 147);
-            this.tbx_M10.Name = "tbx_M10";
-            this.tbx_M10.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M10.TabIndex = 9;
-            this.tbx_M10.Text = "0";
-            this.tbx_M10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M20
-            // 
-            this.tbx_M20.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M20.Location = new System.Drawing.Point(41, 182);
-            this.tbx_M20.Name = "tbx_M20";
-            this.tbx_M20.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M20.TabIndex = 10;
-            this.tbx_M20.Text = "0";
-            this.tbx_M20.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M20.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M30
-            // 
-            this.tbx_M30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M30.Location = new System.Drawing.Point(41, 217);
-            this.tbx_M30.Name = "tbx_M30";
-            this.tbx_M30.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M30.TabIndex = 11;
-            this.tbx_M30.Text = "0";
-            this.tbx_M30.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M30.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M01
-            // 
-            this.tbx_M01.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M01.Location = new System.Drawing.Point(93, 112);
-            this.tbx_M01.Name = "tbx_M01";
-            this.tbx_M01.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M01.TabIndex = 12;
-            this.tbx_M01.Text = "0";
-            this.tbx_M01.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M01.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M11
-            // 
-            this.tbx_M11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M11.Location = new System.Drawing.Point(93, 147);
-            this.tbx_M11.Name = "tbx_M11";
-            this.tbx_M11.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M11.TabIndex = 13;
-            this.tbx_M11.Text = "1";
-            this.tbx_M11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M11.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M21
-            // 
-            this.tbx_M21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M21.Location = new System.Drawing.Point(93, 182);
-            this.tbx_M21.Name = "tbx_M21";
-            this.tbx_M21.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M21.TabIndex = 14;
-            this.tbx_M21.Text = "0";
-            this.tbx_M21.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M21.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M31
-            // 
-            this.tbx_M31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M31.Location = new System.Drawing.Point(93, 217);
-            this.tbx_M31.Name = "tbx_M31";
-            this.tbx_M31.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M31.TabIndex = 15;
-            this.tbx_M31.Text = "0";
-            this.tbx_M31.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M31.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M02
-            // 
-            this.tbx_M02.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M02.Location = new System.Drawing.Point(145, 112);
-            this.tbx_M02.Name = "tbx_M02";
-            this.tbx_M02.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M02.TabIndex = 16;
-            this.tbx_M02.Text = "0";
-            this.tbx_M02.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M02.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M12
-            // 
-            this.tbx_M12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M12.Location = new System.Drawing.Point(145, 147);
-            this.tbx_M12.Name = "tbx_M12";
-            this.tbx_M12.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M12.TabIndex = 17;
-            this.tbx_M12.Text = "0";
-            this.tbx_M12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M12.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M22
-            // 
-            this.tbx_M22.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M22.Location = new System.Drawing.Point(145, 182);
-            this.tbx_M22.Name = "tbx_M22";
-            this.tbx_M22.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M22.TabIndex = 18;
-            this.tbx_M22.Text = "1";
-            this.tbx_M22.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M22.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M32
-            // 
-            this.tbx_M32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M32.Location = new System.Drawing.Point(145, 217);
-            this.tbx_M32.Name = "tbx_M32";
-            this.tbx_M32.Size = new System.Drawing.Size(46, 22);
-            this.tbx_M32.TabIndex = 19;
-            this.tbx_M32.Text = "0";
-            this.tbx_M32.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M32.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M03
-            // 
-            this.tbx_M03.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M03.Location = new System.Drawing.Point(197, 112);
-            this.tbx_M03.Name = "tbx_M03";
-            this.tbx_M03.Size = new System.Drawing.Size(49, 22);
-            this.tbx_M03.TabIndex = 20;
-            this.tbx_M03.Text = "0";
-            this.tbx_M03.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M03.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M13
-            // 
-            this.tbx_M13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M13.Location = new System.Drawing.Point(197, 147);
-            this.tbx_M13.Name = "tbx_M13";
-            this.tbx_M13.Size = new System.Drawing.Size(49, 22);
-            this.tbx_M13.TabIndex = 21;
-            this.tbx_M13.Text = "0";
-            this.tbx_M13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M13.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M23
-            // 
-            this.tbx_M23.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M23.Location = new System.Drawing.Point(197, 182);
-            this.tbx_M23.Name = "tbx_M23";
-            this.tbx_M23.Size = new System.Drawing.Size(49, 22);
-            this.tbx_M23.TabIndex = 22;
-            this.tbx_M23.Text = "0";
-            this.tbx_M23.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M23.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // tbx_M33
-            // 
-            this.tbx_M33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbx_M33.Location = new System.Drawing.Point(197, 217);
-            this.tbx_M33.Name = "tbx_M33";
-            this.tbx_M33.Size = new System.Drawing.Size(49, 22);
-            this.tbx_M33.TabIndex = 23;
-            this.tbx_M33.Text = "1";
-            this.tbx_M33.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbx_M33.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_RX_KeyPress);
-            // 
-            // lbl_Q0
-            // 
-            this.lbl_Q0.AutoSize = true;
-            this.lbl_Q0.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q0.Location = new System.Drawing.Point(41, 249);
-            this.lbl_Q0.Name = "lbl_Q0";
-            this.lbl_Q0.Size = new System.Drawing.Size(46, 12);
-            this.lbl_Q0.TabIndex = 25;
-            this.lbl_Q0.Text = "1";
-            this.lbl_Q0.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbl_Q1
-            // 
-            this.lbl_Q1.AutoSize = true;
-            this.lbl_Q1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q1.Location = new System.Drawing.Point(93, 249);
-            this.lbl_Q1.Name = "lbl_Q1";
-            this.lbl_Q1.Size = new System.Drawing.Size(46, 12);
-            this.lbl_Q1.TabIndex = 26;
-            this.lbl_Q1.Text = "0";
-            this.lbl_Q1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbl_Q2
-            // 
-            this.lbl_Q2.AutoSize = true;
-            this.lbl_Q2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q2.Location = new System.Drawing.Point(145, 249);
-            this.lbl_Q2.Name = "lbl_Q2";
-            this.lbl_Q2.Size = new System.Drawing.Size(46, 12);
-            this.lbl_Q2.TabIndex = 27;
-            this.lbl_Q2.Text = "0";
-            this.lbl_Q2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btn_SaveMatrix.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_SaveMatrix.Location = new System.Drawing.Point(203, 3);
+            this.btn_SaveMatrix.Name = "btn_SaveMatrix";
+            this.btn_SaveMatrix.Size = new System.Drawing.Size(51, 23);
+            this.btn_SaveMatrix.TabIndex = 29;
+            this.btn_SaveMatrix.Text = "Save";
+            this.btn_SaveMatrix.UseVisualStyleBackColor = true;
+            this.btn_SaveMatrix.Click += new System.EventHandler(this.btn_SaveMatrix_Click);
             // 
             // btn_ResetIdentity
             // 
@@ -628,59 +355,52 @@
             this.btn_ResetIdentity.UseVisualStyleBackColor = true;
             this.btn_ResetIdentity.Click += new System.EventHandler(this.btn_ResetIdentity_Click);
             // 
-            // lbl_Q3
+            // tableLayoutPanel3
             // 
-            this.lbl_Q3.AutoSize = true;
-            this.lbl_Q3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Q3.Location = new System.Drawing.Point(197, 249);
-            this.lbl_Q3.Name = "lbl_Q3";
-            this.lbl_Q3.Size = new System.Drawing.Size(49, 12);
-            this.lbl_Q3.TabIndex = 28;
-            this.lbl_Q3.Text = "0";
-            this.lbl_Q3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tableLayoutPanel3.ColumnCount = 5;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.Controls.Add(this.btn_ResetIdentity, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btn_SaveMatrix, 4, 0);
+            this.tableLayoutPanel3.Controls.Add(this.rtbx_M, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.rtbx_Q, 0, 2);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(307, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel2.SetRowSpan(this.tableLayoutPanel3, 4);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 236F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(257, 338);
+            this.tableLayoutPanel3.TabIndex = 1;
             // 
-            // btn_EulerToMatrix
+            // rtbx_M
             // 
-            this.btn_EulerToMatrix.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_EulerToMatrix.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.right_48px;
-            this.btn_EulerToMatrix.Location = new System.Drawing.Point(257, 135);
-            this.btn_EulerToMatrix.Name = "btn_EulerToMatrix";
-            this.btn_EulerToMatrix.Size = new System.Drawing.Size(52, 34);
-            this.btn_EulerToMatrix.TabIndex = 3;
-            this.btn_EulerToMatrix.UseVisualStyleBackColor = true;
-            this.btn_EulerToMatrix.Click += new System.EventHandler(this.btn_EulerToMatrix_Click);
+            this.tableLayoutPanel3.SetColumnSpan(this.rtbx_M, 5);
+            this.rtbx_M.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbx_M.Location = new System.Drawing.Point(3, 54);
+            this.rtbx_M.Name = "rtbx_M";
+            this.rtbx_M.Size = new System.Drawing.Size(251, 230);
+            this.rtbx_M.TabIndex = 30;
+            this.rtbx_M.Text = "";
             // 
-            // btn_MatrixToEuler
+            // rtbx_Q
             // 
-            this.btn_MatrixToEuler.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_MatrixToEuler.Image = global::RsLib.PointCloudLib.CalculateMatrix.Properties.Resources.left_48px;
-            this.btn_MatrixToEuler.Location = new System.Drawing.Point(257, 175);
-            this.btn_MatrixToEuler.Name = "btn_MatrixToEuler";
-            this.btn_MatrixToEuler.Size = new System.Drawing.Size(52, 34);
-            this.btn_MatrixToEuler.TabIndex = 4;
-            this.btn_MatrixToEuler.UseVisualStyleBackColor = true;
-            this.btn_MatrixToEuler.Click += new System.EventHandler(this.btn_MatrixToEuler_Click);
-            // 
-            // btn_SaveMatrix
-            // 
-            this.btn_SaveMatrix.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_SaveMatrix.Location = new System.Drawing.Point(197, 3);
-            this.btn_SaveMatrix.Name = "btn_SaveMatrix";
-            this.btn_SaveMatrix.Size = new System.Drawing.Size(49, 23);
-            this.btn_SaveMatrix.TabIndex = 29;
-            this.btn_SaveMatrix.Text = "Save";
-            this.btn_SaveMatrix.UseVisualStyleBackColor = true;
-            this.btn_SaveMatrix.Click += new System.EventHandler(this.btn_SaveMatrix_Click);
-            // 
-            // btn_LoadEulerData
-            // 
-            this.btn_LoadEulerData.Location = new System.Drawing.Point(119, 3);
-            this.btn_LoadEulerData.Name = "btn_LoadEulerData";
-            this.btn_LoadEulerData.Size = new System.Drawing.Size(46, 23);
-            this.btn_LoadEulerData.TabIndex = 30;
-            this.btn_LoadEulerData.Text = "Load";
-            this.btn_LoadEulerData.UseVisualStyleBackColor = true;
-            this.btn_LoadEulerData.Click += new System.EventHandler(this.btn_LoadEulerData_Click);
+            this.tableLayoutPanel3.SetColumnSpan(this.rtbx_Q, 5);
+            this.rtbx_Q.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbx_Q.Location = new System.Drawing.Point(3, 290);
+            this.rtbx_Q.Name = "rtbx_Q";
+            this.rtbx_Q.Size = new System.Drawing.Size(251, 45);
+            this.rtbx_Q.TabIndex = 31;
+            this.rtbx_Q.Text = "";
             // 
             // TransMatrixControl
             // 
@@ -692,8 +412,10 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -702,7 +424,6 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button btn_EulerToMatrix;
         private System.Windows.Forms.Button btn_MatrixToEuler;
         private System.Windows.Forms.Label label9;
@@ -710,43 +431,22 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox tbx_RX;
         private System.Windows.Forms.TextBox tbx_RY;
         private System.Windows.Forms.TextBox tbx_RZ;
         private System.Windows.Forms.TextBox tbx_SY;
         private System.Windows.Forms.TextBox tbx_SZ;
         private System.Windows.Forms.TextBox tbx_SX;
-        private System.Windows.Forms.TextBox tbx_M00;
-        private System.Windows.Forms.TextBox tbx_M10;
-        private System.Windows.Forms.TextBox tbx_M20;
-        private System.Windows.Forms.TextBox tbx_M30;
-        private System.Windows.Forms.TextBox tbx_M01;
-        private System.Windows.Forms.TextBox tbx_M11;
-        private System.Windows.Forms.TextBox tbx_M21;
-        private System.Windows.Forms.TextBox tbx_M31;
-        private System.Windows.Forms.TextBox tbx_M02;
-        private System.Windows.Forms.TextBox tbx_M12;
-        private System.Windows.Forms.TextBox tbx_M22;
-        private System.Windows.Forms.TextBox tbx_M32;
-        private System.Windows.Forms.TextBox tbx_M03;
-        private System.Windows.Forms.TextBox tbx_M13;
-        private System.Windows.Forms.TextBox tbx_M23;
-        private System.Windows.Forms.TextBox tbx_M33;
-        private System.Windows.Forms.Button btn_ResetIdentity;
-        private System.Windows.Forms.Label lbl_Q0;
-        private System.Windows.Forms.Label lbl_Q1;
-        private System.Windows.Forms.Label lbl_Q2;
-        private System.Windows.Forms.Label lbl_Q3;
         private System.Windows.Forms.Button btn_ResetEuler;
-        private System.Windows.Forms.Button btn_SaveMatrix;
         private System.Windows.Forms.Button btn_LoadEulerData;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.RadioButton rbn_RigidBody;
+        private System.Windows.Forms.RadioButton rbn_Axis;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Button btn_ResetIdentity;
+        private System.Windows.Forms.Button btn_SaveMatrix;
+        private System.Windows.Forms.RichTextBox rtbx_M;
+        private System.Windows.Forms.RichTextBox rtbx_Q;
     }
 }

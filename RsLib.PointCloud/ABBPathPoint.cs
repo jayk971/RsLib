@@ -27,7 +27,7 @@ namespace RsLib.PointCloudLib
             Y = p.Y;
             Z = p.Z;
 
-            Rotate r = new Rotate(p);
+            RotateAxis r = new RotateAxis(p);
             Rx = r.Rx;
             Ry= r.Ry; 
             Rz = r.Rz;

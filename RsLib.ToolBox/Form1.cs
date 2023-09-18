@@ -256,7 +256,7 @@ namespace RsLib.DemoForm
             Vector3 vy = new Vector3(-0.707f, 0.707f, 0f);
             Vector3 vz = new Vector3(0.707f, 0.707f, 0f);
 
-            Rotate r = new Rotate(vx,vy,vz);
+            RotateAxis r = new RotateAxis(vx,vy,vz);
 
             //Y -90 X -45
 
@@ -264,7 +264,7 @@ namespace RsLib.DemoForm
             Vector3 vy2 = new Vector3(0.707f, 0.707f, 0f);
             Vector3 vz2 = new Vector3(-0.707f, 0.707f, 0f);
 
-            Rotate r2 = new Rotate(vx2, vy2, vz2);
+            RotateAxis r2 = new RotateAxis(vx2, vy2, vz2);
 
 
         }

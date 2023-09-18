@@ -1043,5 +1043,29 @@ namespace RsLib.Display3D
             _rotationMatrix = Matrix4.Identity;
             _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI / 2);
         }
+
+        private void smoothVxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selectObj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectObj == null) return;
+            Polyline p = selectObj.SelectPolyine(_CurrentSelectLineIndex);
+            if (p != null)
+            {
+                p.SmoothVx();
+                ReBuildAll();
+            }
+        }
+
+        private void smoothVyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selectObj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectObj == null) return;
+            Polyline p = selectObj.SelectPolyine(_CurrentSelectLineIndex);
+            if (p != null)
+            {
+                p.SmoothVy();
+                ReBuildAll();
+            }
+        }
     }
 }

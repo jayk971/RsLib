@@ -720,6 +720,51 @@ namespace RsLib.PointCloudLib
                 Points.Add(p);
             }
         }
+        public void SmoothVx()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int prev = i - 1;
+                int curr = i;
+                int next = i + 1;
+                if(prev <0) prev = 0;
+                if (next > Points.Count - 1) next = Points.Count - 1;
+
+                PointV3D prevP = Points[prev] as PointV3D;
+                PointV3D currP = Points[curr] as PointV3D;
+                PointV3D nextP = Points[next] as PointV3D;
+
+                currP.Vz.UnitVector();
+                Vector3D tempVx = (prevP.Vx + currP.Vx + nextP.Vx) * (1.0 / 3.0);
+                currP.Vy = Vector3D.Cross(currP.Vz, tempVx).DeepClone();
+                currP.Vy.UnitVector();
+                currP.Vx = Vector3D.Cross(currP.Vy,currP.Vz).DeepClone();
+                currP.Vx.UnitVector();
+            }
+        }
+        public void SmoothVy()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int prev = i - 1;
+                int curr = i;
+                int next = i + 1;
+                if (prev < 0) prev = 0;
+                if (next > Points.Count - 1) next = Points.Count - 1;
+
+                PointV3D prevP = Points[prev] as PointV3D;
+                PointV3D currP = Points[curr] as PointV3D;
+                PointV3D nextP = Points[next] as PointV3D;
+
+                currP.Vz.UnitVector();
+                Vector3D tempVy = (prevP.Vy + currP.Vy + nextP.Vy) * (1.0 / 3.0);
+                currP.Vx = Vector3D.Cross(tempVy, currP.Vz).DeepClone();
+                currP.Vx.UnitVector();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy.UnitVector();
+            }
+        }
+
         public void CalculatePathDirectionAsVy()
         {
             for (int i = 0; i < Points.Count -1; i++)
@@ -990,7 +1035,6 @@ namespace RsLib.PointCloudLib
             Points.Clear();
             Points = temp.DeepClone();
         }
-
 
         public void SmoothPathZOnly()
         {

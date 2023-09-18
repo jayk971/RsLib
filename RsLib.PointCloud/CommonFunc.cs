@@ -1249,17 +1249,17 @@ namespace RsLib.PointCloudLib
 
             //Vector3D shift = new Vector3D(i_P, afterP);
 
-            Rotate local_rotate_image = new Rotate(vx, vy, vz);
+            RotateAxis local_rotate_image = new RotateAxis(vx, vy, vz);
             local_rotate_image.Name = "local_rotate_image";
             Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
             local_shift_image.Name = "local_shift_image";
-            Rotate local_rotate_robot = new Rotate(vx_, vy_, vz_);
+            RotateAxis local_rotate_robot = new RotateAxis(vx_, vy_, vz_);
             local_rotate_robot.Name = "local_rotate_robot";
             Shift local_shift_robot = new Shift(afterP.X, afterP.Y, afterP.Z);
             local_shift_robot.Name = "local_shift_robot";
 
             // 下面的矩陣是由後面往前乘
-            Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.FinalMatrix4Inverse * local_shift_image.FinalMatrix4Inverse;
+            Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.GetMatrixInverse() * local_shift_image.GetMatrixInverse();
 
 
             return Matrix4x4ToArray(final);
@@ -1290,17 +1290,17 @@ namespace RsLib.PointCloudLib
 
             //Vector3D shift = new Vector3D(i_P, afterP);
 
-            Rotate local_rotate_image = new Rotate(vx, vy, vz);
+            RotateAxis local_rotate_image = new RotateAxis(vx, vy, vz);
             local_rotate_image.Name = "local_rotate_image";
             Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
             local_shift_image.Name = "local_shift_image";
-            Rotate local_rotate_robot = new Rotate(vx_, vy_, vz_);
+            RotateAxis local_rotate_robot = new RotateAxis(vx_, vy_, vz_);
             local_rotate_robot.Name = "local_rotate_robot";
             Shift local_shift_robot = new Shift(afterP.X, afterP.Y, afterP.Z);
             local_shift_robot.Name = "local_shift_robot";
 
             // 下面的矩陣是由後面往前乘
-            Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.FinalMatrix4Inverse * local_shift_image.FinalMatrix4Inverse;
+            Matrix4x4 final = local_shift_robot.FinalMatrix4 * local_rotate_robot.FinalMatrix4 * local_rotate_image.GetMatrixInverse() * local_shift_image.GetMatrixInverse();
 
 
             return Matrix4x4ToArray(final);
@@ -1346,6 +1346,73 @@ namespace RsLib.PointCloudLib
             arr[3, 2] = m.V32;
             arr[3, 3] = m.V33;
             return arr;
+        }
+        public static string Matrix4x4ToString(Matrix4x4 m,char splitChar = ',')
+        {
+            string output = $"{m.V00:F3}{splitChar}{m.V01:F3}{splitChar}{m.V02:F3}{splitChar}{m.V03:F3}\n" +
+                $"{m.V10:F3}{splitChar}{m.V11:F3}{splitChar}{m.V12:F3}{splitChar}{m.V13:F3}\n" +
+                $"{m.V20:F3}{splitChar}{m.V21:F3}{splitChar}{m.V22:F3}{splitChar}{m.V23:F3}\n" +
+                $"{m.V30:F3}{splitChar}{m.V31:F3}{splitChar}{m.V32:F3}{splitChar}{m.V33:F3}";
+            return output;
+        }
+        public static Matrix4x4 ParseMatrix4x4(string s, char splitChar = ',')
+        {
+            Matrix4x4 m = Matrix4x4.Identity;
+            string[] splitData1 = s.Split('\n');
+            if(splitData1.Length==4)
+            {
+                string[] row0 = splitData1[0].Split(splitChar);
+                string[] row1 = splitData1[1].Split(splitChar);
+                string[] row2 = splitData1[2].Split(splitChar);
+                string[] row3 = splitData1[3].Split(splitChar);
+
+                if(row0.Length ==4 && row1.Length == 4 && row2.Length == 4 && row3.Length == 4)
+                {
+                    float.TryParse(row0[0], out float v00);
+                    float.TryParse(row0[1], out float v01);
+                    float.TryParse(row0[2], out float v02);
+                    float.TryParse(row0[3], out float v03);
+
+                    float.TryParse(row1[0], out float v10);
+                    float.TryParse(row1[1], out float v11);
+                    float.TryParse(row1[2], out float v12);
+                    float.TryParse(row1[3], out float v13);
+
+                    float.TryParse(row2[0], out float v20);
+                    float.TryParse(row2[1], out float v21);
+                    float.TryParse(row2[2], out float v22);
+                    float.TryParse(row2[3], out float v23);
+
+                    float.TryParse(row3[0], out float v30);
+                    float.TryParse(row3[1], out float v31);
+                    float.TryParse(row3[2], out float v32);
+                    float.TryParse(row3[3], out float v33);
+
+                    m.V00 = v00;
+                    m.V01 = v01;
+                    m.V02 = v02;
+                    m.V03 = v03;
+
+                    m.V10 = v10;
+                    m.V11 = v11;
+                    m.V12 = v12;
+                    m.V13 = v13;
+
+                    m.V20 = v20;
+                    m.V21 = v21;
+                    m.V22 = v22;
+                    m.V23 = v23;
+
+                    m.V30 = v30;
+                    m.V31 = v31;
+                    m.V32 = v32;
+                    m.V33 = v33;
+
+
+                }
+            }
+            return m;
+
         }
 
         public static Matrix4x4 ArrayToMatrix4x4(double[,] matrix4x4)
@@ -1468,10 +1535,10 @@ namespace RsLib.PointCloudLib
                                     rx = double.Parse(splitData[1]);
                                     ry = double.Parse(splitData[2]);
                                     rz = double.Parse(splitData[3]);
-                                    Rotate r = new Rotate();
-                                    r.AddRotateSeq(RefAxis.Z, rz);
-                                    r.AddRotateSeq(RefAxis.Y, ry);
-                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    RotateRigidBody r = new RotateRigidBody();
+                                    r.AddRotateSeq(eRefAxis.Z, rz);
+                                    r.AddRotateSeq(eRefAxis.Y, ry);
+                                    r.AddRotateSeq(eRefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1538,10 +1605,10 @@ namespace RsLib.PointCloudLib
                                     rx = double.Parse(splitData[1]);
                                     ry = double.Parse(splitData[2]);
                                     rz = double.Parse(splitData[3]);
-                                    Rotate r = new Rotate();
-                                    r.AddRotateSeq(RefAxis.Z, rz);
-                                    r.AddRotateSeq(RefAxis.Y, ry);
-                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    RotateRigidBody r = new RotateRigidBody();
+                                    r.AddRotateSeq(eRefAxis.Z, rz);
+                                    r.AddRotateSeq(eRefAxis.Y, ry);
+                                    r.AddRotateSeq(eRefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1597,10 +1664,10 @@ namespace RsLib.PointCloudLib
                                     double rx = double.Parse(splitData[1]);
                                     double ry = double.Parse(splitData[2]);
                                     double rz = double.Parse(splitData[3]);
-                                    Rotate r = new Rotate();
-                                    r.AddRotateSeq(RefAxis.Z, rz);
-                                    r.AddRotateSeq(RefAxis.Y, ry);
-                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    RotateRigidBody r = new RotateRigidBody();
+                                    r.AddRotateSeq(eRefAxis.Z, rz);
+                                    r.AddRotateSeq(eRefAxis.Y, ry);
+                                    r.AddRotateSeq(eRefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1669,10 +1736,10 @@ namespace RsLib.PointCloudLib
                                     double rx = double.Parse(splitData[1]);
                                     double ry = double.Parse(splitData[2]);
                                     double rz = double.Parse(splitData[3]);
-                                    Rotate r = new Rotate();
-                                    r.AddRotateSeq(RefAxis.Z, rz);
-                                    r.AddRotateSeq(RefAxis.Y, ry);
-                                    r.AddRotateSeq(RefAxis.X, rx);
+                                    RotateRigidBody r = new RotateRigidBody();
+                                    r.AddRotateSeq(eRefAxis.Z, rz);
+                                    r.AddRotateSeq(eRefAxis.Y, ry);
+                                    r.AddRotateSeq(eRefAxis.X, rx);
                                     coordMatrix.AddSeq(r);
 
 
@@ -1695,10 +1762,10 @@ namespace RsLib.PointCloudLib
                             }
                             else continue;
                         }
-                        Rotate r_Compensate = new Rotate();
-                        r_Compensate.AddRotateSeq(RefAxis.Z, compensate_rZ);
-                        r_Compensate.AddRotateSeq(RefAxis.Y, compensate_rY);
-                        r_Compensate.AddRotateSeq(RefAxis.X, compensate_rX);
+                        RotateRigidBody r_Compensate = new RotateRigidBody();
+                        r_Compensate.AddRotateSeq(eRefAxis.Z, compensate_rZ);
+                        r_Compensate.AddRotateSeq(eRefAxis.Y, compensate_rY);
+                        r_Compensate.AddRotateSeq(eRefAxis.X, compensate_rX);
                         coordMatrix.AddSeq(r_Compensate);
 
                         Shift s_Compensate = new Shift(compensate_dX, compensate_dY, compensate_dZ);

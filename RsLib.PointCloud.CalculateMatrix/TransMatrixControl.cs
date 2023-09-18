@@ -20,26 +20,53 @@ namespace RsLib.PointCloudLib.CalculateMatrix
 
         private void btn_EulerToMatrix_Click(object sender, EventArgs e)
         {
-
-            calculateEuler(out CoordMatrix c, out Rotate r, out Shift s);
-            updateMatrixTextbox(c.FinalMatrix4);
-            updateQ(r.Q);
-
+            if (rbn_RigidBody.Checked)
+            {
+                calculateEuler_RigidBody(out CoordMatrix c, out RotateRigidBody r, out Shift s);
+                updateMatrixTextbox(c.FinalMatrix4);
+                updateQ(r.Q);
+            }
+            else
+            {
+                calculateEuler_Axis(out CoordMatrix c, out RotateAxis r, out Shift s);
+                updateMatrixTextbox(c.FinalMatrix4);
+                updateQ(r.Q);
+            }
         }
-        void calculateEuler(out CoordMatrix c,out Rotate r, out Shift s)
+        void calculateEuler_RigidBody(out CoordMatrix c,out RotateRigidBody r, out Shift s)
         {
             c = new CoordMatrix();
-            r = new Rotate();
-            r.AddRotateSeq(RefAxis.Z, double.Parse(tbx_RZ.Text));
-            r.AddRotateSeq(RefAxis.Y, double.Parse(tbx_RY.Text));
-            r.AddRotateSeq(RefAxis.X, double.Parse(tbx_RX.Text));
+            r = new RotateRigidBody();
+            r.AddRotateSeq(eRefAxis.Z, double.Parse(tbx_RZ.Text)/180*Math.PI);
+            r.AddRotateSeq(eRefAxis.Y, double.Parse(tbx_RY.Text) / 180 * Math.PI);
+            r.AddRotateSeq(eRefAxis.X, double.Parse(tbx_RX.Text) / 180 * Math.PI);
             r.EndAddMatrix();
 
 
             s = new Shift();
-            s.AddSeq(RefAxis.X, MatrixType.Translation, double.Parse(tbx_SX.Text));
-            s.AddSeq(RefAxis.Y, MatrixType.Translation, double.Parse(tbx_SY.Text));
-            s.AddSeq(RefAxis.Z, MatrixType.Translation, double.Parse(tbx_SZ.Text));
+            s.AddSeq(eRefAxis.X, eMatrixType.Translation, double.Parse(tbx_SX.Text));
+            s.AddSeq(eRefAxis.Y, eMatrixType.Translation, double.Parse(tbx_SY.Text));
+            s.AddSeq(eRefAxis.Z, eMatrixType.Translation, double.Parse(tbx_SZ.Text));
+            s.EndAddMatrix();
+
+            c.AddSeq(r);
+            c.AddSeq(s);
+            c.EndAddMatrix();
+        }
+        void calculateEuler_Axis(out CoordMatrix c, out RotateAxis r, out Shift s)
+        {
+            c = new CoordMatrix();
+            r = new RotateAxis();
+            r.AddRotateSeq(eRefAxis.Z, double.Parse(tbx_RZ.Text) / 180 * Math.PI);
+            r.AddRotateSeq(eRefAxis.Y, double.Parse(tbx_RY.Text) / 180 * Math.PI);
+            r.AddRotateSeq(eRefAxis.X, double.Parse(tbx_RX.Text) / 180 * Math.PI);
+            r.EndAddMatrix();
+
+
+            s = new Shift();
+            s.AddSeq(eRefAxis.X, eMatrixType.Translation, double.Parse(tbx_SX.Text));
+            s.AddSeq(eRefAxis.Y, eMatrixType.Translation, double.Parse(tbx_SY.Text));
+            s.AddSeq(eRefAxis.Z, eMatrixType.Translation, double.Parse(tbx_SZ.Text));
             s.EndAddMatrix();
 
             c.AddSeq(r);
@@ -48,64 +75,44 @@ namespace RsLib.PointCloudLib.CalculateMatrix
         }
         void updateQ(Quaternion q)
         {
-            lbl_Q0.Text = q.Q0.ToString();
-            lbl_Q1.Text = q.Q1.ToString();
-            lbl_Q2.Text = q.Q2.ToString();
-            lbl_Q3.Text = q.Q3.ToString();
+            rtbx_Q.Clear();
+            rtbx_Q.AppendText(q.ToString());
         }
         void updateMatrixTextbox(Matrix4x4 m)
         {
-            tbx_M00.Text = m.V00.ToString();
-            tbx_M01.Text = m.V01.ToString();
-            tbx_M02.Text = m.V02.ToString();
-            tbx_M03.Text = m.V03.ToString();
-            tbx_M10.Text = m.V10.ToString();
-            tbx_M11.Text = m.V11.ToString();
-            tbx_M12.Text = m.V12.ToString();
-            tbx_M13.Text = m.V13.ToString();
-            tbx_M20.Text = m.V20.ToString();
-            tbx_M21.Text = m.V21.ToString();
-            tbx_M22.Text = m.V22.ToString();
-            tbx_M23.Text = m.V23.ToString();
-            tbx_M30.Text = m.V30.ToString();
-            tbx_M31.Text = m.V31.ToString();
-            tbx_M32.Text = m.V32.ToString();
-            tbx_M33.Text = m.V33.ToString();
+            string mStr = PointCloudCommon.Matrix4x4ToString(m);
+            rtbx_M.Clear();
+            rtbx_M.AppendText(mStr);
         }
 
-        void getMatrix(out Matrix4x4 m)
+        void getMatrix(char splitChar, out Matrix4x4 m)
         {
-            m = Matrix4x4.Identity;
-            m.V00 = float.Parse(tbx_M00.Text);
-            m.V01 = float.Parse(tbx_M01.Text);
-            m.V02 = float.Parse (tbx_M02.Text);
-            m.V03 = float.Parse(tbx_M03.Text);
-
-            m.V10 = float.Parse(tbx_M10.Text);
-            m.V11 = float.Parse(tbx_M11.Text);
-            m.V12 = float.Parse(tbx_M12.Text);
-            m.V13 = float.Parse(tbx_M13.Text);
-
-            m.V20 = float.Parse(tbx_M20.Text);
-            m.V21 = float.Parse(tbx_M21.Text);
-            m.V22 = float.Parse(tbx_M22.Text);
-            m.V23 = float.Parse(tbx_M23.Text);
-
-            m.V30 = float.Parse(tbx_M30.Text);
-            m.V31 = float.Parse(tbx_M31.Text);
-            m.V32 = float.Parse(tbx_M32.Text);
-            m.V33 = float.Parse(tbx_M33.Text);
+          m =  PointCloudCommon.ParseMatrix4x4(rtbx_M.Text, splitChar);
         }
         private void btn_MatrixToEuler_Click(object sender, EventArgs e)
         {
-            getMatrix(out Matrix4x4 m);
-            CoordMatrix.SolveMatrixRzRyRxShift(m, out Rotate r, out Shift s);
-            updateEulerTextBox(r, s);
-            updateQ(r.Q);
+            getMatrix(',' ,out Matrix4x4 m);
+            RotateUnit rx = new RotateUnit();
+            RotateUnit ry = new RotateUnit();
+            RotateUnit rz = new RotateUnit();
+
+            Shift s = new Shift();
+            if(rbn_RigidBody.Checked)
+            {
+                RotateRigidBody.SolveRzRyRx(m, out rx, out ry, out rz);
+            }
+            else
+            {
+                RotateAxis.SolveRzRyRx(m, out rx, out ry, out rz);
+            }
+
+            CoordMatrix.SolveTzTyTx(m,out s);
+            updateEulerTextBox(rx,ry,rz, s);
+            updateQ(new Quaternion());
         }
-        void updateEulerTextBox(Rotate r,Shift s)
+        void updateEulerTextBox(RotateUnit rx, RotateUnit ry,RotateUnit rz,Shift s)
         {
-            updateEulerTextBox(s.X, s.Y, s.Z, r.Rx, r.Ry, r.Rz);
+            updateEulerTextBox(s.X, s.Y, s.Z, rx.RotateAngle, ry.RotateAngle, rz.RotateAngle);
         }
         void updateEulerTextBox(double tx,double ty,double tz,double rx,double ry,double rz)
         {
@@ -121,6 +128,7 @@ namespace RsLib.PointCloudLib.CalculateMatrix
 
         private void btn_ResetIdentity_Click(object sender, EventArgs e)
         {
+            rbn_RigidBody.Checked = true;
             updateMatrixTextbox(Matrix4x4.Identity);
             updateQ(new Quaternion());
         }
@@ -149,7 +157,7 @@ namespace RsLib.PointCloudLib.CalculateMatrix
                 if(sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
-                    getMatrix(out Matrix4x4 m);
+                    getMatrix(',', out Matrix4x4 m);
                     PointCloudCommon.SaveMatrix4x4(m, filePath,',');
                 }
             }

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace RsLib.PointCloudLib
 {
-    public enum MatrixType : int
+    public enum eMatrixType : int
     {
         Translation = 0,
         Rotate,
@@ -19,285 +19,253 @@ namespace RsLib.PointCloudLib
         //Reflection,
         //Shearing,
     }
-    public enum RefAxis : int
+    public enum eRefAxis : int
     {
         X,
         Y,
         Z
     }
-
-    public class MatrixUnit
+    public enum eRotateType : int 
     {
+        RigidBody = 0,
+        Axis,
+    }
 
-        RefAxis refAxis = RefAxis.X;
-        public RefAxis RefAxis
-        {
-            get => refAxis;
-            set
-            {
-                refAxis = value;
-                calculateMatrix();
-            }
-        }
-        MatrixType matrixType = MatrixType.Translation;
-        public MatrixType Type
-        {
-            get => matrixType;
-            set
-            {
-                matrixType = value;
-                calculateMatrix();
-            }
-        }
-        public double setValue = 0;
+    public abstract class MatrixUnit
+    {
+        public eRefAxis RefAxis = eRefAxis.X;
+        public eMatrixType MatrixType = eMatrixType.Translation;
+        public eRotateType RotateType = eRotateType.RigidBody;
         /// <summary>
         /// if matrix is rotation, value is radian;
         /// if matrix is translate, value is millimeter.
         /// </summary>
-        public double Value
+        public double Value = 0;
+        public Matrix4x4 Matrix4 = Matrix4x4.Identity;
+
+
+        public abstract Matrix4x4 GetMatrixInverse();
+        public Matrix4x4 GetMatrixTranspose()
         {
-            get => setValue;
-            set
-            {
-                setValue = value;
-                calculateMatrix();
-            }
+            Matrix4x4 output = new Matrix4x4();
+            output.V00 = Matrix4.V00;
+            output.V01 = Matrix4.V10;
+            output.V02 = Matrix4.V20;
+            output.V03 = Matrix4.V30;
+            output.V10 = Matrix4.V01;
+            output.V11 = Matrix4.V11;
+            output.V12 = Matrix4.V21;
+            output.V13 = Matrix4.V31;
+            output.V20 = Matrix4.V02;
+            output.V21 = Matrix4.V12;
+            output.V22 = Matrix4.V22;
+            output.V23 = Matrix4.V32;
+            output.V30 = Matrix4.V03;
+            output.V31 = Matrix4.V13;
+            output.V32 = Matrix4.V23;
+            output.V33 = Matrix4.V33;
+            return output;
+
         }
+        public abstract void CalculateMatrix();
 
-        internal Matrix4x4 matrix4 = Matrix4x4.Identity;
-        public Matrix4x4 Matrix4 { get => matrix4; }
+        public abstract string GetMatrixInfo();
+        //void calculateMatrix()
+        //{
+        //    switch (Type)
+        //    {
+        //        case eMatrixType.Translation:
 
+        //            calculateTranslationMatrix();
 
-        void calculateMatrix()
-        {
-            switch (Type)
-            {
-                case MatrixType.Translation:
+        //            break;
 
-                    calculateTranslationMatrix();
+        //        case eMatrixType.Rotate:
+        //            calculateRotateMatrix();
+        //            break;
+        //        case eMatrixType.Scale:
 
-                    break;
+        //            calculateScaleMatrix();
+        //            break;
 
-                case MatrixType.Rotate:
-                    calculateRotateMatrix();
-                    break;
-                case MatrixType.Scale:
+        //        default:
 
-                    calculateScaleMatrix();
-                    break;
+        //            break;
+        //    }
+        //}
+        //void calculateTranslationMatrix()
+        //{
+        //    matrix4 = Matrix4x4.Identity;
+        //    switch (RefAxis)
+        //    {
+        //        case eRefAxis.X:
+        //            matrix4.V03 = (float)Value;
+        //            break;
 
-                default:
+        //        case eRefAxis.Y:
+        //            matrix4.V13 = (float)Value;
+        //            break;
 
-                    break;
-            }
-        }
-        void calculateTranslationMatrix()
-        {
-            matrix4 = Matrix4x4.Identity;
-            switch (RefAxis)
-            {
-                case RefAxis.X:
-                    matrix4.V03 = (float)Value;
-                    break;
+        //        case eRefAxis.Z:
+        //            matrix4.V23 = (float)Value;
+        //            break;
 
-                case RefAxis.Y:
-                    matrix4.V13 = (float)Value;
-                    break;
+        //        default:
 
-                case RefAxis.Z:
-                    matrix4.V23 = (float)Value;
-                    break;
+        //            break;
+        //    }
+        //}
+        //void calculateRotateMatrix()
+        //{
+        //    matrix4 = Matrix4x4.Identity;
+        //    switch (RefAxis)
+        //    {
+        //        case eRefAxis.X:
+        //            matrix4 = Matrix4x4.CreateRotationX((float)Value);
+        //            break;
 
-                default:
+        //        case eRefAxis.Y:
+        //            matrix4 = Matrix4x4.CreateRotationY((float)Value);
+        //            break;
 
-                    break;
-            }
-        }
-        void calculateRotateMatrix()
-        {
-            matrix4 = Matrix4x4.Identity;
-            switch (RefAxis)
-            {
-                case RefAxis.X:
-                    matrix4 = Matrix4x4.CreateRotationX((float)Value);
-                    break;
+        //        case eRefAxis.Z:
+        //            matrix4 = Matrix4x4.CreateRotationZ((float)Value);
+        //            break;
 
-                case RefAxis.Y:
-                    matrix4 = Matrix4x4.CreateRotationY((float)Value);
-                    break;
+        //        default:
 
-                case RefAxis.Z:
-                    matrix4 = Matrix4x4.CreateRotationZ((float)Value);
-                    break;
+        //            break;
+        //    }
+        //}
+        //void calculateScaleMatrix()
+        //{
+        //    matrix4 = Matrix4x4.Identity;
+        //    matrix4.V00 = (float)Value;
+        //    matrix4.V11 = (float)Value;
+        //    matrix4.V22 = (float)Value;
+        //}
+        //public Point3D Multiply(Point3D target)
+        //{
+        //    Vector4 output = Matrix4x4.Multiply(matrix4, new Vector4((float)target.X, (float)target.Y, (float)target.Z, 1f));
+        //    return new Point3D(output.X, output.Y, output.Z);
+        //}
+        //public Vector3D Multiply(Vector3D target)
+        //{
+        //    Vector4 output = Matrix4x4.Multiply(matrix4, new Vector4((float)target.X, (float)target.Y, (float)target.Z, 1f));
+        //    return new Vector3D(output.X, output.Y, output.Z);
+        //}
 
-                default:
-
-                    break;
-            }
-        }
-        void calculateScaleMatrix()
-        {
-            matrix4 = Matrix4x4.Identity;
-            matrix4.V00 = (float)Value;
-            matrix4.V11 = (float)Value;
-            matrix4.V22 = (float)Value;
-        }
-        public Point3D Multiply(Point3D target)
-        {
-            Vector4 output = Matrix4x4.Multiply(matrix4, new Vector4((float)target.X, (float)target.Y, (float)target.Z, 1f));
-            return new Point3D(output.X, output.Y, output.Z);
-        }
-        public Vector3D Multiply(Vector3D target)
-        {
-            Vector4 output = Matrix4x4.Multiply(matrix4, new Vector4((float)target.X, (float)target.Y, (float)target.Z, 1f));
-            return new Vector3D(output.X, output.Y, output.Z);
-        }
-
-        public override string ToString()
-        {
-            return $"{Type} {RefAxis} Axis {Value} Unit";
-        }
+        //public override string ToString()
+        //{
+        //    return $"{Type} {RefAxis} Axis {Value} Unit";
+        //}
     }
     public class TranslationUnit : MatrixUnit
     {
-        public double ShiftDistance
+         public TranslationUnit()
         {
-            get => Value;
-            set
-            {
-                Value = value;
-            }
+            MatrixType = eMatrixType.Translation;
         }
-        public Matrix4x4 ShiftMatrix4 { get => matrix4; }
-        public Matrix4x4 ShiftMatrix4Inverse
+        public TranslationUnit(eRefAxis inRefAxis, double shiftValue)
         {
-            get
-            {
-                Matrix4x4 m = Matrix4x4.Identity;
-                m.V03 = -matrix4.V03;
-                m.V13 = -matrix4.V13;
-                m.V23 = -matrix4.V23;
-                return m;
-            }
-        }
-
-
-
-        public TranslationUnit()
-        {
-            Type = MatrixType.Translation;
-
-        }
-        public TranslationUnit(RefAxis inRefAxis)
-        {
-            Type = MatrixType.Translation;
-            RefAxis = inRefAxis;
-            Value = 0;
-        }
-        public TranslationUnit(RefAxis inRefAxis, double shiftValue)
-        {
-            Type = MatrixType.Translation;
+            MatrixType = eMatrixType.Translation;
             RefAxis = inRefAxis;
             Value = shiftValue;
+            CalculateMatrix();
         }
 
-        Point3D shift(Point3D target)
+        public override Matrix4x4 GetMatrixInverse()
         {
-            Vector4 output = Matrix4x4.Multiply(matrix4, new Vector4((float)target.X, (float)target.Y, (float)target.Z, 1f));
-            return new Point3D(output.X, output.Y, output.Z);
-        }
-        PointCloud shift(PointCloud target)
-        {
-            PointCloud output = new PointCloud();
-            for (int i = 0; i < target.Count; i++)
-            {
-                output.Add(shift(target.Points[i]));
-            }
+            Matrix4x4 output = Matrix4;
+            output.V03 = Matrix4.V03 * -1;
+            output.V13 = Matrix4.V13 * -1;
+            output.V23 = Matrix4.V23 * -1;
             return output;
         }
-        public override string ToString()
+        public override void CalculateMatrix()
         {
-            return $"{Type} {RefAxis} Axis {Value} mm";
+            Matrix4 = Matrix4x4.Identity;
+            switch (RefAxis)
+            {
+                case eRefAxis.X:
+                    Matrix4.V03 = (float)Value;
+                    break;
+
+                case eRefAxis.Y:
+                    Matrix4.V13 = (float)Value;
+                    break;
+
+                case eRefAxis.Z:
+                    Matrix4.V23 = (float)Value;
+                    break;
+
+                default:
+
+                    break;
+            }
         }
+
+        public override string GetMatrixInfo() => $"{MatrixType} {RefAxis}-Axis {Value} mm";
     }
     public class RotateUnit : MatrixUnit
     {
-        public double RotateAngle { get => Math.Round(Value / Math.PI * 180.0,2); }
-        public double RotateRadian { get => Value; }
-        public Matrix4x4 RotateMatrix4 { get => matrix4; }
-        Matrix3x3 RotateMatrix3
+        public double RotateAngle => Math.Round(Value / Math.PI * 180.0,2);
+
+        public double RotateRadian =>  Value; 
+        public Matrix3x3 RotateMatrix3
         {
             get
             {
                 Matrix3x3 m = Matrix3x3.Identity;
-                m.V00 = matrix4.V00;
-                m.V01 = matrix4.V01;
-                m.V02 = matrix4.V02;
+                m.V00 = Matrix4.V00;
+                m.V01 = Matrix4.V01;
+                m.V02 = Matrix4.V02;
 
-                m.V10 = matrix4.V10;
-                m.V11 = matrix4.V11;
-                m.V12 = matrix4.V12;
+                m.V10 = Matrix4.V10;
+                m.V11 = Matrix4.V11;
+                m.V12 = Matrix4.V12;
 
-                m.V20 = matrix4.V20;
-                m.V21 = matrix4.V21;
-                m.V22 = matrix4.V22;
+                m.V20 = Matrix4.V20;
+                m.V21 = Matrix4.V21;
+                m.V22 = Matrix4.V22;
                 return m;
             }
         }
-        public Matrix4x4 RotateMatrix4Inverse { get => Transpose(); }
 
         public RotateUnit()
         {
-            Type = MatrixType.Rotate;
+            MatrixType = eMatrixType.Rotate;
+            RotateType = eRotateType.RigidBody;
         }
-        public RotateUnit(RefAxis inRefAxis)
+        /// <summary>
+        /// 加入對應軸旋轉弧度, 套用的旋轉矩陣為旋轉點雲的狀態, 而不是旋轉軸的狀態, 會根據 Rotate type 自動加正負號
+        /// </summary>
+        /// <param name="inRefAxis"></param>
+        /// <param name="rotateType"></param>
+        /// <param name="inRotateRad"></param>
+        public RotateUnit(eRefAxis inRefAxis, eRotateType rotateType,double inRotateRad)
         {
-            Type = MatrixType.Rotate;
+            MatrixType = eMatrixType.Rotate;
+            RotateType = rotateType;
             RefAxis = inRefAxis;
-            Value = 0;
-        }
-        public RotateUnit(RefAxis inRefAxis, double inRotValue, bool ValueIsAngleUnit = true)
-        {
-            Type = MatrixType.Rotate;
-            RefAxis = inRefAxis;
-            if (ValueIsAngleUnit) Value = inRotValue / 180 * Math.PI;
-            else Value = inRotValue;
-        }
-        public Matrix4x4 Transpose()
-        {
-            Matrix4x4 output = new Matrix4x4();
-            output.V00 = matrix4.V00;
-            output.V01 = matrix4.V10;
-            output.V02 = matrix4.V20;
-            output.V03 = matrix4.V30;
-            output.V10 = matrix4.V01;
-            output.V11 = matrix4.V11;
-            output.V12 = matrix4.V21;
-            output.V13 = matrix4.V31;
-            output.V20 = matrix4.V02;
-            output.V21 = matrix4.V12;
-            output.V22 = matrix4.V22;
-            output.V23 = matrix4.V32;
-            output.V30 = matrix4.V03;
-            output.V31 = matrix4.V13;
-            output.V32 = matrix4.V23;
-            output.V33 = matrix4.V33;
-            return output;
+
+            Value =inRotateRad;
+            CalculateMatrix();
         }
 
         public void Rotate(ref PointV3D Coord)
         {
             switch (RefAxis)
             {
-                case RefAxis.X:
+                case eRefAxis.X:
                     Coord.Vy = PointCloudCommon.Rotate(Coord.Vy, Coord.Vx, RotateAngle);
                     Coord.Vz = PointCloudCommon.Rotate(Coord.Vz, Coord.Vx, RotateAngle);
                     break;
-                case RefAxis.Y:
+                case eRefAxis.Y:
                     Coord.Vx = PointCloudCommon.Rotate(Coord.Vx, Coord.Vy, RotateAngle);
                     Coord.Vz = PointCloudCommon.Rotate(Coord.Vz, Coord.Vy, RotateAngle);
                     break;
-                case RefAxis.Z:
+                case eRefAxis.Z:
                     Coord.Vx = PointCloudCommon.Rotate(Coord.Vx, Coord.Vz, RotateAngle);
                     Coord.Vy = PointCloudCommon.Rotate(Coord.Vy, Coord.Vz, RotateAngle);
                     break;
@@ -305,22 +273,45 @@ namespace RsLib.PointCloudLib
                     break;
             }
         }
-        public override string ToString()
+
+
+        public override Matrix4x4 GetMatrixInverse() => GetMatrixTranspose();
+
+        public override void CalculateMatrix()
         {
-            return $"{Type} {RefAxis} Axis {RotateAngle} deg {RotateRadian} rad";
+            Matrix4 = Matrix4x4.Identity;
+            float finalValue = RotateType == eRotateType.RigidBody ? (float) Value : (float)-Value;
+            switch (RefAxis)
+            {
+                case eRefAxis.X:
+                    Matrix4 = Matrix4x4.CreateRotationX((float)finalValue);
+                    break;
+
+                case eRefAxis.Y:
+                    Matrix4 = Matrix4x4.CreateRotationY((float)finalValue);
+                    break;
+
+                case eRefAxis.Z:
+                    Matrix4 = Matrix4x4.CreateRotationZ((float)finalValue);
+                    break;
+
+                default:
+
+                    break;
+            }
         }
+        public override string GetMatrixInfo() => $"{MatrixType} {RotateType} {RefAxis}-Axis : {RotateAngle} deg ({RotateRadian} rad)";
     }
     public class CoordMatrix
     {
         internal string Name = "";
-        internal List<MatrixUnit> seq = new List<MatrixUnit>();
-        public List<MatrixUnit> MatrixSequnce { get => seq; }
+        public List<MatrixUnit> MatrixSequnce { get; private set; } = new List<MatrixUnit>();
         protected Matrix4x4 finalMatrix4 = Matrix4x4.Identity;
         public Matrix4x4 FinalMatrix4
         {
             get
             {
-                if (!isMatrixCalculated)
+                if (IsMatrixCalculated == false)
                 {
                     EndAddMatrix();
                 }
@@ -329,35 +320,7 @@ namespace RsLib.PointCloudLib
 
         }
 
-        public Matrix4x4 FinalMatrix4Inverse
-        {
-            get
-            {
-                Matrix4x4 m = Matrix4x4.Identity;
-                for (int i = 0; i < seq.Count; i++)
-                {
-                    switch (seq[i].Type)
-                    {
-                        case MatrixType.Rotate:
-                            RotateUnit rUnit = seq[i] as RotateUnit;
-                            m = Matrix4x4.Multiply(rUnit.RotateMatrix4Inverse, m);
-                            break;
-
-                        case MatrixType.Translation:
-                            TranslationUnit sUnit = seq[i] as TranslationUnit;
-                            m = Matrix4x4.Multiply(sUnit.ShiftMatrix4Inverse, m);
-                            break;
-
-                        default:
-
-                            break;
-                    }
-                }
-                return m;
-            }
-        }
-        internal bool isMatrixCalculated = false;
-        public bool IsMatrixCalculated { get => isMatrixCalculated; }
+        public bool IsMatrixCalculated { get; internal set; } = false;
 
         public CoordMatrix()
         {
@@ -370,53 +333,84 @@ namespace RsLib.PointCloudLib
         /// <param name="axis">參考軸</param>
         /// <param name="matrixType">矩陣類型</param>
         /// <param name="setValue">平移矩陣為平移距離 ; 旋轉矩陣為旋轉角度, 不是弧度</param>
-        public void AddSeq(RefAxis axis, MatrixType matrixType, double setValue)
+        public void AddSeq(eRefAxis axis, eMatrixType matrixType, double setValue)
         {
             switch (matrixType)
             {
-                case MatrixType.Translation:
+                case eMatrixType.Translation:
                     TranslationUnit sUnit = new TranslationUnit(axis, setValue);
-                    seq.Add(sUnit);
+                    MatrixSequnce.Add(sUnit);
                     break;
 
-                case MatrixType.Rotate:
-                    RotateUnit rUnit = new RotateUnit(axis, setValue);
-                    seq.Add(rUnit);
+                case eMatrixType.Rotate:
+                    RotateUnit rUnit = new RotateUnit(axis, eRotateType.RigidBody,setValue);
+                    MatrixSequnce.Add(rUnit);
                     break;
 
                 default:
 
                     break;
             }
-            isMatrixCalculated = false;
+            IsMatrixCalculated = false;
+        }
+        public void AddSeq(MatrixUnit otherUnit)
+        {
+            MatrixSequnce.Add(otherUnit);
+            IsMatrixCalculated = false;
         }
         public void AddSeq(List<MatrixUnit> otherSeq)
         {
-            seq.AddRange(otherSeq);
-            isMatrixCalculated = false;
+            MatrixSequnce.AddRange(otherSeq);
+            IsMatrixCalculated = false;
         }
         public void AddSeq(CoordMatrix otherSeq)
         {
-            seq.AddRange(otherSeq.seq);
-            isMatrixCalculated = false;
+            MatrixSequnce.AddRange(otherSeq.MatrixSequnce);
+            IsMatrixCalculated = false;
         }
 
         public void Clear()
         {
-            seq.Clear();
+            MatrixSequnce.Clear();
             finalMatrix4 = Matrix4x4.Identity;
-            isMatrixCalculated = false;
+            IsMatrixCalculated = false;
         }
         public void EndAddMatrix()
         {
             finalMatrix4 = Matrix4x4.Identity;
-            for (int i = 0; i < seq.Count; i++)
+            for (int i = 0; i < MatrixSequnce.Count; i++)
             {
-                finalMatrix4 = Matrix4x4.Multiply( seq[i].matrix4,finalMatrix4);
+                finalMatrix4 = Matrix4x4.Multiply(MatrixSequnce[i].Matrix4,finalMatrix4);
             }
-            isMatrixCalculated = true;
+            IsMatrixCalculated = true;
         }
-        public Matrix4x4 Transpose()
+        public Matrix4x4 GetMatrixInverse()
+        {
+            Matrix4x4 m = Matrix4x4.Identity;
+            for (int i = 0; i < MatrixSequnce.Count; i++)
+            {
+                switch (MatrixSequnce[i].MatrixType)
+                {
+                    case eMatrixType.Rotate:
+                        RotateUnit rUnit = MatrixSequnce[i] as RotateUnit;
+                        m = Matrix4x4.Multiply(rUnit.GetMatrixInverse(), m);
+                        break;
+
+                    case eMatrixType.Translation:
+                        TranslationUnit sUnit = MatrixSequnce[i] as TranslationUnit;
+                        m = Matrix4x4.Multiply(sUnit.GetMatrixInverse(), m);
+                        break;
+
+                    default:
+
+                        break;
+                }
+            }
+            return m;
+
+        }
+
+        public Matrix4x4 GetMatrixTranspose()
         {
             Matrix4x4 output = new Matrix4x4();
             output.V00 = finalMatrix4.V00;
@@ -438,23 +432,29 @@ namespace RsLib.PointCloudLib
             return output;
         }
 
-        public static void SolveMatrixRzRyRxShift(Matrix4x4 m,out Rotate r, out Shift s)
+        //public static void SolveMatrixRzRyRxShift(Matrix4x4 m,out Rotate r, out Shift s)
+        //{
+        //    s = new Shift(m.V03,m.V13,m.V23);
+        //    Vector3D vx = new Vector3D(m.V00,m.V10,m.V20);
+        //    Vector3D vy = new Vector3D(m.V01, m.V11, m.V21);
+        //    Vector3D vz = new Vector3D(m.V02, m.V12, m.V22);
+
+        //    vx.UnitVector();
+        //    vy.UnitVector();
+        //    vz.UnitVector();
+
+        //    r = new Rotate(vx, vy, vz);
+
+        //}
+
+        public static void SolveTzTyTx(Matrix4x4 inMatrix,out Shift s)
         {
-            s = new Shift(m.V03,m.V13,m.V23);
-            Vector3D vx = new Vector3D(m.V00,m.V10,m.V20);
-            Vector3D vy = new Vector3D(m.V01, m.V11, m.V21);
-            Vector3D vz = new Vector3D(m.V02, m.V12, m.V22);
-
-            vx.UnitVector();
-            vy.UnitVector();
-            vz.UnitVector();
-
-            r = new Rotate(vx, vy, vz);
-
+            s = new Shift(inMatrix.V03, inMatrix.V13, inMatrix.V23);
         }
     }
-    public class Rotate : CoordMatrix
+    public class RotateAxis : CoordMatrix
     {
+        public eRotateType RotationType => eRotateType.Axis;
         public Matrix3x3 RotateMatrix3
         {
             get
@@ -478,9 +478,9 @@ namespace RsLib.PointCloudLib
         {
             get
             {
-                if (seq.Count == 3)
+                if (MatrixSequnce.Count == 3)
                 {
-                    return seq[0].Value / Math.PI * 180;
+                    return MatrixSequnce[0].Value / Math.PI * 180;
                 }
                 else return 0.0;
             }
@@ -489,9 +489,9 @@ namespace RsLib.PointCloudLib
         {
             get
             {
-                if (seq.Count == 3)
+                if (MatrixSequnce.Count == 3)
                 {
-                    return seq[1].Value / Math.PI * 180;
+                    return MatrixSequnce[1].Value / Math.PI * 180;
                 }
                 else return 0.0;
             }
@@ -500,33 +500,22 @@ namespace RsLib.PointCloudLib
         {
             get
             {
-                if (seq.Count == 3)
+                if (MatrixSequnce.Count == 3)
                 {
-                    return seq[2].Value / Math.PI * 180;
+                    return MatrixSequnce[2].Value / Math.PI * 180;
                 }
                 else return 0.0;
             }
         }
 
-        public float[,] FloatArray2d
-        {
-            get
-            {
-                return PointCloudCommon.Matrix4x4ToFloatArray(finalMatrix4);
-            }
-        }
-        public float[,] FloatArray2dTranspose
-        {
-            get
-            {
-                return PointCloudCommon.Matrix4x4ToFloatArray(Transpose());
-            }
-        }
+        public float[,] FloatArray2d =>PointCloudCommon.Matrix4x4ToFloatArray(finalMatrix4);
+        
+        public float[,] FloatArray2dTranspose =>PointCloudCommon.Matrix4x4ToFloatArray(GetMatrixTranspose());
+            
 
         public Quaternion Q = new Quaternion();
-        public Rotate()
+        public RotateAxis()
         {
-
         }
         /// <summary>
         /// 輸入旋轉後坐標系, 計算出世界座標->旋轉後坐標系的矩陣
@@ -534,35 +523,27 @@ namespace RsLib.PointCloudLib
         /// <param name="vx">旋轉後坐標系 x 相對於世界坐標系</param>
         /// <param name="vy">旋轉後坐標系 y 相對於世界坐標系</param>
         /// <param name="vz">旋轉後坐標系 z 相對於世界坐標系</param>
-        public Rotate(Vector3D vx, Vector3D vy, Vector3D vz)
+        public RotateAxis(Vector3D vx, Vector3D vy, Vector3D vz)
         {
             finalMatrix4 = collectMatricElement(vx, vy, vz);
-            solveRzRyRx();
+            SolveRzRyRx(finalMatrix4,out RotateUnit rx,out RotateUnit ry,out RotateUnit rz);
+            MatrixSequnce.Add(rz);
+            MatrixSequnce.Add(ry);
+            MatrixSequnce.Add(rx);
             SolveQ();
-            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            //seq.AddRange(rSeq);
-            isMatrixCalculated = true;
+            IsMatrixCalculated = true;
 
         }
-        public Rotate(PointV3D p)
+        public RotateAxis(PointV3D p)
         {
             finalMatrix4 = collectMatricElement(p.Vx, p.Vy, p.Vz);
-            solveRzRyRx();
+            SolveRzRyRx(finalMatrix4, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
+            MatrixSequnce.Add(rz);
+            MatrixSequnce.Add(ry);
+            MatrixSequnce.Add(rx);
             SolveQ();
-            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            //seq.AddRange(rSeq);
-            isMatrixCalculated = true;
+            IsMatrixCalculated = true;
 
-        }
-        /// <summary>
-        /// Solve Rz -> Ry -> Rx
-        /// </summary>
-        /// <param name="p"></param>
-        /// <returns>[0] : Rz,[1] : Ry,[2] : Rx</returns>
-        public static double[] SolveRzRyRx(PointV3D p)
-        {
-            Rotate r = new Rotate(p);
-            return new double[] { r.Rz, r.Ry, r.Rx };
         }
         /// <summary>
         /// 輸入旋轉後坐標系, 計算出世界座標->旋轉後坐標系的矩陣
@@ -570,42 +551,18 @@ namespace RsLib.PointCloudLib
         /// <param name="vx">旋轉後坐標系 x 相對於世界坐標系</param>
         /// <param name="vy">旋轉後坐標系 y 相對於世界坐標系</param>
         /// <param name="vz">旋轉後坐標系 z 相對於世界坐標系</param>
-        public Rotate(Vector3 vx, Vector3 vy, Vector3 vz)
+        public RotateAxis(Vector3 vx, Vector3 vy, Vector3 vz)
         {
             finalMatrix4 = collectMatricElement(vx, vy, vz);
-            solveRzRyRx();
+            SolveRzRyRx(finalMatrix4,out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
+            MatrixSequnce.Add(rz);
+            MatrixSequnce.Add(ry);
+            MatrixSequnce.Add(rx);
             SolveQ();
-            //List<RotateUnit> rSeq = solveRzRyRx(finalMatrix4);
-            //seq.AddRange(rSeq);
-            isMatrixCalculated = true;
+            IsMatrixCalculated = true;
+        }
 
-        }
-        public void AddRotateSeq(RefAxis rotSeq, double rotateAngle)
-        {
-            RotateUnit rotateEulerUnit = new RotateUnit(rotSeq, rotateAngle);
-            seq.Add(rotateEulerUnit);
-            Q*=new Quaternion(rotateEulerUnit);
-            isMatrixCalculated = false;
-        }
-        /// <summary>
-        /// 取得旋轉 Rz -> Ry -> Rx 順序的旋轉角
-        /// </summary>
-        /// <param name="vx">姿態的 x 向量</param>
-        /// <param name="vy">姿態的 y 向量</param>
-        /// <param name="vz">姿態的 z 向量</param>
-        /// <returns>旋轉 Rz -> Ry -> Rx 順序的旋轉角</returns>
-        public static List<RotateUnit> SolveRzRyRxFromVector3DZYX(Vector3D vx, Vector3D vy, Vector3D vz)
-        {
-            /*
-            V00,V01,V02,V03
-            V10,V11,V12,V13
-            V20,V21,V22,V23
-            V30,V31,V32,V33
-            */
-            Matrix4x4 after = collectMatricElement(vx, vy, vz);
-            return SolveRzRyRx(after);
-        }
-        static Matrix4x4 collectMatricElement(Vector3D vx, Vector3D vy, Vector3D vz)
+        Matrix4x4 collectMatricElement(Vector3D vx, Vector3D vy, Vector3D vz)
         {
             vx.UnitVector();
             vy.UnitVector();
@@ -628,7 +585,7 @@ namespace RsLib.PointCloudLib
             matrix.V22 = (float)vz.Z;
             return matrix;
         }
-        static Matrix4x4 collectMatricElement(Vector3 vx, Vector3 vy, Vector3 vz)
+        Matrix4x4 collectMatricElement(Vector3 vx, Vector3 vy, Vector3 vz)
         {
             vx.Normalize();
             vy.Normalize();
@@ -651,7 +608,13 @@ namespace RsLib.PointCloudLib
             matrix.V22 = (float)vz.Z;
             return matrix;
         }
-
+        public void AddRotateSeq(eRefAxis rotSeq, double rotateAngle)
+        {
+            RotateUnit rotateEulerUnit = new RotateUnit(rotSeq, eRotateType.Axis, rotateAngle);
+            MatrixSequnce.Add(rotateEulerUnit);
+            Q *= new Quaternion(rotateEulerUnit);
+            IsMatrixCalculated = false;
+        }
 #if m
         public static double[] SolveQ(Matrix4x4 inMatrix)
         {
@@ -724,54 +687,155 @@ namespace RsLib.PointCloudLib
 
         }
 #endif
-        public void SolveQ()
+        public static void SolveRzRyRx(Matrix4x4 inMatrix,out RotateUnit Rx, out RotateUnit Ry, out RotateUnit Rz)
         {
-            Q = new Quaternion();
-            for (int i = 0; i < seq.Count; i++)
-            {
-                 if(seq[i].Type == MatrixType.Rotate)
-                {
-                    Quaternion tempQ = new Quaternion(seq[i]);
-                    Q *= tempQ;
-                }
-            }
-        }
-        public static List<RotateUnit> SolveRzRyRx(Matrix4x4 inMatrix)
-        {
-            RotateUnit rx = new RotateUnit(RefAxis.X);
-            RotateUnit ry = new RotateUnit(RefAxis.Y);
-            RotateUnit rz = new RotateUnit(RefAxis.Z);
-
+            double rx = 0, ry = 0, rz = 0;
             if (inMatrix.V02 < 1)
             {
                 if (inMatrix.V02 > -1)
                 {
-                    rx.Value = Math.Atan2(inMatrix.V12, inMatrix.V22);
-                    ry.Value = -Math.Asin(inMatrix.V02);
-                    rz.Value = Math.Atan2(inMatrix.V01, inMatrix.V00);
+                    rx = Math.Atan2(inMatrix.V12, inMatrix.V22);
+                    ry = -Math.Asin(inMatrix.V02);
+                    rz = Math.Atan2(inMatrix.V01, inMatrix.V00);
                 }
                 else // inMatrix.V02 == -1
                 {
-                    rx.Value = Math.Atan2(inMatrix.V10, inMatrix.V11);
-                    ry.Value = Math.PI / 2;
-                    rz.Value = 0;
+                    rx = Math.Atan2(inMatrix.V10, inMatrix.V11);
+                    ry = Math.PI / 2;
+                    rz = 0;
                 }
             }
             else // inMatrix.V02 == 1
             {
-                rx.Value = -Math.Atan2(inMatrix.V10, inMatrix.V11);
-                ry.Value = -Math.PI / 2;
-                rz.Value = 0;
+                rx = -Math.Atan2(inMatrix.V10, inMatrix.V11);
+                ry = -Math.PI / 2;
+                rz = 0;
             }
-            List<RotateUnit> output = new List<RotateUnit>();
-            output.Add(rz);
-            output.Add(ry);
-            output.Add(rx);
-            return output;
+
+            Rx = new RotateUnit(eRefAxis.X, eRotateType.Axis, rx);
+            Ry = new RotateUnit(eRefAxis.Y, eRotateType.Axis, ry);
+            Rz = new RotateUnit(eRefAxis.Z, eRotateType.Axis, rz);
+
         }
-        void solveRzRyRx()
+
+        public void SolveQ()
         {
-            seq.AddRange(SolveRzRyRx(finalMatrix4));
+            Q = new Quaternion();
+            for (int i = 0; i < MatrixSequnce.Count; i++)
+            {
+                 if(MatrixSequnce[i].MatrixType == eMatrixType.Rotate)
+                {
+                    Quaternion tempQ = new Quaternion(MatrixSequnce[i]);
+                    Q *= tempQ;
+                }
+            }
+        }
+    }
+
+
+    public class RotateRigidBody : CoordMatrix
+    {
+        public eRotateType RotationType => eRotateType.RigidBody;
+        public Matrix3x3 RotateMatrix3
+        {
+            get
+            {
+                Matrix3x3 output = new Matrix3x3();
+                output.V00 = finalMatrix4.V00;
+                output.V01 = finalMatrix4.V01;
+                output.V02 = finalMatrix4.V02;
+
+                output.V10 = finalMatrix4.V10;
+                output.V11 = finalMatrix4.V11;
+                output.V12 = finalMatrix4.V12;
+
+                output.V20 = finalMatrix4.V20;
+                output.V21 = finalMatrix4.V21;
+                output.V22 = finalMatrix4.V22;
+                return output;
+            }
+        }
+        public double Rz
+        {
+            get
+            {
+                if (MatrixSequnce.Count == 3)
+                {
+                    return MatrixSequnce[0].Value / Math.PI * 180;
+                }
+                else return 0.0;
+            }
+        }
+        public double Ry
+        {
+            get
+            {
+                if (MatrixSequnce.Count == 3)
+                {
+                    return MatrixSequnce[1].Value / Math.PI * 180;
+                }
+                else return 0.0;
+            }
+        }
+        public double Rx
+        {
+            get
+            {
+                if (MatrixSequnce.Count == 3)
+                {
+                    return MatrixSequnce[2].Value / Math.PI * 180;
+                }
+                else return 0.0;
+            }
+        }
+
+        public float[,] FloatArray2d =>PointCloudCommon.Matrix4x4ToFloatArray(finalMatrix4);
+        
+        public float[,] FloatArray2dTranspose =>PointCloudCommon.Matrix4x4ToFloatArray(GetMatrixTranspose());
+        public Quaternion Q = new Quaternion();
+        public RotateRigidBody()
+        {
+        }
+
+        public void AddRotateSeq(eRefAxis rotSeq, double rotateRad)
+        {
+            RotateUnit rotateEulerUnit = new RotateUnit(rotSeq, eRotateType.RigidBody,rotateRad);
+            MatrixSequnce.Add(rotateEulerUnit);
+            Q*=new Quaternion(rotateEulerUnit);
+            IsMatrixCalculated = false;
+        }
+        public static void SolveRzRyRx(Matrix4x4 inMatrix, out RotateUnit Rx, out RotateUnit Ry, out RotateUnit Rz)
+        {
+            double rx = 0, ry = 0, rz = 0;
+            if (inMatrix.V02 < 1)
+            {
+                if (inMatrix.V02 > -1)
+                {
+                    rx = Math.Atan2(inMatrix.V12, inMatrix.V22);
+                    ry = -Math.Asin(inMatrix.V02);
+                    rz = Math.Atan2(inMatrix.V01, inMatrix.V00);
+                }
+                else // inMatrix.V02 == -1
+                {
+                    rx = Math.Atan2(inMatrix.V10, inMatrix.V11);
+                    ry = Math.PI / 2;
+                    rz = 0;
+                }
+            }
+            else // inMatrix.V02 == 1
+            {
+                rx = -Math.Atan2(inMatrix.V10, inMatrix.V11);
+                ry = -Math.PI / 2;
+                rz = 0;
+            }
+            rx *= -1;
+            ry *= -1;
+            rz *= -1;
+
+            Rx = new RotateUnit(eRefAxis.X, eRotateType.RigidBody, rx);
+            Ry = new RotateUnit(eRefAxis.Y, eRotateType.RigidBody, ry);
+            Rz = new RotateUnit(eRefAxis.Z, eRotateType.RigidBody, rz);
+
         }
 
     }
@@ -781,33 +845,38 @@ namespace RsLib.PointCloudLib
         {
             get
             {
-                foreach (var item in seq)
+                double output = 0;
+                foreach (var item in MatrixSequnce)
                 {
-                    if (item.RefAxis == RefAxis.X) return item.Value;
+                    if (item.RefAxis == eRefAxis.X) output+= item.Value;
                 }
-                return 0;
+                return output;
             }
         }
         public double Y
         {
             get
             {
-                foreach (var item in seq)
+                double output = 0;
+
+                foreach (var item in MatrixSequnce)
                 {
-                    if (item.RefAxis == RefAxis.Y) return item.Value;
+                    if (item.RefAxis == eRefAxis.Y) output+= item.Value;
                 }
-                return 0;
+                return output;
             }
         }
         public double Z
         {
             get
             {
-                foreach (var item in seq)
+                double output = 0;
+
+                foreach (var item in MatrixSequnce)
                 {
-                    if (item.RefAxis == RefAxis.Z) return item.Value;
+                    if (item.RefAxis == eRefAxis.Z) output+= item.Value;
                 }
-                return 0;
+                return output;
             }
         }
         public Shift()
@@ -816,9 +885,9 @@ namespace RsLib.PointCloudLib
         }
         public Shift(double x, double y, double z)
         {
-            seq.Add(new TranslationUnit(RefAxis.X, x));
-            seq.Add(new TranslationUnit(RefAxis.Y, y));
-            seq.Add(new TranslationUnit(RefAxis.Z, z));
+            MatrixSequnce.Add(new TranslationUnit(eRefAxis.X, x));
+            MatrixSequnce.Add(new TranslationUnit(eRefAxis.Y, y));
+            MatrixSequnce.Add(new TranslationUnit(eRefAxis.Z, z));
             EndAddMatrix();
         }
     }
@@ -829,11 +898,11 @@ namespace RsLib.PointCloudLib
         public Vector3D V { get; set; } = new Vector3D();
 
         public double[] QArray => new double[] { Q0, Q1, Q2, Q3 };
-        public double Q0 => Math.Round(W,7);
-        public double Q1 => Math.Round(V.X,7);
-        public double Q2 => Math.Round(V.Y,7);
-        public double Q3 => Math.Round(V.Z,7);
-        public double Determin => Math.Round(Math.Sqrt(Math.Pow(Q0, 2) + Math.Pow(Q1, 2) + Math.Pow(Q2, 2) + Math.Pow(Q3, 2)),7);
+        public double Q0 => Math.Round(W, 7);
+        public double Q1 => Math.Round(V.X, 7);
+        public double Q2 => Math.Round(V.Y, 7);
+        public double Q3 => Math.Round(V.Z, 7);
+        public double Determin => Math.Round(Math.Sqrt(Math.Pow(Q0, 2) + Math.Pow(Q1, 2) + Math.Pow(Q2, 2) + Math.Pow(Q3, 2)), 7);
 
         //public Matrix4x4 Matrix44
         //{
@@ -844,7 +913,7 @@ namespace RsLib.PointCloudLib
         //        output.V00 = (float)(Math.Pow(Q0,2)+Math.Pow(Q1,2)-Math.Pow(Q2,2)-Math.Pow(Q3,2));
         //        output.V01 = (float)(2 * (Q1 * Q2 - Q0 * Q3));
         //        output.V02 = (float)(2 * (Q1 * Q3 + Q0 * Q2));
-                
+
         //        output.V10 = (float)(2 * (Q1 * Q2 + Q0 * Q3));
         //        output.V11 = (float)(Math.Pow(Q0, 2) - Math.Pow(Q1, 2) + Math.Pow(Q2, 2) - Math.Pow(Q3, 2));
         //        output.V12 = (float)(2 * (Q2 * Q3 - Q0 * Q1));
@@ -861,21 +930,24 @@ namespace RsLib.PointCloudLib
         }
         public Quaternion(MatrixUnit matrixUnit)
         {
-            if(matrixUnit.Type == MatrixType.Rotate)
+            if (matrixUnit.MatrixType == eMatrixType.Rotate)
             {
                 RotateUnit rotateUnit = matrixUnit as RotateUnit;
-                if(rotateUnit != null)
+                if (rotateUnit != null)
                 {
                     calculateQ(rotateUnit.RotateRadian, rotateUnit.RefAxis);
                 }
             }
         }
-        public Quaternion(double rotateRad,RefAxis refAxis)
+        public Quaternion(double rotateRad, eRefAxis refAxis)
         {
             calculateQ(rotateRad, refAxis);
         }
-        
-        private void calculateQ(double rotateRad,RefAxis refAxis)
+        public override string ToString()
+        {
+            return $"{W:F6},{Q1:F6},{Q2:F6},{Q3:F6}";
+        }
+        private void calculateQ(double rotateRad,eRefAxis refAxis)
         {
             W = Math.Cos(rotateRad/2);
             V = Math.Sin(rotateRad/2) * Vector3D.GetRefAxis(refAxis);
