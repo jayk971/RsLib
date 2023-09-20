@@ -67,7 +67,7 @@ namespace RsLib.Display3D
             formAdd.ClearSelectPath += FormAdd_ClearSelectPath;
 
             Log.Start();
-            trackBar_RotateSensitivity.Value = (int)Settings.Default.Sensitivity * 10;
+            trackBar_RotateSensitivity.Value = (int)(Settings.Default.Sensitivity * 10);
 
         }
 
@@ -876,18 +876,38 @@ namespace RsLib.Display3D
 
         private void saveOPTFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ObjectGroup selectGroup = selectObjectGroup(_CurrentSelectObjectIndex);
+            bool tempSaveAll = false;
+            if (selectGroup == null) return;
+            if (_SelectedPathIndex.Count == 0)
+            {
+                DialogResult dr =  MessageBox.Show("Save all path of the selected item to opt file?", "Save all path?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.No) return;
+                else
+                {
+                    tempSaveAll = true;
+                    addAllToCollectionToolStripMenuItem_Click(null, null);
+                }
+            }
             ObjectGroup selects = selectPartPaths();
             if (selects != null)
             {
                 using (SaveFileDialog sf = new SaveFileDialog())
                 {
-                    sf.Filter = "OPT file|*.opt";
+                    sf.Filter = "OPT file|*.opt|OPT2 file|*.opt2";
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
                         string filePath = sf.FileName;
+                        int s = sf.FilterIndex;
                         try
                         {
-                            selects.SaveOPT(filePath);
+                            if(s == 1) selects.SaveOPT(filePath);
+                            else selects.SaveOPT2(filePath);
+
+                            if(tempSaveAll)
+                            {
+                                _SelectedPathIndex.Clear();
+                            }
                             Log.Add($"Save opt path. {filePath}", MsgLevel.Info);
                             MessageBox.Show($"Save opt path done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1064,6 +1084,18 @@ namespace RsLib.Display3D
             if (p != null)
             {
                 p.SmoothVy();
+                ReBuildAll();
+            }
+        }
+
+        private void smoothVzToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ObjectGroup selectObj = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectObj == null) return;
+            Polyline p = selectObj.SelectPolyine(_CurrentSelectLineIndex);
+            if (p != null)
+            {
+                p.SmoothVz();
                 ReBuildAll();
             }
         }

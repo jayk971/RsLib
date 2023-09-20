@@ -51,26 +51,19 @@ namespace RsLib.PointCloudLib
                 if (fileContent[i] != "")
                 {
                     string[] SplitData = fileContent[i].Split(',');
-                    if (SplitData.Length >= 6)
+                    if (SplitData.Length == 6)
                     {
-                        double x = 0;
-                        double y = 0;
-                        double z = 0;
-                        double vz_x = 0;
-                        double vz_y = 0;
-                        double vz_z = 0;
-
                         if (i % ResampleCount != 0) continue;
 
-                        if (!double.TryParse(SplitData[0], out x)) return false;
-                        if (!double.TryParse(SplitData[1], out y)) return false;
-                        if (!double.TryParse(SplitData[2], out z)) return false;
-                        if (!double.TryParse(SplitData[3], out vz_x)) return false;
-                        if (!double.TryParse(SplitData[4], out vz_y)) return false;
-                        if (!double.TryParse(SplitData[5], out vz_z)) return false;
+                        if (!double.TryParse(SplitData[0], out double x)) return false;
+                        if (!double.TryParse(SplitData[1], out double y)) return false;
+                        if (!double.TryParse(SplitData[2], out double z)) return false;
+                        if (!double.TryParse(SplitData[3], out double vz_x)) return false;
+                        if (!double.TryParse(SplitData[4], out double vz_y)) return false;
+                        if (!double.TryParse(SplitData[5], out double vz_z)) return false;
 
-                        Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
-                        Vector3D vec = new Vector3D(Math.Round(vz_x, 2), Math.Round(vz_y, 2), Math.Round(vz_z, 2));
+                        Point3D point = new Point3D(Math.Round(x, 3), Math.Round(y, 3), Math.Round(z, 3));
+                        Vector3D vec = new Vector3D(Math.Round(vz_x, 3), Math.Round(vz_y, 3), Math.Round(vz_z, 3));
 
                         LocateIndexOption index = new LocateIndexOption()
                         {
@@ -81,6 +74,47 @@ namespace RsLib.PointCloudLib
                         PointV3D point_V = new PointV3D(point, vec);
                         Points.Add(point_V);
                         if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                    }
+                    else if(SplitData.Length == 12)
+                    {
+                        if (i % ResampleCount != 0) continue;
+
+                        if (!double.TryParse(SplitData[0], out double x)) return false;
+                        if (!double.TryParse(SplitData[1], out double y)) return false;
+                        if (!double.TryParse(SplitData[2], out double z)) return false;
+
+                        if (!double.TryParse(SplitData[3], out double vz_x)) return false;
+                        if (!double.TryParse(SplitData[4], out double vz_y)) return false;
+                        if (!double.TryParse(SplitData[5], out double vz_z)) return false;
+
+                        if (!double.TryParse(SplitData[6], out double vy_x)) return false;
+                        if (!double.TryParse(SplitData[7], out double vy_y)) return false;
+                        if (!double.TryParse(SplitData[8], out double vy_z)) return false;
+
+                        if (!double.TryParse(SplitData[9], out double vx_x)) return false;
+                        if (!double.TryParse(SplitData[10], out double vx_y)) return false;
+                        if (!double.TryParse(SplitData[11], out double vx_z)) return false;
+
+                        Point3D point = new Point3D(Math.Round(x, 3), Math.Round(y, 3), Math.Round(z, 3));
+                        Vector3D vz = new Vector3D(Math.Round(vz_x, 3), Math.Round(vz_y, 3), Math.Round(vz_z, 3));
+                        Vector3D vy = new Vector3D(Math.Round(vy_x, 3), Math.Round(vy_y, 3), Math.Round(vy_z, 3));
+                        Vector3D vx = new Vector3D(Math.Round(vx_x, 3), Math.Round(vx_y, 3), Math.Round(vx_z, 3));
+
+                        LocateIndexOption index = new LocateIndexOption()
+                        {
+                            Index = Count
+                        };
+                        point.Options.AddRange(Options);
+                        point.Options.Add(index);
+                        PointV3D point_V = new PointV3D(point, vx, vy, vz);
+
+                        Points.Add(point_V);
+                        if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+
+                    }
+                    else
+                    {
+
                     }
                 }
             }
@@ -764,7 +798,27 @@ namespace RsLib.PointCloudLib
                 currP.Vy.UnitVector();
             }
         }
+        public void SmoothVz()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int prev = i - 1;
+                int curr = i;
+                int next = i + 1;
+                if (prev < 0) prev = 0;
+                if (next > Points.Count - 1) next = Points.Count - 1;
 
+                PointV3D prevP = Points[prev] as PointV3D;
+                PointV3D currP = Points[curr] as PointV3D;
+                PointV3D nextP = Points[next] as PointV3D;
+
+                currP.Vz = (prevP.Vz + currP.Vz + nextP.Vz) * (1.0 / 3.0);
+                currP.Vx = Vector3D.Cross(currP.Vy, currP.Vz).DeepClone();
+                currP.Vx.UnitVector();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy.UnitVector();
+            }
+        }
         public void CalculatePathDirectionAsVy()
         {
             for (int i = 0; i < Points.Count -1; i++)
@@ -1302,6 +1356,26 @@ namespace RsLib.PointCloudLib
             output.Add("");
             return output;
         }
+        public List<string> GetOpt2PathStringList()
+        {
+            List<string> output = new List<string>();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if (Points[i].GetType() == typeof(PointV3D))
+                {
+                    PointV3D p = Points[i] as PointV3D;
+                    output.Add(string.Format("{0:F3},{1:F3},{2:F3},{3:F3},{4:F3},{5:F3},{6:F3},{7:F3},{8:F3},{9:F3},{10:F3},{11:F3}", p.X, p.Y, p.Z, p.Vz.X, p.Vz.Y, p.Vz.Z, p.Vy.X, p.Vy.Y, p.Vy.Z, p.Vx.X, p.Vx.Y, p.Vx.Z));
+                }
+                else
+                {
+                    Point3D p = Points[i];
+                    output.Add(string.Format("{0:F2},{1:F2},{2:F2},0,0,0,0,0,0,0,0,0", p.X, p.Y, p.Z));
+                }
+            }
+            output.Add("");
+            return output;
+        }
+
         public void SaveAsTxt(string FilePath, bool Append = false)
         {
             if (Path.GetExtension(FilePath).ToUpper() == ".XYZ") FilePath = FilePath.Replace(".xyz", ".txt");

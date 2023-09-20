@@ -339,6 +339,26 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+        public void SaveOPT2(string filePath)
+        {
+            List<string> finalString = new List<string>();
+            foreach (var item in Objects)
+            {
+                var subObj = item.Value as Polyline;
+                if (subObj != null)
+                {
+                    finalString.AddRange(subObj.GetOpt2PathStringList());
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default, 65535))
+            {
+                for (int i = 0; i < finalString.Count; i++)
+                {
+                    sw.WriteLine(finalString[i]);
+                }
+            }
+        }
+
         public void LoadMultiPathOPT(string filePath, bool buildKDTree)
         {
             List<string> temp = new List<string>();
@@ -388,6 +408,54 @@ namespace RsLib.PointCloudLib
                 temp.Clear();
             }
         }
+        public void LoadMultiPathOPT2(string filePath, bool buildKDTree)
+        {
+            List<string> temp = new List<string>();
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    if (readData != "")
+                    {
+                        temp.Add(readData);
+                    }
+                    else
+                    {
+                        if (temp.Count > 0)
+                        {
+                            Polyline p = new Polyline();
+                            LineOption lineProperty = new LineOption()
+                            {
+                                LineIndex = Objects.Count,
+                            };
+
+                            p.Options.Add(lineProperty);
+                            p.LoadFromStringList(temp, buildKDTree);
+
+                            Objects.Add(lineProperty.LineIndex.ToString(), p);
+                            Sequence.Add(lineProperty.LineIndex.ToString());
+                            temp.Clear();
+                        }
+                    }
+                }
+            }
+            if (temp.Count > 0)
+            {
+                Polyline p = new Polyline();
+                LineOption lineProperty = new LineOption()
+                {
+                    LineIndex = Objects.Count
+                };
+                p.Options.Add(lineProperty);
+                p.LoadFromStringList(temp, buildKDTree);
+
+                Objects.Add(lineProperty.LineIndex.ToString(), p);
+                Sequence.Add(lineProperty.LineIndex.ToString());
+                temp.Clear();
+            }
+        }
+
         public void SaveABBModPath(string filePath,bool isRobTargetMode)
         {
             ABBPath aBBPath = ConvertABBModPath();

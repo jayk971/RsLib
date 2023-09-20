@@ -184,6 +184,33 @@ namespace RsLib.XYZViewer
 
 
                         break;
+                    case ".opt2":
+                        ObjectGroup group2 = new ObjectGroup(fileName);
+                        group2.LoadMultiPathOPT2(filePath, true);
+                        drawObjectGroup(group2, drawItem, fileName);
+                        //Polyline line = new Polyline();
+                        //line.LoadFromOPTFile(filePath, true);
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        //_displayCtrl.BuildPath(group, (int)drawItem, true, true);
+
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+                        //_displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
+
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
+
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
+
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
+                        //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
+                        //_displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
+
+
+                        break;
+
                     case ".csv":
                         PointCloud cloud2 = KeyRawCSV.LoadHeightRawData(filePath, 1, 1);
                         _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
@@ -322,6 +349,7 @@ namespace RsLib.XYZViewer
                     {
                         if(ext == ".opt") canDrop = true;
                         else if(ext == ".json")canDrop = true;
+                        else if(ext == ".opt2") canDrop =true;
                         else canDrop = false;
                     }
 

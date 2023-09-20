@@ -864,6 +864,21 @@ namespace RsLib.PointCloudLib
 
             AddOption(src.Options);
         }
+        public PointV3D(Point3D src, Vector3D vx, Vector3D vy, Vector3D vz)
+        {
+            Vx = vx.DeepClone();
+            Vy = vy.DeepClone();
+            Vz = vz.DeepClone();
+
+            X = src.X;
+            Y = src.Y;
+            Z = src.Z;
+            Dt = src.Dt;
+            flag = src.flag;
+
+            AddOption(src.Options);
+        }
+
         public PointV3D(PointV3D src)
         {
             Vx = new Vector3D(src.Vx.X, src.Vx.Y, src.Vx.Z);
