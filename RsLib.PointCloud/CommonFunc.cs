@@ -1536,9 +1536,9 @@ namespace RsLib.PointCloudLib
                                     ry = double.Parse(splitData[2]);
                                     rz = double.Parse(splitData[3]);
                                     RotateRigidBody r = new RotateRigidBody();
-                                    r.AddRotateSeq(eRefAxis.Z, rz);
-                                    r.AddRotateSeq(eRefAxis.Y, ry);
-                                    r.AddRotateSeq(eRefAxis.X, rx);
+                                    r.AddRotateSeq(eRefAxis.Z, rz / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.Y, ry / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.X, rx / 180.0 * Math.PI);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1606,9 +1606,9 @@ namespace RsLib.PointCloudLib
                                     ry = double.Parse(splitData[2]);
                                     rz = double.Parse(splitData[3]);
                                     RotateRigidBody r = new RotateRigidBody();
-                                    r.AddRotateSeq(eRefAxis.Z, rz);
-                                    r.AddRotateSeq(eRefAxis.Y, ry);
-                                    r.AddRotateSeq(eRefAxis.X, rx);
+                                    r.AddRotateSeq(eRefAxis.Z, rz / 180.0 *Math.PI);
+                                    r.AddRotateSeq(eRefAxis.Y, ry / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.X, rx / 180.0 * Math.PI);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1665,9 +1665,9 @@ namespace RsLib.PointCloudLib
                                     double ry = double.Parse(splitData[2]);
                                     double rz = double.Parse(splitData[3]);
                                     RotateRigidBody r = new RotateRigidBody();
-                                    r.AddRotateSeq(eRefAxis.Z, rz);
-                                    r.AddRotateSeq(eRefAxis.Y, ry);
-                                    r.AddRotateSeq(eRefAxis.X, rx);
+                                    r.AddRotateSeq(eRefAxis.Z, rz / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.Y, ry / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.X, rx / 180.0 * Math.PI);
                                     coordMatrix.AddSeq(r);
                                 }
                             }
@@ -1737,9 +1737,9 @@ namespace RsLib.PointCloudLib
                                     double ry = double.Parse(splitData[2]);
                                     double rz = double.Parse(splitData[3]);
                                     RotateRigidBody r = new RotateRigidBody();
-                                    r.AddRotateSeq(eRefAxis.Z, rz);
-                                    r.AddRotateSeq(eRefAxis.Y, ry);
-                                    r.AddRotateSeq(eRefAxis.X, rx);
+                                    r.AddRotateSeq(eRefAxis.Z, rz /180.0 *Math.PI);
+                                    r.AddRotateSeq(eRefAxis.Y, ry / 180.0 * Math.PI);
+                                    r.AddRotateSeq(eRefAxis.X, rx / 180.0 * Math.PI);
                                     coordMatrix.AddSeq(r);
 
 
