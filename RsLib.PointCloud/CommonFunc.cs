@@ -98,7 +98,7 @@ namespace RsLib.PointCloudLib
             xArr = new double[0];
             yArr = new double[0];
             zArr = new double[0];
-
+            int dSampleRate = downSample > 0? downSample : 1;
 
             using (StreamReader sr = new StreamReader(filePath))
             {
@@ -112,12 +112,12 @@ namespace RsLib.PointCloudLib
                         if (double.TryParse(splitData[0], out double x) == false) continue;
                         if (double.TryParse(splitData[1], out double y) == false) continue;
                         if (double.TryParse(splitData[2], out double z) == false) continue;
-
-                        if (ptCount % downSample != 0) continue;
+                        ptCount++;
+                        if (ptCount % dSampleRate != 0) continue;
                         xList.Add(x);
                         yList.Add(y);
                         zList.Add(z);
-                        ptCount++;
+                        
                     }
                 }
             }
