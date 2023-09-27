@@ -389,6 +389,19 @@ namespace RsLib.PointCloudLib
 
             return outPt;
         }
+        public Point3D Multiply(Matrix4x4 matrix)
+        {
+            Point3D outPt = new Point3D(this);
+            Vector4 v = new Vector4((float)X, (float)Y, (float)Z, 1f);
+            Vector4 output = matrix * v;
+
+           
+            outPt.X = output.X;
+            outPt.Y = output.Y;
+            outPt.Z = output.Z;
+
+            return outPt;
+        }
 
 
         /// <summary>

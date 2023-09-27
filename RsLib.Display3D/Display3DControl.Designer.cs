@@ -91,8 +91,14 @@ namespace RsLib.Display3D
             this.smoothVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothVzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothVyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smoothVzToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolCmb_LineIndex = new System.Windows.Forms.ToolStripComboBox();
+            this.toolBtn_ReversePath = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolBtn_SmoothVx = new System.Windows.Forms.ToolStripButton();
+            this.toolBtn_SmoothVy = new System.Windows.Forms.ToolStripButton();
+            this.toolBtn_SmoothVz = new System.Windows.Forms.ToolStripButton();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.tlp_LocalTransform = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -109,12 +115,6 @@ namespace RsLib.Display3D
             this.trackBar_RotateSensitivity = new System.Windows.Forms.TrackBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.smoothVzToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolBtn_ReversePath = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolBtn_SmoothVx = new System.Windows.Forms.ToolStripButton();
-            this.toolBtn_SmoothVy = new System.Windows.Forms.ToolStripButton();
-            this.toolBtn_SmoothVz = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -696,16 +696,23 @@ namespace RsLib.Display3D
             // smoothVzToolStripMenuItem
             // 
             this.smoothVzToolStripMenuItem.Name = "smoothVzToolStripMenuItem";
-            this.smoothVzToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smoothVzToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.smoothVzToolStripMenuItem.Text = "Smooth Vx";
             this.smoothVzToolStripMenuItem.Click += new System.EventHandler(this.smoothVxToolStripMenuItem_Click);
             // 
             // smoothVyToolStripMenuItem
             // 
             this.smoothVyToolStripMenuItem.Name = "smoothVyToolStripMenuItem";
-            this.smoothVyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.smoothVyToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.smoothVyToolStripMenuItem.Text = "Smooth Vy";
             this.smoothVyToolStripMenuItem.Click += new System.EventHandler(this.smoothVyToolStripMenuItem_Click);
+            // 
+            // smoothVzToolStripMenuItem1
+            // 
+            this.smoothVzToolStripMenuItem1.Name = "smoothVzToolStripMenuItem1";
+            this.smoothVzToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
+            this.smoothVzToolStripMenuItem1.Text = "Smooth Vz";
+            this.smoothVzToolStripMenuItem1.Click += new System.EventHandler(this.smoothVzToolStripMenuItem1_Click);
             // 
             // toolStripLabel1
             // 
@@ -719,6 +726,54 @@ namespace RsLib.Display3D
             this.toolCmb_LineIndex.Name = "toolCmb_LineIndex";
             this.toolCmb_LineIndex.Size = new System.Drawing.Size(75, 30);
             this.toolCmb_LineIndex.SelectedIndexChanged += new System.EventHandler(this.toolCmb_LineIndex_SelectedIndexChanged);
+            // 
+            // toolBtn_ReversePath
+            // 
+            this.toolBtn_ReversePath.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtn_ReversePath.Image = global::RsLib.Display3D.Properties.Resources.reversed_numerical_sorting_48px;
+            this.toolBtn_ReversePath.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_ReversePath.Name = "toolBtn_ReversePath";
+            this.toolBtn_ReversePath.Size = new System.Drawing.Size(23, 27);
+            this.toolBtn_ReversePath.Text = "Reverse Path";
+            this.toolBtn_ReversePath.Click += new System.EventHandler(this.reversePathToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 30);
+            // 
+            // toolBtn_SmoothVx
+            // 
+            this.toolBtn_SmoothVx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolBtn_SmoothVx.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVx.Image")));
+            this.toolBtn_SmoothVx.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_SmoothVx.Name = "toolBtn_SmoothVx";
+            this.toolBtn_SmoothVx.Size = new System.Drawing.Size(25, 27);
+            this.toolBtn_SmoothVx.Text = "Vx";
+            this.toolBtn_SmoothVx.ToolTipText = "Smooth Vx";
+            this.toolBtn_SmoothVx.Click += new System.EventHandler(this.smoothVxToolStripMenuItem_Click);
+            // 
+            // toolBtn_SmoothVy
+            // 
+            this.toolBtn_SmoothVy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolBtn_SmoothVy.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVy.Image")));
+            this.toolBtn_SmoothVy.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_SmoothVy.Name = "toolBtn_SmoothVy";
+            this.toolBtn_SmoothVy.Size = new System.Drawing.Size(25, 27);
+            this.toolBtn_SmoothVy.Text = "Vy";
+            this.toolBtn_SmoothVy.ToolTipText = "Smooth Vy";
+            this.toolBtn_SmoothVy.Click += new System.EventHandler(this.smoothVyToolStripMenuItem_Click);
+            // 
+            // toolBtn_SmoothVz
+            // 
+            this.toolBtn_SmoothVz.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolBtn_SmoothVz.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVz.Image")));
+            this.toolBtn_SmoothVz.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_SmoothVz.Name = "toolBtn_SmoothVz";
+            this.toolBtn_SmoothVz.Size = new System.Drawing.Size(25, 27);
+            this.toolBtn_SmoothVz.Text = "Vz";
+            this.toolBtn_SmoothVz.ToolTipText = "Smooth Vz";
+            this.toolBtn_SmoothVz.Click += new System.EventHandler(this.smoothVzToolStripMenuItem1_Click);
             // 
             // treeView1
             // 
@@ -976,61 +1031,6 @@ namespace RsLib.Display3D
             // 
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // smoothVzToolStripMenuItem1
-            // 
-            this.smoothVzToolStripMenuItem1.Name = "smoothVzToolStripMenuItem1";
-            this.smoothVzToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.smoothVzToolStripMenuItem1.Text = "Smooth Vz";
-            this.smoothVzToolStripMenuItem1.Click += new System.EventHandler(this.smoothVzToolStripMenuItem1_Click);
-            // 
-            // toolBtn_ReversePath
-            // 
-            this.toolBtn_ReversePath.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtn_ReversePath.Image = global::RsLib.Display3D.Properties.Resources.reversed_numerical_sorting_48px;
-            this.toolBtn_ReversePath.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtn_ReversePath.Name = "toolBtn_ReversePath";
-            this.toolBtn_ReversePath.Size = new System.Drawing.Size(23, 27);
-            this.toolBtn_ReversePath.Text = "Reverse Path";
-            this.toolBtn_ReversePath.Click += new System.EventHandler(this.reversePathToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 30);
-            // 
-            // toolBtn_SmoothVx
-            // 
-            this.toolBtn_SmoothVx.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolBtn_SmoothVx.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVx.Image")));
-            this.toolBtn_SmoothVx.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtn_SmoothVx.Name = "toolBtn_SmoothVx";
-            this.toolBtn_SmoothVx.Size = new System.Drawing.Size(25, 27);
-            this.toolBtn_SmoothVx.Text = "Vx";
-            this.toolBtn_SmoothVx.ToolTipText = "Smooth Vx";
-            this.toolBtn_SmoothVx.Click += new System.EventHandler(this.smoothVxToolStripMenuItem_Click);
-            // 
-            // toolBtn_SmoothVy
-            // 
-            this.toolBtn_SmoothVy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolBtn_SmoothVy.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVy.Image")));
-            this.toolBtn_SmoothVy.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtn_SmoothVy.Name = "toolBtn_SmoothVy";
-            this.toolBtn_SmoothVy.Size = new System.Drawing.Size(25, 27);
-            this.toolBtn_SmoothVy.Text = "Vy";
-            this.toolBtn_SmoothVy.ToolTipText = "Smooth Vy";
-            this.toolBtn_SmoothVy.Click += new System.EventHandler(this.smoothVyToolStripMenuItem_Click);
-            // 
-            // toolBtn_SmoothVz
-            // 
-            this.toolBtn_SmoothVz.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolBtn_SmoothVz.Image = ((System.Drawing.Image)(resources.GetObject("toolBtn_SmoothVz.Image")));
-            this.toolBtn_SmoothVz.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtn_SmoothVz.Name = "toolBtn_SmoothVz";
-            this.toolBtn_SmoothVz.Size = new System.Drawing.Size(25, 27);
-            this.toolBtn_SmoothVz.Text = "Vz";
-            this.toolBtn_SmoothVz.ToolTipText = "Smooth Vz";
-            this.toolBtn_SmoothVz.Click += new System.EventHandler(this.smoothVzToolStripMenuItem1_Click);
             // 
             // Display3DControl
             // 

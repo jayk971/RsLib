@@ -89,6 +89,44 @@ namespace RsLib.PointCloudLib
             yArr = yList.ToArray();
             zArr = zList.ToArray();
         }
+        public static void LoadXYZToArray(string filePath, char cplitChar, int downSample,out double[] xArr, out double[] yArr, out double[] zArr)
+        {
+            List<double> xList = new List<double>();
+            List<double> yList = new List<double>();
+            List<double> zList = new List<double>();
+
+            xArr = new double[0];
+            yArr = new double[0];
+            zArr = new double[0];
+
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                int ptCount = 0;
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    string[] splitData = readData.Split(cplitChar);
+                    if (splitData.Length >= 3)
+                    {
+                        if (double.TryParse(splitData[0], out double x) == false) continue;
+                        if (double.TryParse(splitData[1], out double y) == false) continue;
+                        if (double.TryParse(splitData[2], out double z) == false) continue;
+
+                        if (ptCount % downSample != 0) continue;
+                        xList.Add(x);
+                        yList.Add(y);
+                        zList.Add(z);
+                        ptCount++;
+                    }
+                }
+            }
+
+            xArr = xList.ToArray();
+            yArr = yList.ToArray();
+            zArr = zList.ToArray();
+        }
+
         public static void LoadOPTToXYZIndexNormalArray(string filePath, 
             char cplitChar, 
             out double[] xArr, 

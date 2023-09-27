@@ -770,9 +770,9 @@ namespace RsLib.PointCloudLib
 
                 currP.Vz.UnitVector();
                 Vector3D tempVx = (prevP.Vx + currP.Vx + nextP.Vx) * (1.0 / 3.0);
-                currP.Vy = Vector3D.Cross(currP.Vz, tempVx).DeepClone();
+                currP.Vy = Vector3D.Cross(currP.Vz, tempVx);
                 currP.Vy.UnitVector();
-                currP.Vx = Vector3D.Cross(currP.Vy,currP.Vz).DeepClone();
+                currP.Vx = Vector3D.Cross(currP.Vy,currP.Vz);
                 currP.Vx.UnitVector();
             }
         }
@@ -792,9 +792,9 @@ namespace RsLib.PointCloudLib
 
                 currP.Vz.UnitVector();
                 Vector3D tempVy = (prevP.Vy + currP.Vy + nextP.Vy) * (1.0 / 3.0);
-                currP.Vx = Vector3D.Cross(tempVy, currP.Vz).DeepClone();
+                currP.Vx = Vector3D.Cross(tempVy, currP.Vz);
                 currP.Vx.UnitVector();
-                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx);
                 currP.Vy.UnitVector();
             }
         }
@@ -813,9 +813,9 @@ namespace RsLib.PointCloudLib
                 PointV3D nextP = Points[next] as PointV3D;
 
                 currP.Vz = (prevP.Vz + currP.Vz + nextP.Vz) * (1.0 / 3.0);
-                currP.Vx = Vector3D.Cross(currP.Vy, currP.Vz).DeepClone();
+                currP.Vx = Vector3D.Cross(currP.Vy, currP.Vz);
                 currP.Vx.UnitVector();
-                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx);
                 currP.Vy.UnitVector();
             }
         }
@@ -831,17 +831,17 @@ namespace RsLib.PointCloudLib
                 Vector3D Vpath = new Vector3D(currP, nextP);
                 currP.Vz.UnitVector();
                 Vpath.UnitVector();
-                currP.Vx = Vector3D.Cross(Vpath, currP.Vz).DeepClone();
+                currP.Vx = Vector3D.Cross(Vpath, currP.Vz);
                 currP.Vx.UnitVector();
-                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx).DeepClone();
+                currP.Vy = Vector3D.Cross(currP.Vz, currP.Vx);
                 currP.Vy.UnitVector();
 
                 if(i == Points.Count-2)
                 {
                     nextP.Vz.UnitVector();
-                    nextP.Vx = Vector3D.Cross(Vpath, nextP.Vz).DeepClone();
+                    nextP.Vx = Vector3D.Cross(Vpath, nextP.Vz);
                     nextP.Vx.UnitVector();
-                    nextP.Vy = Vector3D.Cross(nextP.Vz, nextP.Vx).DeepClone();
+                    nextP.Vy = Vector3D.Cross(nextP.Vz, nextP.Vx);
                     nextP.Vy.UnitVector();
                 }
             }
