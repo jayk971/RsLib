@@ -541,7 +541,7 @@ namespace RsLib.PointCloudLib
             Queue<double> FIFO_X = new Queue<double>();
             Queue<double> FIFO_Y = new Queue<double>();
             Queue<double> FIFO_Z = new Queue<double>();
-            List<Point3D> AvePoints = new List<Point3D>();
+            List<PointV3D> AvePoints = new List<PointV3D>();
             int QueueCount = 0;
             for (int i = 0; i < Points.Count - 1; i++)
             {
@@ -594,14 +594,20 @@ namespace RsLib.PointCloudLib
                 if (SmoothY) y = FIFO_Y.Average();
                 if (SmoothZ) z = FIFO_Z.Average();
 
-                Point3D NewPoint = new Point3D(x, y, z);
+                PointV3D NewPoint = new PointV3D(Points[i]);
+                NewPoint.X = x;
+                NewPoint.Y = y;
+                NewPoint.Z = z;
 
                 AvePoints.Add(NewPoint);
             }
             int LastCount = AvePoints.Count - 1;
             AvePoints.RemoveAt(LastCount);
-            AvePoints.Add(Points[Points.Count - 1]);
-            Points = AvePoints;
+            PointV3D lastPoint = new PointV3D(Points[Points.Count - 1]);
+
+            AvePoints.Add(lastPoint);
+            Points.Clear();
+            Points.AddRange(AvePoints);
 
             CalculatePercent();
 
