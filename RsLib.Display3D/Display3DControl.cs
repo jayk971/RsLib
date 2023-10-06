@@ -14,10 +14,10 @@ namespace RsLib.Display3D
 {
     public partial class Display3DControl : UserControl
     {
-        public event Action<Polyline> AfterPointsSelected;
+        public event Action<PointCloud> AfterPointsSelected;
         public event Action AfterClearButtonPressed;
         public event Action MiddleMouseButtonClick;
-
+        public event Action<int> AfterPolylineSelected;
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
         const int splitContainerPanel1MinSize = 300;
@@ -31,6 +31,16 @@ namespace RsLib.Display3D
         // key : object ID, value : list of select paths;
         Dictionary<int, List<int>> _SelectedPathIndex = new Dictionary<int, List<int>>();
         int _CurrentSelectLineIndex = -1;
+        bool enableMultipleSelect = false;
+        public bool EnableMultipleSelect
+        {
+            get => enableMultipleSelect;
+            set
+            {
+                enableMultipleSelect = value;
+                MultipleSelectToolStripMenuItem.Visible = value;
+            }
+        }
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
@@ -501,7 +511,7 @@ namespace RsLib.Display3D
 
         private void btn_PickPoint_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.Single)
+            if (_pickMode == PointPickMode.One)
             {
                 pickMode_None();
             }
@@ -527,7 +537,7 @@ namespace RsLib.Display3D
 
         private void measureDistanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.Multiple)
+            if (_pickMode == PointPickMode.Two)
             {
                 pickMode_None();
             }
@@ -548,11 +558,12 @@ namespace RsLib.Display3D
             lbl_PickPointMode.Image = Resources.unavailable_48px;
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = true;
+            toolStrip_MultipleSelect.Visible = false;
 
         }
         void pickMode_Single()
         {
-            _pickMode = PointPickMode.Single;
+            _pickMode = PointPickMode.One;
             lbl_PickPointMode.Text = "Pick Point - Middle Click";
             lbl_PickPointMode.Image = Resources.place_marker_30px;
             treeView1.Nodes.Clear();
@@ -561,14 +572,22 @@ namespace RsLib.Display3D
         }
         void pickMode_Measure()
         {
-            _pickMode = PointPickMode.Multiple;
+            _pickMode = PointPickMode.Two;
             lbl_PickPointMode.Text = "Pick 1st Point - Middle Click";
             lbl_PickPointMode.Image = Resources.width_30px;
             treeView1.Nodes.Clear();
             splitContainer2.Panel2Collapsed = false;
 
         }
+        void pickMode_Multiple()
+        {
+            _pickMode = PointPickMode.Multiple;
+            lbl_PickPointMode.Text = "Select Range : Shift + Middle Click\tSelect Each : Ctrl + Middle Click";
+            lbl_PickPointMode.Image = Resources.map_pinpoint_30px;
+            treeView1.Nodes.Clear();
+            splitContainer2.Panel2Collapsed = false;
 
+        }
         private void btn_SaveAs_Click(object sender, EventArgs e)
         {
             if (_CurrentSelectObjectIndex <= 1)
@@ -969,6 +988,7 @@ namespace RsLib.Display3D
                 {
                     _SelectPath = p;
                     _haveSelectPath = true;
+                    AfterPolylineSelected?.Invoke(_CurrentSelectLineIndex);
                 }
             }
             
@@ -1098,6 +1118,41 @@ namespace RsLib.Display3D
                 p.SmoothVz();
                 ReBuildAll();
             }
+        }
+
+        private void toolCmb_LineIndex_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MultipleSelectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStrip_MultipleSelect.Visible = !toolStrip_MultipleSelect.Visible;
+        }
+
+
+        private void toolBtn_StartMultipleSelect_Click(object sender, EventArgs e)
+        {
+            if (_pickMode == PointPickMode.Multiple)
+            {
+                pickMode_None();
+            }
+            else
+            {
+                pickMode_Multiple();
+            }
+        }
+
+        private void toolBtn_EndMultipleSelect_Click(object sender, EventArgs e)
+        {
+            pickMode_None();
+            AfterPointsSelected?.Invoke(_multiSelectPoints);
+        }
+
+        private void toolBtn_ClearMultipleSelect_Click(object sender, EventArgs e)
+        {
+            _multiSelectPoints.Clear();
+
         }
     }
 }

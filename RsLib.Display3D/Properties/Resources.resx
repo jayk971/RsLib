@@ -145,6 +145,9 @@
   <data name="place_marker_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\place_marker_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="unavailable_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\unavailable_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="settings_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settings_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -169,7 +172,7 @@
   <data name="add_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="unavailable_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\unavailable_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="map_pinpoint_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\map_pinpoint_30px1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -141,22 +141,14 @@ namespace RsLib.PointCloudLib
                     string[] SplitData = stringList[i].Split(',');
                     if (SplitData.Length == 6)
                     {
-                        double x = 0;
-                        double y = 0;
-                        double z = 0;
-                        double vz_x = 0;
-                        double vz_y = 0;
-                        double vz_z = 0;
-
-
                         if (i % ResampleCount != 0) continue;
 
-                        if (!double.TryParse(SplitData[0], out x)) return false;
-                        if (!double.TryParse(SplitData[1], out y)) return false;
-                        if (!double.TryParse(SplitData[2], out z)) return false;
-                        if (!double.TryParse(SplitData[3], out vz_x)) return false;
-                        if (!double.TryParse(SplitData[4], out vz_y)) return false;
-                        if (!double.TryParse(SplitData[5], out vz_z)) return false;
+                        if (!double.TryParse(SplitData[0], out double x)) return false;
+                        if (!double.TryParse(SplitData[1], out double y)) return false;
+                        if (!double.TryParse(SplitData[2], out double z)) return false;
+                        if (!double.TryParse(SplitData[3], out double vz_x)) return false;
+                        if (!double.TryParse(SplitData[4], out double vz_y)) return false;
+                        if (!double.TryParse(SplitData[5], out double vz_z)) return false;
 
                         Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
                         Vector3D vec = new Vector3D(Math.Round(vz_x, 2), Math.Round(vz_y, 2), Math.Round(vz_z, 2));
@@ -534,6 +526,117 @@ namespace RsLib.PointCloudLib
             double LastDis = Point3D.Distance(LastPoint, P_End);
             if (LastDis > 0.5) Points.Add(P_End);
         }
+        public void SmoothByCatmullRom(int subdivisions = 10)
+        {
+            if (Count <= 1) return;
+
+            List<Point3D> output = new List<Point3D>();
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                for (int j = 0; j < subdivisions; j++)
+                {
+                    float t = (float)j / subdivisions;
+                    Point3D pt = CatmullRom(
+                        Points[Math.Max(i - 1, 0)],
+                        Points[i],
+                        Points[(i + 1) % Points.Count],
+                        Points[Math.Min(i + 2, Points.Count - 1)],
+                        t
+                    );
+
+                    if (Points[i] is PointV3D pv3d)
+                    {
+                        PointV3D NewPoint = new PointV3D(pv3d);
+
+                        NewPoint.X = pt.X;
+                        NewPoint.Y = pt.Y;
+                        NewPoint.Z = pt.Z;
+                        output.Add(NewPoint);
+                    }
+                    else
+                    {
+                        Point3D NewPoint = new Point3D(Points[i]);
+                        NewPoint.X = pt.X;
+                        NewPoint.Y = pt.Y;
+                        NewPoint.Z = pt.Z;
+                        output.Add(NewPoint);
+                    }
+                }
+            }
+            Points.Clear();
+            Points.AddRange(output);
+        }
+        private Point3D CatmullRom(Point3D p0, Point3D p1, Point3D p2, Point3D p3, float t)
+        {
+            float t2 = t * t;
+            float t3 = t2 * t;
+
+            Point3D point = 0.5f * (
+                (2.0f * p1) +
+                (-1.0*p0 + p2) * t +
+                (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * t2 +
+                (-1*p0 + 3.0f * p1 - 3.0f * p2 + p3) * t3
+            );
+
+            return point;
+        }
+        public void SmoothByCubicBezier(int subdivisions = 10)
+        {
+            if (Count <= 3) return;
+            List<Point3D> output = new List<Point3D>();
+            for (int i = 0; i < Points.Count - 3; i++)
+            {
+                for (int j = 0; j < subdivisions; j++)
+                {
+                    float t = (float)j / subdivisions;
+                    Point3D pt = CubicBezier(
+                        Points[i],
+                        Points[i + 1],
+                        Points[i + 2],
+                        Points[i + 3],
+                        t
+                    );
+
+                    if (Points[i] is PointV3D pv3d)
+                    {
+                        PointV3D NewPoint = new PointV3D(pv3d);
+
+                        NewPoint.X = pt.X;
+                        NewPoint.Y = pt.Y;
+                        NewPoint.Z = pt.Z;
+                        output.Add(NewPoint);
+                    }
+                    else
+                    {
+                        Point3D NewPoint = new Point3D(Points[i]);
+                        NewPoint.X = pt.X;
+                        NewPoint.Y = pt.Y;
+                        NewPoint.Z = pt.Z;
+                        output.Add(NewPoint);
+                    }
+                }
+            }
+            Points.Clear();
+            Points.AddRange(output);
+        }
+        private Point3D CubicBezier(Point3D p0, Point3D p1, Point3D p2, Point3D p3, float t)
+        {
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            float uuu = uu * u;
+            float ttt = tt * t;
+
+            Point3D p = uuu * p0; // (1-t)^3 * P0
+            p += 3 * uu * t * p1; // 3(1-t)^2 * t * P1
+            p += 3 * u * tt * p2; // 3(1-t) * t^2 * P2
+            p += ttt * p3; // t^3 * P3
+
+            return p;
+        }
+
+
+
         public void SmoothByMoveAve(int count, bool SmoothX, bool SmoothY, bool SmoothZ)
         {
 
@@ -541,7 +644,8 @@ namespace RsLib.PointCloudLib
             Queue<double> FIFO_X = new Queue<double>();
             Queue<double> FIFO_Y = new Queue<double>();
             Queue<double> FIFO_Z = new Queue<double>();
-            List<PointV3D> AvePoints = new List<PointV3D>();
+
+            List<Point3D> AvePoints = new List<Point3D>();
             int QueueCount = 0;
             for (int i = 0; i < Points.Count - 1; i++)
             {
@@ -594,18 +698,40 @@ namespace RsLib.PointCloudLib
                 if (SmoothY) y = FIFO_Y.Average();
                 if (SmoothZ) z = FIFO_Z.Average();
 
-                PointV3D NewPoint = new PointV3D(Points[i]);
-                NewPoint.X = x;
-                NewPoint.Y = y;
-                NewPoint.Z = z;
+                if(Points[i] is PointV3D d2)
+                {
+                    PointV3D NewPoint = new PointV3D(d2);
+                    NewPoint.X = x;
+                    NewPoint.Y = y;
+                    NewPoint.Z = z;
 
-                AvePoints.Add(NewPoint);
+                    AvePoints.Add(NewPoint);
+                }
+                else
+                {
+                    Point3D NewPoint = new Point3D(Points[i]);
+                    NewPoint.X = x;
+                    NewPoint.Y = y;
+                    NewPoint.Z = z;
+
+                    AvePoints.Add(NewPoint);
+                }
+
             }
             int LastCount = AvePoints.Count - 1;
             AvePoints.RemoveAt(LastCount);
-            PointV3D lastPoint = new PointV3D(Points[Points.Count - 1]);
 
-            AvePoints.Add(lastPoint);
+            if(Points[Points.Count - 1] is PointV3D d)
+            {
+                PointV3D lastPoint = new PointV3D(d);
+                AvePoints.Add(lastPoint);
+
+            }
+            else
+            {
+                Point3D lastPoint = new Point3D(Points[Points.Count - 1]);
+                AvePoints.Add(lastPoint);
+            }
             Points.Clear();
             Points.AddRange(AvePoints);
 
@@ -742,15 +868,15 @@ namespace RsLib.PointCloudLib
                 Point3D target = output[i];
                 PointV3D p = new PointV3D(target);
 
-                Vector3D vX = new Vector3D();
-                Vector3D vY = new Vector3D();
-                Vector3D vZ = new Vector3D();
-                Point3D center = new Point3D();
+                //Vector3D vX = new Vector3D();
+                //Vector3D vY = new Vector3D();
+                //Vector3D vZ = new Vector3D();
+                //Point3D center = new Point3D();
 
                 PointCloud surfaceCloud = PointCloudCommon.GetNearestPointCloud((KDTree<int>)tree, target, searchRadius);
                 if (surfaceCloud.Count > 0)
                 {
-                    PointCloudCommon.PCA(surfaceCloud, out vX, out vY, out vZ, out center);
+                    PointCloudCommon.PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
                     double dot = Vector3D.Dot(vZ, positiveDir);
                     if (dot < 0) vZ.Reverse();
                     p.Vz = vZ.GetUnitVector();
@@ -1095,46 +1221,172 @@ namespace RsLib.PointCloudLib
             Points.Clear();
             Points = temp.DeepClone();
         }
-
-        public void SmoothPathZOnly()
+        public void SmoothPath_5P(bool enableSmoothX, bool enableSmoothY, bool enableSmoothZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4,double ratioP5)
         {
             List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double p5r = ratioP5 < 0 ? 0 : ratioP5;
+
+            double sum = p1r + p2r + p3r + p4r + p5r;
+
+
 
             for (int i = 0; i < Points.Count; i++)
             {
 
                 int index1 = i - 2;
                 int index2 = i - 1;
-                int index3 = i + 1;
-                int index4 = i + 2;
+                int index3 = i;
+                int index4 = i + 1;
+                int index5 = i + 2;
 
-                if (index3 >= Points.Count)
-                    index3 -= Points.Count;
+                if (index5 >= Points.Count)
+                    index5 = i;
 
                 if (index4 >= Points.Count)
-                    index4 -= Points.Count;
+                    index4 = i;
 
                 if (index1 < 0)
-                    index1 += Points.Count;
+                    index1 = i;
 
                 if (index2 < 0)
-                    index2 += Points.Count;
+                    index2 = i;
 
-                Point3D outP = new Point3D();
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
 
-                outP.X = Points[i].X;
-                outP.Y = Points[i].Y;
-
-                outP.Z = (Points[index1].Z * 0.25 + Points[index2].Z * 0.5 + Points[index3].Z * 0.5 + Points[index4].Z * 0.25) / 1.5;
+                if (sum > 0)
+                {
+                    if (enableSmoothX) outP.X = (Points[index1].X * p1r + Points[index2].X * p2r + Points[index3].X * p3r + Points[index4].X * p4r + Points[index5].X * p5r) / (sum);
+                    if (enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r + Points[index4].Y * p4r + Points[index5].Y * p5r) / (sum);
+                    if (enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r + Points[index4].Z * p4r + Points[index5].Z * p5r) / (sum);
+                }
 
                 output.Add(outP);
             }
             Points.Clear();
-            Points = output.DeepClone();
+            Points.AddRange(output);
         }
-        public void SmoothPathYOnly()
+
+        public void SmoothPath_4P(bool enableSmoothX,bool enableSmoothY,bool enableSmoothZ,double ratioP1, double ratioP2, double ratioP3, double ratioP4)
         {
             List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double sum = p1r + p2r + p3r + p4r;
+
+
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+
+                int index1 = i - 2;
+                int index2 = i - 1;
+                int index3 = i + 1;
+                int index4 = i + 2;
+
+                if (index3 >= Points.Count)
+                    index3 = i;
+
+                if (index4 >= Points.Count)
+                    index4 = i;
+
+                if (index1 < 0)
+                    index1 = i;
+
+                if (index2 < 0)
+                    index2 = i;
+
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
+
+                if (sum > 0)
+                {
+                    if(enableSmoothX) outP.X = (Points[index1].X * p1r + Points[index2].X * p2r + Points[index3].X * p3r + Points[index4].X * p4r) / (sum);
+                    if(enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r + Points[index4].Y * p4r) / (sum);
+                    if(enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r + Points[index4].Z * p4r) / (sum);
+                }
+
+                output.Add(outP);
+            }
+            Points.Clear();
+            Points.AddRange(output);
+        }
+        public void SmoothPath_3P(bool enableSmoothX, bool enableSmoothY, bool enableSmoothZ, double ratioP1, double ratioP2, double ratioP3)
+        {
+            List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double sum = p1r + p2r + p3r;
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int index1 = i - 1;
+                int index2 = i ;
+                int index3 = i + 1;
+
+                if (index3 >= Points.Count)
+                    index3 = i;
+
+                if (index1 < 0)
+                    index1 = i;
+
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
+
+                if (sum > 0)
+                {
+                    if (enableSmoothX) outP.X = (Points[index1].X * p1r + Points[index2].X * p2r + Points[index3].X * p3r) / (sum);
+                    if (enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r) / (sum);
+                    if (enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r) / (sum);
+                }
+
+                output.Add(outP);
+            }
+            Points.Clear();
+            Points.AddRange(output);
+        }
+        public void SmoothPathZ_4P(double ratioP1,double ratioP2,double ratioP3,double ratioP4)
+        {
+            List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double sum = p1r + p2r + p3r + p4r;
+
+
 
             for (int i = 0; i < Points.Count; i++)
             {
@@ -1156,22 +1408,86 @@ namespace RsLib.PointCloudLib
                 if (index2 < 0)
                     index2 += Points.Count;
 
-                Point3D outP = new Point3D();
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
 
-
-                outP.X = Points[i].X;
-                outP.Z = Points[i].Z;
-                outP.Y = (Points[index1].Y * 0.25 + Points[index2].Y * 0.5 + Points[index3].Y * 0.5 + Points[index4].Y * 0.25) / 1.5;
+                if (sum > 0)
+                {
+                    outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r + Points[index4].Z * p4r) / (sum);
+                }
 
                 output.Add(outP);
             }
             Points.Clear();
-            Points = output.DeepClone();
+            Points.AddRange(output);
+        }
+        public void SmoothPathY_4P(double ratioP1, double ratioP2, double ratioP3, double ratioP4)
+        {
+            List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double sum = p1r + p2r + p3r + p4r;
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+
+                int index1 = i - 2;
+                int index2 = i - 1;
+                int index3 = i + 1;
+                int index4 = i + 2;
+
+                if (index3 >= Points.Count)
+                    index3 -= Points.Count;
+
+                if (index4 >= Points.Count)
+                    index4 -= Points.Count;
+
+                if (index1 < 0)
+                    index1 += Points.Count;
+
+                if (index2 < 0)
+                    index2 += Points.Count;
+
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
+
+                if (sum > 0)
+                {
+                    outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r + Points[index4].Y * p4r) / sum;
+                }
+                output.Add(outP);
+            }
+            Points.Clear();
+            Points.AddRange(output);
 
         }
-        public void SmoothPathXOnly()
+        public void SmoothPathX_4P(double ratioP1, double ratioP2, double ratioP3, double ratioP4)
         {
             List<Point3D> output = new List<Point3D>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double sum = p1r + p2r + p3r + p4r;
 
             for (int i = 0; i < Points.Count; i++)
             {
@@ -1193,17 +1509,23 @@ namespace RsLib.PointCloudLib
                 if (index2 < 0)
                     index2 += Points.Count;
 
-                Point3D outP = new Point3D();
-
-                outP.Y = Points[i].Y;
-                outP.Z = Points[i].Z;
-
-                outP.X = (Points[index1].X * 0.25 + Points[index2].X * 0.5 + Points[index3].X * 0.5 + Points[index4].X * 0.25) / 1.5;
-
+                Point3D outP;
+                if (Points[i] is PointV3D p1)
+                {
+                    outP = new PointV3D(p1);
+                }
+                else
+                {
+                    outP = new Point3D(Points[i]);
+                }
+                if (sum > 0)
+                {
+                    outP.X = (Points[index1].X * p1r + Points[index2].X * p2r + Points[index3].X * p3r + Points[index4].X * p4r) / sum;
+                }
                 output.Add(outP);
             }
             Points.Clear();
-            Points = output.DeepClone();
+            Points.AddRange(output);
 
         }
 

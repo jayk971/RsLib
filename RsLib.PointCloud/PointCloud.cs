@@ -1797,7 +1797,7 @@ namespace RsLib.PointCloudLib
             Points.Add(point);
             if (IsAddKdTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
         }
-        public void StartAdd()
+        public void StartAddNotDuplicate()
         {
             DuplicatePoints.Clear();
             IsAddNoDuplicate = true;
@@ -1839,7 +1839,7 @@ namespace RsLib.PointCloudLib
                 if (!DuplicatePoints.ContainsKey(PointName)) DuplicatePoints.Add(PointName, Input.Points[i]);
             }
         }
-        public void EndAdd()
+        public void EndAddNotDuplicate()
         {
             Points = DuplicatePoints.Values.ToList();
             DuplicatePoints.Clear();

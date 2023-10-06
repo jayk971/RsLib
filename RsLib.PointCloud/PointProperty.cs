@@ -7,7 +7,7 @@ using System.IO;
 namespace RsLib.PointCloudLib
 {
     [Serializable]
-    public class ObjectOption
+    public abstract class ObjectOption
     {
 
     }

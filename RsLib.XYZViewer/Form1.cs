@@ -29,6 +29,7 @@ namespace RsLib.XYZViewer
             InitializeComponent();
             KeyBMP.Init();
             _displayCtrl.Dock = DockStyle.Fill;
+            _displayCtrl.EnableMultipleSelect = false;
             tableLayoutPanel2.Controls.Add(_displayCtrl, 1, 0);
             _displayCtrl.AfterClearButtonPressed += _displayCtrl_AfterCleared;
             init();

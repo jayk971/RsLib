@@ -37,7 +37,9 @@ namespace RsLib.Display3D
         public DisplayObjectOption CurrentSelectObjOption => GetDisplayObjectOption(_CurrentSelectObjectIndex);
         public Object3D CurrentSelectObj => GetDisplayObject(_CurrentSelectObjectIndex);
         Point3D _closetPoint = new Point3D();
-        Polyline _multiSelectPoints = new Polyline();
+        PointCloud _multiSelectPoints = new PointCloud();
+        PointCloud _tempMultiSelectPoints = new PointCloud();
+
         Polyline _SelectPath = new Polyline();
 
 
@@ -56,6 +58,13 @@ namespace RsLib.Display3D
             }
         }
         bool _isCheckedMaxMin = false;
+
+        int _MultiSelectLineIndex_Start = -1;
+        int _MultiSelectLineIndex_End = -1;
+
+        int _MultiSelectPtIndex_Start = -1;
+        int _MultiSelectPtIndex_End = -1;
+
         #region event
 
         private void _glControl_SizeChanged(object sender, EventArgs e)
@@ -110,15 +119,20 @@ namespace RsLib.Display3D
             {
                 drawSelectPath();
             }
-            if (_pickMode == PointPickMode.Single)
+            if (_pickMode == PointPickMode.One)
             {
                 if (_haveClosestPoint)
                     drawSelectedPoint();
             }
-            else if (_pickMode == PointPickMode.Multiple)
+            else if (_pickMode == PointPickMode.Two)
             {
                 if (_multiSelectPoints.Count <= 2)
                     drawMeasureLine();
+            }
+            else if (_pickMode == PointPickMode.Multiple)
+            {
+                drawTempMultipleSelect();
+                drawMultipleSelect();
             }
 
             if (_CurrentSelectObjectIndex > 1)
@@ -164,15 +178,15 @@ namespace RsLib.Display3D
 
                 switch (_pickMode)
                 {
-                    case PointPickMode.Single:
+                    case PointPickMode.One:
                         _middleMouseCount = 0;
                         _multiSelectPoints.Clear();
                         _multiSelectPoints.Add(_closetPoint);
                         showSelectPointData(_haveClosestPoint, _closetPoint);
-                        AfterPointsSelected?.Invoke(_multiSelectPoints);
+                        //AfterPointsSelected?.Invoke(_multiSelectPoints);
                         break;
 
-                    case PointPickMode.Multiple:
+                    case PointPickMode.Two:
                         if (_haveClosestPoint)
                         {
                             if (_middleMouseCount % 2 == 0)
@@ -189,7 +203,7 @@ namespace RsLib.Display3D
                                 lbl_PickPointMode.Text = "Measure";
                                 _middleMouseCount++;
                                 showSelectMeasurePointData(_multiSelectPoints);
-                                AfterPointsSelected?.Invoke(_multiSelectPoints);
+                                //AfterPointsSelected?.Invoke(_multiSelectPoints);
                             }
                         }
                         else
@@ -206,7 +220,148 @@ namespace RsLib.Display3D
                         }
 
                         break;
+                    case PointPickMode.Multiple:
+                        if (_haveClosestPoint)
+                        {
+                            if (Control.ModifierKeys == Keys.Shift)
+                            {
+                                if (_middleMouseCount % 2 == 0)
+                                {
+                                    _MultiSelectLineIndex_Start = -1;
+                                    _MultiSelectLineIndex_End = -1;
+                                    _MultiSelectPtIndex_Start = -1;
+                                    _MultiSelectPtIndex_End = -1;
+                                    _tempMultiSelectPoints.Clear();
 
+                                    if (_closetPoint.GetOption(typeof(LineOption)) is LineOption lo) _MultiSelectLineIndex_Start = lo.LineIndex;
+                                    if (_closetPoint.GetOption(typeof(LocateIndexOption)) is LocateIndexOption lio) _MultiSelectPtIndex_Start = lio.Index;
+                                    if (_MultiSelectLineIndex_Start >= 0) // 選到的是線
+                                    {
+                                        if (_haveSelectPath) // 指定特定線
+                                        {
+                                            _tempMultiSelectPoints.Add(_SelectPath.Points[_MultiSelectPtIndex_Start]);
+
+                                        }
+                                        else
+                                        {
+                                            if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
+                                            {
+                                                foreach (var item in obj.Objects)
+                                                {
+                                                    if (item.Value is Polyline pl)
+                                                    {
+                                                        if (pl.GetOption(typeof(LineOption)) is LineOption pllo)
+                                                        {
+                                                            if (pllo.LineIndex == _MultiSelectLineIndex_Start)
+                                                            {
+
+                                                                _tempMultiSelectPoints.Add(pl.Points[_MultiSelectPtIndex_Start]);
+
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    _middleMouseCount++;
+                                }
+                                else
+                                {
+                                    if (_closetPoint.GetOption(typeof(LineOption)) is LineOption lo) _MultiSelectLineIndex_End= lo.LineIndex;
+                                    if (_closetPoint.GetOption(typeof(LocateIndexOption)) is LocateIndexOption lio) _MultiSelectPtIndex_End = lio.Index;
+                                    int minIndex = _MultiSelectPtIndex_Start <= _MultiSelectPtIndex_End ? _MultiSelectPtIndex_Start : _MultiSelectPtIndex_End;
+                                    int maxIndex = _MultiSelectPtIndex_End >= _MultiSelectPtIndex_Start ? _MultiSelectPtIndex_End : _MultiSelectPtIndex_Start;
+
+                                    if (_MultiSelectLineIndex_Start == _MultiSelectLineIndex_End ) 
+                                    {
+                                        if (_MultiSelectLineIndex_End >= 0) // 選到的是線
+                                        {
+                                            if (_haveSelectPath) // 指定特定線
+                                            {
+                                                for (int i = minIndex; i <= maxIndex; i++)
+                                                {
+                                                    _multiSelectPoints.Add(_SelectPath.Points[i]);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
+                                                {
+                                                    foreach (var item in obj.Objects)
+                                                    {
+                                                        if (item.Value is Polyline pl)
+                                                        {
+                                                            if(pl.GetOption(typeof(LineOption)) is LineOption pllo)
+                                                            {
+                                                                if(pllo.LineIndex == _MultiSelectLineIndex_End)
+                                                                {
+                                                                    for (int i = minIndex; i <= maxIndex; i++)
+                                                                    {
+                                                                        _multiSelectPoints.Add(pl.Points[i]);
+                                                                    }
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            _tempMultiSelectPoints.Clear();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _tempMultiSelectPoints.Clear();
+                                    }
+                                    _middleMouseCount = 0;
+
+                                }
+                            }
+                            else if (Control.ModifierKeys == Keys.Control)
+                            {
+                                if (_closetPoint.GetOption(typeof(LineOption)) is LineOption lo) _MultiSelectLineIndex_Start = lo.LineIndex;
+                                if (_closetPoint.GetOption(typeof(LocateIndexOption)) is LocateIndexOption lio) _MultiSelectPtIndex_Start = lio.Index;
+
+                                if(_MultiSelectLineIndex_Start >=0)
+                                {
+                                    if (_haveSelectPath) // 指定特定線
+                                    {
+                                        if(_SelectPath.Count > _MultiSelectPtIndex_Start)
+                                            _multiSelectPoints.Add(_SelectPath.Points[_MultiSelectPtIndex_Start]);
+                                    }
+                                    else
+                                    {
+                                        if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
+                                        {
+                                            foreach (var item in obj.Objects)
+                                            {
+                                                if (item.Value is Polyline pl)
+                                                {
+                                                    if (pl.GetOption(typeof(LineOption)) is LineOption pllo)
+                                                    {
+                                                        if (pllo.LineIndex == _MultiSelectLineIndex_Start)
+                                                        {
+                                                            if (pl.Count > _MultiSelectPtIndex_Start)
+                                                                _multiSelectPoints.Add(pl.Points[_MultiSelectPtIndex_Start]);
+
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _tempMultiSelectPoints.Clear();
+                        }
+                        break;
                     default:
                         _middleMouseCount = 0;
 
@@ -373,7 +528,7 @@ namespace RsLib.Display3D
             return output;
         }
 
-        void showSelectMeasurePointData(Polyline measureLine)
+        void showSelectMeasurePointData(PointCloud measureLine)
         {
             treeView1.Nodes.Clear();
 
@@ -389,7 +544,7 @@ namespace RsLib.Display3D
                 treeView1.Nodes.Add($"End Point", "End Point");
                 treeView1.Nodes["End Point"].BackColor = Settings.Default.Color_EndPoint;
 
-                treeView1.Nodes.Add($"Vector", "Vector");
+                treeView1.Nodes.Add($"Difference", "Difference");
 
                 treeView1.Nodes.Add($"Length", $"Length : {v.L:F2}");
                 treeView1.Nodes["Length"].BackColor = Settings.Default.Color_MeasureLine;
@@ -412,7 +567,10 @@ namespace RsLib.Display3D
                     treeView1.Nodes["End Point"].Nodes["Property"].Nodes.Add(endPtProp[i]);
                 }
 
-                treeView1.Nodes["Vector"].Nodes.Add($" Vz : {v.X:F3} ,  {v.Y:F3} , {v.Z:F3}");
+                treeView1.Nodes["Difference"].Nodes.Add($" X : {v.X:F3}");
+                treeView1.Nodes["Difference"].Nodes.Add($" Y : {v.Y:F3}");
+                treeView1.Nodes["Difference"].Nodes.Add($" Z : {v.Z:F3}");
+
             }
             treeView1.ExpandAll();
         }
@@ -472,24 +630,23 @@ namespace RsLib.Display3D
 
             DisplayObjectType displayObjectType = _displayOption[_CurrentSelectObjectIndex].DisplayType;
             if (displayObjectType == DisplayObjectType.None) return false;
-            DisplayObjectOption objectOption = _displayOption[_CurrentSelectObjectIndex];
+            //DisplayObjectOption objectOption = _displayOption[_CurrentSelectObjectIndex];
             //if (objectOption.IsDisplay == false) return false;
 
-            Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
+            //Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
 
             if (_haveSelectPath == false)
             {
-                if (objectType == typeof(Point3D))
+                if (_displayObject[_CurrentSelectObjectIndex] is Point3D pt)
                 {
-                    var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
-                    float result = calculatePointMinDistance(rayOrig, rayDir, obj);
+                    //var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
+                    float result = calculatePointMinDistance(rayOrig, rayDir, pt);
                     closestDistance = result;
-                    closestPoint = obj;
+                    closestPoint = pt;
                     hasClosetPoint = closestDistance <= _closetDisLimit;
                 }
-                else if (objectType == typeof(ObjectGroup))
+                else if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
                 {
-                    var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
                     foreach (var item in obj.Objects)
                     {
                         var subObj = item.Value as PointCloud;
@@ -502,10 +659,10 @@ namespace RsLib.Display3D
                         }
                     }
                 }
-                else
+                else if (_displayObject[_CurrentSelectObjectIndex] is PointCloud cloud)
                 {
-                    var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
-                    Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
+                    //var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
+                    Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, cloud.Points);
                     closestDistance = result.Item1;
                     closestPoint = result.Item2;
                     hasClosetPoint = closestDistance <= _closetDisLimit;
@@ -514,8 +671,7 @@ namespace RsLib.Display3D
             }
             else
             {
-                var obj = _SelectPath as PointCloud;
-                Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, obj.Points);
+                Tuple<float, Point3D> result = calculateNearestPoint(rayOrig, rayDir, closestDistance, _SelectPath.Points);
                 closestDistance = result.Item1;
                 closestPoint = result.Item2;
                 hasClosetPoint = closestDistance <= _closetDisLimit;
@@ -640,9 +796,9 @@ namespace RsLib.Display3D
             };
 
             drawPolyline(_SelectPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
-            drawPointCloud(_SelectPath, Settings.Default.Size_SelectPath*3, Settings.Default.Color_SelectPath, false);
+            drawPointCloud(_SelectPath, Settings.Default.Size_SelectPath*2, Settings.Default.Color_SelectPath, false);
             drawVector(_SelectPath, Settings.Default.Size_SelectPath, Color.Blue, false, DisplayObjectType.Vector_z);
-            drawCone(pos, 10, dir, 3, Settings.Default.Color_SelectPath);
+            drawCone(pos, 7, dir, 2, Settings.Default.Color_SelectPath);
 
         }
         void drawMeasureLine()
@@ -659,7 +815,8 @@ namespace RsLib.Display3D
             }
             GL.End();
 
-            if (_multiSelectPoints.Count == 2)
+
+            if (_multiSelectPoints.Count >= 2)
             {
                 GL.LineWidth(Settings.Default.Size_MeasureLine);
                 GL.Begin(PrimitiveType.Lines);
@@ -671,6 +828,33 @@ namespace RsLib.Display3D
                 }
                 GL.End();
             }
+
+        }
+        void drawMultipleSelect()
+        {
+            GL.PointSize(Settings.Default.Size_SelectPoint);
+            GL.Begin(PrimitiveType.Points);
+            GL.Color4(Settings.Default.Color_StartPoint);
+            for (int i = 0; i < _multiSelectPoints.Count; i++)
+            {
+                Point3D p = _multiSelectPoints.Points[i];
+
+                GL.Vertex3(p.PArray);
+            }
+            GL.End();
+        }
+        void drawTempMultipleSelect()
+        {
+            GL.PointSize(Settings.Default.Size_SelectPoint);
+            GL.Begin(PrimitiveType.Points);
+            GL.Color4(Settings.Default.Color_EndPoint);
+            for (int i = 0; i < _tempMultiSelectPoints.Count; i++)
+            {
+                Point3D p = _tempMultiSelectPoints.Points[i];
+
+                GL.Vertex3(p.PArray);
+            }
+            GL.End();
         }
 
         void drawSelectRangeFrame()
@@ -1557,7 +1741,8 @@ namespace RsLib.Display3D
     public enum PointPickMode : int
     {
         None = 0,
-        Single,
-        Multiple,
+        One,
+        Two,
+        Multiple
     }
 }

@@ -141,6 +141,38 @@ namespace RsLib.PointCloudLib
             Y = y;
             Z = z;
         }
+        public static Point3D operator *(double t , Point3D p)
+        {
+            return new Point3D(t * p.X, t * p.Y, t * p.Z);
+        }
+        public static Point3D operator *(Point3D p, double t)
+        {
+            return new Point3D(t * p.X, t * p.Y, t * p.Z);
+        }
+        public static Point3D operator *(float t, Point3D p)
+        {
+            return new Point3D(t * p.X, t * p.Y, t * p.Z);
+        }
+        public static Point3D operator *(Point3D p, float t)
+        {
+            return new Point3D(t * p.X, t * p.Y, t * p.Z);
+        }
+        public static Point3D operator -(Point3D p1, Point3D p2)
+        {
+            return new Point3D(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
+        }
+        public static Point3D operator +(Point3D p1, Point3D p2)
+        {
+            return new Point3D(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
+        }
+        public static Point3D operator /(Point3D p, double t)
+        {
+            return new Point3D(p.X/t,  p.Y/t, p.Z/t);
+        }
+        public static Point3D operator /(Point3D p, float t)
+        {
+            return new Point3D(p.X / t, p.Y / t, p.Z / t);
+        }
         public void SetXYZ(Point3D p)
         {
             X = p.X;

@@ -56,6 +56,7 @@ namespace RsLib.Display3D
             this.saveABBModFileWithRobTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_PickPoint = new System.Windows.Forms.ToolStripSplitButton();
             this.measureDistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MultipleSelectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lbl_Selectable = new System.Windows.Forms.ToolStripLabel();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -100,6 +101,11 @@ namespace RsLib.Display3D
             this.toolBtn_SmoothVy = new System.Windows.Forms.ToolStripButton();
             this.toolBtn_SmoothVz = new System.Windows.Forms.ToolStripButton();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.toolStrip_MultipleSelect = new System.Windows.Forms.ToolStrip();
+            this.toolBtn_StartMultipleSelect = new System.Windows.Forms.ToolStripButton();
+            this.toolBtn_EndMultipleSelect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolBtn_ClearMultipleSelect = new System.Windows.Forms.ToolStripButton();
             this.tlp_LocalTransform = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -130,6 +136,7 @@ namespace RsLib.Display3D
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.toolStrip2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.toolStrip_MultipleSelect.SuspendLayout();
             this.tlp_LocalTransform.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_ShiftX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_ShiftY)).BeginInit();
@@ -331,6 +338,7 @@ namespace RsLib.Display3D
             this.btn_PickPoint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btn_PickPoint.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.measureDistanceToolStripMenuItem,
+            this.MultipleSelectToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.btn_PickPoint.Image = global::RsLib.Display3D.Properties.Resources.place_marker_30px;
             this.btn_PickPoint.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -343,15 +351,23 @@ namespace RsLib.Display3D
             // 
             this.measureDistanceToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.width_30px;
             this.measureDistanceToolStripMenuItem.Name = "measureDistanceToolStripMenuItem";
-            this.measureDistanceToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.measureDistanceToolStripMenuItem.Text = "Multiple Select";
+            this.measureDistanceToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.measureDistanceToolStripMenuItem.Text = "Measure Distance";
             this.measureDistanceToolStripMenuItem.Click += new System.EventHandler(this.measureDistanceToolStripMenuItem_Click);
+            // 
+            // MultipleSelectToolStripMenuItem
+            // 
+            this.MultipleSelectToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.map_pinpoint_30px;
+            this.MultipleSelectToolStripMenuItem.Name = "MultipleSelectToolStripMenuItem";
+            this.MultipleSelectToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.MultipleSelectToolStripMenuItem.Text = "Multiple Select";
+            this.MultipleSelectToolStripMenuItem.Click += new System.EventHandler(this.MultipleSelectToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.shutdown_30px;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.exitToolStripMenuItem.Text = "Exit Select Mode";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -500,6 +516,7 @@ namespace RsLib.Display3D
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.toolStrip_MultipleSelect);
             this.splitContainer1.Panel2.Controls.Add(this.tlp_LocalTransform);
             this.splitContainer1.Panel2.Controls.Add(this.trackBar_RotateSensitivity);
             this.splitContainer1.Size = new System.Drawing.Size(742, 559);
@@ -726,6 +743,7 @@ namespace RsLib.Display3D
             this.toolCmb_LineIndex.Name = "toolCmb_LineIndex";
             this.toolCmb_LineIndex.Size = new System.Drawing.Size(75, 30);
             this.toolCmb_LineIndex.SelectedIndexChanged += new System.EventHandler(this.toolCmb_LineIndex_SelectedIndexChanged);
+            this.toolCmb_LineIndex.Click += new System.EventHandler(this.toolCmb_LineIndex_Click);
             // 
             // toolBtn_ReversePath
             // 
@@ -785,6 +803,57 @@ namespace RsLib.Display3D
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseClick);
+            // 
+            // toolStrip_MultipleSelect
+            // 
+            this.toolStrip_MultipleSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStrip_MultipleSelect.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip_MultipleSelect.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolBtn_StartMultipleSelect,
+            this.toolBtn_EndMultipleSelect,
+            this.toolStripSeparator7,
+            this.toolBtn_ClearMultipleSelect});
+            this.toolStrip_MultipleSelect.Location = new System.Drawing.Point(340, 5);
+            this.toolStrip_MultipleSelect.Name = "toolStrip_MultipleSelect";
+            this.toolStrip_MultipleSelect.Size = new System.Drawing.Size(87, 25);
+            this.toolStrip_MultipleSelect.TabIndex = 2;
+            this.toolStrip_MultipleSelect.Text = "toolStrip3";
+            this.toolStrip_MultipleSelect.Visible = false;
+            // 
+            // toolBtn_StartMultipleSelect
+            // 
+            this.toolBtn_StartMultipleSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtn_StartMultipleSelect.Image = global::RsLib.Display3D.Properties.Resources.add_48px;
+            this.toolBtn_StartMultipleSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_StartMultipleSelect.Name = "toolBtn_StartMultipleSelect";
+            this.toolBtn_StartMultipleSelect.Size = new System.Drawing.Size(23, 22);
+            this.toolBtn_StartMultipleSelect.Text = "toolStripButton1";
+            this.toolBtn_StartMultipleSelect.Click += new System.EventHandler(this.toolBtn_StartMultipleSelect_Click);
+            // 
+            // toolBtn_EndMultipleSelect
+            // 
+            this.toolBtn_EndMultipleSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtn_EndMultipleSelect.Image = global::RsLib.Display3D.Properties.Resources.minus_48px;
+            this.toolBtn_EndMultipleSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_EndMultipleSelect.Name = "toolBtn_EndMultipleSelect";
+            this.toolBtn_EndMultipleSelect.Size = new System.Drawing.Size(23, 22);
+            this.toolBtn_EndMultipleSelect.Text = "toolStripButton2";
+            this.toolBtn_EndMultipleSelect.Click += new System.EventHandler(this.toolBtn_EndMultipleSelect_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolBtn_ClearMultipleSelect
+            // 
+            this.toolBtn_ClearMultipleSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtn_ClearMultipleSelect.Image = global::RsLib.Display3D.Properties.Resources.broom_30px;
+            this.toolBtn_ClearMultipleSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtn_ClearMultipleSelect.Name = "toolBtn_ClearMultipleSelect";
+            this.toolBtn_ClearMultipleSelect.Size = new System.Drawing.Size(23, 22);
+            this.toolBtn_ClearMultipleSelect.Text = "toolStripButton3";
+            this.toolBtn_ClearMultipleSelect.Click += new System.EventHandler(this.toolBtn_ClearMultipleSelect_Click);
             // 
             // tlp_LocalTransform
             // 
@@ -1048,6 +1117,7 @@ namespace RsLib.Display3D
             this.tableLayoutPanel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -1060,6 +1130,8 @@ namespace RsLib.Display3D
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.toolStrip_MultipleSelect.ResumeLayout(false);
+            this.toolStrip_MultipleSelect.PerformLayout();
             this.tlp_LocalTransform.ResumeLayout(false);
             this.tlp_LocalTransform.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_ShiftX)).EndInit();
@@ -1155,5 +1227,11 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripButton toolBtn_SmoothVx;
         private System.Windows.Forms.ToolStripButton toolBtn_SmoothVy;
         private System.Windows.Forms.ToolStripButton toolBtn_SmoothVz;
+        private System.Windows.Forms.ToolStripMenuItem MultipleSelectToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip_MultipleSelect;
+        private System.Windows.Forms.ToolStripButton toolBtn_StartMultipleSelect;
+        private System.Windows.Forms.ToolStripButton toolBtn_EndMultipleSelect;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripButton toolBtn_ClearMultipleSelect;
     }
 }
