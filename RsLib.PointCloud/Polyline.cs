@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+
 namespace RsLib.PointCloudLib
 {
     [Serializable]
@@ -635,8 +637,75 @@ namespace RsLib.PointCloudLib
             return p;
         }
 
+        public void SmoothByRDP(float tolerance)
+        {
+            if (Points == null || Points.Count < 3) return;
 
+            List<Point3D> simplifiedPoints = new List<Point3D>();
+            Simplify(Points, tolerance, 0, Points.Count - 1, simplifiedPoints);
+            simplifiedPoints.Add(Points[Points.Count - 1]);  // Ensure the last point is included
 
+            Points.Clear();
+            Points.AddRange(simplifiedPoints);
+        }
+        private  void Simplify(List<Point3D> polyline, float tolerance, int start, int end, List<Point3D> result)
+        {
+            double maxDistance = 0;
+            int index = 0;
+
+            for (int i = start + 1; i < end; i++)
+            {
+                double distance = DistanceFromPointToLine(polyline[i], polyline[start], polyline[end]);
+
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    index = i;
+                }
+            }
+
+            if (maxDistance > tolerance)
+            {
+                Simplify(polyline, tolerance, start, index, result);
+                result.Add(polyline[index]);
+                Simplify(polyline, tolerance, index, end, result);
+            }
+        }
+
+        private double DistanceFromPointToLine(Point3D point, Point3D lineStart, Point3D lineEnd)
+        {
+            double a = point.X - lineStart.X;
+            double b = point.Y - lineStart.Y;
+            double c = lineEnd.X - lineStart.X;
+            double d = lineEnd.Y - lineStart.Y;
+
+            double dot = a * c + b * d;
+            double lenSq = c * c + d * d;
+            double param = (lenSq != 0) ? dot / lenSq : -1;
+
+            double xx, yy;
+
+            if (param < 0)
+            {
+                xx = lineStart.X;
+                yy = lineStart.Y;
+            }
+            else if (param > 1)
+            {
+                xx = lineEnd.X;
+                yy = lineEnd.Y;
+            }
+            else
+            {
+                xx = lineStart.X + param * c;
+                yy = lineStart.Y + param * d;
+            }
+
+            double dx = point.X - xx;
+            double dy = point.Y - yy;
+
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
         public void SmoothByMoveAve(int count, bool SmoothX, bool SmoothY, bool SmoothZ)
         {
 
