@@ -662,6 +662,7 @@ namespace RsLib.Display3D
         private void saveABBModFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ObjectGroup selectGroup = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectGroup == null) return;
             saveABBMod(selectGroup, false);
         }
         private ObjectGroup selectObjectGroup(int selectIndex)
@@ -672,13 +673,11 @@ namespace RsLib.Display3D
                 if (selectIndex == -1)
                 {
                     Log.Add("Select index = -1. Didn't select path.", MsgLevel.Warn);
-                    MessageBox.Show($"Didn't select any path yet.", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return null;
                 }
                 if (_displayObject.ContainsKey(selectIndex) == false)
                 {
                     Log.Add($"Select index = {selectIndex}. Display objects didn't contain {selectIndex}.", MsgLevel.Warn);
-                    MessageBox.Show($"Display object didn't conatin {selectIndex} object", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return null;
 
                 }
@@ -687,7 +686,6 @@ namespace RsLib.Display3D
                 if (output == null)
                 {
                     Log.Add($"Select index = {selectIndex}. Selected object  type is not ObjectGroup.", MsgLevel.Warn);
-                    MessageBox.Show($"Selected object is not a path. Cannot be saved!", "File save fail", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return output;
             }
@@ -817,6 +815,7 @@ namespace RsLib.Display3D
             try
             {
                 ObjectGroup output = new ObjectGroup("SelectPath");
+                if (output == null) return null;
 
                 foreach (var item in _SelectedPathIndex)
                 {
@@ -864,6 +863,7 @@ namespace RsLib.Display3D
         private void saveABBModFileWithRobTargetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ObjectGroup selectGroup = selectObjectGroup(_CurrentSelectObjectIndex);
+            if (selectGroup == null) return;
             saveABBMod(selectGroup, true);
         }
 
@@ -972,14 +972,11 @@ namespace RsLib.Display3D
             formAdd.Show();
         }
 
-        private void toolCmb_LineIndex_SelectedIndexChanged(object sender, EventArgs e)
+        public void SelectSegment(int selectObj,int segmentIndex)
         {
-            _haveSelectPath = false;
-            _haveClosestPoint = false;
-            if (toolCmb_LineIndex.Items.Count == 0) return;
-            if (toolCmb_LineIndex.SelectedIndex <= 0) return;
+            _CurrentSelectLineIndex = segmentIndex;
+            _CurrentSelectObjectIndex = selectObj;
 
-            _CurrentSelectLineIndex = toolCmb_LineIndex.SelectedIndex - 1;
             ObjectGroup obj = selectObjectGroup(_CurrentSelectObjectIndex);
             if (obj != null)
             {
@@ -991,6 +988,29 @@ namespace RsLib.Display3D
                     AfterPolylineSelected?.Invoke(_CurrentSelectLineIndex);
                 }
             }
+
+        }
+
+        private void toolCmb_LineIndex_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _haveSelectPath = false;
+            _haveClosestPoint = false;
+            if (toolCmb_LineIndex.Items.Count == 0) return;
+            if (toolCmb_LineIndex.SelectedIndex <= 0) return;
+
+            SelectSegment(_CurrentSelectObjectIndex, toolCmb_LineIndex.SelectedIndex - 1);
+            //_CurrentSelectLineIndex = toolCmb_LineIndex.SelectedIndex - 1;
+            //ObjectGroup obj = selectObjectGroup(_CurrentSelectObjectIndex);
+            //if (obj != null)
+            //{
+            //    Polyline p = obj.SelectPolyine(_CurrentSelectLineIndex);
+            //    if (p != null)
+            //    {
+            //        _SelectPath = p;
+            //        _haveSelectPath = true;
+            //        AfterPolylineSelected?.Invoke(_CurrentSelectLineIndex);
+            //    }
+            //}
             
 
         }
