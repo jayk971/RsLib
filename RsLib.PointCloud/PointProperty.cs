@@ -497,6 +497,7 @@ namespace RsLib.PointCloudLib
         }
         public Polyline SelectPolyine(int selectLineIndex)
         {
+            if(selectLineIndex <0) return null;
             foreach (var item in Objects)
             {
                 string name = item.Key;
