@@ -981,11 +981,16 @@ namespace RsLib.Display3D
             if (obj != null)
             {
                 Polyline p = obj.SelectPolyine(_CurrentSelectLineIndex);
+                _SelectPath = p;
+
                 if (p != null)
                 {
-                    _SelectPath = p;
                     _haveSelectPath = true;
                     AfterPolylineSelected?.Invoke(_CurrentSelectLineIndex);
+                }
+                else
+                {
+                    _haveSelectPath = false;
                 }
             }
 
