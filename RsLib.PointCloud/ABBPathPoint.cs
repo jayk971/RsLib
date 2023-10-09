@@ -34,8 +34,8 @@ namespace RsLib.PointCloudLib
             Q = r.Q;
         }
         public string ToString_XYZRxRyRz() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2}]";
-        public string ToString_XYZRxRyRzLapSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{LapIndex+1},{SegmentIndex+1}]";
-        public string ToString_XYZRxRyRzSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{SegmentIndex+1}]";
+        public string ToString_XYZRxRyRzLapSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{LapIndex},{SegmentIndex}]";
+        public string ToString_XYZRxRyRzSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F2},{Ry:F2},{Rz:F2},{SegmentIndex}]";
         public string ToString_RobTarget(string targetName) => $"CONST robtarget {targetName} :=[[{X:F2},{Y:F2},{Z:F2}],[{Q.W:F6},{Q.V.X:F6},{Q.V.Y:F6},{Q.V.Z:F6}],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
     }
 
