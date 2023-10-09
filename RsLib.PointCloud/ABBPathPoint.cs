@@ -116,6 +116,25 @@ namespace RsLib.PointCloudLib
                 sw.WriteLine($"ENDMODULE");
             }
         }
+        public List<string> ToString(string arrayName)
+        {
+            List<string> output = new List<string>();
+            output.Add($"LOCAL VAR num {arrayName}{{{Count} ,7}} := [");
+            for (int i = 0; i < Count; i++)
+            {
+                ABBPathPoint abbPt = Pts[i];
+                if (i == Count - 1)
+                {
+                    output.Add($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                }
+                else
+                {
+                    output.Add($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                }
+            }
+            output.Add($"");
+            return output;
+        }
 
     }
 
