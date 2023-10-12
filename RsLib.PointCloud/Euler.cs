@@ -711,7 +711,8 @@ namespace RsLib.PointCloudLib
                 ry = -Math.PI / 2;
                 rz = 0;
             }
-
+            if (rz < 0) rz += Math.PI*2;
+            //else if (rz <= -180) rz += 360;
             Rx = new RotateUnit(eRefAxis.X, eRotateType.Axis, rx);
             Ry = new RotateUnit(eRefAxis.Y, eRotateType.Axis, ry);
             Rz = new RotateUnit(eRefAxis.Z, eRotateType.Axis, rz);
@@ -891,7 +892,7 @@ namespace RsLib.PointCloudLib
             EndAddMatrix();
         }
     }
-
+    [Serializable]
     public class Quaternion
     {
         public double W { get; set; } = 1;

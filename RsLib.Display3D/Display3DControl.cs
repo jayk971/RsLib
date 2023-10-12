@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using RsLib.Common;
 using RsLib.Display3D.Properties;
 using RsLib.LogMgr;
 using RsLib.PointCloudLib;
@@ -824,23 +825,48 @@ namespace RsLib.Display3D
                     ObjectGroup selectObj = selectObjectGroup(selectObjIndex);
                     if (selectObj == null) return null;
                     int outputLineIndex = 0;
-                    foreach (var item2 in selectObj.Objects)
+                    for (int i = 0; i < selectPartPath.Count; i++)
                     {
-                        string name = item2.Key;
-                        Polyline p = item2.Value as Polyline;
-                        if (p != null)
+                        foreach (var item2 in selectObj.Objects)
                         {
-                            LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
-                            if (lineOption != null)
+                            string name = item2.Key;
+                            if (item2.Value is Polyline p)
                             {
-                                if (selectPartPath.Contains(lineOption.LineIndex))
+                                if (p.GetOption(typeof(LineOption)) is LineOption lineOption)
                                 {
-                                    output.Add($"{selectObjIndex}_{outputLineIndex}", p);
-                                    outputLineIndex++;
+                                    if (lineOption.LineIndex == selectPartPath[i])
+                                    {
+                                        Polyline newPl = p.DeepClone();
+                                        newPl.SetLineIndexForAllPts(outputLineIndex);
+                                        if (newPl.GetOption(typeof(LineOption)) is LineOption lineOption2)
+                                        {
+                                            lineOption2.LineIndex = outputLineIndex;
+                                            output.Add($"{selectObjIndex}_{outputLineIndex}", newPl);
+                                            outputLineIndex++;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+
+                    //foreach (var item2 in selectObj.Objects)
+                    //{
+                    //    string name = item2.Key;
+                    //    Polyline p = item2.Value as Polyline;
+                    //    if (p != null)
+                    //    {
+                    //        LineOption lineOption = p.GetOption(typeof(LineOption)) as LineOption;
+                    //        if (lineOption != null)
+                    //        {
+                    //            if (selectPartPath.Contains(lineOption.LineIndex))
+                    //            {
+                    //                output.Add($"{selectObjIndex}_{outputLineIndex}", p);
+                    //                outputLineIndex++;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
 
                 if (output.DataCount <= 0)
@@ -1178,6 +1204,11 @@ namespace RsLib.Display3D
         {
             _multiSelectPoints.Clear();
 
+        }
+
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FT_Functions.OpenFolder($"{System.Environment.CurrentDirectory}\\Log");
         }
     }
 }

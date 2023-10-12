@@ -1347,7 +1347,6 @@ namespace RsLib.PointCloudLib
             Points.Clear();
             Points.AddRange(output);
         }
-
         public void SmoothPath_4P(bool enableSmoothX,bool enableSmoothY,bool enableSmoothZ,double ratioP1, double ratioP2, double ratioP3, double ratioP4)
         {
             List<Point3D> output = new List<Point3D>();
@@ -1597,7 +1596,22 @@ namespace RsLib.PointCloudLib
             Points.AddRange(output);
 
         }
+        public void SetLineIndexForAllPts(int lineIndex)
+        {
+            for (int i = 0; i < Points.Count;i++)
+            {
+                if (Points[i].GetOption(typeof(LineOption)) is LineOption lo)
+                {
+                    lo.LineIndex = lineIndex;
+                }
+                else
+                {
+                    LineOption newlo = new LineOption() { LineIndex = lineIndex };
+                    Points[i].AddOption(newlo);
 
+                }
+            }
+        }
         public void ReduceSamePoint()
         {
             List<Point3D> Output = new List<Point3D>();

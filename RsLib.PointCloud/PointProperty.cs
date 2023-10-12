@@ -459,6 +459,7 @@ namespace RsLib.PointCloudLib
         public void SaveABBModPath(string filePath,bool isRobTargetMode)
         {
             ABBPath aBBPath = ConvertABBModPath();
+            aBBPath.SmoothEulerAngle_3P(true, true, true, 1.0, 1.0, 1.0);
             if (isRobTargetMode) 
                 aBBPath.SaveABBModPathWithRobTarget(filePath);
             else
