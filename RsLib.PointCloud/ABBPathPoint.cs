@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace RsLib.PointCloudLib
 {
     [Serializable]
-    public partial class ABBPathPoint:Point3D
+    public partial class ABBPoint:Point3D
     {
         public double Rx { get; set; } = 0;
         public double Ry { get; set; } = 0;
@@ -18,11 +19,11 @@ namespace RsLib.PointCloudLib
         public int SegmentIndex { get; set; } = 0;
         public Quaternion Q { get; set; } = new Quaternion();
 
-        public ABBPathPoint() 
+        public ABBPoint() 
         {
 
         }
-        public ABBPathPoint(PointV3D p)
+        public ABBPoint(PointV3D p)
         {
             X = p.X;
             Y = p.Y;
@@ -30,8 +31,10 @@ namespace RsLib.PointCloudLib
 
             RotateAxis r = new RotateAxis(p);
             Rx = r.Rx;
-            Ry= r.Ry; 
-            Rz = r.Rz;
+            Ry= r.Ry;
+            if (r.Rz == 180) Rz = -180.0;
+            else if (r.Rz == -180) Rz = 180.0;
+            else Rz = r.Rz;
             Q = r.Q;
         }
 
@@ -52,22 +55,176 @@ namespace RsLib.PointCloudLib
     [Serializable]
     public partial class ABBPath
     {
-        public List<ABBPathPoint> Pts { get;private  set; } = new List<ABBPathPoint>();
-        public int Count => Pts.Count;
+        public Dictionary<int,ABBSegment> Segments { get;private  set; } = new Dictionary<int, ABBSegment>();
+        public int Count => Segments.Count;
+        public int PtCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var segment in Segments)
+                {
+                    count += segment.Value.Count;
+                }
+                return count;
+            }
+        }
         public ABBPath() { }
+        public void Add(ABBPoint abbPt)
+        {
+            int index = abbPt.SegmentIndex;
+            if(Segments.ContainsKey(index))
+            {
+                Segments[index].Add(abbPt);
+            }
+            else
+            {
+                Segments.Add(index, new ABBSegment());
+                Segments[index].Add(abbPt);
+            }
+        }
 
-        public void Add(ABBPathPoint p)
+
+        public void SaveABBModPath(string filePath)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
+            string moduleName = "ABB_" + fileName;
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
+            {
+                sw.WriteLine($"MODULE {moduleName}");
+                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
+                sw.WriteLine("");
+                sw.WriteLine($"VAR num {moduleName}_Pose{{{PtCount} ,7}} := [");
+
+                foreach (var item in Segments)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+
+                        ABBPoint abbPt = item.Value.Pts[i];
+                        if (i == Count - 1)
+                        {
+                            sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                        }
+                        else
+                        {
+                            sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                        }
+                    }
+                }
+                sw.WriteLine("");
+                sw.WriteLine($"ENDMODULE");
+            }
+        }
+        public void SaveABBModPathWithRobTarget(string filePath)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
+            string moduleName = "ABB_" + fileName;
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
+            {
+                sw.WriteLine($"MODULE {moduleName}");
+                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
+                sw.WriteLine("");
+                foreach (var item in Segments)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        ABBPoint abbPt = item.Value.Pts[i];
+                        sw.WriteLine(abbPt.ToString_RobTarget($"{fileName}_{abbPt.SegmentIndex}_{i}"));
+
+                    }
+                }
+                sw.WriteLine("");
+
+                sw.WriteLine("PERS tooldata LocalTool:=[TRUE,[[0,0,0],[1,0,0,0]],[1,[0,0,0],[1,0,0,0],0,0,0]];");
+                sw.WriteLine("PERS wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
+
+                sw.WriteLine("");
+                sw.WriteLine($"PROC Path{moduleName}()");
+                sw.WriteLine("");
+                sw.WriteLine("\tVAR speeddata LocalSpeed := v100;");
+                sw.WriteLine("");
+
+                foreach (var item in Segments)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        ABBPoint abbPt = item.Value.Pts[i];
+                        sw.WriteLine($"\tMOVEL {fileName}_{abbPt.SegmentIndex}_{i}, LocalSpeed, z1, LocalTool\\WObj:=LocalWork;");
+
+                    }
+                }
+ 
+                sw.WriteLine("");
+                sw.WriteLine($"ENDPROC");
+                sw.WriteLine("");
+                sw.WriteLine($"ENDMODULE");
+            }
+        }
+        public List<string> ToString(string arrayName)
+        {
+            List<string> output = new List<string>();
+            output.Add($"LOCAL VAR num {arrayName}{{{PtCount} ,7}} := [");
+
+            foreach (var item in Segments)
+            {
+                for (int i = 0; i < item.Value.Count; i++)
+                {
+                    ABBPoint abbPt = item.Value.Pts[i];
+                    if (i == Count - 1)
+                    {
+                        output.Add($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                    }
+                    else
+                    {
+                        output.Add($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                    }
+                }
+            }
+
+            output.Add($"");
+            return output;
+        }
+        public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5)
+        {
+            foreach (var item in Segments)
+            {
+                item.Value.SmoothEulerAngle_5P(enableSmoothRX, enableSmoothRY, enableSmoothRZ, ratioP1, ratioP2, ratioP3,ratioP4,ratioP5);
+            }
+        }
+        public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4)
+        {
+            foreach (var item in Segments)
+            {
+                item.Value.SmoothEulerAngle_4P(enableSmoothRX, enableSmoothRY, enableSmoothRZ, ratioP1, ratioP2, ratioP3,ratioP4);
+            }
+        }
+        public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3)
+        {
+            foreach (var item in Segments)
+            {
+                item.Value.SmoothEulerAngle_3P(enableSmoothRX, enableSmoothRY, enableSmoothRZ, ratioP1, ratioP2, ratioP3);
+            }
+        }
+
+    }
+    [Serializable]
+    public partial class ABBSegment
+    {
+        public List<ABBPoint> Pts = new List<ABBPoint>();
+        public int Count => Pts.Count;
+        public void Add(ABBPoint p)
         {
             Pts.Add(p);
-               
+
         }
-        public void Clear() 
+        public void Clear()
         {
             Pts.Clear();
         }
         public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5)
         {
-            List<ABBPathPoint> output = new List<ABBPathPoint>();
+            List<ABBPoint> output = new List<ABBPoint>();
 
             double p1r = ratioP1 < 0 ? 0 : ratioP1;
             double p2r = ratioP2 < 0 ? 0 : ratioP2;
@@ -76,7 +233,6 @@ namespace RsLib.PointCloudLib
             double p5r = ratioP5 < 0 ? 0 : ratioP5;
 
             double sum = p1r + p2r + p3r + p4r + p5r;
-
 
 
             for (int i = 0; i < Pts.Count; i++)
@@ -99,7 +255,7 @@ namespace RsLib.PointCloudLib
 
                 if (index2 < 0)
                     index2 = i;
-                ABBPathPoint outP = Pts[i].DeepClone();
+                ABBPoint outP = Pts[i].DeepClone();
 
                 if (sum > 0)
                 {
@@ -115,7 +271,7 @@ namespace RsLib.PointCloudLib
         }
         public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4)
         {
-            List<ABBPathPoint> output = new List<ABBPathPoint>();
+            List<ABBPoint> output = new List<ABBPoint>();
 
             double p1r = ratioP1 < 0 ? 0 : ratioP1;
             double p2r = ratioP2 < 0 ? 0 : ratioP2;
@@ -145,7 +301,7 @@ namespace RsLib.PointCloudLib
 
                 if (index2 < 0)
                     index2 = i;
-                ABBPathPoint outP = Pts[i].DeepClone();
+                ABBPoint outP = Pts[i].DeepClone();
 
                 if (sum > 0)
                 {
@@ -162,7 +318,7 @@ namespace RsLib.PointCloudLib
         }
         public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3)
         {
-            List<ABBPathPoint> output = new List<ABBPathPoint>();
+            List<ABBPoint> output = new List<ABBPoint>();
 
             double p1r = ratioP1 < 0 ? 0 : ratioP1;
             double p2r = ratioP2 < 0 ? 0 : ratioP2;
@@ -176,7 +332,7 @@ namespace RsLib.PointCloudLib
             {
 
                 int index1 = i - 1;
-                int index2 = i ;
+                int index2 = i;
                 int index3 = i + 1;
 
                 if (index1 < 0)
@@ -185,7 +341,7 @@ namespace RsLib.PointCloudLib
                 if (index3 >= Pts.Count)
                     index3 = i;
 
-                ABBPathPoint outP = Pts[i].DeepClone();
+                ABBPoint outP = Pts[i].DeepClone();
 
                 if (sum > 0)
                 {
@@ -199,87 +355,6 @@ namespace RsLib.PointCloudLib
             }
             Pts.Clear();
             Pts.AddRange(output);
-        }
-
-        public void SaveABBModPath(string filePath)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
-            string moduleName = "ABB_" + fileName;
-            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
-            {
-                sw.WriteLine($"MODULE {moduleName}");
-                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
-                sw.WriteLine("");
-                sw.WriteLine($"VAR num {moduleName}_Pose{{{Count} ,7}} := [");
-                for (int i = 0; i < Count; i++)
-                {
-                    ABBPathPoint abbPt = Pts[i];
-                    if (i == Count - 1)
-                    {
-                        sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
-                    }
-                    else
-                    {
-                        sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()},");
-                    }
-                }
-                sw.WriteLine("");
-                sw.WriteLine($"ENDMODULE");
-            }
-        }
-        public void SaveABBModPathWithRobTarget(string filePath)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
-            string moduleName = "ABB_" + fileName;
-            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
-            {
-                sw.WriteLine($"MODULE {moduleName}");
-                sw.WriteLine($"! File Generate Time : {DateTime.Now:yyMMdd_HHmmss}");
-                sw.WriteLine("");
-                for (int i = 0; i < Count; i++)
-                {
-                    ABBPathPoint abbPt = Pts[i];
-                    sw.WriteLine(abbPt.ToString_RobTarget($"{fileName}_{abbPt.SegmentIndex}_{i}"));
-                }
-                sw.WriteLine("");
-
-                sw.WriteLine("PERS tooldata LocalTool:=[TRUE,[[0,0,0],[1,0,0,0]],[1,[0,0,0],[1,0,0,0],0,0,0]];");
-                sw.WriteLine("PERS wobjdata LocalWork:=[FALSE,TRUE,\"\",[[0,0,0],[1,0,0,0]],[[0,0,0],[1,0,0,0]]]; ");
-
-                sw.WriteLine("");
-                sw.WriteLine($"PROC Path{moduleName}()");
-                sw.WriteLine("");
-                sw.WriteLine("\tVAR speeddata LocalSpeed := v100;");
-                sw.WriteLine("");
-                for (int i = 0; i < Count; i++)
-                {
-                    ABBPathPoint abbPt = Pts[i];
-                    sw.WriteLine($"\tMOVEL {fileName}_{abbPt.SegmentIndex}_{i}, LocalSpeed, z1, LocalTool\\WObj:=LocalWork;");
-                }
-                sw.WriteLine("");
-                sw.WriteLine($"ENDPROC");
-                sw.WriteLine("");
-                sw.WriteLine($"ENDMODULE");
-            }
-        }
-        public List<string> ToString(string arrayName)
-        {
-            List<string> output = new List<string>();
-            output.Add($"LOCAL VAR num {arrayName}{{{Count} ,7}} := [");
-            for (int i = 0; i < Count; i++)
-            {
-                ABBPathPoint abbPt = Pts[i];
-                if (i == Count - 1)
-                {
-                    output.Add($"{abbPt.ToString_XYZRxRyRzSegment()}];");
-                }
-                else
-                {
-                    output.Add($"{abbPt.ToString_XYZRxRyRzSegment()},");
-                }
-            }
-            output.Add($"");
-            return output;
         }
 
     }

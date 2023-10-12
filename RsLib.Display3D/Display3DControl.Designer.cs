@@ -30,10 +30,10 @@ namespace RsLib.Display3D
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
@@ -45,6 +45,9 @@ namespace RsLib.Display3D
             this.changeColorSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeRotateSensitivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualShiftRotateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.saveXYZPointCloudToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,8 +89,11 @@ namespace RsLib.Display3D
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addAllToCollectionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.reversePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.smoothVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothVzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smoothVyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,12 +126,6 @@ namespace RsLib.Display3D
             this.trackBar_RotateSensitivity = new System.Windows.Forms.TrackBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.addAllToCollectionToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -262,6 +262,26 @@ namespace RsLib.Display3D
             this.manualShiftRotateToolStripMenuItem.Text = "Manual shift \\ rotate";
             this.manualShiftRotateToolStripMenuItem.Visible = false;
             this.manualShiftRotateToolStripMenuItem.Click += new System.EventHandler(this.manualShiftRotateToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(208, 6);
+            // 
+            // openFolderToolStripMenuItem
+            // 
+            this.openFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.logToolStripMenuItem});
+            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.openFolderToolStripMenuItem.Text = "Open Folder";
+            // 
+            // logToolStripMenuItem
+            // 
+            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.logToolStripMenuItem.Text = "Log";
+            this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -568,14 +588,14 @@ namespace RsLib.Display3D
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column_Type,
@@ -596,8 +616,8 @@ namespace RsLib.Display3D
             // 
             // Column_Type
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column_Type.HeaderText = "Type";
             this.Column_Type.Name = "Column_Type";
             this.Column_Type.ReadOnly = true;
@@ -620,8 +640,8 @@ namespace RsLib.Display3D
             // 
             // Column1
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column1.HeaderText = "ID";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -637,8 +657,8 @@ namespace RsLib.Display3D
             // 
             // Column2_Size
             // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column2_Size.HeaderText = "Size";
             this.Column2_Size.Name = "Column2_Size";
             this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -684,21 +704,39 @@ namespace RsLib.Display3D
             this.addToolStripMenuItem.Text = "Add To Collection";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
+            // addAllToCollectionToolStripMenuItem1
+            // 
+            this.addAllToCollectionToolStripMenuItem1.Image = global::RsLib.Display3D.Properties.Resources.add_48px;
+            this.addAllToCollectionToolStripMenuItem1.Name = "addAllToCollectionToolStripMenuItem1";
+            this.addAllToCollectionToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.addAllToCollectionToolStripMenuItem1.Text = "Add All To Collection";
+            this.addAllToCollectionToolStripMenuItem1.Click += new System.EventHandler(this.addAllToCollectionToolStripMenuItem_Click);
+            // 
             // clearCollectionToolStripMenuItem
             // 
             this.clearCollectionToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.broom_30px;
             this.clearCollectionToolStripMenuItem.Name = "clearCollectionToolStripMenuItem";
-            this.clearCollectionToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.clearCollectionToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.clearCollectionToolStripMenuItem.Text = "Clear Collection";
             this.clearCollectionToolStripMenuItem.Click += new System.EventHandler(this.clearCollectionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
             // 
             // reversePathToolStripMenuItem
             // 
             this.reversePathToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.reversed_numerical_sorting_48px;
             this.reversePathToolStripMenuItem.Name = "reversePathToolStripMenuItem";
-            this.reversePathToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.reversePathToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.reversePathToolStripMenuItem.Text = "Reverse Path";
             this.reversePathToolStripMenuItem.Click += new System.EventHandler(this.reversePathToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(190, 6);
             // 
             // smoothVectorToolStripMenuItem
             // 
@@ -707,7 +745,7 @@ namespace RsLib.Display3D
             this.smoothVyToolStripMenuItem,
             this.smoothVzToolStripMenuItem1});
             this.smoothVectorToolStripMenuItem.Name = "smoothVectorToolStripMenuItem";
-            this.smoothVectorToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.smoothVectorToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.smoothVectorToolStripMenuItem.Text = "Smooth Vector";
             // 
             // smoothVzToolStripMenuItem
@@ -1100,44 +1138,6 @@ namespace RsLib.Display3D
             // 
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // addAllToCollectionToolStripMenuItem1
-            // 
-            this.addAllToCollectionToolStripMenuItem1.Image = global::RsLib.Display3D.Properties.Resources.add_48px;
-            this.addAllToCollectionToolStripMenuItem1.Name = "addAllToCollectionToolStripMenuItem1";
-            this.addAllToCollectionToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
-            this.addAllToCollectionToolStripMenuItem1.Text = "Add All To Collection";
-            this.addAllToCollectionToolStripMenuItem1.Click += new System.EventHandler(this.addAllToCollectionToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(190, 6);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(190, 6);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(208, 6);
-            // 
-            // openFolderToolStripMenuItem
-            // 
-            this.openFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.logToolStripMenuItem});
-            this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.openFolderToolStripMenuItem.Text = "Open Folder";
-            // 
-            // logToolStripMenuItem
-            // 
-            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.logToolStripMenuItem.Text = "Log";
-            this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
             // Display3DControl
             // 

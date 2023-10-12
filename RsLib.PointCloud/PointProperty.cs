@@ -481,7 +481,7 @@ namespace RsLib.PointCloudLib
                         PointV3D pV3D = pLine.Points[i] as PointV3D;
                         if(pV3D != null)
                         {
-                            ABBPathPoint abbPt = new ABBPathPoint(pV3D)
+                            ABBPoint abbPt = new ABBPoint(pV3D)
                             {
                                 PtIndex = i,
                                 LapIndex = segmentIndex,
