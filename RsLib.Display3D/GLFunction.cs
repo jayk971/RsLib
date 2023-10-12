@@ -592,16 +592,15 @@ namespace RsLib.Display3D
             Vector3 axis = Vector3.Cross(trackballStart, trackballCurrent);
             float angle = (float)Math.Acos(Vector3.Dot(trackballStart, trackballCurrent));
             angle *= Settings.Default.Sensitivity;
-
-            if (axis.X == 0 && axis.Y == 0 && axis.Z == 0) return;
-            Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(axis, angle);
-            _rotationMatrix *= deltaRotation;
-            //_rotation.X += (mouseX - _lastRotX) / (float)_glControl.Width * 10.0f;
-            //_rotation.Y += 1 * (mouseY - _lastRotY) / (float)_glControl.Height * 10.0f;
-
-            _glControl.Invalidate();
             _lastRotX = mouseX;
             _lastRotY = mouseY;
+            if (axis.Length == 0) return;
+            Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(axis, angle);
+
+            _rotationMatrix *= deltaRotation;
+
+            _glControl.Invalidate();
+
         }
         void checkMaxMinPoint(Point3D p)
         {
