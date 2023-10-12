@@ -89,6 +89,7 @@ namespace RsLib.PointCloudLib
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath).Replace(" ","_");
             string moduleName = "ABB_" + fileName;
+            int countSegment = 0;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
                 sw.WriteLine($"MODULE {moduleName}");
@@ -98,13 +99,21 @@ namespace RsLib.PointCloudLib
 
                 foreach (var item in Segments)
                 {
+                    countSegment++;
                     for (int i = 0; i < item.Value.Count; i++)
                     {
 
                         ABBPoint abbPt = item.Value.Pts[i];
-                        if (i == Count - 1)
+                        if (countSegment == Count)
                         {
-                            sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                            if (i == item.Value.Count - 1)
+                            {
+                                sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                            }
+                            else
+                            {
+                                sw.WriteLine($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                            }
                         }
                         else
                         {
@@ -165,15 +174,23 @@ namespace RsLib.PointCloudLib
         {
             List<string> output = new List<string>();
             output.Add($"LOCAL VAR num {arrayName}{{{PtCount} ,7}} := [");
-
+            int countSegment = 0;
             foreach (var item in Segments)
             {
+                countSegment++;
                 for (int i = 0; i < item.Value.Count; i++)
                 {
                     ABBPoint abbPt = item.Value.Pts[i];
-                    if (i == Count - 1)
+                    if (countSegment == Count)//最後一條線
                     {
-                        output.Add($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                        if (i == item.Value.Count - 1)//最後一條線的最後一點
+                        {
+                            output.Add($"{abbPt.ToString_XYZRxRyRzSegment()}];");
+                        }
+                        else
+                        {
+                            output.Add($"{abbPt.ToString_XYZRxRyRzSegment()},");
+                        }
                     }
                     else
                     {
