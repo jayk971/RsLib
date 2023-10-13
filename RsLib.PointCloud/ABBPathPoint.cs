@@ -12,11 +12,21 @@ namespace RsLib.PointCloudLib
     public partial class ABBPoint:Point3D
     {
         public double Rx { get; set; } = 0;
+        public double Rx_Rad => Rx/180.0*Math.PI;
         public double Ry { get; set; } = 0;
+        public double Ry_Rad => Ry / 180.0 * Math.PI;
+
         public double Rz { get; set; } = 0;
+        public double Rz_Rad => Rz / 180.0 * Math.PI;
+
         public int PtIndex { get; set; } = 0;
         public int LapIndex { get; set; } = 0;
         public int SegmentIndex { get; set; } = 0;
+
+        public Vector2D RzVec => new Vector2D(Math.Cos(Rz_Rad), Math.Sin(Rz_Rad));
+        public Vector2D RyVec => new Vector2D(Math.Cos(Ry_Rad), Math.Sin(Ry_Rad));
+        public Vector2D RxVec => new Vector2D(Math.Cos(Rx_Rad), Math.Sin(Rx_Rad));
+
         public Quaternion Q { get; set; } = new Quaternion();
 
         public ABBPoint() 
@@ -32,9 +42,7 @@ namespace RsLib.PointCloudLib
             RotateAxis r = new RotateAxis(p);
             Rx = r.Rx;
             Ry= r.Ry;
-            if (r.Rz == 180) Rz = -180.0;
-            else if (r.Rz == -180) Rz = 180.0;
-            else Rz = r.Rz;
+            Rz = r.Rz;
             Q = r.Q;
         }
 
@@ -273,14 +281,21 @@ namespace RsLib.PointCloudLib
                 if (index2 < 0)
                     index2 = i;
                 ABBPoint outP = Pts[i].DeepClone();
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
 
                 if (sum > 0)
                 {
-                    if (enableSmoothRX) outP.Rx = (Pts[index1].Rx * p1r + Pts[index2].Rx * p2r + Pts[index3].Rx * p3r + Pts[index4].Rx * p4r + Pts[index5].Rx * p5r) / (sum);
-                    if (enableSmoothRY) outP.Ry = (Pts[index1].Ry * p1r + Pts[index2].Ry * p2r + Pts[index3].Ry * p3r + Pts[index4].Ry * p4r + Pts[index5].Ry * p5r) / (sum);
-                    if (enableSmoothRZ) outP.Rz = (Pts[index1].Rz * p1r + Pts[index2].Rz * p2r + Pts[index3].Rz * p3r + Pts[index4].Rz * p4r + Pts[index5].Rz * p5r) / (sum);
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r + Pts[index5].RxVec * p5r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r + Pts[index5].RyVec * p5r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r + Pts[index5].RzVec * p5r) / (sum);
+                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
+
+                    outP.ReCaculateQ();
                 }
-                outP.ReCaculateQ();
                 output.Add(outP);
             }
             Pts.Clear();
@@ -319,15 +334,21 @@ namespace RsLib.PointCloudLib
                 if (index2 < 0)
                     index2 = i;
                 ABBPoint outP = Pts[i].DeepClone();
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
 
                 if (sum > 0)
                 {
-                    if (enableSmoothRX) outP.Rx = (Pts[index1].Rx * p1r + Pts[index2].Rx * p2r + Pts[index3].Rx * p3r + Pts[index4].Rx * p4r) / (sum);
-                    if (enableSmoothRY) outP.Ry = (Pts[index1].Ry * p1r + Pts[index2].Ry * p2r + Pts[index3].Ry * p3r + Pts[index4].Ry * p4r) / (sum);
-                    if (enableSmoothRZ) outP.Rz = (Pts[index1].Rz * p1r + Pts[index2].Rz * p2r + Pts[index3].Rz * p3r + Pts[index4].Rz * p4r) / (sum);
-                }
-                outP.ReCaculateQ();
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r) / (sum);
+                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
 
+                    outP.ReCaculateQ();
+                }
                 output.Add(outP);
             }
             Pts.Clear();
@@ -347,7 +368,6 @@ namespace RsLib.PointCloudLib
 
             for (int i = 0; i < Pts.Count; i++)
             {
-
                 int index1 = i - 1;
                 int index2 = i;
                 int index3 = i + 1;
@@ -359,15 +379,20 @@ namespace RsLib.PointCloudLib
                     index3 = i;
 
                 ABBPoint outP = Pts[i].DeepClone();
-
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
                 if (sum > 0)
                 {
-                    if (enableSmoothRX) outP.Rx = (Pts[index1].Rx * p1r + Pts[index2].Rx * p2r + Pts[index3].Rx * p3r) / (sum);
-                    if (enableSmoothRY) outP.Ry = (Pts[index1].Ry * p1r + Pts[index2].Ry * p2r + Pts[index3].Ry * p3r) / (sum);
-                    if (enableSmoothRZ) outP.Rz = (Pts[index1].Rz * p1r + Pts[index2].Rz * p2r + Pts[index3].Rz * p3r) / (sum);
-                }
-                outP.ReCaculateQ();
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r) / (sum);
+                    if(vRx.GetRadianAngle(out double radX)) outP.Rx = radX/Math.PI*180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
 
+                    outP.ReCaculateQ();
+                }
                 output.Add(outP);
             }
             Pts.Clear();

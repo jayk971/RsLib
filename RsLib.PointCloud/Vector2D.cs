@@ -10,7 +10,6 @@ namespace RsLib.PointCloudLib
         [DefaultValue(0.0)]
         public double Y { get; set; } = 0.0;
         public override uint DataCount => 1;
-
         public double L
         {
             get
@@ -21,7 +20,22 @@ namespace RsLib.PointCloudLib
             }
         }
 
-
+        public static Vector2D operator *(Vector2D v, double d)
+        {
+            return new Vector2D(v.X * d, v.Y * d);
+        }
+        public static Vector2D operator /(Vector2D v, double d)
+        {
+            return new Vector2D(v.X / d, v.Y / d);
+        }
+        public static Vector2D operator +(Vector2D v1, Vector2D v2)
+        {
+            return new Vector2D(v1.X+v2.X,v1.Y+v2.Y);
+        }
+        public static Vector2D operator -(Vector2D v1, Vector2D v2)
+        {
+            return new Vector2D(v1.X - v2.X, v1.Y - v2.Y);
+        }
         public Vector2D()
         {
             X = 0.0;
@@ -49,7 +63,15 @@ namespace RsLib.PointCloudLib
             X += vector.X;
             Y += vector.Y;
         }
-
-
+        public bool GetRadianAngle(out double rad)
+        {
+            rad = 0;
+            if (X == 0 && Y == 0) return false;
+            else
+            {
+                rad = Math.Atan2(Y, X);
+                return true;
+            }
+        }
     }
 }
