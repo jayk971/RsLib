@@ -30,10 +30,10 @@ namespace RsLib.Display3D
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
@@ -126,6 +126,9 @@ namespace RsLib.Display3D
             this.trackBar_RotateSensitivity = new System.Windows.Forms.TrackBar();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.yXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -306,6 +309,7 @@ namespace RsLib.Display3D
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 35);
             this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.ToolTipText = "Save File";
             // 
             // saveXYZPointCloudToolStripMenuItem
             // 
@@ -416,18 +420,22 @@ namespace RsLib.Display3D
             this.rightViewToolStripMenuItem,
             this.lefeViewToolStripMenuItem,
             this.frontViewToolStripMenuItem,
-            this.backViewToolStripMenuItem});
+            this.backViewToolStripMenuItem,
+            this.yXToolStripMenuItem,
+            this.zYToolStripMenuItem,
+            this.zXToolStripMenuItem});
             this.toolStripDropDownButton2.Image = global::RsLib.Display3D.Properties.Resources.orthogonal_view_48px;
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
             this.toolStripDropDownButton2.Size = new System.Drawing.Size(29, 35);
             this.toolStripDropDownButton2.Text = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.ToolTipText = "Set Model View";
             // 
             // upToolStripMenuItem
             // 
             this.upToolStripMenuItem.Name = "upToolStripMenuItem";
             this.upToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.upToolStripMenuItem.Text = "Top View";
+            this.upToolStripMenuItem.Text = "Top View (X-Y)";
             this.upToolStripMenuItem.Click += new System.EventHandler(this.upToolStripMenuItem_Click);
             // 
             // bottomViewToolStripMenuItem
@@ -441,7 +449,7 @@ namespace RsLib.Display3D
             // 
             this.rightViewToolStripMenuItem.Name = "rightViewToolStripMenuItem";
             this.rightViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rightViewToolStripMenuItem.Text = "Right View";
+            this.rightViewToolStripMenuItem.Text = "Right View (Y-Z)";
             this.rightViewToolStripMenuItem.Click += new System.EventHandler(this.rightViewToolStripMenuItem_Click);
             // 
             // lefeViewToolStripMenuItem
@@ -462,7 +470,7 @@ namespace RsLib.Display3D
             // 
             this.backViewToolStripMenuItem.Name = "backViewToolStripMenuItem";
             this.backViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.backViewToolStripMenuItem.Text = "Back View";
+            this.backViewToolStripMenuItem.Text = "Back View (X-Z)";
             this.backViewToolStripMenuItem.Click += new System.EventHandler(this.backViewToolStripMenuItem_Click);
             // 
             // statusStrip1
@@ -588,14 +596,14 @@ namespace RsLib.Display3D
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle25.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            dataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column_Type,
@@ -616,8 +624,8 @@ namespace RsLib.Display3D
             // 
             // Column_Type
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle26;
             this.Column_Type.HeaderText = "Type";
             this.Column_Type.Name = "Column_Type";
             this.Column_Type.ReadOnly = true;
@@ -640,8 +648,8 @@ namespace RsLib.Display3D
             // 
             // Column1
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle27;
             this.Column1.HeaderText = "ID";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -657,8 +665,8 @@ namespace RsLib.Display3D
             // 
             // Column2_Size
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle28;
             this.Column2_Size.HeaderText = "Size";
             this.Column2_Size.Name = "Column2_Size";
             this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
@@ -1139,6 +1147,27 @@ namespace RsLib.Display3D
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // yXToolStripMenuItem
+            // 
+            this.yXToolStripMenuItem.Name = "yXToolStripMenuItem";
+            this.yXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.yXToolStripMenuItem.Text = "Y-X";
+            this.yXToolStripMenuItem.Click += new System.EventHandler(this.yXToolStripMenuItem_Click);
+            // 
+            // zYToolStripMenuItem
+            // 
+            this.zYToolStripMenuItem.Name = "zYToolStripMenuItem";
+            this.zYToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.zYToolStripMenuItem.Text = "Z-Y";
+            this.zYToolStripMenuItem.Click += new System.EventHandler(this.zYToolStripMenuItem_Click);
+            // 
+            // zXToolStripMenuItem
+            // 
+            this.zXToolStripMenuItem.Name = "zXToolStripMenuItem";
+            this.zXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.zXToolStripMenuItem.Text = "Z-X";
+            this.zXToolStripMenuItem.Click += new System.EventHandler(this.zXToolStripMenuItem_Click);
+            // 
             // Display3DControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1276,5 +1305,8 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yXToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zYToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zXToolStripMenuItem;
     }
 }

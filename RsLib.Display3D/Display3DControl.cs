@@ -1063,7 +1063,39 @@ namespace RsLib.Display3D
                 }
             }
         }
+        public void SetView(eCoordPlane coordPlane)
+        {
+            switch (coordPlane)
+            {
+                case eCoordPlane.XY:
+                    SetXYView();
+                    break;
 
+                case eCoordPlane.XZ:
+                    SetXZView();
+                    break;
+                
+                case eCoordPlane.YZ:
+                    SetYZView();
+                    break;
+
+                case eCoordPlane.YX:
+                    SetYXView();
+                    break;
+
+                case eCoordPlane.ZX: 
+                    SetZXView();
+                    break;
+
+                case eCoordPlane.ZY:
+                    SetZYView();
+                    break;
+                default:
+
+                    break;
+            }
+
+        }
         private void trackBar_RotateSensitivity_Scroll(object sender, EventArgs e)
         {
 
@@ -1096,14 +1128,14 @@ namespace RsLib.Display3D
         {
             tlp_LocalTransform.Visible = !tlp_LocalTransform.Visible;
         }
-        public void SetTopView()
+        public void SetXYView()
         {
             _rotationMatrix = Matrix4.Identity;
 
         }
         private void upToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetTopView();
+            SetXYView();
         }
         public void SetBottomView()
         {
@@ -1114,7 +1146,7 @@ namespace RsLib.Display3D
         {
             SetBottomView();
         }
-        public void SetRightView()
+        public void SetYZView()
         {
             _rotationMatrix = Matrix4.Identity;
             _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), -1 * (float)Math.PI / 2);
@@ -1122,7 +1154,7 @@ namespace RsLib.Display3D
         }
         private void rightViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetRightView();
+            SetYZView();
         }
         public void SetLeftView()
         {
@@ -1145,7 +1177,7 @@ namespace RsLib.Display3D
         {
             SetFrontView();
         }
-        public void SetBackView()
+        public void SetXZView()
         {
             _rotationMatrix = Matrix4.Identity;
             _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI / 2);
@@ -1153,7 +1185,7 @@ namespace RsLib.Display3D
 
         private void backViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetBackView();
+            SetXZView();
         }
 
         private void smoothVxToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1230,6 +1262,39 @@ namespace RsLib.Display3D
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FT_Functions.OpenFolder($"{System.Environment.CurrentDirectory}\\Log");
+        }
+        public void SetYXView()
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 0, 1), -1*(float)Math.PI / 2);
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), -1 * (float)Math.PI);
+        }
+
+        private void yXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetYXView();
+        }
+        public void SetZYView()
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 1,0), (float)Math.PI / 2);
+        }
+
+        private void zYToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetZYView();
+        }
+        public void SetZXView()
+        {
+            _rotationMatrix = Matrix4.Identity;
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), (float)Math.PI / 2);
+            _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), (float)Math.PI / 2);
+
+        }
+
+        private void zXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetZXView();
         }
     }
 }
