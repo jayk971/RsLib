@@ -426,42 +426,42 @@ namespace RsLib.Display3D
             // upToolStripMenuItem
             // 
             this.upToolStripMenuItem.Name = "upToolStripMenuItem";
-            this.upToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.upToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.upToolStripMenuItem.Text = "Top View";
             this.upToolStripMenuItem.Click += new System.EventHandler(this.upToolStripMenuItem_Click);
             // 
             // bottomViewToolStripMenuItem
             // 
             this.bottomViewToolStripMenuItem.Name = "bottomViewToolStripMenuItem";
-            this.bottomViewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.bottomViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.bottomViewToolStripMenuItem.Text = "Bottom View";
             this.bottomViewToolStripMenuItem.Click += new System.EventHandler(this.bottomViewToolStripMenuItem_Click);
             // 
             // rightViewToolStripMenuItem
             // 
             this.rightViewToolStripMenuItem.Name = "rightViewToolStripMenuItem";
-            this.rightViewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.rightViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rightViewToolStripMenuItem.Text = "Right View";
             this.rightViewToolStripMenuItem.Click += new System.EventHandler(this.rightViewToolStripMenuItem_Click);
             // 
             // lefeViewToolStripMenuItem
             // 
             this.lefeViewToolStripMenuItem.Name = "lefeViewToolStripMenuItem";
-            this.lefeViewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.lefeViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.lefeViewToolStripMenuItem.Text = "Left View";
             this.lefeViewToolStripMenuItem.Click += new System.EventHandler(this.leftViewToolStripMenuItem_Click);
             // 
             // frontViewToolStripMenuItem
             // 
             this.frontViewToolStripMenuItem.Name = "frontViewToolStripMenuItem";
-            this.frontViewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.frontViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.frontViewToolStripMenuItem.Text = "Front View";
             this.frontViewToolStripMenuItem.Click += new System.EventHandler(this.frontViewToolStripMenuItem_Click);
             // 
             // backViewToolStripMenuItem
             // 
             this.backViewToolStripMenuItem.Name = "backViewToolStripMenuItem";
-            this.backViewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.backViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.backViewToolStripMenuItem.Text = "Back View";
             this.backViewToolStripMenuItem.Click += new System.EventHandler(this.backViewToolStripMenuItem_Click);
             // 
