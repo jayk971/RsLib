@@ -1,5 +1,14 @@
 ﻿namespace RsLib.Common
 {
+    public enum eCoordPlane : int
+    {
+        XY = 0,
+        XZ,
+        YZ,
+        YX,
+        ZX,
+        ZY
+    }
     public enum MachineStatus : int
     {
         NotInitial = 0,      //尚未初始化
