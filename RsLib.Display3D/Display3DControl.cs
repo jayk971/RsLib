@@ -21,6 +21,7 @@ namespace RsLib.Display3D
         public event Action AfterClearButtonPressed;
         public event Action MiddleMouseButtonClick;
         public event Action<int> AfterPolylineSelected;
+        public event Action<double[], double[]> AfterMediemButtonClick;
         public bool LockRotate = false;
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
@@ -1069,6 +1070,7 @@ namespace RsLib.Display3D
         public void SetView(eCoordPlane coordPlane,bool lockRotate)
         {
             LockRotate = lockRotate;
+            changeLockViewIcon();
             switch (coordPlane)
             {
                 case eCoordPlane.XY:
@@ -1304,10 +1306,14 @@ namespace RsLib.Display3D
         private void toolBtn_LockView_Click(object sender, EventArgs e)
         {
             switchLockViewStatus();
+            changeLockViewIcon();
         }
         private void switchLockViewStatus()
         {
             LockRotate = !LockRotate;
+        }
+        private void changeLockViewIcon()
+        {
             toolBtn_LockView.Image = LockRotate ? Resources.lock_48px : Resources.padlock_48px;
         }
     }

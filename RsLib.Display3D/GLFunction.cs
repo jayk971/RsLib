@@ -176,6 +176,10 @@ namespace RsLib.Display3D
                 GL.PopMatrix();
                 _haveClosestPoint = closestPoint(nearWorld, farWorld, out _closetPoint);
 
+                AfterMediemButtonClick?.Invoke(
+                    new double[] { nearWorld.X, nearWorld.Y, nearWorld.Z },
+                    new double[] { farWorld.X, farWorld.Y, farWorld.Z });
+
                 switch (_pickMode)
                 {
                     case PointPickMode.One:
