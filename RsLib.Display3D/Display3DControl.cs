@@ -16,9 +16,12 @@ namespace RsLib.Display3D
     public partial class Display3DControl : UserControl
     {
         public event Action<PointCloud> AfterPointsSelected;
+        public event Action<Point3D> AfterPointSelected;
+
         public event Action AfterClearButtonPressed;
         public event Action MiddleMouseButtonClick;
         public event Action<int> AfterPolylineSelected;
+        public bool LockRotate = false;
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
         const int splitContainerPanel1MinSize = 300;
@@ -1063,8 +1066,9 @@ namespace RsLib.Display3D
                 }
             }
         }
-        public void SetView(eCoordPlane coordPlane)
+        public void SetView(eCoordPlane coordPlane,bool lockRotate)
         {
+            LockRotate = lockRotate;
             switch (coordPlane)
             {
                 case eCoordPlane.XY:
@@ -1295,6 +1299,16 @@ namespace RsLib.Display3D
         private void zXToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetZXView();
+        }
+
+        private void toolBtn_LockView_Click(object sender, EventArgs e)
+        {
+            switchLockViewStatus();
+        }
+        private void switchLockViewStatus()
+        {
+            LockRotate = !LockRotate;
+            toolBtn_LockView.Image = LockRotate ? Resources.lock_48px : Resources.padlock_48px;
         }
     }
 }

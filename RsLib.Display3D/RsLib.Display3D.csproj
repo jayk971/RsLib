@@ -254,6 +254,12 @@
   <ItemGroup>
     <None Include="Resources\map_pinpoint_30px1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lock_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\padlock_48px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y

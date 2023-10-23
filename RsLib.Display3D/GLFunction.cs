@@ -183,6 +183,7 @@ namespace RsLib.Display3D
                         _multiSelectPoints.Clear();
                         _multiSelectPoints.Add(_closetPoint);
                         showSelectPointData(_haveClosestPoint, _closetPoint);
+                        if(_haveClosestPoint) AfterPointSelected?.Invoke(_closetPoint);
                         //AfterPointsSelected?.Invoke(_multiSelectPoints);
                         break;
 
@@ -586,6 +587,7 @@ namespace RsLib.Display3D
         }
         void rotate(int mouseX, int mouseY)
         {
+            if (LockRotate) return;
 
             Vector3 trackballStart = ScreenToTrackball(_lastRotX, _lastRotY);
             Vector3 trackballCurrent = ScreenToTrackball(mouseX, mouseY);
