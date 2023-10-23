@@ -73,6 +73,16 @@ namespace RsLib.Display3D.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap autograph_48px {
+            get {
+                object obj = ResourceManager.GetObject("autograph_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap available_updates_30px {
             get {
                 object obj = ResourceManager.GetObject("available_updates_30px", resourceCulture);
@@ -256,6 +266,16 @@ namespace RsLib.Display3D.Properties {
         internal static System.Drawing.Bitmap unavailable_48px {
             get {
                 object obj = ResourceManager.GetObject("unavailable_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap undo_48px {
+            get {
+                object obj = ResourceManager.GetObject("undo_48px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

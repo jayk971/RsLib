@@ -1047,6 +1047,12 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+        public void RemoveLast()
+        {
+            if (Points.Count == 0) return;
+            Points.RemoveAt(Count - 1);
+            CalculatePercent();
+        }
         public void RemovePoint(double percent)
         {
             if (percent < 0 || percent > 1) return;

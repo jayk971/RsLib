@@ -1,6 +1,7 @@
 ﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using RsLib.Common;
 using RsLib.Display3D.Properties;
 using RsLib.PointCloudLib;
 using System;
@@ -41,6 +42,7 @@ namespace RsLib.Display3D
         PointCloud _tempMultiSelectPoints = new PointCloud();
 
         Polyline _SelectPath = new Polyline();
+        Polyline _DrawPath = new Polyline();
 
 
         Vector3 _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
@@ -134,7 +136,10 @@ namespace RsLib.Display3D
                 drawTempMultipleSelect();
                 drawMultipleSelect();
             }
-
+            else if(_pickMode == PointPickMode.Draw)
+            {
+                drawDrawPath();
+            }
             if (_CurrentSelectObjectIndex > 1)
                 drawSelectRangeFrame();
 
@@ -367,6 +372,9 @@ namespace RsLib.Display3D
                             _tempMultiSelectPoints.Clear();
                         }
                         break;
+                    case PointPickMode.Draw:
+                        addToDrawPath(nearWorld, farWorld);
+                        break;
                     default:
                         _middleMouseCount = 0;
 
@@ -375,6 +383,39 @@ namespace RsLib.Display3D
                 }
 
             }
+        }
+        private void addToDrawPath(Vector3 near,Vector3 far)
+        {
+            switch (currentPlane)
+            {
+                case eCoordPlane.XY:
+                    _DrawPath.Add(near.X, near.Y, 0.0);
+                    break;
+
+                case eCoordPlane.XZ:
+                    _DrawPath.Add(near.X, 0.0, near.Z);
+                    break;
+
+                case eCoordPlane.YZ:
+                    _DrawPath.Add(0.0, near.Y, near.Z);
+                    break;
+
+                case eCoordPlane.YX:
+                    _DrawPath.Add(near.X, near.Y, 0.0);
+                    break;
+
+                case eCoordPlane.ZX:
+                    _DrawPath.Add(near.X, 0.0, near.Z);
+                    break;
+
+                case eCoordPlane.ZY:
+                    _DrawPath.Add(0.0, near.Y, near.Z);
+                    break;
+                default:
+                    break;
+            }
+
+
         }
 
         private void GlControl_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -780,6 +821,16 @@ namespace RsLib.Display3D
             GL.End();
             drawVector(_closetPoint);
         }
+        void drawDrawPath()
+        {
+            int count = _DrawPath.Count;
+            if (count == 0) return;
+            if(count >= 2)
+                drawPolyline(_DrawPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
+            drawPointCloud(_DrawPath, Settings.Default.Size_SelectPath * 2, Settings.Default.Color_SelectPath, false);
+
+        }
+
         void drawSelectPath()
         {
             int count = _SelectPath.Count;
@@ -1748,6 +1799,7 @@ namespace RsLib.Display3D
         None = 0,
         One,
         Two,
-        Multiple
+        Multiple,
+        Draw
     }
 }

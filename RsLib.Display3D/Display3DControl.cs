@@ -22,6 +22,7 @@ namespace RsLib.Display3D
         public event Action MiddleMouseButtonClick;
         public event Action<int> AfterPolylineSelected;
         public event Action<double[], double[]> AfterMediemButtonClick;
+        public event Action<Polyline> AfterLineDrawn;
         public bool LockRotate = false;
         bool _isColorDialogOpen = false;
         bool _isMouseOnCell = false;
@@ -46,6 +47,8 @@ namespace RsLib.Display3D
                 MultipleSelectToolStripMenuItem.Visible = value;
             }
         }
+
+        eCoordPlane currentPlane = eCoordPlane.None;
         public Display3DControl(int listNum = 1)
         {
             InitializeComponent();
@@ -593,6 +596,15 @@ namespace RsLib.Display3D
             splitContainer2.Panel2Collapsed = false;
 
         }
+        void pickMode_Draw()
+        {
+            _pickMode = PointPickMode.Draw;
+            lbl_PickPointMode.Text = "Draw Polyline";
+            lbl_PickPointMode.Image = Resources.autograph_48px;
+            treeView1.Nodes.Clear();
+            splitContainer2.Panel2Collapsed = false;
+
+        }
         private void btn_SaveAs_Click(object sender, EventArgs e)
         {
             if (_CurrentSelectObjectIndex <= 1)
@@ -657,7 +669,7 @@ namespace RsLib.Display3D
         {
             if (_GLUpdateDone)
                 _glControl.Invalidate();
-
+            toolLbl_CurrentPlane.Text = currentPlane.ToString();
             toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
             toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
 
@@ -1070,8 +1082,9 @@ namespace RsLib.Display3D
         public void SetView(eCoordPlane coordPlane,bool lockRotate)
         {
             LockRotate = lockRotate;
-            changeLockViewIcon();
-            switch (coordPlane)
+            if (currentPlane != coordPlane) _DrawPath.Clear();
+            currentPlane = coordPlane;
+            switch (currentPlane)
             {
                 case eCoordPlane.XY:
                     SetXYView();
@@ -1097,10 +1110,11 @@ namespace RsLib.Display3D
                     SetZYView();
                     break;
                 default:
-
+                    LockRotate = false;
                     break;
             }
-
+            
+            changeLockViewIcon();
         }
         private void trackBar_RotateSensitivity_Scroll(object sender, EventArgs e)
         {
@@ -1141,7 +1155,7 @@ namespace RsLib.Display3D
         }
         private void upToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetXYView();
+            SetView(eCoordPlane.XY, true);
         }
         public void SetBottomView()
         {
@@ -1150,6 +1164,9 @@ namespace RsLib.Display3D
         }
         private void bottomViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+            currentPlane = eCoordPlane.None;
+            _DrawPath.Clear();
             SetBottomView();
         }
         public void SetYZView()
@@ -1160,7 +1177,7 @@ namespace RsLib.Display3D
         }
         private void rightViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetYZView();
+            SetView(eCoordPlane.YZ, true);
         }
         public void SetLeftView()
         {
@@ -1171,6 +1188,8 @@ namespace RsLib.Display3D
 
         private void leftViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            currentPlane = eCoordPlane.None;
+            _DrawPath.Clear();
             SetLeftView();
         }
         public void SetFrontView()
@@ -1181,6 +1200,8 @@ namespace RsLib.Display3D
         }
         private void frontViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            currentPlane = eCoordPlane.None;
+            _DrawPath.Clear();
             SetFrontView();
         }
         public void SetXZView()
@@ -1191,7 +1212,7 @@ namespace RsLib.Display3D
 
         private void backViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetXZView();
+            SetView(eCoordPlane.XZ, true);
         }
 
         private void smoothVxToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1278,7 +1299,7 @@ namespace RsLib.Display3D
 
         private void yXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetYXView();
+            SetView(eCoordPlane.YX, true);
         }
         public void SetZYView()
         {
@@ -1288,7 +1309,7 @@ namespace RsLib.Display3D
 
         private void zYToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetZYView();
+            SetView(eCoordPlane.ZY, true);
         }
         public void SetZXView()
         {
@@ -1300,7 +1321,7 @@ namespace RsLib.Display3D
 
         private void zXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetZXView();
+            SetView(eCoordPlane.ZX, true);
         }
 
         private void toolBtn_LockView_Click(object sender, EventArgs e)
@@ -1315,6 +1336,37 @@ namespace RsLib.Display3D
         private void changeLockViewIcon()
         {
             toolBtn_LockView.Image = LockRotate ? Resources.lock_48px : Resources.padlock_48px;
+            if (LockRotate == false) currentPlane = eCoordPlane.None;
+
+        }
+
+        private void drawSegmentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void startDrawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pickMode_Draw();
+        }
+
+        private void endDrawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pickMode_None();
+            if (_DrawPath.Count >= 2)
+                AfterLineDrawn?.Invoke(_DrawPath);
+            _DrawPath.Clear();
+
+        }
+
+        private void clearDrawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _DrawPath.Clear();
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _DrawPath.RemoveLast();
         }
     }
 }

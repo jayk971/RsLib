@@ -60,6 +60,13 @@ namespace RsLib.Display3D
             this.btn_PickPoint = new System.Windows.Forms.ToolStripSplitButton();
             this.measureDistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MultipleSelectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawSegmentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startDrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.endDrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearDrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lbl_Selectable = new System.Windows.Forms.ToolStripLabel();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -79,6 +86,7 @@ namespace RsLib.Display3D
             this.toolStatusLbl_SelectObjectIndex = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStatusLbl_CurrentSelectLineIndex = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolLbl_CurrentPlane = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -373,6 +381,7 @@ namespace RsLib.Display3D
             this.btn_PickPoint.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.measureDistanceToolStripMenuItem,
             this.MultipleSelectToolStripMenuItem,
+            this.drawSegmentToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.btn_PickPoint.Image = global::RsLib.Display3D.Properties.Resources.place_marker_30px;
             this.btn_PickPoint.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -396,6 +405,63 @@ namespace RsLib.Display3D
             this.MultipleSelectToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
             this.MultipleSelectToolStripMenuItem.Text = "Multiple Select";
             this.MultipleSelectToolStripMenuItem.Click += new System.EventHandler(this.MultipleSelectToolStripMenuItem_Click);
+            // 
+            // drawSegmentToolStripMenuItem
+            // 
+            this.drawSegmentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.startDrawToolStripMenuItem,
+            this.endDrawToolStripMenuItem,
+            this.toolStripSeparator10,
+            this.undoToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.clearDrawToolStripMenuItem});
+            this.drawSegmentToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.autograph_48px;
+            this.drawSegmentToolStripMenuItem.Name = "drawSegmentToolStripMenuItem";
+            this.drawSegmentToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.drawSegmentToolStripMenuItem.Text = "Draw Segment";
+            this.drawSegmentToolStripMenuItem.Click += new System.EventHandler(this.drawSegmentToolStripMenuItem_Click);
+            // 
+            // startDrawToolStripMenuItem
+            // 
+            this.startDrawToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.autograph_48px;
+            this.startDrawToolStripMenuItem.Name = "startDrawToolStripMenuItem";
+            this.startDrawToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.startDrawToolStripMenuItem.Text = "Start Draw";
+            this.startDrawToolStripMenuItem.Click += new System.EventHandler(this.startDrawToolStripMenuItem_Click);
+            // 
+            // endDrawToolStripMenuItem
+            // 
+            this.endDrawToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.autograph_48px;
+            this.endDrawToolStripMenuItem.Name = "endDrawToolStripMenuItem";
+            this.endDrawToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.endDrawToolStripMenuItem.Text = "End Draw";
+            this.endDrawToolStripMenuItem.Click += new System.EventHandler(this.endDrawToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(193, 6);
+            // 
+            // undoToolStripMenuItem
+            // 
+            this.undoToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.undo_48px;
+            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.undoToolStripMenuItem.Text = "Undo";
+            this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(193, 6);
+            // 
+            // clearDrawToolStripMenuItem
+            // 
+            this.clearDrawToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.broom_30px;
+            this.clearDrawToolStripMenuItem.Name = "clearDrawToolStripMenuItem";
+            this.clearDrawToolStripMenuItem.Size = new System.Drawing.Size(196, 38);
+            this.clearDrawToolStripMenuItem.Text = "Clear Draw";
+            this.clearDrawToolStripMenuItem.Click += new System.EventHandler(this.clearDrawToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -517,7 +583,8 @@ namespace RsLib.Display3D
             this.toolStripStatusLabel1,
             this.toolStatusLbl_SelectObjectIndex,
             this.toolStripStatusLabel2,
-            this.toolStatusLbl_CurrentSelectLineIndex});
+            this.toolStatusLbl_CurrentSelectLineIndex,
+            this.toolLbl_CurrentPlane});
             this.statusStrip1.Location = new System.Drawing.Point(0, 603);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(748, 30);
@@ -555,6 +622,12 @@ namespace RsLib.Display3D
             this.toolStatusLbl_CurrentSelectLineIndex.Name = "toolStatusLbl_CurrentSelectLineIndex";
             this.toolStatusLbl_CurrentSelectLineIndex.Size = new System.Drawing.Size(22, 25);
             this.toolStatusLbl_CurrentSelectLineIndex.Text = " -1";
+            // 
+            // toolLbl_CurrentPlane
+            // 
+            this.toolLbl_CurrentPlane.Name = "toolLbl_CurrentPlane";
+            this.toolLbl_CurrentPlane.Size = new System.Drawing.Size(39, 25);
+            this.toolLbl_CurrentPlane.Text = "None";
             // 
             // tableLayoutPanel1
             // 
@@ -1323,5 +1396,13 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripMenuItem zYToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zXToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolBtn_LockView;
+        private System.Windows.Forms.ToolStripMenuItem drawSegmentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startDrawToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem endDrawToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearDrawToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripStatusLabel toolLbl_CurrentPlane;
+        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
     }
 }

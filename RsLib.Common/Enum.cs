@@ -2,6 +2,7 @@
 {
     public enum eCoordPlane : int
     {
+        None = -1,
         XY = 0,
         XZ,
         YZ,

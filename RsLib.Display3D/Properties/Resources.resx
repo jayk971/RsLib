@@ -124,8 +124,8 @@
   <data name="resize_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\resize_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="map_pinpoint_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\map_pinpoint_30px1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lock_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lock_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="available_updates_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\available_updates_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,8 +136,14 @@
   <data name="shutdown_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shutdown_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="autograph_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\autograph_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="list_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\list_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="padlock_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\padlock_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="orthogonal_view_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\orthogonal_view_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -148,17 +154,14 @@
   <data name="place_marker_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\place_marker_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="unavailable_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\unavailable_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="settings_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\settings_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="reversed_numerical_sorting_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\reversed_numerical_sorting_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="unavailable_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\unavailable_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="minus_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\minus_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="map_pinpoint_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\map_pinpoint_30px1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="width_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\width_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,13 +175,16 @@
   <data name="save_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\save_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="reversed_numerical_sorting_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reversed_numerical_sorting_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="add_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="lock_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\lock_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="minus_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\minus_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="padlock_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\padlock_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="undo_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\undo_48px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
