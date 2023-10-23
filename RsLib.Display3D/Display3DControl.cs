@@ -1318,7 +1318,10 @@ namespace RsLib.Display3D
             _rotationMatrix *= Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), (float)Math.PI / 2);
 
         }
-
+        public void SetDrawPath(Polyline pl)
+        {
+            _DrawPath = pl;
+        }
         private void zXToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetView(eCoordPlane.ZX, true);
