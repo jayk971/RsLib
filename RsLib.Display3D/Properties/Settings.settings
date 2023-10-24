@@ -41,5 +41,11 @@
     <Setting Name="Sensitivity" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1.5</Value>
     </Setting>
+    <Setting Name="Size_DrawLine" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="Color_DrawLine" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Cyan</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

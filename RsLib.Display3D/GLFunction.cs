@@ -389,27 +389,27 @@ namespace RsLib.Display3D
             switch (currentPlane)
             {
                 case eCoordPlane.XY:
-                    _DrawPath.Add(near.X, near.Y, _maxPoint.Z);
+                    _DrawPath.Add(near.X, near.Y, 0.0);
                     break;
 
                 case eCoordPlane.XZ:
-                    _DrawPath.Add(near.X, _minPoint.Y, near.Z);
+                    _DrawPath.Add(near.X, 0.0, near.Z);
                     break;
 
                 case eCoordPlane.YZ:
-                    _DrawPath.Add(_maxPoint.X, near.Y, near.Z);
+                    _DrawPath.Add(0.0, near.Y, near.Z);
                     break;
 
                 case eCoordPlane.YX:
-                    _DrawPath.Add(near.X, near.Y, _minPoint.Z);
+                    _DrawPath.Add(near.X, near.Y, 0.0);
                     break;
 
                 case eCoordPlane.ZX:
-                    _DrawPath.Add(near.X, _maxPoint.Y, near.Z);
+                    _DrawPath.Add(near.X, 0.0, near.Z);
                     break;
 
                 case eCoordPlane.ZY:
-                    _DrawPath.Add(_minPoint.X, near.Y, near.Z);
+                    _DrawPath.Add(0.0, near.Y, near.Z);
                     break;
                 default:
                     break;
@@ -825,9 +825,43 @@ namespace RsLib.Display3D
         {
             int count = _DrawPath.Count;
             if (count == 0) return;
-            if(count >= 2)
-                drawPolyline(_DrawPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
-            drawPointCloud(_DrawPath, Settings.Default.Size_SelectPath * 2, Settings.Default.Color_SelectPath, false);
+            for (int i = 0; i < _DrawPath.Count; i++)
+            {
+                Point3D pt = _DrawPath.Points[i];
+                switch (currentPlane)
+                {
+                    case eCoordPlane.XY:
+                        pt.Z =  _maxPoint.Z == float.MinValue ? 0f : _maxPoint.Z;
+                        break;
+
+                    case eCoordPlane.XZ:
+                        pt.Y = _minPoint.Y == float.MaxValue ? 0f : _minPoint.Y;
+                        break;
+
+                    case eCoordPlane.YZ:
+                        pt.X = _maxPoint.X == float.MinValue ? 0f : _maxPoint.X;
+                        break;
+
+                    case eCoordPlane.YX:
+                        pt.Z =_minPoint.Z == float.MaxValue ? 0f : _minPoint.Z;
+                        break;
+
+                    case eCoordPlane.ZX:
+                        pt.Y =_maxPoint.Y == float.MinValue ? 0f : _maxPoint.Y;
+                        break;
+
+                    case eCoordPlane.ZY:
+                        pt.X = _minPoint.X == float.MaxValue ? 0f : _minPoint.X;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            if (count >= 2)
+                drawPolyline(_DrawPath, Settings.Default.Size_DrawLine, Settings.Default.Color_DrawLine, false);
+            drawPointCloud(_DrawPath, Settings.Default.Size_DrawLine * 3, Settings.Default.Color_DrawLine, false);
 
         }
 

@@ -178,5 +178,29 @@ namespace RsLib.Display3D.Properties {
                 this["Sensitivity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public float Size_DrawLine {
+            get {
+                return ((float)(this["Size_DrawLine"]));
+            }
+            set {
+                this["Size_DrawLine"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Cyan")]
+        public global::System.Drawing.Color Color_DrawLine {
+            get {
+                return ((global::System.Drawing.Color)(this["Color_DrawLine"]));
+            }
+            set {
+                this["Color_DrawLine"] = value;
+            }
+        }
     }
 }
