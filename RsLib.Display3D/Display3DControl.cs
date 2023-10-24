@@ -67,7 +67,7 @@ namespace RsLib.Display3D
             _glControl.SizeChanged += _glControl_SizeChanged;
 
             //_glControl.Parent = splitContainer1.Panel2;
-            splitContainer1.Panel2.Controls.Add(_glControl);
+            pnl_GLControl.Controls.Add(_glControl);
 
             dataGridView1.CellValueChanged += DataGridView1_CellValueChanged;
             dataGridView1.CellContentClick += DataGridView1_CellContentClick;
@@ -1338,9 +1338,12 @@ namespace RsLib.Display3D
         }
         private void changeLockViewIcon()
         {
+            toolLbl_Notify.Visible = LockRotate;
             toolBtn_LockView.Image = LockRotate ? Resources.lock_48px : Resources.padlock_48px;
-            if (LockRotate == false) currentPlane = eCoordPlane.None;
-
+            if (LockRotate == false)
+            {
+                currentPlane = eCoordPlane.None;
+            }
         }
 
         private void drawSegmentToolStripMenuItem_Click(object sender, EventArgs e)

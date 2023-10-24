@@ -389,27 +389,27 @@ namespace RsLib.Display3D
             switch (currentPlane)
             {
                 case eCoordPlane.XY:
-                    _DrawPath.Add(near.X, near.Y, 0.0);
+                    _DrawPath.Add(near.X, near.Y, _maxPoint.Z);
                     break;
 
                 case eCoordPlane.XZ:
-                    _DrawPath.Add(near.X, 0.0, near.Z);
+                    _DrawPath.Add(near.X, _minPoint.Y, near.Z);
                     break;
 
                 case eCoordPlane.YZ:
-                    _DrawPath.Add(0.0, near.Y, near.Z);
+                    _DrawPath.Add(_maxPoint.X, near.Y, near.Z);
                     break;
 
                 case eCoordPlane.YX:
-                    _DrawPath.Add(near.X, near.Y, 0.0);
+                    _DrawPath.Add(near.X, near.Y, _minPoint.Z);
                     break;
 
                 case eCoordPlane.ZX:
-                    _DrawPath.Add(near.X, 0.0, near.Z);
+                    _DrawPath.Add(near.X, _maxPoint.Y, near.Z);
                     break;
 
                 case eCoordPlane.ZY:
-                    _DrawPath.Add(0.0, near.Y, near.Z);
+                    _DrawPath.Add(_minPoint.X, near.Y, near.Z);
                     break;
                 default:
                     break;
