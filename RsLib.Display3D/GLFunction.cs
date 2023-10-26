@@ -141,7 +141,7 @@ namespace RsLib.Display3D
                 drawDrawPath();
             }
             if (_CurrentSelectObjectIndex > 1)
-                drawSelectRangeFrame();
+                //drawSelectRangeFrame();
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.PopMatrix();
