@@ -193,11 +193,11 @@ namespace RsLib.DemoForm
             listBox1.Items.Clear();
         }
 
-        private void EJ1500_WeightMeasured(int index, double obj)
+        private void EJ1500_WeightMeasured(int index, double obj,bool isRaiseEvent)
         {
             if (this.InvokeRequired)
             {
-                Action<int, double> action = new Action<int, double>(EJ1500_WeightMeasured);
+                Action<int, double,bool> action = new Action<int, double,bool>(EJ1500_WeightMeasured);
                 this.Invoke(action, index, obj);
             }
             else

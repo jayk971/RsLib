@@ -11,7 +11,7 @@ namespace RsLib.SerialPortLib
 {
     public class EJ1500
     {
-        public event Action<int, double> WeightMeasured;
+        public event Action<int, double,bool> WeightMeasured;
         public event Action<bool> Connected;
         RS232 _rs232;
         public EJ1500Setting Setting { get; private set; } = new EJ1500Setting();
@@ -87,7 +87,7 @@ namespace RsLib.SerialPortLib
                         if (_stableCount >= Setting.MeasureCount)
                         {
                             double avgWeight = Math.Round(_weightSum / (double)Setting.MeasureCount, 1);
-                            if(_isRaiseEvent) WeightMeasured?.Invoke(Setting.Index, avgWeight);
+                            WeightMeasured?.Invoke(Setting.Index, avgWeight,_isRaiseEvent);
                             _stableCount = 0;
                             _weightSum = 0;
                             _enableGetWeight = false;

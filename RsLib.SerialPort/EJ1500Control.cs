@@ -34,12 +34,12 @@ namespace RsLib.SerialPortLib
             }
         }
 
-        private void _ej1500_WeightMeasured(int scaleIndex, double measuredWeight)
+        private void _ej1500_WeightMeasured(int scaleIndex, double measuredWeight,bool isRaiseEvent)
         {
             if (this.InvokeRequired)
             {
-                Action<int, double> action = new Action<int, double>(_ej1500_WeightMeasured);
-                this.Invoke(action, scaleIndex, measuredWeight);
+                Action<int, double,bool> action = new Action<int, double,bool>(_ej1500_WeightMeasured);
+                this.Invoke(action, scaleIndex, measuredWeight,isRaiseEvent);
             }
             else
             {
