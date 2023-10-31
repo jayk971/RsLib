@@ -23,36 +23,10 @@ namespace RsLib.Display3D
         public event Action<int> AfterPolylineSelected;
         public event Action<double[], double[]> AfterMediemButtonClick;
         public event Action<Polyline> AfterLineDrawn;
-        public bool LockRotate = false;
-        bool _isColorDialogOpen = false;
-        bool _isMouseOnCell = false;
-        const int splitContainerPanel1MinSize = 300;
-        const int _typeIndex = 0;
-        const int _visibleIndex = 1;
-        const int _nameIndex = 2;
-        const int _idIndex = 3;
-        const int _colorIndex = 4;
-        const int _sizeIndex = 5;
-        FormAddSelectPath formAdd = new FormAddSelectPath();
-        // key : object ID, value : list of select paths;
-        Dictionary<int, List<int>> _SelectedPathIndex = new Dictionary<int, List<int>>();
-        int _CurrentSelectLineIndex = -1;
-        bool enableMultipleSelect = false;
-        public bool EnableMultipleSelect
-        {
-            get => enableMultipleSelect;
-            set
-            {
-                enableMultipleSelect = value;
-                MultipleSelectToolStripMenuItem.Visible = value;
-            }
-        }
-
-        eCoordPlane currentPlane = eCoordPlane.None;
-        public Display3DControl(int listNum = 1)
+        public Display3DControl(int listNum )
         {
             InitializeComponent();
-            _maxDisplayList = listNum + 1;
+            _maxDisplayList = listNum;
 
             _glControl = new GLControl();
             _glControl.Load += GlControl_Load;
@@ -159,38 +133,38 @@ namespace RsLib.Display3D
 
                     switch (option.DisplayType)
                     {
-                        case DisplayObjectType.PointCloud:
+                        case eDisplayObjectType.PointCloud:
                             if (objectType == typeof(ObjectGroup))
                                 BuildPointCloud((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(PointCloud))
                                 BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_z:
+                        case eDisplayObjectType.Vector_z:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_y:
+                        case eDisplayObjectType.Vector_y:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_x:
+                        case eDisplayObjectType.Vector_x:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Path:
+                        case eDisplayObjectType.Path:
                             if (objectType == typeof(ObjectGroup))
                                 BuildPath((ObjectGroup)_displayObject[id], id, false, false);
 
                             else if (objectType == typeof(Polyline))
                                 BuildPath((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Point:
+                        case eDisplayObjectType.Point:
                             BuildPoint((Point3D)_displayObject[id], id, false, false);
                             break;
                         default:
@@ -385,12 +359,12 @@ namespace RsLib.Display3D
                 bool isCheck = (bool)dataGridView1.Rows[r].Cells[_visibleIndex].Value;
                 if (_displayOption.ContainsKey(id))
                 {
-                    bool oldCheck = _displayOption[id].IsDisplay;
+                    bool oldCheck = _displayOption[id].Visible;
                     if (oldCheck != isCheck)
                     {
                         Log.Add($"Change ID {id} is visible. {isCheck}.", MsgLevel.Trace);
 
-                        _displayOption[id].IsDisplay = isCheck;
+                        _displayOption[id].Visible = isCheck;
                     }
                 }
 
@@ -449,6 +423,34 @@ namespace RsLib.Display3D
             }
             _isColorDialogOpen = false;
         }
+        public void UpdateTreeView()
+        {
+            if (this.InvokeRequired)
+            {
+                Action action = new Action(UpdateTreeView);
+                this.Invoke(action);
+            }
+            else
+            {
+
+                tvw_DrawItem.Nodes.Clear();
+                foreach (var item in _displayOption)
+                {
+                    DisplayObjectOption option = item.Value;
+                    if (_displayObject.ContainsKey(option.ID) == false) continue;
+                    if (option.IsShowAtDataGrid)
+                    {
+                        if (option.Name != "")
+                        {
+                            tvw_DrawItem.Nodes.Add(option.ToTreeNode());
+                        }
+                    }
+                }
+                _CurrentSelectObjectIndex = -1;
+                _CurrentSelectLineIndex = -1;
+                UpdateLineIndexComboBox();
+            }
+        }
 
         public void UpdateDataGridView()
         {
@@ -459,7 +461,7 @@ namespace RsLib.Display3D
             }
             else
             {
-
+                UpdateTreeView();
                 dataGridView1.Rows.Clear();
                 foreach (var item in _displayOption)
                 {
@@ -519,7 +521,7 @@ namespace RsLib.Display3D
 
         private void btn_PickPoint_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.One)
+            if (_pickMode == ePointPickMode.One)
             {
                 pickMode_None();
             }
@@ -545,7 +547,7 @@ namespace RsLib.Display3D
 
         private void measureDistanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.Two)
+            if (_pickMode == ePointPickMode.Two)
             {
                 pickMode_None();
             }
@@ -561,7 +563,7 @@ namespace RsLib.Display3D
         }
         void pickMode_None()
         {
-            _pickMode = PointPickMode.None;
+            _pickMode = ePointPickMode.None;
             lbl_PickPointMode.Text = "None";
             lbl_PickPointMode.Image = Resources.unavailable_48px;
             treeView1.Nodes.Clear();
@@ -571,7 +573,7 @@ namespace RsLib.Display3D
         }
         void pickMode_Single()
         {
-            _pickMode = PointPickMode.One;
+            _pickMode = ePointPickMode.One;
             lbl_PickPointMode.Text = "Pick Point - Middle Click";
             lbl_PickPointMode.Image = Resources.place_marker_30px;
             treeView1.Nodes.Clear();
@@ -580,7 +582,7 @@ namespace RsLib.Display3D
         }
         void pickMode_Measure()
         {
-            _pickMode = PointPickMode.Two;
+            _pickMode = ePointPickMode.Two;
             lbl_PickPointMode.Text = "Pick 1st Point - Middle Click";
             lbl_PickPointMode.Image = Resources.width_30px;
             treeView1.Nodes.Clear();
@@ -589,7 +591,7 @@ namespace RsLib.Display3D
         }
         void pickMode_Multiple()
         {
-            _pickMode = PointPickMode.Multiple;
+            _pickMode = ePointPickMode.Multiple;
             lbl_PickPointMode.Text = "Select Range : Shift + Middle Click\tSelect Each : Ctrl + Middle Click";
             lbl_PickPointMode.Image = Resources.map_pinpoint_30px;
             treeView1.Nodes.Clear();
@@ -598,7 +600,7 @@ namespace RsLib.Display3D
         }
         void pickMode_Draw()
         {
-            _pickMode = PointPickMode.Draw;
+            _pickMode = ePointPickMode.Draw;
             lbl_PickPointMode.Text = "Draw Polyline";
             lbl_PickPointMode.Image = Resources.autograph_48px;
             treeView1.Nodes.Clear();
@@ -1264,7 +1266,7 @@ namespace RsLib.Display3D
 
         private void toolBtn_StartMultipleSelect_Click(object sender, EventArgs e)
         {
-            if (_pickMode == PointPickMode.Multiple)
+            if (_pickMode == ePointPickMode.Multiple)
             {
                 pickMode_None();
             }
@@ -1373,6 +1375,26 @@ namespace RsLib.Display3D
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _DrawPath.RemoveLast();
+        }
+
+        private void visibleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void changeColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tvw_DrawItem_MouseClick(object sender, MouseEventArgs e)
+        {
+            
         }
     }
 }

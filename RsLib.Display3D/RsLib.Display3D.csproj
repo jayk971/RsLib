@@ -85,12 +85,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class.cs" />
+    <Compile Include="ClassProperty.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Display3DControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Display3DControl.Designer.cs">
       <DependentUpon>Display3DControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Enum.cs" />
     <Compile Include="FormAddSelectPath.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +109,9 @@
       <DependentUpon>FormChangeDefaultColor.cs</DependentUpon>
     </Compile>
     <Compile Include="GLFunction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BuildMethod.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

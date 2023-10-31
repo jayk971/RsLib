@@ -53,12 +53,12 @@ namespace RsLib.XYZViewer
 
         void init()
         {
-            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 2.0f, true);
-            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 2.0f, false);
-            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 5.0f, true);
-            DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
-            DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, DisplayObjectType.Vector_y, 1.0f, false);
-            DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, DisplayObjectType.Vector_x, 1.0f, false);
+            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, eDisplayObjectType.PointCloud, 2.0f ,true);
+            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, eDisplayObjectType.Path, 2.0f, false);
+            //DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, eDisplayObjectType.PointCloud, 5.0f, true);
+            //DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, eDisplayObjectType.Vector_z, 1.0f, false);
+            //DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, eDisplayObjectType.Vector_y, 1.0f, false);
+            //DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, eDisplayObjectType.Vector_x, 1.0f, false);
 
             XYZOptions[0].DrawColor = Color.Gray;
             XYZOptions[1].DrawColor = Color.DarkGray;
@@ -70,28 +70,28 @@ namespace RsLib.XYZViewer
             PathOptions[1].DrawColor = Color.SteelBlue;
             PathOptions[2].DrawColor = Color.DarkOrchid;
 
-            PointOptions[0].DrawColor = Color.DarkOrange;
-            PointOptions[1].DrawColor = Color.SteelBlue;
-            PointOptions[2].DrawColor = Color.DarkOrchid;
+            //PointOptions[0].DrawColor = Color.DarkOrange;
+            //PointOptions[1].DrawColor = Color.SteelBlue;
+            //PointOptions[2].DrawColor = Color.DarkOrchid;
 
-            vzVectorOptions[0].DrawColor = Color.Blue;
-            vzVectorOptions[1].DrawColor = Color.Blue;
-            vzVectorOptions[2].DrawColor = Color.Blue;
+            //vzVectorOptions[0].DrawColor = Color.Blue;
+            //vzVectorOptions[1].DrawColor = Color.Blue;
+            //vzVectorOptions[2].DrawColor = Color.Blue;
 
-            vyVectorOptions[0].DrawColor = Color.LimeGreen;
-            vyVectorOptions[1].DrawColor = Color.LimeGreen;
-            vyVectorOptions[2].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[0].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[1].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[2].DrawColor = Color.LimeGreen;
 
-            vxVectorOptions[0].DrawColor = Color.Red;
-            vxVectorOptions[1].DrawColor = Color.Red;
-            vxVectorOptions[2].DrawColor = Color.Red;
+            //vxVectorOptions[0].DrawColor = Color.Red;
+            //vxVectorOptions[1].DrawColor = Color.Red;
+            //vxVectorOptions[2].DrawColor = Color.Red;
 
             _displayCtrl.AddDisplayOption(XYZOptions);
             _displayCtrl.AddDisplayOption(PathOptions);
-            _displayCtrl.AddDisplayOption(PointOptions);
-            _displayCtrl.AddDisplayOption(vzVectorOptions);
-            _displayCtrl.AddDisplayOption(vyVectorOptions);
-            _displayCtrl.AddDisplayOption(vxVectorOptions);
+            //_displayCtrl.AddDisplayOption(PointOptions);
+            //_displayCtrl.AddDisplayOption(vzVectorOptions);
+            //_displayCtrl.AddDisplayOption(vyVectorOptions);
+            //_displayCtrl.AddDisplayOption(vxVectorOptions);
 
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3");
@@ -261,20 +261,20 @@ namespace RsLib.XYZViewer
             _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
             _displayCtrl.BuildPath(group, (int)drawItem, true, true);
 
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
-            _displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 3).Name = fileName;
+            //_displayCtrl.BuildPointCloud(group, (int)drawItem + 3, false, true);
 
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 6).IsDisplay = false;
-            _displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Name = fileName;
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 6).Visible = false;
+            //_displayCtrl.BuildVector(group, (int)drawItem + 6, false, true);
 
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 9).IsDisplay = false;
-            _displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Name = fileName;
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 9).Visible = false;
+            //_displayCtrl.BuildVector(group, (int)drawItem + 9, false, true);
 
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
-            _displayCtrl.GetDisplayObjectOption((int)drawItem + 12).IsDisplay = false;
-            _displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Name = fileName;
+            //_displayCtrl.GetDisplayObjectOption((int)drawItem + 12).Visible = false;
+            //_displayCtrl.BuildVector(group, (int)drawItem + 12, false, true);
 
         }
         DrawItem getPressedButton(Button btn)
