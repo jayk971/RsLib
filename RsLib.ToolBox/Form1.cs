@@ -198,7 +198,7 @@ namespace RsLib.DemoForm
             if (this.InvokeRequired)
             {
                 Action<int, double,bool> action = new Action<int, double,bool>(EJ1500_WeightMeasured);
-                this.Invoke(action, index, obj);
+                this.Invoke(action, index, obj, isRaiseEvent);
             }
             else
             {
