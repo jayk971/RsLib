@@ -2318,6 +2318,34 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
+        public PointCloud GetIntersectVz(KDTree<int> tree,double vzExtendLength,int searchRange,double searchR,double reduceR)
+        {
+            Polyline output = new Polyline();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if(searchRange <=0) searchRange = 10;
+                if (Points[i] is PointV3D pt)
+                {
+                    double increasement = vzExtendLength / (double)searchRange;
+                    for (int j = 0; j < searchRange; j++)
+                    {
+                       Point3D ptVz =   pt.GetVzExtendPoint(j * increasement);
+                      PointCloud nearCloud =   PointCloudCommon.GetNearestPointCloud(tree, ptVz, searchR);
+                        if (nearCloud != null)
+                        {
+                            if (nearCloud.Count > 0)
+                            {
+                                Point3D ptAvg = nearCloud.Average;
+                                output.Add(ptAvg);
+                            }
+                        }
+                    }
+                }
+            }
+            output.ReduceByKDTree(reduceR);
+            output.SmoothByKDTree(reduceR, true, true, false);
+            return output;
+        }
     }
     [Serializable]
     public class LocatePercentOption : ObjectOption

@@ -1374,5 +1374,6 @@ namespace RsLib.Display3D
         {
             _DrawPath.RemoveLast();
         }
+
     }
 }

@@ -16,7 +16,7 @@ namespace RsLib.XYZViewer
         const int MaxXYZCount = 5;
         const int MaxOPTCount = 3;
 
-        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount + MaxOPTCount * 5);
+        Display3DControl _displayCtrl = new Display3DControl(MaxXYZCount + MaxOPTCount * 5 +1);
 
         Dictionary<DrawItem, Button> xyzButtons = new Dictionary<DrawItem, Button>();
         Dictionary<DrawItem, Button> optButtons = new Dictionary<DrawItem, Button>();
@@ -92,7 +92,7 @@ namespace RsLib.XYZViewer
             _displayCtrl.AddDisplayOption(vzVectorOptions);
             _displayCtrl.AddDisplayOption(vyVectorOptions);
             _displayCtrl.AddDisplayOption(vxVectorOptions);
-
+            _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, DisplayObjectType.PointCloud, 5.0f));
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3");
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2");
@@ -386,6 +386,59 @@ namespace RsLib.XYZViewer
                 }
             }
         }
+
+        private void showINtersectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormIntersection fi = new FormIntersection();
+            fi.AfterPressShowIntersect += Fi_AfterPressShowIntersect;
+            fi.Show();
+        }
+
+        private void Fi_AfterPressShowIntersect(int cloudIndex, int pathIndex, double extendLength, double searchR, int searchRange,double reduceR)
+        {
+            string cloudFile = loadedFiles[(DrawItem)(cloudIndex + 1)];
+            string pathFile = loadedFiles[(DrawItem)(6 + pathIndex)];
+            string fileName = Path.GetFileNameWithoutExtension(pathFile);
+            string ext  = Path.GetExtension(pathFile).ToUpper();
+            try
+            {
+                _displayCtrl.ClearSelectedObjectList((int)DrawItem.VzIntersection);
+                PointCloud cloud = new PointCloud();
+                cloud.LoadFromFile(cloudFile, true);
+                ObjectGroup group = new ObjectGroup(fileName);
+
+                switch (ext)
+                {
+                    case ".OPT":
+                        group.LoadMultiPathOPT(pathFile, true);
+                        break;
+                    case ".OPT2":
+                        group.LoadMultiPathOPT2(pathFile, true);
+                        break;
+                    default:
+
+                        break;
+                }
+                PointCloud cloudIntersect = new PointCloud();
+                foreach (var item in group.Objects)
+                {
+                    string objName = item.Key;
+                    Object3D obj = item.Value;
+                    if(obj is Polyline pl)
+                    {
+                        PointCloud pCloud=  pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR);
+                        cloudIntersect.Add(pCloud);
+                    }
+                }
+                _displayCtrl.GetDisplayObjectOption((int)DrawItem.VzIntersection).Name = "VzIntersection";
+                _displayCtrl.BuildPointCloud(cloudIntersect, (int)DrawItem.VzIntersection, false, true);
+            }
+            catch (Exception ex)
+            {
+                Log.Add("Load file exception.", MsgLevel.Alarm, ex);
+            }
+
+        }
     }
     public enum DrawItem : int
     {
@@ -416,5 +469,6 @@ namespace RsLib.XYZViewer
         OPT2vxVector,
         OPT3vxVector,
 
+        VzIntersection,
     }
 }

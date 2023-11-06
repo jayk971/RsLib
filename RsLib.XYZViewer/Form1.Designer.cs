@@ -35,6 +35,7 @@ namespace RsLib.XYZViewer
             this.panel1 = new System.Windows.Forms.Panel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showINtersectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,17 +66,25 @@ namespace RsLib.XYZViewer
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.reloadToolStripMenuItem});
+            this.reloadToolStripMenuItem,
+            this.showINtersectionToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(143, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
             // 
             // reloadToolStripMenuItem
             // 
             this.reloadToolStripMenuItem.Image = global::RsLib.XYZViewer.Properties.Resources.available_updates_80px;
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadToolStripMenuItem.Text = "Reload Files";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            // 
+            // showINtersectionToolStripMenuItem
+            // 
+            this.showINtersectionToolStripMenuItem.Name = "showINtersectionToolStripMenuItem";
+            this.showINtersectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showINtersectionToolStripMenuItem.Text = "Show Intersection";
+            this.showINtersectionToolStripMenuItem.Click += new System.EventHandler(this.showINtersectionToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -98,6 +107,7 @@ namespace RsLib.XYZViewer
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showINtersectionToolStripMenuItem;
     }
 }
 
