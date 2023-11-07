@@ -9,6 +9,9 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using RsLib.LogMgr;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace RsLib.XYZViewer
 {
     public partial class Form1 : Form
@@ -420,16 +423,21 @@ namespace RsLib.XYZViewer
                         break;
                 }
                 PointCloud cloudIntersect = new PointCloud();
-                foreach (var item in group.Objects)
+                object lockobj = new object();
+                Parallel.ForEach(group.Objects, (KeyValuePair<string,Object3D> o) =>
                 {
-                    string objName = item.Key;
-                    Object3D obj = item.Value;
-                    if(obj is Polyline pl)
+                    string objName = o.Key;
+                    Object3D obj = o.Value;
+                    if (obj is Polyline pl)
                     {
-                        PointCloud pCloud=  pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR);
-                        cloudIntersect.Add(pCloud);
+                        PointCloud pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR);
+                        lock (lockobj)
+                        {
+                            cloudIntersect.Add(pCloud);
+                        }
                     }
-                }
+                });
+
                 _displayCtrl.GetDisplayObjectOption((int)DrawItem.VzIntersection).Name = "VzIntersection";
                 _displayCtrl.BuildPointCloud(cloudIntersect, (int)DrawItem.VzIntersection, false, true);
             }
