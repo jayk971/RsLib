@@ -2499,7 +2499,7 @@ namespace RsLib.PointCloudLib
 
                             Point3D point = new Point3D(Math.Round(x, 2), Math.Round(y, 2), Math.Round(z, 2));
                             Points.Add(point);
-                            kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                            if(IsBuildKDTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                             i++;
                         }
                         else if (SplitData.Length == 6)
@@ -2528,7 +2528,7 @@ namespace RsLib.PointCloudLib
                             displayOption.Color = Color.FromArgb(r, g, b);
                             point.AddOption(displayOption);
                             Points.Add(point);
-                            kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                            if(IsBuildKDTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                             i++;
                         }
                     }
@@ -2574,9 +2574,10 @@ namespace RsLib.PointCloudLib
             return true;
 
         }
-        public bool LoadFromPLY(string FilePath, int ResampleCount = 0)
+        public bool LoadFromPLY(string FilePath, bool buildKDTree,int ResampleCount = 0)
         {
             Points.Clear();
+            kdTree.Clear();
             if (!File.Exists(FilePath)) return false;
             //List<string> stringList = ReadAllLines(FilePath);
             using (StreamReader sr = new StreamReader(FilePath, Encoding.Default))
@@ -2614,6 +2615,7 @@ namespace RsLib.PointCloudLib
 
                             Point3D point = new Point3D(x, y, z);
                             Points.Add(point);
+                            if(buildKDTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
                             i++;
                         }
                     }
