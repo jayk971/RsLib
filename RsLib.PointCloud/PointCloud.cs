@@ -1,4 +1,5 @@
-﻿using Accord.Collections;
+﻿using Accord;
+using Accord.Collections;
 using Accord.Math;
 using RsLib.Common;
 using System;
@@ -44,16 +45,38 @@ namespace RsLib.PointCloudLib
         public PointCloud()
         {
         }
+        public PointCloud(Tuple<double[], double[], double[]> dataTuple,bool buildKDTree)
+        {
+            parseXYZArray(dataTuple.Item1, dataTuple.Item2, dataTuple.Item3,buildKDTree);
+        }
         public PointCloud(Tuple<double[], double[], double[]> dataTuple)
         {
             parseXYZArray(dataTuple.Item1,dataTuple.Item2,dataTuple.Item3);
+        }
+        public PointCloud(double[] x, double[] y, double[] z,bool buildKDTree)
+        {
+            parseXYZArray(x, y, z,buildKDTree);
         }
         public PointCloud(double[] x, double[] y, double[] z)
         {
             parseXYZArray(x, y, z);
         }
+        void parseXYZArray(double[] x, double[] y, double[] z,bool buildKDTree)
+        {
+            kdTree.Clear();
+            if (x.Length == y.Length && x.Length == z.Length)
+            {
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Point3D p = new Point3D(x[i], y[i], z[i]);
+                    Points.Add(p);
+                    if(buildKDTree) kdTree.Add(new double[] { x[i], y[i], z[i] }, Points.Count - 1);
+                }
+            }
+        }
         void parseXYZArray(double[] x, double[] y, double[] z)
         {
+            kdTree.Clear();
             if (x.Length == y.Length && x.Length == z.Length)
             {
                 for (int i = 0; i < x.Length; i++)
