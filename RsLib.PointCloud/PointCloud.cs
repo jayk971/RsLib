@@ -3450,6 +3450,82 @@ namespace RsLib.PointCloudLib
                 yield return Points[i];
             }
         }
+
+        public void CompareOtherCloud(KDTree<int> otherCloudTree, double minDis, double maxDis, bool enableParallel)
+        {
+            ColorGradient cg = new ColorGradient(minDis, maxDis);
+
+            if (enableParallel)
+            {
+                Parallel.For(0, Count, (int i) =>
+                {
+                    Point3D p = Points[i];
+                    double searchR = 0.5;
+                    bool searchNearest = true;
+                    while (searchNearest)
+                    {
+                        PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
+                        if (searchCloud.Count == 0)
+                        {
+                            if (searchR >= maxDis)
+                            {
+                                Color testColor = cg.GetColorFromGradient(maxDis);
+                                p.AddOption(new DisplayOption() { Color = testColor });
+                                searchNearest = false;
+                            }
+                            else
+                            {
+                                searchR += 0.5;
+                            }
+                        }
+                        else
+                        {
+                            Point3D avg = searchCloud.Average;
+                            double testDis = Point3D.Distance(avg, p);
+                            Color testColor = cg.GetColorFromGradient(testDis);
+                            p.AddOption(new DisplayOption() { Color = testColor });
+                            searchNearest = false;
+                        }
+                    }
+
+                });
+            }
+            else
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    Point3D p = Points[i];
+                    double searchR = 0.5;
+                    bool searchNearest = true;
+                    while (searchNearest)
+                    {
+                        PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
+                        if (searchCloud.Count == 0)
+                        {
+                            if (searchR >= maxDis)
+                            {
+                                Color testColor = cg.GetColorFromGradient(maxDis);
+                                p.AddOption(new DisplayOption() { Color = testColor });
+                                searchNearest = false;
+                            }
+                            else
+                            {
+                                searchR += 0.5;
+                            }
+                        }
+                        else
+                        {
+                            Point3D avg = searchCloud.Average;
+                            double testDis = Point3D.Distance(avg, p);
+                            Color testColor = cg.GetColorFromGradient(testDis);
+                            p.AddOption(new DisplayOption() { Color = testColor });
+                            searchNearest = false;
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     public enum DigitFormat : int
