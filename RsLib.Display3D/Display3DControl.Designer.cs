@@ -142,6 +142,7 @@ namespace RsLib.Display3D
             this.toolBtn_ClearMultipleSelect = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.saToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -261,7 +262,7 @@ namespace RsLib.Display3D
             // 
             this.changeColorSizeToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.paint_palette_30px;
             this.changeColorSizeToolStripMenuItem.Name = "changeColorSizeToolStripMenuItem";
-            this.changeColorSizeToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.changeColorSizeToolStripMenuItem.Size = new System.Drawing.Size(215, 38);
             this.changeColorSizeToolStripMenuItem.Text = "Change color and size";
             this.changeColorSizeToolStripMenuItem.Click += new System.EventHandler(this.btn_Color_Click);
             // 
@@ -269,7 +270,7 @@ namespace RsLib.Display3D
             // 
             this.manualShiftRotateToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.settings_48px;
             this.manualShiftRotateToolStripMenuItem.Name = "manualShiftRotateToolStripMenuItem";
-            this.manualShiftRotateToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.manualShiftRotateToolStripMenuItem.Size = new System.Drawing.Size(215, 38);
             this.manualShiftRotateToolStripMenuItem.Text = "Manual shift \\ rotate";
             this.manualShiftRotateToolStripMenuItem.Visible = false;
             this.manualShiftRotateToolStripMenuItem.Click += new System.EventHandler(this.manualShiftRotateToolStripMenuItem_Click);
@@ -277,14 +278,14 @@ namespace RsLib.Display3D
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(196, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(212, 6);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logToolStripMenuItem});
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(215, 38);
             this.openFolderToolStripMenuItem.Text = "Open Folder";
             // 
             // logToolStripMenuItem
@@ -306,6 +307,7 @@ namespace RsLib.Display3D
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveXYZPointCloudToolStripMenuItem,
+            this.saToolStripMenuItem,
             this.saveSelectedXYZPointCloudToolStripMenuItem,
             this.toolStripSeparator2,
             this.toolStripMenuItem1,
@@ -323,7 +325,7 @@ namespace RsLib.Display3D
             // 
             this.saveXYZPointCloudToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveXYZPointCloudToolStripMenuItem.Name = "saveXYZPointCloudToolStripMenuItem";
-            this.saveXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.saveXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
             this.saveXYZPointCloudToolStripMenuItem.Text = "Save XYZ point cloud";
             this.saveXYZPointCloudToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveAs_Click);
             // 
@@ -331,33 +333,33 @@ namespace RsLib.Display3D
             // 
             this.saveSelectedXYZPointCloudToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveSelectedXYZPointCloudToolStripMenuItem.Name = "saveSelectedXYZPointCloudToolStripMenuItem";
-            this.saveSelectedXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.saveSelectedXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
             this.saveSelectedXYZPointCloudToolStripMenuItem.Text = "Save selected XYZ point cloud";
             this.saveSelectedXYZPointCloudToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedXYZPointCloudToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(269, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(285, 6);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(272, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(288, 38);
             this.toolStripMenuItem1.Text = "Save OPT path file";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.saveOPTFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(269, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(285, 6);
             // 
             // saveABBModFileToolStripMenuItem
             // 
             this.saveABBModFileToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveABBModFileToolStripMenuItem.Name = "saveABBModFileToolStripMenuItem";
-            this.saveABBModFileToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.saveABBModFileToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
             this.saveABBModFileToolStripMenuItem.Text = "Save ABB Mod File";
             this.saveABBModFileToolStripMenuItem.ToolTipText = "Save ABB Mod File";
             this.saveABBModFileToolStripMenuItem.Click += new System.EventHandler(this.saveABBModFileToolStripMenuItem_Click);
@@ -366,7 +368,7 @@ namespace RsLib.Display3D
             // 
             this.saveABBModFileWithRobTargetToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveABBModFileWithRobTargetToolStripMenuItem.Name = "saveABBModFileWithRobTargetToolStripMenuItem";
-            this.saveABBModFileWithRobTargetToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.saveABBModFileWithRobTargetToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
             this.saveABBModFileWithRobTargetToolStripMenuItem.Text = "Save ABB Mod File With RobTarget";
             this.saveABBModFileWithRobTargetToolStripMenuItem.Click += new System.EventHandler(this.saveABBModFileWithRobTargetToolStripMenuItem_Click);
             // 
@@ -1321,6 +1323,13 @@ namespace RsLib.Display3D
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // saToolStripMenuItem
+            // 
+            this.saToolStripMenuItem.Name = "saToolStripMenuItem";
+            this.saToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saToolStripMenuItem.Text = "Save Resorted XYZ point cloud";
+            this.saToolStripMenuItem.Click += new System.EventHandler(this.saToolStripMenuItem_Click);
+            // 
             // Display3DControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1480,5 +1489,6 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripMenuItem zXToolStripMenuItem1;
         private System.Windows.Forms.ToolStripButton toolBtn_SetRotateSpeed;
         private System.Windows.Forms.ToolStripLabel toolLbl_Notify;
+        private System.Windows.Forms.ToolStripMenuItem saToolStripMenuItem;
     }
 }

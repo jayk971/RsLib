@@ -2848,6 +2848,8 @@ namespace RsLib.PointCloudLib
             Points.Clear();
             Points = tempCollect.DeepClone();
         }
+
+
         public void ReduceByZLayer(double LayerRange, int LayerPointCount)
         {
 

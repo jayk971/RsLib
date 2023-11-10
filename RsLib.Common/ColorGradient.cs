@@ -35,11 +35,11 @@ namespace RsLib.Common
 
             if (testValue < Min)
             {
-                TargetVal = Min;
+                TargetVal = 0.0;
             }
             else if (testValue > Max)
             {
-                TargetVal = Max;
+                TargetVal = 1.0;
             }
             else
             {

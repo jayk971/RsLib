@@ -72,6 +72,7 @@ namespace RsLib.PointCloudLib
             double Max, Min = 0.0;
             int SplitCount = 0;
             double UseDis = Math.Abs(Dis);
+            double refDis = UseDis < 0.5 ? UseDis * 0.5 : 0.5;
             if (IsSplitX)
             {
                 Max = Input.Max.X;
@@ -101,7 +102,7 @@ namespace RsLib.PointCloudLib
                 {
                     double BaseValue = BaseIndex[j];
                     double Diff = Math.Abs(BaseValue - RefValue);
-                    if (Diff <= 0.5)
+                    if (Diff <= refDis)
                     {
                         if (IsSplitX)
                         {

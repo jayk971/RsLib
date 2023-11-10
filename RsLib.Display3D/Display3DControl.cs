@@ -633,21 +633,26 @@ namespace RsLib.Display3D
                         {
                             if (objectType == typeof(Point3D))
                             {
-                                var obj = _displayObject[_CurrentSelectObjectIndex] as Point3D;
-                                if (obj != null)
+                                if (_displayObject[_CurrentSelectObjectIndex] is Point3D obj)
+                                {
                                     obj.Save(filePath);
+                                }
                             }
                             else if (objectType == typeof(ObjectGroup))
                             {
-                                var obj = _displayObject[_CurrentSelectObjectIndex] as ObjectGroup;
-                                if (obj != null)
+                                if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
+                                {
                                     obj.SaveXYZ(filePath);
+                                }
                             }
                             else
                             {
-                                var obj = _displayObject[_CurrentSelectObjectIndex] as PointCloud;
-                                if (obj != null)
+                                if (_displayObject[_CurrentSelectObjectIndex] is PointCloud obj)
+                                {
                                     obj.Save(filePath);
+                                    //LayerPointCloud layer = new LayerPointCloud(obj, false, 0.3);
+                                    //layer.Save(filePath);
+                                }
                             }
                             Log.Add($"Save xyz cloud.{filePath}", MsgLevel.Info);
                             MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1375,5 +1380,71 @@ namespace RsLib.Display3D
             _DrawPath.RemoveLast();
         }
 
+        private void saToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (_CurrentSelectObjectIndex <= 1)
+            {
+                Log.Add("Select index = -1. Didn't select object.", MsgLevel.Warn);
+                MessageBox.Show("Please select object first.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (_displayObject.ContainsKey(_CurrentSelectObjectIndex) == false)
+            {
+                Log.Add($"Select index = {_CurrentSelectObjectIndex}. Display objects didn't contain {_CurrentSelectObjectIndex}.", MsgLevel.Warn);
+                MessageBox.Show("No data to be saved.", "Save file as xyz fail.", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            try
+            {
+                Type objectType = _displayObject[_CurrentSelectObjectIndex].GetType();
+
+                using (SaveFileDialog sf = new SaveFileDialog())
+                {
+                    sf.Filter = "XYZ point cloud|*.xyz";
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string filePath = sf.FileName;
+                        try
+                        {
+                            if (objectType == typeof(Point3D))
+                            {
+                                if (_displayObject[_CurrentSelectObjectIndex] is Point3D obj)
+                                {
+                                    obj.Save(filePath);
+                                }
+                            }
+                            else if (objectType == typeof(ObjectGroup))
+                            {
+                                if (_displayObject[_CurrentSelectObjectIndex] is ObjectGroup obj)
+                                {
+                                    obj.SaveXYZ(filePath);
+                                }
+                            }
+                            else
+                            {
+                                if (_displayObject[_CurrentSelectObjectIndex] is PointCloud obj)
+                                {
+                                    LayerPointCloud layer = new LayerPointCloud(obj, false, 0.3);
+                                    layer.Save(filePath);
+                                }
+                            }
+                            Log.Add($"Save xyz cloud.{filePath}", MsgLevel.Info);
+                            MessageBox.Show($"Save xyz point cloud done.\n{filePath}", "Save file done.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Add($"Save xyz cloud exception.", MsgLevel.Alarm, ex);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Save XYZ cloud exception.", MsgLevel.Alarm, ex);
+            }
+
+
+        }
     }
 }
