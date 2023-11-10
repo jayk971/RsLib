@@ -12,12 +12,14 @@ namespace RsLib.Common
         public double Min { get; private set; } = 0;
 
         ColorTupleList _gradient = new ColorTupleList();
+        public ColorGradientControl ColorControl = null;
 
         public ColorGradient(double min, double max)
         {
             Max = max;
             Min = min;
-
+            ColorControl = new ColorGradientControl();
+            ColorControl.SetMaxMin(max, min);
             _gradient.Clear();
             _gradient.Add(new ColorTuple(0.0, 0f, 0f, 1f));  //blue
             _gradient.Add(new ColorTuple(0.25, 0f, 1f, 1f)); // cyan

@@ -36,6 +36,7 @@ namespace RsLib.XYZViewer
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showINtersectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDifferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -67,24 +68,32 @@ namespace RsLib.XYZViewer
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reloadToolStripMenuItem,
-            this.showINtersectionToolStripMenuItem});
+            this.showINtersectionToolStripMenuItem,
+            this.showDifferenceToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 92);
             // 
             // reloadToolStripMenuItem
             // 
             this.reloadToolStripMenuItem.Image = global::RsLib.XYZViewer.Properties.Resources.available_updates_80px;
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.reloadToolStripMenuItem.Text = "Reload Files";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // showINtersectionToolStripMenuItem
             // 
             this.showINtersectionToolStripMenuItem.Name = "showINtersectionToolStripMenuItem";
-            this.showINtersectionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.showINtersectionToolStripMenuItem.Text = "Show Intersection";
+            this.showINtersectionToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.showINtersectionToolStripMenuItem.Text = "Cloud Path Intersection";
             this.showINtersectionToolStripMenuItem.Click += new System.EventHandler(this.showINtersectionToolStripMenuItem_Click);
+            // 
+            // showDifferenceToolStripMenuItem
+            // 
+            this.showDifferenceToolStripMenuItem.Name = "showDifferenceToolStripMenuItem";
+            this.showDifferenceToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.showDifferenceToolStripMenuItem.Text = "Cloud Difference";
+            this.showDifferenceToolStripMenuItem.Click += new System.EventHandler(this.showDifferenceToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -108,6 +117,7 @@ namespace RsLib.XYZViewer
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showINtersectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showDifferenceToolStripMenuItem;
     }
 }
 

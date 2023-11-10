@@ -117,6 +117,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormDifference.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDifference.Designer.cs">
+      <DependentUpon>FormDifference.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormIntersection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDifference.resx">
+      <DependentUpon>FormDifference.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormIntersection.resx">
       <DependentUpon>FormIntersection.cs</DependentUpon>

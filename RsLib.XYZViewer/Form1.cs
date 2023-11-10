@@ -161,7 +161,12 @@ namespace RsLib.XYZViewer
                         _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                         _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
                         break;
-
+                    case ".ply":
+                        PointCloud cloudPLY = new PointCloud();
+                        cloudPLY.LoadFromPLY(filePath, true);
+                        _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
+                        _displayCtrl.BuildPointCloud(cloudPLY, (int)drawItem, true, true);
+                        break;
                     case ".opt":
                         ObjectGroup group = new ObjectGroup(fileName);
                         group.LoadMultiPathOPT(filePath, true);
@@ -342,8 +347,10 @@ namespace RsLib.XYZViewer
                         {
                             if (fileName.Contains(KeyBMP.HeightExt.ToLower())) canDrop = true;
                         }
-
-
+                        else if(ext == ".ply")
+                        {
+                            canDrop = true;
+                        }
                         else
                         {
                             canDrop = false;
@@ -367,8 +374,8 @@ namespace RsLib.XYZViewer
             using (OpenFileDialog op = new OpenFileDialog())
             {
                 DrawItem dropedBtn = getPressedButton((Button)sender);
-                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz|Keyence CSV Raw File|*_HRaw.csv|Keyence BMP Raw File|*_Height.bmp";
-                if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path) op.Filter = "OPT path file|*.opt";
+                if (dropedBtn >= DrawItem.XYZ1 && dropedBtn <= DrawItem.XYZ5) op.Filter = "XYZ cloud file|*.xyz|PLY file|*.ply|Keyence CSV Raw File|*_HRaw.csv|Keyence BMP Raw File|*_Height.bmp";
+                if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path) op.Filter = "OPT path file|*.opt|OPT2 path file|*.opt2";
 
                 if (op.ShowDialog() == DialogResult.OK)
                 {
@@ -394,6 +401,23 @@ namespace RsLib.XYZViewer
         {
             FormIntersection fi = new FormIntersection();
             fi.AfterPressShowIntersect += Fi_AfterPressShowIntersect;
+            string[] fileNames = new string[5];
+            for (int i = 2; i < 7; i++)
+            {
+                if (loadedFiles.ContainsKey((DrawItem)i))
+                {
+                    fileNames[i - 2] = Path.GetFileNameWithoutExtension(loadedFiles[(DrawItem)i]);
+                }
+            }
+            string[] optFileNames = new string[3];
+            for (int i = 7; i < 10; i++)
+            {
+                if (loadedFiles.ContainsKey((DrawItem)i))
+                {
+                    optFileNames[i - 7] = Path.GetFileNameWithoutExtension(loadedFiles[(DrawItem)i]);
+                }
+            }
+            fi.SetFileName(fileNames,optFileNames);
             fi.Show();
         }
 
@@ -446,6 +470,90 @@ namespace RsLib.XYZViewer
                 Log.Add("Load file exception.", MsgLevel.Alarm, ex);
             }
 
+        }
+
+        private void showDifferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDifference fd = new FormDifference();
+            fd.AfterShowPressed += Fd_AfterShowPressed;
+            string[] fileNames = new string[5];
+            for(int i = 2; i < 7; i++)
+            {
+                if(loadedFiles.ContainsKey((DrawItem)i))
+                {
+                    fileNames[i - 2] = Path.GetFileNameWithoutExtension(loadedFiles[(DrawItem)i]);
+                }
+            }
+            fd.SetFileName(fileNames);
+            fd.Show();
+            
+        }
+
+        private void Fd_AfterShowPressed(int baseIndex, int compareIndex, double min, double max)
+        {
+            string baseFile = loadedFiles[(DrawItem)(baseIndex + 1)];
+            string baseFileName = Path.GetFileNameWithoutExtension(baseFile);
+            string baseFileext = Path.GetExtension(baseFile).ToUpper();
+            string compareFile = loadedFiles[(DrawItem)(compareIndex + 1)];
+            string compareFileName = Path.GetFileNameWithoutExtension(compareFile);
+            string compareFileext = Path.GetExtension(compareFile).ToUpper();
+            try
+            {
+                PointCloud cloudBase = new PointCloud();
+
+                switch (baseFileext)
+                {
+                    case ".XYZ":
+                        cloudBase.LoadFromFile(baseFile, true);
+                        break;
+                    case ".PLY":
+                        cloudBase.LoadFromPLY(baseFile, true);
+                        break;
+                    case ".CSV":
+                        cloudBase = KeyRawCSV.LoadHeightRawData(baseFile, 1, 1);
+
+                        break;
+                    case ".BMP":
+                        KeyBMP.Load(baseFile);
+                        cloudBase = KeyBMP.ConvertToXYZ();
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+                PointCloud cloudCompare = new PointCloud();
+                switch (compareFileext)
+                {
+                    case ".XYZ":
+                        cloudCompare.LoadFromFile(compareFile, true);
+                        break;
+                    case ".PLY":
+                        cloudCompare.LoadFromPLY(compareFile, true);
+                        break;
+                    case ".CSV":
+                        cloudCompare = KeyRawCSV.LoadHeightRawData(compareFile, 1, 1);
+
+                        break;
+                    case ".BMP":
+                        KeyBMP.Load(compareFile);
+                        cloudCompare = KeyBMP.ConvertToXYZ();
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                cloudBase.CompareOtherCloud(cloudCompare.kdTree, min, max, true);
+                _displayCtrl.BuildPointCloud(cloudBase, baseIndex + 1, false, true);
+            }
+            catch (Exception ex)
+            {
+                Log.Add("Load file exception.", MsgLevel.Alarm, ex);
+            }
         }
     }
     public enum DrawItem : int

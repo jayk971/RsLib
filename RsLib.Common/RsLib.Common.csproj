@@ -80,6 +80,12 @@
   <ItemGroup>
     <Compile Include="AppFile.cs" />
     <Compile Include="ColorGradient.cs" />
+    <Compile Include="ColorGradientControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ColorGradientControl.Designer.cs">
+      <DependentUpon>ColorGradientControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CSVReader.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Extension.cs" />
@@ -121,6 +127,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ColorGradientControl.resx">
+      <DependentUpon>ColorGradientControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileVersionControl.resx">
       <DependentUpon>FileVersionControl.cs</DependentUpon>
     </EmbeddedResource>

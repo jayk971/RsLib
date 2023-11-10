@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RsLib.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -45,6 +46,62 @@ namespace RsLib.XYZViewer
             if (searchRange <= 0) searchRange = 10;
             if (reduceR <= 0) reduceR = 1.5;
             AfterPressShowIntersect?.Invoke(cloudIndex, pathIndex, extendLength, searchR, searchRange,reduceR);
+            Close();
         }
+
+        private void tbx_ExtendLength_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
+        }
+        public void SetFileName(string[] fileNames, string[] optFileNames)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                string fileName = fileNames[i];
+                switch (i)
+                {
+                    case 0:
+                        rbn_Cloud1.Text = fileName;
+                        break;
+                    case 1:
+                        rbn_Cloud2.Text = fileName;
+                        break;
+                    case 2:
+                        rbn_Cloud3.Text = fileName;
+                        break;
+                    case 3:
+                        rbn_Cloud4.Text = fileName;
+                        break;
+                    case 4:
+                        rbn_Cloud5.Text = fileName;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                string fileName = optFileNames[i];
+                switch (i)
+                {
+                    case 0:
+                        rbn_Path1.Text = fileName;
+                        break;
+                    case 1:
+                        rbn_Path2.Text = fileName;
+                        break;
+                    case 2:
+                        rbn_Path3.Text = fileName;
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+
+        }
+
     }
 }
