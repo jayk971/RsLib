@@ -520,6 +520,7 @@ namespace RsLib.XYZViewer
 
         private void Fd_AfterShowPressed(int baseIndex, int compareIndex, double min, double max)
         {
+            ColorGradient cg = new ColorGradient(min, max);
             string baseFile = loadedFiles[(DrawItem)(baseIndex + 1)];
             string baseFileName = Path.GetFileNameWithoutExtension(baseFile);
             string baseFileext = Path.GetExtension(baseFile).ToUpper();
@@ -575,7 +576,8 @@ namespace RsLib.XYZViewer
 
                         break;
                 }
-
+                _displayCtrl.SetColorGradientCtrl(cg.ColorControl);
+                _displayCtrl.ShowColorGradientControl(true);
                 cloudBase.CompareOtherCloud(cloudCompare.kdTree, min, max, true);
                 _displayCtrl.BuildPointCloud(cloudBase, baseIndex + 1, false, true);
             }

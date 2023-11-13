@@ -86,10 +86,19 @@ namespace RsLib.Display3D
 
             Log.Start();
             trackBar_RotateSensitivity.Value = (int)(Settings.Default.Sensitivity * 10);
-
+            pnl_ColorGradient.Visible = false;
         }
 
-
+        public void ShowColorGradientControl(bool show)
+        {
+            pnl_ColorGradient.Visible = show;
+        }
+        public void SetColorGradientCtrl(ColorGradientControl colorCtrl)
+        {
+            pnl_ColorGradient.Controls.Clear();
+            colorCtrl.Dock = DockStyle.Fill;
+            pnl_ColorGradient.Controls.Add(colorCtrl);
+        }
         public bool AddDisplayOption(DisplayObjectOption option)
         {
             if (_displayOption.ContainsKey(option.ID))
@@ -119,6 +128,7 @@ namespace RsLib.Display3D
         {
             _displayObject.Clear();
             treeView1.Nodes.Clear();
+            ShowColorGradientControl(false);
             foreach (var item in _displayOption)
             {
                 DisplayObjectOption objOption = item.Value;
