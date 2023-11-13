@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using RsLib.LogMgr;
 using System.Threading;
 using System.Threading.Tasks;
+using Accord.Statistics.Filters;
 
 namespace RsLib.XYZViewer
 {
@@ -26,6 +27,9 @@ namespace RsLib.XYZViewer
         Dictionary<DrawItem, string> loadedFiles = new Dictionary<DrawItem, string>();
 
         FormProcessing _processForm;
+        FormIntersection fi = new FormIntersection();
+        FormDifference fd = new FormDifference();
+
         public Form1()
         {
             Log.Start();
@@ -38,6 +42,9 @@ namespace RsLib.XYZViewer
             init();
             SizeChanged += Form1_SizeChanged;
             this.Text += " " + FT_Functions.GetFileVersion("RsLib.XYZViewer.exe");
+            fi.AfterPressShowIntersect += Fi_AfterPressShowIntersect;
+            fd.AfterShowPressed += Fd_AfterShowPressed;
+
         }
 
 
@@ -308,7 +315,8 @@ namespace RsLib.XYZViewer
                 DrawItem dropedBtn = getPressedButton((Button)sender);
 
                 loadFile(dropedBtn, files[0]);
-                if(loadedFiles.ContainsKey(dropedBtn) == false)
+                ((Button)sender).Text = Path.GetFileNameWithoutExtension(files[0]);
+                if (loadedFiles.ContainsKey(dropedBtn) == false)
                 {
                     loadedFiles.Add(dropedBtn, files[0]);
                 }
@@ -379,6 +387,7 @@ namespace RsLib.XYZViewer
 
                 if (op.ShowDialog() == DialogResult.OK)
                 {
+                    ((Button)sender).Text = Path.GetFileNameWithoutExtension(op.FileName);
                     loadFile(dropedBtn, op.FileName);
                 }
             }
@@ -399,8 +408,6 @@ namespace RsLib.XYZViewer
 
         private void showINtersectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormIntersection fi = new FormIntersection();
-            fi.AfterPressShowIntersect += Fi_AfterPressShowIntersect;
             string[] fileNames = new string[5];
             for (int i = 2; i < 7; i++)
             {
@@ -424,17 +431,41 @@ namespace RsLib.XYZViewer
         private void Fi_AfterPressShowIntersect(int cloudIndex, int pathIndex, double extendLength, double searchR, int searchRange,double reduceR)
         {
             string cloudFile = loadedFiles[(DrawItem)(cloudIndex + 1)];
+            string cloudFileName = Path.GetFileNameWithoutExtension(cloudFile);
+            string cloudExt = Path.GetExtension(cloudFile).ToUpper();
+
             string pathFile = loadedFiles[(DrawItem)(6 + pathIndex)];
-            string fileName = Path.GetFileNameWithoutExtension(pathFile);
-            string ext  = Path.GetExtension(pathFile).ToUpper();
+            string pathFileName = Path.GetFileNameWithoutExtension(pathFile);
+            string pathExt  = Path.GetExtension(pathFile).ToUpper();
             try
             {
                 _displayCtrl.ClearSelectedObjectList((int)DrawItem.VzIntersection);
                 PointCloud cloud = new PointCloud();
-                cloud.LoadFromFile(cloudFile, true);
-                ObjectGroup group = new ObjectGroup(fileName);
+                switch (cloudExt)
+                {
+                    case ".XYZ":
+                        cloud.LoadFromFile(cloudFile, true);
+                        break;
+                    case ".PLY":
+                        cloud.LoadFromPLY(cloudFile, true);
+                        break;
+                    case ".CSV":
+                        cloud = KeyRawCSV.LoadHeightRawData(cloudFile, 1, 1);
 
-                switch (ext)
+                        break;
+                    case ".BMP":
+                        KeyBMP.Load(cloudFile);
+                        cloud = KeyBMP.ConvertToXYZ();
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+                ObjectGroup group = new ObjectGroup(pathFileName);
+
+                switch (pathExt)
                 {
                     case ".OPT":
                         group.LoadMultiPathOPT(pathFile, true);
@@ -474,8 +505,6 @@ namespace RsLib.XYZViewer
 
         private void showDifferenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormDifference fd = new FormDifference();
-            fd.AfterShowPressed += Fd_AfterShowPressed;
             string[] fileNames = new string[5];
             for(int i = 2; i < 7; i++)
             {

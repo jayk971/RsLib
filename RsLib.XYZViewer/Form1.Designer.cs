@@ -71,7 +71,7 @@ namespace RsLib.XYZViewer
             this.showINtersectionToolStripMenuItem,
             this.showDifferenceToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 70);
             // 
             // reloadToolStripMenuItem
             // 

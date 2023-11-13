@@ -380,6 +380,7 @@
             this.MinimizeBox = false;
             this.Name = "FormIntersection";
             this.Text = "Show Intersection";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormIntersection_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);

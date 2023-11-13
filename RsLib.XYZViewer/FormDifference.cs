@@ -31,7 +31,6 @@ namespace RsLib.XYZViewer
             int cloudBase = 0;
             int cloudCompare = 0;
 
-
             ColorGradient cg = new ColorGradient(realMin,realMax);
             panel1.Controls.Clear();
             cg.ColorControl.Dock = DockStyle.Fill;
@@ -50,6 +49,7 @@ namespace RsLib.XYZViewer
             else if (rbn_Compare5.Checked) cloudCompare = 5;
 
             AfterShowPressed?.Invoke(cloudBase, cloudCompare, realMin, realMax);
+            Hide();
         }
         public void SetFileName(string[] fileNames)
         {
@@ -97,6 +97,12 @@ namespace RsLib.XYZViewer
         private void tbx_Min_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void FormDifference_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

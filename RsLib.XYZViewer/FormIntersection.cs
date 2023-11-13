@@ -46,7 +46,7 @@ namespace RsLib.XYZViewer
             if (searchRange <= 0) searchRange = 10;
             if (reduceR <= 0) reduceR = 1.5;
             AfterPressShowIntersect?.Invoke(cloudIndex, pathIndex, extendLength, searchR, searchRange,reduceR);
-            Close();
+            Hide();
         }
 
         private void tbx_ExtendLength_KeyPress(object sender, KeyPressEventArgs e)
@@ -103,5 +103,10 @@ namespace RsLib.XYZViewer
 
         }
 
+        private void FormIntersection_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
     }
 }
