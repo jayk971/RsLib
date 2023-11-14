@@ -156,6 +156,7 @@ namespace RsLib.XYZViewer
             ThreadPool.QueueUserWorkItem(new WaitCallback(showProcessForm_td));
             string ext = Path.GetExtension(filePath).ToLower();
             string fileName = Path.GetFileNameWithoutExtension(filePath);
+            _displayCtrl.ShowColorGradientControl(false);
             Log.Add($"Load {filePath}.", MsgLevel.Info);
             try
             {

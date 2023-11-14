@@ -66,7 +66,9 @@ namespace RsLib.DemoForm
             //ThreadPool.QueueUserWorkItem(warnTd);
             //ThreadPool.QueueUserWorkItem(alarmTd);
 
-
+            ColorGradient cg = new ColorGradient(0, 3);
+            cg.ColorControl.Dock = DockStyle.Fill;
+            panel2.Controls.Add(cg.ColorControl);
         }
         void traceTd(object obj)
         {

@@ -49,12 +49,13 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage_EJ1500 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -247,6 +248,7 @@ namespace RsLib.DemoForm
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.button7);
@@ -258,6 +260,13 @@ namespace RsLib.DemoForm
             this.tabPage1.TabIndex = 6;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(402, 23);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(348, 399);
+            this.panel1.TabIndex = 3;
             // 
             // button1
             // 
@@ -309,12 +318,12 @@ namespace RsLib.DemoForm
             this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // panel1
+            // panel2
             // 
-            this.panel1.Location = new System.Drawing.Point(100, 23);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(650, 399);
-            this.panel1.TabIndex = 3;
+            this.panel2.Location = new System.Drawing.Point(6, 204);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(299, 206);
+            this.panel2.TabIndex = 4;
             // 
             // Form1
             // 
@@ -363,6 +372,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 

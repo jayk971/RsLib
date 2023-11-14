@@ -31,11 +31,6 @@ namespace RsLib.XYZViewer
             int cloudBase = 0;
             int cloudCompare = 0;
 
-            ColorGradient cg = new ColorGradient(realMin,realMax);
-            panel1.Controls.Clear();
-            cg.ColorControl.Dock = DockStyle.Fill;
-            panel1.Controls.Add(cg.ColorControl);
-
             if (rbn_Cloud1.Checked) cloudBase = 1;
             else if (rbn_Cloud2.Checked) cloudBase = 2;
             else if (rbn_Cloud3.Checked) cloudBase = 3;

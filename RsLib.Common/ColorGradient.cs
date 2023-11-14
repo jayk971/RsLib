@@ -26,6 +26,7 @@ namespace RsLib.Common
             _gradient.Add(new ColorTuple(0.5, 0f, 1f, 0f)); // green
             _gradient.Add(new ColorTuple(0.75, 1f, 1f, 0f)); // yellow
             _gradient.Add(new ColorTuple(1.0, 1f, 0f, 0f)); // red
+            ColorControl.SetRatio(_gradient);
         }
 
         public Color GetColorFromGradient(double testValue)
@@ -33,19 +34,19 @@ namespace RsLib.Common
             double r = 0.0;
             double g = 0.0;
             double b = 1.0;
-            double TargetVal = 0;
+            double TargetValue = 0;
 
             if (testValue < Min)
             {
-                TargetVal = Min;
+                TargetValue = Min;
             }
             else if (testValue > Max)
             {
-                TargetVal = 1.0;
+                TargetValue = 1.0;
             }
             else
             {
-                TargetVal = (testValue - Min) / (Max - Min);
+                TargetValue = (testValue - Min) / (Max - Min);
             }
             int iR = double2Int(r);
             int iG = double2Int(g);
@@ -58,22 +59,26 @@ namespace RsLib.Common
                 PrevI = i - 1;
 
                 ColorTuple CurrC = _gradient[i];
-                if (TargetVal == _gradient[_gradient.Count - 1].Item1)
+                double lastRatio = _gradient[_gradient.Count - 1].Item1;
+                double firstRation = _gradient[0].Item1;
+                double currentRatio = CurrC.Item1;
+                if (TargetValue == lastRatio)
                 {
                     Output = Color.FromArgb(255, 0, 0);
                     return Output;
 
                 }
-                else if (TargetVal == _gradient[0].Item1)
+                else if (TargetValue == firstRation)
                 {
                     Output = Color.FromArgb(0, 0, 255);
                     return Output;
                 }
-                else if (TargetVal < CurrC.Item1)
+                else if (TargetValue < currentRatio)
                 {
                     ColorTuple PrevC = _gradient[PrevI];
-                    double ValDiff = (PrevC.Item1 - CurrC.Item1);
-                    double FractBetween = (ValDiff == 0) ? 0 : (TargetVal - CurrC.Item1) / ValDiff;
+                    double prevRatio = PrevC.Item1;
+                    double ValDiff = (prevRatio - currentRatio);
+                    double FractBetween = (ValDiff == 0) ? 0 : (TargetValue - currentRatio) / ValDiff;
 
                     r = (PrevC.Item2 - CurrC.Item2) * FractBetween + CurrC.Item2;
                     g = (PrevC.Item3 - CurrC.Item3) * FractBetween + CurrC.Item3;
