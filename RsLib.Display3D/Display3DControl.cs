@@ -7,6 +7,7 @@ using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.AccessControl;
@@ -1455,6 +1456,19 @@ namespace RsLib.Display3D
             }
 
 
+        }
+
+        private void saveImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sf = new SaveFileDialog())
+            {
+                sf.Filter = "Snap Shot Image|*.png";
+                if(sf.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = sf.FileName;
+                    SaveSnapShot(filePath);
+                }
+            }
         }
     }
 }

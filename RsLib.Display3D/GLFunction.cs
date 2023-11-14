@@ -7,6 +7,7 @@ using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
@@ -1305,6 +1306,22 @@ namespace RsLib.Display3D
             GL.Vertex3(pt.PArray);
 
             GL.End();
+        }
+        public void SaveSnapShot(string filePath)
+        {
+            Bitmap bmp = new Bitmap(pnl_GLControl.Width, pnl_GLControl.Height);
+            BitmapData bitmapData = bmp.LockBits(
+                new Rectangle(0, 0, pnl_GLControl.Width, pnl_GLControl.Height),
+                ImageLockMode.WriteOnly,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            GL.ReadPixels(0, 0, pnl_GLControl.Width, pnl_GLControl.Height, 
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgr, 
+                PixelType.UnsignedByte, 
+                bitmapData.Scan0);
+            bmp.UnlockBits(bitmapData);
+            bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            bmp.Save(filePath, ImageFormat.Png);
+            bmp.Dispose();
         }
         public void BuildPoint(Point3D pt, int id, bool checkMaxMin, bool isUpdateObject)
         {
