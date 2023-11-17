@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 namespace RsLib.PointCloudLib
 {
+    using CoordTuple = Tuple<List<double>, List<double>, List<double>>;
+    using SelectionTuple = Tuple<Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>, List<int>>;
+
     [Serializable]
     public abstract class ObjectOption
     {
@@ -159,7 +162,16 @@ namespace RsLib.PointCloudLib
                 dataTuple.Item6,
                 dataTuple.Item7);
         }
-
+        public ObjectGroup(string groupName, SelectionTuple dataTuple,bool calculateVy)
+        {
+            Name = groupName;
+            parseArray(dataTuple, calculateVy);
+        }
+        public ObjectGroup(string groupName, PoseList dataTuple, bool calculateVy)
+        {
+            Name = groupName;
+            parseArray(dataTuple, calculateVy);
+        }
         public ObjectGroup(string groupName,double[] xArray,double[] yArray,double[] zArray,int[] objIndexArray, double[] nXArr, double[] nYArr, double[] nZArr)
         {
             Name = groupName;
@@ -212,6 +224,156 @@ namespace RsLib.PointCloudLib
             p.CalculatePathDirectionAsVy();
             Add($"{Name}_{lastIndex}", p);
         }
+        void parseArray(SelectionTuple selectionTuple, bool calculateVy)
+        {
+            int lastIndex = 0;
+            Polyline p = new Polyline();
+            LineOption lineOption = new LineOption() { LineIndex = lastIndex };
+            p.AddOption(lineOption);
+            if (calculateVy == false)
+                if (selectionTuple.Item2.Item1.Count == 0)
+                    calculateVy = true;
+            for (int i = 0; i < selectionTuple.Item5.Count; i++)
+            {
+                double x = selectionTuple.Item1.Item1[i];
+                double y = selectionTuple.Item1.Item2[i];
+                double z = selectionTuple.Item1.Item3[i];
+                int index = selectionTuple.Item5[i];
+
+                double zx = selectionTuple.Item4.Item1[i];
+                double zy = selectionTuple.Item4.Item2[i];
+                double zz = selectionTuple.Item4.Item3[i];
+
+
+                if (lastIndex == index)
+                {
+                    PointV3D pt = new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(zx, zy, zz)
+                    };
+
+                    if(calculateVy == false)
+                    {
+                        double xx = selectionTuple.Item2.Item1[i];
+                        double xy = selectionTuple.Item2.Item2[i];
+                        double xz = selectionTuple.Item2.Item3[i];
+
+                        double yx = selectionTuple.Item3.Item1[i];
+                        double yy = selectionTuple.Item3.Item2[i];
+                        double yz = selectionTuple.Item3.Item3[i];
+                        pt.Vx = new Vector3D(xx, xy, xz);
+                        pt.Vy = new Vector3D(yx, yy, yz);
+
+                    }
+                    p.Add(pt);
+                }
+                else
+                {
+                    if(calculateVy) p.CalculatePathDirectionAsVy();
+
+                    Add($"{Name}_{lastIndex}", p);
+                    lastIndex = index;
+                    p = new Polyline();
+                    lineOption = new LineOption() { LineIndex = lastIndex };
+                    p.AddOption(lineOption);
+                    PointV3D pt = new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(zx, zy, zz)
+                    };
+
+                    if (calculateVy == false)
+                    {
+                        double xx = selectionTuple.Item2.Item1[i];
+                        double xy = selectionTuple.Item2.Item2[i];
+                        double xz = selectionTuple.Item2.Item3[i];
+
+                        double yx = selectionTuple.Item3.Item1[i];
+                        double yy = selectionTuple.Item3.Item2[i];
+                        double yz = selectionTuple.Item3.Item3[i];
+                        pt.Vx = new Vector3D(xx, xy, xz);
+                        pt.Vy = new Vector3D(yx, yy, yz);
+
+                    }
+                    p.Add(pt);
+                }
+            }
+            if (calculateVy) p.CalculatePathDirectionAsVy();
+            Add($"{Name}_{lastIndex}", p);
+        }
+        void parseArray(PoseList selectionTuple, bool calculateVy)
+        {
+            int lastIndex = 0;
+            Polyline p = new Polyline();
+            LineOption lineOption = new LineOption() { LineIndex = lastIndex };
+            p.AddOption(lineOption);
+            if (calculateVy == false)
+                if (selectionTuple.Xx.Count == 0)
+                    calculateVy = true;
+            for (int i = 0; i < selectionTuple.Index.Count; i++)
+            {
+                double x = selectionTuple.X[i];
+                double y = selectionTuple.Y[i];
+                double z = selectionTuple.Z[i];
+                int index = selectionTuple.Index[i];
+
+                double zx = selectionTuple.Zx[i];
+                double zy = selectionTuple.Zy[i];
+                double zz = selectionTuple.Zz[i];
+
+
+                if (lastIndex == index)
+                {
+                    PointV3D pt = new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(zx, zy, zz)
+                    };
+
+                    if (calculateVy == false)
+                    {
+                        pt.Vx = selectionTuple.GetVectorX(i);
+                        pt.Vy = selectionTuple.GetVectorY(i);
+
+                    }
+                    p.Add(pt);
+                }
+                else
+                {
+                    if (calculateVy) p.CalculatePathDirectionAsVy();
+
+                    Add($"{Name}_{lastIndex}", p);
+                    lastIndex = index;
+                    p = new Polyline();
+                    lineOption = new LineOption() { LineIndex = lastIndex };
+                    p.AddOption(lineOption);
+                    PointV3D pt = new PointV3D()
+                    {
+                        X = x,
+                        Y = y,
+                        Z = z,
+                        Vz = new Vector3D(zx, zy, zz)
+                    };
+
+                    if (calculateVy == false)
+                    {
+                        pt.Vx = selectionTuple.GetVectorX(i);
+                        pt.Vy = selectionTuple.GetVectorY(i);
+                    }
+                    p.Add(pt);
+                }
+            }
+            if (calculateVy) p.CalculatePathDirectionAsVy();
+            Add($"{Name}_{lastIndex}", p);
+        }
+
         public void Add(string objName, Object3D object3D)
         {
             if (!Objects.ContainsKey(objName))
@@ -299,6 +461,7 @@ namespace RsLib.PointCloudLib
 
             return new Tuple<double[], double[], double[], int[]>(xList.ToArray(), yList.ToArray(), zLIst.ToArray(), iLIst.ToArray());
         }
+
         public void Clear()
         {
             Objects.Clear();

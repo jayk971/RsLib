@@ -137,21 +137,41 @@ namespace RsLib.PointCloudLib
             out double[] nZArr,
             out int[] indexArr)
         {
-            List<double> xList = new List<double>();
-            List<double> yList = new List<double>();
-            List<double> zList = new List<double>();
-            List<double> nxList = new List<double>();
-            List<double> nyList = new List<double>();
-            List<double> nzList = new List<double>();
-            List<int> indexList = new List<int>();
 
-            xArr = new double[0];
-            yArr = new double[0];
-            zArr = new double[0];
-            nXArr = new double[0];
-            nYArr = new double[0];
-            nZArr = new double[0];
-            indexArr = new int[0];
+            LoadOPTToXYZIndexNormalList(filePath, cplitChar,
+                out List<double> x,
+                out List<double> y,
+                out List<double> z,
+                out List<double> zX,
+                out List<double> zY,
+                out List<double> zZ,
+                out List<int> index);
+
+            xArr = x.ToArray();
+            yArr = y.ToArray();
+            zArr = z.ToArray();
+            nXArr = zX.ToArray();
+            nYArr = zY.ToArray();
+            nZArr = zZ.ToArray();
+            indexArr = index.ToArray();
+        }
+        public static void LoadOPTToXYZIndexNormalList(string filePath,
+    char cplitChar,
+    out List<double> xList,
+    out List<double> yList,
+    out List<double> zList,
+    out List<double> nxList,
+    out List<double> nyList,
+    out List<double> nzList,
+    out List<int> indexList)
+        {
+            xList = new List<double>();
+            yList = new List<double>();
+            zList = new List<double>();
+            nxList = new List<double>();
+            nyList = new List<double>();
+            nzList = new List<double>();
+            indexList = new List<int>();
 
             using (StreamReader sr = new StreamReader(filePath))
             {
@@ -180,14 +200,6 @@ namespace RsLib.PointCloudLib
                     }
                 }
             }
-
-            xArr = xList.ToArray();
-            yArr = yList.ToArray();
-            zArr = zList.ToArray();
-            nXArr = nxList.ToArray();
-            nYArr = nyList.ToArray();
-            nZArr = nzList.ToArray();
-            indexArr = indexList.ToArray();
         }
         public static void SaveOPTFromXYZIndexNormalArray(string filePath,
     double[] xArr,
