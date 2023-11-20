@@ -14,7 +14,11 @@ namespace RsLib.TCP.Control
             _server.ClientAdded += _server_ClientAdded;
             propertyGrid1.SelectedObject = _server.Option;
         }
-
+        public void SetOuterButton(System.Windows.Forms.Control ctrl)
+        {
+            pnl_OuterButton.Controls.Clear();
+            pnl_OuterButton.Controls.Add(ctrl);
+        }
         private void _server_ClientAdded(string obj)
         {
             if (this.InvokeRequired)
@@ -33,19 +37,19 @@ namespace RsLib.TCP.Control
             }
         }
 
-        private void _server_DataReceived(string arg1, string arg2)
+        private void _server_DataReceived(string name, string msg)
         {
             if (this.InvokeRequired)
             {
                 Action<string, string> action = new Action<string, string>(_server_DataReceived);
-                this.Invoke(action, arg1, arg2);
+                this.Invoke(action, name, msg);
             }
             else
             {
-                if (richTextBox1.Lines.Length > 10) richTextBox1.Clear();
-                DataReceived?.Invoke(arg1, arg2);
+                if (richTextBox1.Lines.Length > 50) richTextBox1.Clear();
+                DataReceived?.Invoke(name, msg);
 
-                string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{arg1}\t{arg2}\n";
+                string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{name}\t<< {msg}\n";
                 richTextBox1.AppendText(displayMsg);
             }
         }
@@ -74,11 +78,13 @@ namespace RsLib.TCP.Control
         {
             if (data == "") return;
             if (_server.IsRun == false) return;
+            if (_server.ClientCount == 0) return;
             _server.Send(clientName, data);
-            string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{data}\n";
+            string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t>> {data}\n";
             richTextBox1.Invoke((Action)(() =>
             {
                 richTextBox1.AppendText(displayMsg);
+                richTextBox1.ScrollToCaret();
             }));
 
         }

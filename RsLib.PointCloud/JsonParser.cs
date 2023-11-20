@@ -9,6 +9,7 @@ namespace RsLib.PointCloudLib
 {
     //using CoordTuple = Tuple<List<double>, List<double>, List<double>>;
     //using SelectionTuple = Tuple<Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>, Tuple<List<double>, List<double>, List<double>>,List<int>>;
+    [Serializable]
     public class NikePath
     {
         public string SchemaVersion { get; set; }

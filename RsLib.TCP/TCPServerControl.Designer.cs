@@ -41,16 +41,17 @@ namespace RsLib.TCP.Control
             this.btn_SendDataAll = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.pnl_ServerLog = new System.Windows.Forms.Panel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.lbl_ClientCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.pnl_OuterButton = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.pnl_ServerLog.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -69,7 +70,7 @@ namespace RsLib.TCP.Control
             this.btn_SendDataAll});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(429, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(482, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -151,8 +152,8 @@ namespace RsLib.TCP.Control
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.richTextBox1, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.toolStrip1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.pnl_ServerLog, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -160,36 +161,26 @@ namespace RsLib.TCP.Control
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(429, 240);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(482, 512);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // richTextBox1
             // 
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(217, 28);
+            this.richTextBox1.Location = new System.Drawing.Point(244, 28);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(209, 189);
+            this.richTextBox1.Size = new System.Drawing.Size(235, 461);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
-            // 
-            // pnl_ServerLog
-            // 
-            this.pnl_ServerLog.Controls.Add(this.propertyGrid1);
-            this.pnl_ServerLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnl_ServerLog.Location = new System.Drawing.Point(0, 25);
-            this.pnl_ServerLog.Margin = new System.Windows.Forms.Padding(0);
-            this.pnl_ServerLog.Name = "pnl_ServerLog";
-            this.pnl_ServerLog.Size = new System.Drawing.Size(214, 195);
-            this.pnl_ServerLog.TabIndex = 1;
             // 
             // propertyGrid1
             // 
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid1.HelpVisible = false;
-            this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
+            this.propertyGrid1.Location = new System.Drawing.Point(3, 3);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(214, 195);
+            this.propertyGrid1.Size = new System.Drawing.Size(229, 165);
             this.propertyGrid1.TabIndex = 0;
             this.propertyGrid1.ToolbarVisible = false;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
@@ -200,9 +191,9 @@ namespace RsLib.TCP.Control
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.lbl_ClientCount});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 220);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 492);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(429, 20);
+            this.statusStrip1.Size = new System.Drawing.Size(482, 20);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -223,20 +214,43 @@ namespace RsLib.TCP.Control
             this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.propertyGrid1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.pnl_OuterButton, 0, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 28);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.09328F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.90672F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(235, 461);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // pnl_OuterButton
+            // 
+            this.pnl_OuterButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnl_OuterButton.Location = new System.Drawing.Point(3, 174);
+            this.pnl_OuterButton.Name = "pnl_OuterButton";
+            this.pnl_OuterButton.Size = new System.Drawing.Size(229, 284);
+            this.pnl_OuterButton.TabIndex = 1;
+            // 
             // TCPServerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "TCPServerControl";
-            this.Size = new System.Drawing.Size(429, 240);
+            this.Size = new System.Drawing.Size(482, 512);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.pnl_ServerLog.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -248,7 +262,6 @@ namespace RsLib.TCP.Control
         private System.Windows.Forms.ToolStripButton btn_ServerStop;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel pnl_ServerLog;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -260,5 +273,7 @@ namespace RsLib.TCP.Control
         private System.Windows.Forms.ToolStripButton btn_SendData;
         private System.Windows.Forms.ToolStripButton btn_SendDataAll;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Panel pnl_OuterButton;
     }
 }

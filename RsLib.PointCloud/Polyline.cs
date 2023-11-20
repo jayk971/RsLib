@@ -2346,6 +2346,38 @@ namespace RsLib.PointCloudLib
             output.SmoothByKDTree(reduceR, true, true, false);
             return output;
         }
+        public List<Pose> ToJsonPoses()
+        {
+            List<Pose> output = new List<Pose>();
+            for (int i = 0; i < Count; i++)
+            {
+                if(Points[i] is PointV3D pV3D)
+                {
+                    Pose pose = new Pose()
+                    {
+                        X = pV3D.X,
+                        Y = pV3D.Y,
+                        Z = pV3D.Z,
+
+                        XAxis = new double[] { pV3D.Vx.X, pV3D.Vx.Y, pV3D.Vx.Z },
+                        YAxis = new double[] { pV3D.Vy.X, pV3D.Vy.Y, pV3D.Vy.Z }
+                    };
+                    output.Add(pose);
+                }
+                else if(Points[i] is Point3D p3D)
+                {
+                    Pose pose = new Pose()
+                    {
+                        X = p3D.X,
+                        Y = p3D.Y,
+                        Z = p3D.Z,
+
+                    };
+                    output.Add(pose);
+                }
+            }
+            return output;
+        }
     }
     [Serializable]
     public class LocatePercentOption : ObjectOption

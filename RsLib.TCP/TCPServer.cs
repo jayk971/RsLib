@@ -54,13 +54,13 @@ namespace RsLib.TCP.Server
             if (_clientObj[name].WorkSocket != null)
                 if (_clientObj[name].WorkSocket.Connected == true)
                 {
-                    Log.Add($"TCP server send name : {name} msg : {data}", MsgLevel.Trace);
+                    //Log.Add($"TCP server send name : {name} msg : {data}", MsgLevel.Trace);
                     _clientObj[name].SendData(data);
                 }
         }
         private void StateObject_DataReceived(string name, string obj)
         {
-            Log.Add($"TCP server receive name : {name} msg : {obj}", MsgLevel.Trace);
+            //Log.Add($"TCP server receive name : {name} msg : {obj}", MsgLevel.Trace);
 
             DataReceived?.Invoke(name, obj);
             Msg = obj;

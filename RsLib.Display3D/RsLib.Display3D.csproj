@@ -103,6 +103,12 @@
     <Compile Include="FormChangeDefaultColor.Designer.cs">
       <DependentUpon>FormChangeDefaultColor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormJsonPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormJsonPath.Designer.cs">
+      <DependentUpon>FormJsonPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="GLFunction.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormChangeDefaultColor.resx">
       <DependentUpon>FormChangeDefaultColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormJsonPath.resx">
+      <DependentUpon>FormJsonPath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
