@@ -13,6 +13,8 @@ namespace RsLib.TCP.Common
         byte[] _buffer = new byte[_bufferSize];
         StringBuilder sb = new StringBuilder();
         public event Action<string, string> DataReceived;
+        public event Action<string, string> DataSended;
+
         public bool IsConnect => WorkSocket != null ? WorkSocket.Connected : false;
         public StateObject(string name)
         {
@@ -20,15 +22,15 @@ namespace RsLib.TCP.Common
         }
         public void SendClientConnect()
         {
-            SendData($"{Command.Connect}");
+            SendData(Command.Connect);
         }
         public void SendClientDisconnect()
         {
-            SendData($"{Command.Disconnect}");
+            SendData(Command.Disconnect);
         }
         public void SendServerStop()
         {
-            SendData(Command.Stop);
+            SendData(Command.ServerStop);
         }
         public void SendData(string data)
         {
@@ -36,6 +38,7 @@ namespace RsLib.TCP.Common
             byte[] byteData = Encoding.ASCII.GetBytes(sendData);
             WorkSocket.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), WorkSocket);
+            DataSended?.Invoke(Name, data);
         }
         private void SendCallback(IAsyncResult ar)
         {
@@ -110,8 +113,9 @@ namespace RsLib.TCP.Common
         public const string Connect = "Connect";
         public const string Disconnect = "Disconnect";
         public const string ByeBye = "ByeBye";
-        public const string Stop = "Stop";
-        public const string ack = "ack";
+        public const string ServerStop = "ServerStop";
+        public const string None = "None";
+
     }
 
 }

@@ -45,7 +45,7 @@ namespace RsLib.TCP.Client
             string act = splitData[1];
             switch (act)
             {
-                case Command.Stop:
+                case Command.ServerStop:
                     Send(Command.ByeBye);
                     stateObject.DataReceived -= StateObject_DataReceived;
                     stateObject.Disconnect();

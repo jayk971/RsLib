@@ -1,4 +1,5 @@
 ﻿using RsLib.TCP.Server;
+using RsLib.TCP.Common;
 using System;
 using System.Windows.Forms;
 namespace RsLib.TCP.Control
@@ -12,8 +13,41 @@ namespace RsLib.TCP.Control
             InitializeComponent();
             _server.DataReceived += _server_DataReceived;
             _server.ClientAdded += _server_ClientAdded;
+            _server.DataSended += _server_DataSended;
             propertyGrid1.SelectedObject = _server.Option;
         }
+        public TCPServerControl(TCPServer tcpServer)
+        {
+            InitializeComponent();
+            _server = tcpServer;
+            _server.DataReceived += _server_DataReceived;
+            _server.ClientAdded += _server_ClientAdded;
+            _server.DataSended += _server_DataSended;
+            propertyGrid1.SelectedObject = _server.Option;
+        }
+        private void _server_DataSended(string name, string msg)
+        {
+            if(this.InvokeRequired)
+            {
+                Action<string, string> action = new Action<string, string>(_server_DataSended);
+                this.Invoke(action, name, msg);
+            }
+            else
+            {
+                if (msg.Contains(Command.None)) return;
+                string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t>> {msg}\n";
+                try
+                {
+                    richTextBox1.AppendText(displayMsg);
+                    richTextBox1.ScrollToCaret();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
         public void SetOuterButton(System.Windows.Forms.Control ctrl)
         {
             pnl_OuterButton.Controls.Clear();
@@ -46,10 +80,12 @@ namespace RsLib.TCP.Control
             }
             else
             {
-                if (richTextBox1.Lines.Length > 50) richTextBox1.Clear();
+                if (msg.Contains(Command.None)) return;
+                if (msg.Contains("\n") == false) return;
+                if (richTextBox1.Lines.Length > 30) richTextBox1.Clear();
                 DataReceived?.Invoke(name, msg);
 
-                string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{name}\t<< {msg}\n";
+                string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t{name}\t<< {msg}";
                 richTextBox1.AppendText(displayMsg);
             }
         }
@@ -80,12 +116,6 @@ namespace RsLib.TCP.Control
             if (_server.IsRun == false) return;
             if (_server.ClientCount == 0) return;
             _server.Send(clientName, data);
-            string displayMsg = $"{DateTime.Now:HH:mm:ss.fff}\t>> {data}\n";
-            richTextBox1.Invoke((Action)(() =>
-            {
-                richTextBox1.AppendText(displayMsg);
-                richTextBox1.ScrollToCaret();
-            }));
 
         }
         private void btn_SendData_Click(object sender, EventArgs e)

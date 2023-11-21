@@ -30,6 +30,8 @@ namespace RsLib.TCP.Server
         public string Msg { get; private set; }
         //StateObject[] stateObject;
         public event Action<string, string> DataReceived;
+        public event Action<string, string> DataSended;
+
         public event Action<string> ClientAdded;
         ManualResetEvent ReceiveDone = new ManualResetEvent(false);
         public TCPServer()
@@ -44,6 +46,7 @@ namespace RsLib.TCP.Server
             foreach (var item in _clientObj)
             {
                 Send(item.Key, data);
+
             }
         }
         public void Send(string name, string data)
@@ -58,12 +61,16 @@ namespace RsLib.TCP.Server
                     _clientObj[name].SendData(data);
                 }
         }
-        private void StateObject_DataReceived(string name, string obj)
+        private void StateObject_DataSended(string name, string msg)
+        {
+            DataSended?.Invoke(name, msg);
+        }
+        private void StateObject_DataReceived(string name, string msg)
         {
             //Log.Add($"TCP server receive name : {name} msg : {obj}", MsgLevel.Trace);
 
-            DataReceived?.Invoke(name, obj);
-            Msg = obj;
+            DataReceived?.Invoke(name, msg);
+            Msg = msg;
             msgHandle();
             ReceiveDone.Set();
 
@@ -82,6 +89,7 @@ namespace RsLib.TCP.Server
                         _clientObj[requestName].SendData(Command.ByeBye);
                         _clientObj[requestName].Disconnect();
                         _clientObj[requestName].DataReceived -= StateObject_DataReceived;
+                        _clientObj[requestName].DataSended -= StateObject_DataSended;
 
                         _clientObj.Remove(requestName);
                         ClientAdded?.Invoke("");
@@ -89,6 +97,7 @@ namespace RsLib.TCP.Server
                     case Command.ByeBye:
                         _clientObj[requestName].Disconnect();
                         _clientObj[requestName].DataReceived -= StateObject_DataReceived;
+                        _clientObj[requestName].DataSended -= StateObject_DataSended;
 
                         _clientObj.Remove(requestName);
                         ClientAdded?.Invoke("");
@@ -124,58 +133,73 @@ namespace RsLib.TCP.Server
         void clientConnected(IAsyncResult ar)
         {
             if (mainSocket == null) return;
-            Socket handler = mainSocket.EndAccept(ar);
 
-            int currentClientCount = _clientObj.Count;
-            if (currentClientCount >= Option.MaxClientCount)
+            try
             {
-                Log.Add($"Clients count is over limit {Option.MaxClientCount}", MsgLevel.Alarm);
-                return;
-            }
-            StateObject temp = new StateObject($"{Option.Name}_{currentClientCount}");
-            Log.Add($"{handler.RemoteEndPoint} is connecting to {temp.Name}", MsgLevel.Info);
+                Socket handler = mainSocket.EndAccept(ar);
 
-            temp.DataReceived += StateObject_DataReceived;
-            temp.WorkSocket = handler;
-            temp.SendData(Command.Welcome);
-            ReceiveDone.Reset();
-            temp.Receive();
-            bool isInTime = ReceiveDone.WaitOne(5000);
-
-            if (isInTime && Msg.Contains(Command.Connect))
-            {
-                string[] splitData = Msg.Split(',');
-                if (splitData.Length < 2)
+                int currentClientCount = _clientObj.Count;
+                if (currentClientCount >= Option.MaxClientCount)
                 {
-                    Log.Add($"Msg format is wrong. Receive Msg : {Msg}", MsgLevel.Alarm);
+                    Log.Add($"Clients count is over limit {Option.MaxClientCount}", MsgLevel.Alarm);
+                    return;
                 }
-                else
+                StateObject temp = new StateObject($"{Option.Name}_{currentClientCount}");
+                Log.Add($"{handler.RemoteEndPoint} is connecting to {temp.Name}", MsgLevel.Info);
+
+                temp.DataReceived += StateObject_DataReceived;
+                temp.DataSended += StateObject_DataSended;
+                temp.WorkSocket = handler;
+                temp.SendData(Command.Welcome);
+                ReceiveDone.Reset();
+                temp.Receive();
+                bool isInTime = ReceiveDone.WaitOne(5000);
+
+                if (isInTime && Msg.Contains(Command.Connect))
                 {
-                    string requestName = splitData[0];
-                    if (_clientObj.ContainsKey(requestName) == false)
+                    string[] splitData = Msg.Split(',');
+                    if (splitData.Length < 2)
                     {
-                        _clientObj.Add(requestName, temp);
-                        Log.Add($"{handler.RemoteEndPoint} connects to {temp.Name} successfully.", MsgLevel.Info);
-                        ClientAdded?.Invoke(requestName);
+                        Log.Add($"Msg format is wrong. Receive Msg : {Msg}", MsgLevel.Alarm);
                     }
                     else
                     {
-                        _clientObj[requestName].DataReceived -= StateObject_DataReceived;
-                        _clientObj[requestName].Disconnect();
-                        _clientObj[requestName] = temp;
-                        Log.Add($"{handler.RemoteEndPoint} reconnected.", MsgLevel.Warn);
+                        string requestName = splitData[0];
+                        if (_clientObj.ContainsKey(requestName) == false)
+                        {
+                            _clientObj.Add(requestName, temp);
+                            Log.Add($"{handler.RemoteEndPoint} connects to {temp.Name} successfully.", MsgLevel.Info);
+                            ClientAdded?.Invoke(requestName);
+                        }
+                        else
+                        {
+                            _clientObj[requestName].DataReceived -= StateObject_DataReceived;
+                            _clientObj[requestName].DataSended -= StateObject_DataSended;
+
+                            _clientObj[requestName].Disconnect();
+                            _clientObj[requestName] = temp;
+                            Log.Add($"{handler.RemoteEndPoint} reconnected.", MsgLevel.Warn);
+                        }
                     }
                 }
+                else
+                {
+                    Log.Add($"{handler.RemoteEndPoint} connect fail. Timeout : {!isInTime}. Msg : {Msg}", MsgLevel.Alarm);
+                }
+                if (mainSocket == null) return;
+
+                // 等待下一個使用者連接
+                mainSocket.BeginAccept(
+                    new AsyncCallback(clientConnected),
+                    null);
             }
-            else
+            catch(Exception ex)
             {
-                Log.Add($"{handler.RemoteEndPoint} connect fail. Timeout : {!isInTime}. Msg : {Msg}", MsgLevel.Alarm);
+                Log.Add($"TCP client connect exception.", MsgLevel.Alarm, ex);
             }
-            // 等待下一個使用者連接
-            mainSocket.BeginAccept(
-                new AsyncCallback(clientConnected),
-                null);
         }
+
+
 
         // 停止Server
         public void Stop()
@@ -186,10 +210,15 @@ namespace RsLib.TCP.Server
                 {
                     ReceiveDone.Reset();
                     item.Value.SendServerStop();
-                    bool isInTime = ReceiveDone.WaitOne(5000);
+                    //bool isInTime = ReceiveDone.WaitOne(5000);
+                    _clientObj[item.Key].DataReceived -= StateObject_DataReceived;
+                    _clientObj[item.Key].DataSended -= StateObject_DataSended;
+                    _clientObj[item.Key].Disconnect();
+
                 }
                 if (mainSocket.Connected)
                     mainSocket.Shutdown(SocketShutdown.Both);
+                
                 mainSocket.Close();
                 mainSocket.Dispose();
                 mainSocket = null;
