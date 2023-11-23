@@ -1828,7 +1828,7 @@ namespace RsLib.Display3D
         }
         public object[] ToDataGridRowObject()
         {
-            return new object[] { DisplayType, IsDisplay, Name, ID, "", DrawSize };
+            return new object[] { DisplayType, IsDisplay, Name, DrawSize,"", ID, };
         }
 
 

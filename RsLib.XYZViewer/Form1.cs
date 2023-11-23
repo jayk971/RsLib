@@ -480,10 +480,12 @@ namespace RsLib.XYZViewer
                 }
                 PointCloud cloudIntersect = new PointCloud();
                 object lockobj = new object();
-                Parallel.ForEach(group.Objects, (KeyValuePair<string,Object3D> o) =>
+
+#if parallel
+                foreach (var item in group.Objects)
                 {
-                    string objName = o.Key;
-                    Object3D obj = o.Value;
+                    string objName = item.Key;
+                    Object3D obj = item.Value;
                     if (obj is Polyline pl)
                     {
                         PointCloud pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR);
@@ -492,8 +494,24 @@ namespace RsLib.XYZViewer
                             cloudIntersect.Add(pCloud);
                         }
                     }
-                });
+                }
 
+
+#else
+                Parallel.ForEach(group.Objects, (KeyValuePair<string, Object3D> o) =>
+                {
+                    string objName = o.Key;
+                    Object3D obj = o.Value;
+                    if (obj is Polyline pl)
+                    {
+                        PointCloud pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR,true);
+                        lock (lockobj)
+                        {
+                            cloudIntersect.Add(pCloud);
+                        }
+                    }
+                });
+#endif
                 _displayCtrl.GetDisplayObjectOption((int)DrawItem.VzIntersection).Name = "VzIntersection";
                 _displayCtrl.BuildPointCloud(cloudIntersect, (int)DrawItem.VzIntersection, false, true);
             }

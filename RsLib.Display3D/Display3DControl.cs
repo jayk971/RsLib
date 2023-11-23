@@ -31,9 +31,9 @@ namespace RsLib.Display3D
         const int _typeIndex = 0;
         const int _visibleIndex = 1;
         const int _nameIndex = 2;
-        const int _idIndex = 3;
+        const int _idIndex = 5;
         const int _colorIndex = 4;
-        const int _sizeIndex = 5;
+        const int _sizeIndex = 3;
         FormAddSelectPath formAdd = new FormAddSelectPath();
         // key : object ID, value : list of select paths;
         Dictionary<int, List<int>> _SelectedPathIndex = new Dictionary<int, List<int>>();

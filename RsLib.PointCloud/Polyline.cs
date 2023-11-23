@@ -2318,7 +2318,7 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
-        public PointCloud GetIntersectVz(KDTree<int> tree,double vzExtendLength,int searchRange,double searchR,double reduceR)
+        public PointCloud GetIntersectVz(KDTree<int> tree,double vzExtendLength,int searchRange,double searchR,double reduceR,bool ignoreZLowerTarget)
         {
             Polyline output = new Polyline();
             for (int i = 0; i < Points.Count; i++)
@@ -2336,7 +2336,23 @@ namespace RsLib.PointCloudLib
                             if (nearCloud.Count > 0)
                             {
                                 Point3D ptAvg = nearCloud.Average;
-                                output.Add(ptAvg);
+                                double t = (ptAvg.Z - pt.Z) / pt.Vz.Z;
+                                Point3D ptAtVector = pt.GetVzExtendPoint(t);
+                                Vector3D testResultV = new Vector3D(pt, ptAtVector);
+                                double dot = Vector3D.Dot(pt.Vz, testResultV);
+                                if (ignoreZLowerTarget)
+                                {
+                                    if(dot > 0)
+                                    {
+                                        output.Add(ptAtVector);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    output.Add(ptAtVector);
+                                    break;
+                                }
                             }
                         }
                     }

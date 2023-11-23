@@ -31,10 +31,10 @@ namespace RsLib.Display3D
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
             this.btn_ClearObject = new System.Windows.Forms.ToolStripButton();
@@ -57,6 +57,8 @@ namespace RsLib.Display3D
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveABBModFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveABBModFileWithRobTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_PickPoint = new System.Windows.Forms.ToolStripSplitButton();
             this.measureDistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MultipleSelectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,12 +83,6 @@ namespace RsLib.Display3D
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Display = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Column2_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,8 +140,12 @@ namespace RsLib.Display3D
             this.toolBtn_ClearMultipleSelect = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Display = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -330,14 +330,14 @@ namespace RsLib.Display3D
             // 
             this.saveXYZPointCloudToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveXYZPointCloudToolStripMenuItem.Name = "saveXYZPointCloudToolStripMenuItem";
-            this.saveXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saveXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.saveXYZPointCloudToolStripMenuItem.Text = "Save XYZ point cloud";
             this.saveXYZPointCloudToolStripMenuItem.Click += new System.EventHandler(this.btn_SaveAs_Click);
             // 
             // saToolStripMenuItem
             // 
             this.saToolStripMenuItem.Name = "saToolStripMenuItem";
-            this.saToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.saToolStripMenuItem.Text = "Save Resorted XYZ point cloud";
             this.saToolStripMenuItem.Click += new System.EventHandler(this.saToolStripMenuItem_Click);
             // 
@@ -345,33 +345,33 @@ namespace RsLib.Display3D
             // 
             this.saveSelectedXYZPointCloudToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveSelectedXYZPointCloudToolStripMenuItem.Name = "saveSelectedXYZPointCloudToolStripMenuItem";
-            this.saveSelectedXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saveSelectedXYZPointCloudToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.saveSelectedXYZPointCloudToolStripMenuItem.Text = "Save selected XYZ point cloud";
             this.saveSelectedXYZPointCloudToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedXYZPointCloudToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(285, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(269, 6);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(288, 38);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(272, 22);
             this.toolStripMenuItem1.Text = "Save OPT path file";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.saveOPTFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(285, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(269, 6);
             // 
             // saveABBModFileToolStripMenuItem
             // 
             this.saveABBModFileToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveABBModFileToolStripMenuItem.Name = "saveABBModFileToolStripMenuItem";
-            this.saveABBModFileToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saveABBModFileToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.saveABBModFileToolStripMenuItem.Text = "Save ABB Mod File";
             this.saveABBModFileToolStripMenuItem.ToolTipText = "Save ABB Mod File";
             this.saveABBModFileToolStripMenuItem.Click += new System.EventHandler(this.saveABBModFileToolStripMenuItem_Click);
@@ -380,9 +380,21 @@ namespace RsLib.Display3D
             // 
             this.saveABBModFileWithRobTargetToolStripMenuItem.Image = global::RsLib.Display3D.Properties.Resources.save_30px;
             this.saveABBModFileWithRobTargetToolStripMenuItem.Name = "saveABBModFileWithRobTargetToolStripMenuItem";
-            this.saveABBModFileWithRobTargetToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
+            this.saveABBModFileWithRobTargetToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.saveABBModFileWithRobTargetToolStripMenuItem.Text = "Save ABB Mod File With RobTarget";
             this.saveABBModFileWithRobTargetToolStripMenuItem.Click += new System.EventHandler(this.saveABBModFileWithRobTargetToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(269, 6);
+            // 
+            // saveImageToolStripMenuItem
+            // 
+            this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
+            this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.saveImageToolStripMenuItem.Text = "Save Image";
+            this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
             // 
             // btn_PickPoint
             // 
@@ -632,9 +644,9 @@ namespace RsLib.Display3D
             this.Column_Type,
             this.Column_Display,
             this.Column_Name,
-            this.Column1,
+            this.Column2_Size,
             this.Column_Color,
-            this.Column2_Size});
+            this.Column1});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 33);
             this.dataGridView1.MultiSelect = false;
@@ -644,56 +656,6 @@ namespace RsLib.Display3D
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.Size = new System.Drawing.Size(290, 322);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // Column_Type
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Column_Type.HeaderText = "Type";
-            this.Column_Type.Name = "Column_Type";
-            this.Column_Type.ReadOnly = true;
-            this.Column_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column_Type.Width = 70;
-            // 
-            // Column_Display
-            // 
-            this.Column_Display.HeaderText = "Display";
-            this.Column_Display.Name = "Column_Display";
-            this.Column_Display.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column_Display.Width = 50;
-            // 
-            // Column_Name
-            // 
-            this.Column_Name.HeaderText = "Name";
-            this.Column_Name.Name = "Column_Name";
-            this.Column_Name.ReadOnly = true;
-            this.Column_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Column1.HeaderText = "ID";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 30;
-            // 
-            // Column_Color
-            // 
-            this.Column_Color.HeaderText = "Color";
-            this.Column_Color.Name = "Column_Color";
-            this.Column_Color.ReadOnly = true;
-            this.Column_Color.Width = 50;
-            // 
-            // Column2_Size
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Column2_Size.HeaderText = "Size";
-            this.Column2_Size.Name = "Column2_Size";
-            this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2_Size.Width = 60;
             // 
             // toolStrip2
             // 
@@ -1344,17 +1306,56 @@ namespace RsLib.Display3D
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // toolStripSeparator12
+            // Column_Type
             // 
-            this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(285, 6);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column_Type.HeaderText = "Type";
+            this.Column_Type.Name = "Column_Type";
+            this.Column_Type.ReadOnly = true;
+            this.Column_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column_Type.Width = 70;
             // 
-            // saveImageToolStripMenuItem
+            // Column_Display
             // 
-            this.saveImageToolStripMenuItem.Name = "saveImageToolStripMenuItem";
-            this.saveImageToolStripMenuItem.Size = new System.Drawing.Size(288, 38);
-            this.saveImageToolStripMenuItem.Text = "Save Image";
-            this.saveImageToolStripMenuItem.Click += new System.EventHandler(this.saveImageToolStripMenuItem_Click);
+            this.Column_Display.HeaderText = "-";
+            this.Column_Display.Name = "Column_Display";
+            this.Column_Display.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column_Display.ToolTipText = "Visible";
+            this.Column_Display.Width = 30;
+            // 
+            // Column_Name
+            // 
+            this.Column_Name.HeaderText = "Name";
+            this.Column_Name.Name = "Column_Name";
+            this.Column_Name.ReadOnly = true;
+            this.Column_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column2_Size
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Column2_Size.HeaderText = "Size";
+            this.Column2_Size.Name = "Column2_Size";
+            this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2_Size.Width = 40;
+            // 
+            // Column_Color
+            // 
+            this.Column_Color.HeaderText = "Color";
+            this.Column_Color.Name = "Column_Color";
+            this.Column_Color.ReadOnly = true;
+            this.Column_Color.Width = 50;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Column1.HeaderText = "ID";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 30;
             // 
             // Display3DControl
             // 
@@ -1420,12 +1421,6 @@ namespace RsLib.Display3D
         private System.Windows.Forms.ToolStripStatusLabel lbl_PickPointMode;
         private System.Windows.Forms.ToolStripMenuItem measureDistanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Type;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Column_Display;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewButtonColumn Column_Color;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2_Size;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TreeView treeView1;
@@ -1519,5 +1514,11 @@ namespace RsLib.Display3D
         private System.Windows.Forms.Panel pnl_ColorGradient;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         private System.Windows.Forms.ToolStripMenuItem saveImageToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Type;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Column_Display;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2_Size;
+        private System.Windows.Forms.DataGridViewButtonColumn Column_Color;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }
