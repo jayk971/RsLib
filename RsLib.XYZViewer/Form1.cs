@@ -102,7 +102,7 @@ namespace RsLib.XYZViewer
             _displayCtrl.AddDisplayOption(vzVectorOptions);
             _displayCtrl.AddDisplayOption(vyVectorOptions);
             _displayCtrl.AddDisplayOption(vxVectorOptions);
-            _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, DisplayObjectType.PointCloud, 5.0f));
+            _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, DisplayObjectType.Path, 2.0f) { IsShowAtDataGrid = true});
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3");
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2");
@@ -478,7 +478,8 @@ namespace RsLib.XYZViewer
 
                         break;
                 }
-                PointCloud cloudIntersect = new PointCloud();
+                //PointCloud cloudIntersect = new PointCloud();
+                ObjectGroup groupIntersect = new ObjectGroup("IntersecPath");
                 object lockobj = new object();
 
 #if parallel
@@ -504,16 +505,18 @@ namespace RsLib.XYZViewer
                     Object3D obj = o.Value;
                     if (obj is Polyline pl)
                     {
-                        PointCloud pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR,true);
+                        Polyline pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange,0.1, searchR,0.1, reduceR,true);
                         lock (lockobj)
                         {
-                            cloudIntersect.Add(pCloud);
+                            //cloudIntersect.Add(pCloud);
+                            groupIntersect.Add($"{objName}Intersect", pCloud);
                         }
                     }
                 });
 #endif
-                _displayCtrl.GetDisplayObjectOption((int)DrawItem.VzIntersection).Name = "VzIntersection";
-                _displayCtrl.BuildPointCloud(cloudIntersect, (int)DrawItem.VzIntersection, false, true);
+                _displayCtrl.GetDisplayObjectOption((int)DrawItem.VzIntersection).Name = "IntersectVz";
+                _displayCtrl.BuildPath(groupIntersect, (int)DrawItem.VzIntersection, false, true);
+                _displayCtrl.UpdateDataGridView();
             }
             catch (Exception ex)
             {

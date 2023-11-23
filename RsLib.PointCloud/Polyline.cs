@@ -2318,7 +2318,7 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
-        public PointCloud GetIntersectVz(KDTree<int> tree,double vzExtendLength,int searchRange,double searchR,double reduceR,bool ignoreZLowerTarget)
+        public Polyline GetIntersectVz(KDTree<int> tree,double vzExtendLength,int searchRange,double searchR,double reduceR,bool ignoreZLowerTarget)
         {
             Polyline output = new Polyline();
             for (int i = 0; i < Points.Count; i++)
@@ -2362,6 +2362,64 @@ namespace RsLib.PointCloudLib
             output.SmoothByKDTree(reduceR, true, true, false);
             return output;
         }
+        public Polyline GetIntersectVz(KDTree<int> tree, double vzExtendLength, int searchRange, double startSearchR,double EndSearchR, double stepSearchR,double reduceR, bool ignoreZLowerTarget)
+        {
+            Polyline output = new Polyline();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if (searchRange <= 0) searchRange = 10;
+                if (Points[i] is PointV3D pt)
+                {
+                    double increasement = vzExtendLength / (double)searchRange;
+                    double tempSearchR = startSearchR;
+                    bool isSearchOK = false;
+                    while (tempSearchR <= EndSearchR)
+                    {
+                        for (int j = 0; j < searchRange; j++)
+                        {
+                            Point3D ptVz = pt.GetVzExtendPoint(j * increasement);
+                            PointCloud nearCloud = PointCloudCommon.GetNearestPointCloud(tree, ptVz, tempSearchR);
+                            if (nearCloud != null)
+                            {
+                                if (nearCloud.Count > 0)
+                                {
+                                    Point3D ptAvg = nearCloud.Average;
+                                    double t = (ptAvg.Z - pt.Z) / pt.Vz.Z;
+                                    Point3D ptAtVector = pt.GetVzExtendPoint(t);
+                                    Vector3D testResultV = new Vector3D(pt, ptAtVector);
+                                    double dot = Vector3D.Dot(pt.Vz, testResultV);
+                                    if (ignoreZLowerTarget)
+                                    {
+                                        if (dot > 0)
+                                        {
+                                            output.Add(ptAtVector);
+                                            isSearchOK = true;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        output.Add(ptAtVector);
+                                        isSearchOK = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (isSearchOK) break;
+                        else
+                        {
+                            tempSearchR += stepSearchR;
+                        }
+                    }
+                }
+            }
+            output.ReduceByKDTree(reduceR);
+            output.SmoothByKDTree(reduceR, true, true, false);
+            return output;
+        }
+
+
         public List<Pose> ToJsonPoses()
         {
             List<Pose> output = new List<Pose>();
