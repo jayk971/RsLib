@@ -2414,8 +2414,8 @@ namespace RsLib.PointCloudLib
                     }
                 }
             }
-            output.ReduceByKDTree(reduceR);
-            output.SmoothByKDTree(reduceR, true, true, false);
+            //output.ReduceByKDTree(reduceR);
+            //output.SmoothByKDTree(reduceR, true, true, false);
             return output;
         }
 
