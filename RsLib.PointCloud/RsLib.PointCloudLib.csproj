@@ -72,6 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\RLib\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Open3DSharp">
+      <HintPath>..\..\..\..\..\RLib\Lib\Open3DSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -90,6 +93,7 @@
     <Compile Include="ColorPoint.cs" />
     <Compile Include="DisplayProperty.cs" />
     <Compile Include="Euler.cs" />
+    <Compile Include="ICPMatch.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Point2D.cs" />
@@ -135,6 +139,11 @@
       <Project>{17f62326-eca7-428b-80bc-216f77c54394}</Project>
       <Name>RsLib.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Open3DSharpNative.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

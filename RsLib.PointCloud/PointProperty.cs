@@ -1,4 +1,5 @@
-﻿using Accord.Statistics.Kernels;
+﻿using Accord.Math;
+using Accord.Statistics.Kernels;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
@@ -404,6 +405,25 @@ namespace RsLib.PointCloudLib
             }
             else
                 throw new Exception($"object name : {objName} is not in the group.");
+        }
+
+        public ObjectGroup Multiply(Matrix4x4 matrix)
+        {
+            ObjectGroup outputOg = new ObjectGroup("TransformOG");
+            foreach(var item in Objects)
+            {
+                if(item.Value is Polyline pl)
+                {
+                    Polyline plTransform =  pl.Multiply(matrix) as Polyline;
+                    outputOg.Add($"Trans{item.Key}", plTransform);
+                }
+                else if(item.Value is PointCloud pc)
+                {
+                    PointCloud pcTransform = pc.Multiply(matrix);
+                    outputOg.Add($"Trans{item.Key}", pcTransform);
+                }
+            }
+            return outputOg;
         }
         public Tuple<double[],double[],double[],int[]> ToXYZIArrayTuple()
         {

@@ -173,6 +173,30 @@ namespace RsLib.PointCloudLib
         {
             return new Point3D(p.X / t, p.Y / t, p.Z / t);
         }
+        public static bool operator >=(Point3D p1, Point3D p2)
+        {
+            return p1.X >= p2.X & p1.Y >= p2.Y & p1.Z >= p2.Z;
+        }
+        public static bool operator <=(Point3D p1, Point3D p2)
+        {
+            return p1.X <= p2.X & p1.Y <= p2.Y & p1.Z <= p2.Z;
+        }
+        public static bool operator >(Point3D p1, Point3D p2)
+        {
+            return p1.X > p2.X & p1.Y > p2.Y & p1.Z > p2.Z;
+        }
+        public static bool operator <(Point3D p1, Point3D p2)
+        {
+            return p1.X < p2.X & p1.Y < p2.Y & p1.Z < p2.Z;
+        }
+        public static bool operator ==(Point3D p1, Point3D p2)
+        {
+            return p1.X == p2.X & p1.Y == p2.Y & p1.Z == p2.Z;
+        }
+        public static bool operator !=(Point3D p1, Point3D p2)
+        {
+            return p1.X != p2.X & p1.Y != p2.Y & p1.Z != p2.Z;
+        }
         public void SetXYZ(Point3D p)
         {
             X = p.X;
@@ -450,6 +474,14 @@ namespace RsLib.PointCloudLib
                                 (A.Z - B.Z) * (A.Z - B.Z)
                 );
         }
+        public static double DistanceXY(Point3D A, Point3D B)
+        {
+            if (A.X == B.X && A.Y == B.Y)
+                return 0.0;
+
+            return Math.Sqrt(Math.Pow((A.X - B.X),2) +Math.Pow((A.Y - B.Y) ,2));
+        }
+
         /// <summary>
         /// 求線段p1-p2-p3的最小夾角
         /// </summary>

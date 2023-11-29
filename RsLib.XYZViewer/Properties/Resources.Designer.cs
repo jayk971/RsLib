@@ -83,9 +83,29 @@ namespace RsLib.XYZViewer.Properties {
         /// <summary>
         ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
         /// </summary>
+        internal static System.Drawing.Bitmap depth_48px {
+            get {
+                object obj = ResourceManager.GetObject("depth_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
         internal static System.Drawing.Bitmap open_document_30px {
             get {
                 object obj = ResourceManager.GetObject("open_document_30px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類型 System.Drawing.Bitmap 的當地語系化資源。
+        /// </summary>
+        internal static System.Drawing.Bitmap waypoint_map_48px {
+            get {
+                object obj = ResourceManager.GetObject("waypoint_map_48px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

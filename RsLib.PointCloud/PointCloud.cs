@@ -2724,7 +2724,27 @@ namespace RsLib.PointCloudLib
             return true;
 
         }
+        public double GetMaxDistanceAtXY(Point3D target)
+        {
+            double max = double.MinValue;
+            for (int i = 0; i < Count; i++)
+            {
+                double d = Point3D.DistanceXY(target, Points[i]);
+                if (d > max) max = d;
+            }
+            return max;
+        }
 
+        public double GetMaxDistance(Point3D target)
+        {
+            double max = double.MinValue;
+            for (int i = 0; i < Count; i++)
+            {
+                double d = Point3D.Distance(target, Points[i]);
+                if(d> max) max = d;
+            }
+            return max;
+        }
         public void Save(string FilePath)
         {
 

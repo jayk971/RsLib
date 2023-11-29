@@ -1464,6 +1464,35 @@ namespace RsLib.PointCloudLib
             return m;
 
         }
+        public static Matrix4x4 ArrayToMatrix4x4(double[] matrix4x4)
+        {
+            if (matrix4x4.Length != 16 ) return Matrix4x4.Identity;
+            else
+            {
+                Matrix4x4 output;
+                output.V00 = (float)matrix4x4[0];
+                output.V01 = (float)matrix4x4[4];
+                output.V02 = (float)matrix4x4[8];
+                output.V03 = (float)matrix4x4[12];
+
+                output.V10 = (float)matrix4x4[1];
+                output.V11 = (float)matrix4x4[5];
+                output.V12 = (float)matrix4x4[9];
+                output.V13 = (float)matrix4x4[13];
+
+                output.V20 = (float)matrix4x4[2];
+                output.V21 = (float)matrix4x4[6];
+                output.V22 = (float)matrix4x4[10];
+                output.V23 = (float)matrix4x4[14];
+
+                output.V30 = (float)matrix4x4[3];
+                output.V31 = (float)matrix4x4[7];
+                output.V32 = (float)matrix4x4[11];
+                output.V33 = (float)matrix4x4[15];
+                return output;
+            }
+
+        }
 
         public static Matrix4x4 ArrayToMatrix4x4(double[,] matrix4x4)
         {

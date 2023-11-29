@@ -213,6 +213,30 @@ namespace RsLib.PointCloudLib
             }
             return output;
         }
+        public new Polyline Multiply(Matrix4x4 matrix)
+        {
+            Polyline output = new Polyline();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Type type = Points[i].GetType();
+                if (type == typeof(Point3D))
+                {
+                    Point3D pt = Points[i];
+                    Point3D p = Point3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
+                else if (type == typeof(PointV3D))
+                {
+                    PointV3D pt = Points[i] as PointV3D;
+                    PointV3D p = PointV3D.Multiply(pt, matrix);
+                    output.Add(p);
+
+                }
+            }
+            return output;
+        }
+
         public new Polyline Multiply(double[,] matrixArr)
         {
             Polyline output = new Polyline();

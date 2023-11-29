@@ -332,7 +332,7 @@ namespace RsLib.PointCloudLib
         /// </summary>
         /// <param name="axis">參考軸</param>
         /// <param name="matrixType">矩陣類型</param>
-        /// <param name="setValue">平移矩陣為平移距離 ; 旋轉矩陣為旋轉角度, 不是弧度</param>
+        /// <param name="setValue">平移矩陣為平移距離 ; 旋轉矩陣為旋轉弧度, 不是角度</param>
         public void AddSeq(eRefAxis axis, eMatrixType matrixType, double setValue)
         {
             switch (matrixType)

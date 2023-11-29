@@ -416,6 +416,43 @@ namespace RsLib.PointCloudLib
             return kD;
         }
 
+        public PointCloud Split(double minX,double minY,double maxX,double maxY)
+        {
+            PointCloud output = new PointCloud();
+            Point3D minPt = new Point3D(minX, minY, double.MinValue);
+            Point3D maxPt = new Point3D(maxX, maxY, double.MaxValue);
+            for (int i = 0; i < LayerCount; i++)
+            {
+                PointCloud pCloud = Layers[i];
+                for (int j = 0; j < pCloud.Count; j++)
+                {
+                    Point3D pt = pCloud.Points[j];
+                    if (pt >= minPt && pt <= maxPt)
+                    {
+                        output.Add(pt);
+                    }
+                }
+            }
+            return output;
+        }
+
+        public PointCloud Split(Point3D minPt,Point3D maxPt)
+        {
+            PointCloud output = new PointCloud();
+            for (int i = 0; i < LayerCount; i++)
+            {
+                PointCloud pCloud = Layers[i];
+                for (int j = 0;j<pCloud.Count; j++)
+                {
+                    Point3D pt = pCloud.Points[j];
+                    if(pt>=minPt && pt <=maxPt)
+                    {
+                        output.Add(pt);
+                    }
+                }
+            }
+            return output;
+        }
         public void ReduceAboveX(double LimitValue)
         {
             List<PointCloud> Output = new List<PointCloud>();
@@ -911,10 +948,12 @@ namespace RsLib.PointCloudLib
             double z = double.MinValue;
             for (int i = 0; i < Layers.Count; i++)
             {
-                Point3D tmpMax = Layers[i].Max;
-                if (tmpMax.X > x) x = tmpMax.X;
-                if (tmpMax.Y > y) y = tmpMax.Y;
-                if (tmpMax.Z > z) z = tmpMax.Z;
+                PointCloud layer = Layers[i];
+                Point3D pMax = layer.Max;
+                if(pMax.X >x) x = pMax.X;
+                if (pMax.Y > y) y = pMax.Y;
+                if (pMax.Z > z) z = pMax.Z;
+
             }
             return new Point3D(x, y, z);
         }
@@ -925,10 +964,11 @@ namespace RsLib.PointCloudLib
             double z = double.MaxValue;
             for (int i = 0; i < Layers.Count; i++)
             {
-                Point3D tmpMin = Layers[i].Min;
-                if (tmpMin.X < x) x = tmpMin.X;
-                if (tmpMin.Y < y) y = tmpMin.Y;
-                if (tmpMin.Z < z) z = tmpMin.Z;
+                PointCloud layer = Layers[i];
+                Point3D pMin = layer.Min;
+                if (pMin.X < x) x = pMin.X;
+                if (pMin.Y < y) y = pMin.Y;
+                if (pMin.Z < z) z = pMin.Z;
             }
             return new Point3D(x, y, z);
         }

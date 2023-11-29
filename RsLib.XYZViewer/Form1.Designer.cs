@@ -34,8 +34,8 @@ namespace RsLib.XYZViewer
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showINtersectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDifferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -71,7 +71,15 @@ namespace RsLib.XYZViewer
             this.showINtersectionToolStripMenuItem,
             this.showDifferenceToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(205, 92);
+            // 
+            // showINtersectionToolStripMenuItem
+            // 
+            this.showINtersectionToolStripMenuItem.Image = global::RsLib.XYZViewer.Properties.Resources.waypoint_map_48px;
+            this.showINtersectionToolStripMenuItem.Name = "showINtersectionToolStripMenuItem";
+            this.showINtersectionToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.showINtersectionToolStripMenuItem.Text = "Cloud Path Intersection";
+            this.showINtersectionToolStripMenuItem.Click += new System.EventHandler(this.showINtersectionToolStripMenuItem_Click);
             // 
             // reloadToolStripMenuItem
             // 
@@ -81,15 +89,9 @@ namespace RsLib.XYZViewer
             this.reloadToolStripMenuItem.Text = "Reload Files";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
-            // showINtersectionToolStripMenuItem
-            // 
-            this.showINtersectionToolStripMenuItem.Name = "showINtersectionToolStripMenuItem";
-            this.showINtersectionToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.showINtersectionToolStripMenuItem.Text = "Cloud Path Intersection";
-            this.showINtersectionToolStripMenuItem.Click += new System.EventHandler(this.showINtersectionToolStripMenuItem_Click);
-            // 
             // showDifferenceToolStripMenuItem
             // 
+            this.showDifferenceToolStripMenuItem.Image = global::RsLib.XYZViewer.Properties.Resources.depth_48px;
             this.showDifferenceToolStripMenuItem.Name = "showDifferenceToolStripMenuItem";
             this.showDifferenceToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.showDifferenceToolStripMenuItem.Text = "Cloud Difference";
