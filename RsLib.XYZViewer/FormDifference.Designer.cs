@@ -36,7 +36,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tbx_Min = new System.Windows.Forms.TextBox();
             this.btn_Show = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.rbn_Compare1 = new System.Windows.Forms.RadioButton();
@@ -51,6 +50,8 @@
             this.rbn_Cloud3 = new System.Windows.Forms.RadioButton();
             this.rbn_Cloud4 = new System.Windows.Forms.RadioButton();
             this.rbn_Cloud5 = new System.Windows.Forms.RadioButton();
+            this.rbn_AbsMode = new System.Windows.Forms.RadioButton();
+            this.rbn_RelativeMode = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -93,12 +94,13 @@
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.rbn_RelativeMode, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.tbx_Max, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.label2, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.tbx_Min, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.btn_Show, 0, 4);
-            this.tableLayoutPanel4.Controls.Add(this.panel1, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.rbn_AbsMode, 0, 2);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 18);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -122,7 +124,7 @@
             this.tbx_Max.Text = "1";
             this.tbx_Max.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbx_Max.TextChanged += new System.EventHandler(this.tbx_Max_TextChanged);
-            this.tbx_Max.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_Min_KeyPress);
+            this.tbx_Max.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbx_Max_KeyPress);
             // 
             // label1
             // 
@@ -169,16 +171,6 @@
             this.btn_Show.Text = "Show";
             this.btn_Show.UseVisualStyleBackColor = true;
             this.btn_Show.Click += new System.EventHandler(this.btn_Show_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(119, 96);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0);
-            this.panel1.Name = "panel1";
-            this.tableLayoutPanel4.SetRowSpan(this.panel1, 3);
-            this.panel1.Size = new System.Drawing.Size(119, 147);
-            this.panel1.TabIndex = 5;
             // 
             // groupBox1
             // 
@@ -360,6 +352,32 @@
             this.rbn_Cloud5.Text = "Point Cloud 5";
             this.rbn_Cloud5.UseVisualStyleBackColor = true;
             // 
+            // rbn_AbsMode
+            // 
+            this.rbn_AbsMode.AutoSize = true;
+            this.rbn_AbsMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbn_AbsMode.Location = new System.Drawing.Point(3, 99);
+            this.rbn_AbsMode.Name = "rbn_AbsMode";
+            this.rbn_AbsMode.Size = new System.Drawing.Size(113, 42);
+            this.rbn_AbsMode.TabIndex = 5;
+            this.rbn_AbsMode.TabStop = true;
+            this.rbn_AbsMode.Text = "Abs Mode";
+            this.rbn_AbsMode.UseVisualStyleBackColor = true;
+            // 
+            // rbn_RelativeMode
+            // 
+            this.rbn_RelativeMode.AutoSize = true;
+            this.rbn_RelativeMode.Checked = true;
+            this.rbn_RelativeMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbn_RelativeMode.Location = new System.Drawing.Point(122, 99);
+            this.rbn_RelativeMode.Name = "rbn_RelativeMode";
+            this.rbn_RelativeMode.Size = new System.Drawing.Size(113, 42);
+            this.rbn_RelativeMode.TabIndex = 6;
+            this.rbn_RelativeMode.TabStop = true;
+            this.rbn_RelativeMode.Text = "Relative Mode";
+            this.rbn_RelativeMode.UseVisualStyleBackColor = true;
+            this.rbn_RelativeMode.CheckedChanged += new System.EventHandler(this.rbn_RelativeMode_CheckedChanged);
+            // 
             // FormDifference
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -409,6 +427,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbx_Min;
         private System.Windows.Forms.Button btn_Show;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton rbn_RelativeMode;
+        private System.Windows.Forms.RadioButton rbn_AbsMode;
     }
 }

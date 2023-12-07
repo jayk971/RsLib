@@ -3493,9 +3493,20 @@ namespace RsLib.PointCloudLib
             }
         }
 
-        public void CompareOtherCloud(KDTree<int> otherCloudTree, double minDis, double maxDis, bool enableParallel)
+        public void CompareOtherCloud(KDTree<int> otherCloudTree, double minDis, double maxDis,bool absMode ,bool enableParallel = true)
         {
-            ColorGradient cg = new ColorGradient(minDis, maxDis);
+
+            Point3D centerP = Average;
+            double min = minDis <= maxDis ? minDis : maxDis;
+            double max = maxDis >= minDis ? maxDis: minDis;
+            if(absMode)
+            {
+                double absValue = max - min;
+                min = 0.0;
+                max = absValue;
+            }
+
+            ColorGradient cg = new ColorGradient(min, max);
 
             if (enableParallel)
             {
@@ -3509,9 +3520,9 @@ namespace RsLib.PointCloudLib
                         PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
                         if (searchCloud.Count == 0)
                         {
-                            if (searchR >= maxDis)
+                            if (searchR >= (max-min))
                             {
-                                Color testColor = cg.GetColorFromGradient(maxDis);
+                                Color testColor = cg.GetColorFromGradient(min);
                                 p.AddOption(new DisplayOption() { Color = testColor });
                                 searchNearest = false;
                             }
@@ -3523,8 +3534,12 @@ namespace RsLib.PointCloudLib
                         else
                         {
                             Point3D avg = searchCloud.Average;
-                            Vector3D diffV = new Vector3D(avg, p);
-                            Color testColor = cg.GetColorFromGradient(diffV.L);
+                            Vector3D diffV = new Vector3D(p, avg);
+                            Vector3D centerV = new Vector3D(centerP, p);
+                            double dot = Vector3D.Dot(centerV, diffV);
+                            int sign = Math.Sign(dot);
+                            if (absMode) sign = 1;
+                            Color testColor = cg.GetColorFromGradient(sign * diffV.L);
                             p.AddOption(new DisplayOption() { Color = testColor });
                             p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
                             searchNearest = false;
@@ -3545,7 +3560,7 @@ namespace RsLib.PointCloudLib
                         PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
                         if (searchCloud.Count == 0)
                         {
-                            if (searchR >= maxDis)
+                            if (searchR >= (max-min))
                             {
                                 Color testColor = cg.GetColorFromGradient(maxDis);
                                 p.AddOption(new DisplayOption() { Color = testColor });
@@ -3560,7 +3575,11 @@ namespace RsLib.PointCloudLib
                         {
                             Point3D avg = searchCloud.Average;
                             Vector3D diffV = new Vector3D(avg, p);
-                            Color testColor = cg.GetColorFromGradient(diffV.L);
+                            Vector3D centerV = new Vector3D(centerP, p);
+                            double dot = Vector3D.Dot(centerV, diffV);
+                            int sign = Math.Sign(dot);
+                            if (absMode) sign = 1;
+                            Color testColor = cg.GetColorFromGradient(sign * diffV.L);
                             p.AddOption(new DisplayOption() { Color = testColor });
                             p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
                             searchNearest = false;

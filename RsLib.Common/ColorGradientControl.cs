@@ -28,9 +28,9 @@ namespace RsLib.Common
         public void SetMaxMin(double max,double min)
         {
             double d100 = max;
-            double d75 = (max - min) * 0.75;
-            double d50 = (max - min) * 0.5;
-            double d25 = (max - min) * 0.25;
+            double d75 = (max - min) * 0.75 + min;
+            double d50 = (max - min) * 0.5 + min;
+            double d25 = (max - min) * 0.25 + min;
             double d0 = min;
 
             lbl_100.Text = d100.ToString("F1");

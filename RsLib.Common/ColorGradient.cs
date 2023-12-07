@@ -34,19 +34,19 @@ namespace RsLib.Common
             double r = 0.0;
             double g = 0.0;
             double b = 1.0;
-            double TargetValue = 0;
+            double TargetRatio = 0;
 
             if (testValue < Min)
             {
-                TargetValue = Min;
+                TargetRatio = 0.0;
             }
             else if (testValue > Max)
             {
-                TargetValue = 1.0;
+                TargetRatio = 1.0;
             }
             else
             {
-                TargetValue = (testValue - Min) / (Max - Min);
+                TargetRatio = (testValue - Min) / (Max - Min);
             }
             int iR = double2Int(r);
             int iG = double2Int(g);
@@ -62,23 +62,23 @@ namespace RsLib.Common
                 double lastRatio = _gradient[_gradient.Count - 1].Item1;
                 double firstRation = _gradient[0].Item1;
                 double currentRatio = CurrC.Item1;
-                if (TargetValue == lastRatio)
+                if (TargetRatio == lastRatio)
                 {
                     Output = Color.FromArgb(255, 0, 0);
                     return Output;
 
                 }
-                else if (TargetValue == firstRation)
+                else if (TargetRatio == firstRation)
                 {
                     Output = Color.FromArgb(0, 0, 255);
                     return Output;
                 }
-                else if (TargetValue < currentRatio)
+                else if (TargetRatio < currentRatio)
                 {
                     ColorTuple PrevC = _gradient[PrevI];
                     double prevRatio = PrevC.Item1;
                     double ValDiff = (prevRatio - currentRatio);
-                    double FractBetween = (ValDiff == 0) ? 0 : (TargetValue - currentRatio) / ValDiff;
+                    double FractBetween = (ValDiff == 0) ? 0 : (TargetRatio - currentRatio) / ValDiff;
 
                     r = (PrevC.Item2 - CurrC.Item2) * FractBetween + CurrC.Item2;
                     g = (PrevC.Item3 - CurrC.Item3) * FractBetween + CurrC.Item3;

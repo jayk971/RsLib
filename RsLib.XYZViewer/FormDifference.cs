@@ -13,7 +13,7 @@ namespace RsLib.XYZViewer
 {
     public partial class FormDifference : Form
     {
-        public event Action<int, int, double, double> AfterShowPressed;
+        public event Action<int, int, double, double,bool> AfterShowPressed;
         public FormDifference()
         {
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace RsLib.XYZViewer
             else if (rbn_Compare4.Checked) cloudCompare = 4;
             else if (rbn_Compare5.Checked) cloudCompare = 5;
 
-            AfterShowPressed?.Invoke(cloudBase, cloudCompare, realMin, realMax);
+            AfterShowPressed?.Invoke(cloudBase, cloudCompare, realMin, realMax,rbn_AbsMode.Checked);
             Hide();
         }
         public void SetFileName(string[] fileNames)
@@ -79,10 +79,6 @@ namespace RsLib.XYZViewer
 
             }
         }
-        private void tbx_Min_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
-        }
 
         private void tbx_Max_TextChanged(object sender, EventArgs e)
         {
@@ -98,6 +94,42 @@ namespace RsLib.XYZViewer
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void tbx_Min_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (rbn_AbsMode.Checked)
+            {
+                tbx_Min.Text = "0";
+            }
+            else
+            {
+                e.Handled = FT_Functions.double_Positive_Negative_KeyPress(e.KeyChar);
+            }
+
+        }
+
+        private void tbx_Max_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (rbn_AbsMode.Checked)
+            {
+                e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
+            }
+            else
+            {
+                e.Handled = FT_Functions.double_Positive_Negative_KeyPress(e.KeyChar);
+            }
+        }
+
+        private void rbn_RelativeMode_CheckedChanged(object sender, EventArgs e)
+        {
+            tbx_Min.Enabled = !rbn_AbsMode.Checked;
+
+            if (rbn_AbsMode.Checked)
+            {
+                tbx_Min.Text = "0";
+            }
+
         }
     }
 }
