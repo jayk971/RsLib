@@ -93,9 +93,16 @@
     <Compile Include="ColorPoint.cs" />
     <Compile Include="DisplayProperty.cs" />
     <Compile Include="Euler.cs" />
+    <Compile Include="ICPAlignControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ICPAlignControl.Designer.cs">
+      <DependentUpon>ICPAlignControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ICPMatch.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="ObjectGroup.cs" />
     <Compile Include="Point2D.cs" />
     <Compile Include="Point3DControl.cs">
       <SubType>UserControl</SubType>
@@ -123,6 +130,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ICPAlignControl.resx">
+      <DependentUpon>ICPAlignControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Point3DControl.resx">
       <DependentUpon>Point3DControl.cs</DependentUpon>
     </EmbeddedResource>

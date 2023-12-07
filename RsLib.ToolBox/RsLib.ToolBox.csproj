@@ -101,6 +101,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SipingPlugIn.cs" />
+    <Compile Include="TestPlugIn.cs" />
     <Compile Include="TestSystemControlThread.cs">
       <SubType>Form</SubType>
     </Compile>

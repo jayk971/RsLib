@@ -891,6 +891,62 @@ namespace RsLib.PointCloudLib
             }
             return Output;
         }
+
+        public static PointCloud GetPointCloudWithXY(KDTree<Point3D> InputTree, 
+            double x,
+            double y,
+            double startSearchRadius,
+            double endSearchRadius,
+            double startSearchZ,
+            double endSearchZ,
+            uint stepRadius = 10,
+            uint stepZ = 10)
+        {
+            PointCloud Output = new PointCloud();
+            double startRadius = startSearchRadius;
+            double diffRadius = (endSearchRadius - startSearchRadius) / stepRadius;
+            double startZ = startSearchZ;
+            double diffZ = (endSearchZ - startSearchZ) / stepZ;
+            if(startSearchRadius <=0 || endSearchRadius <=0)
+            {
+                throw new Exception("Search radius <=0.");
+            }
+            if(endSearchZ <= startSearchZ)
+            {
+                throw new Exception("End search z value <= start search z value.");
+            }
+            while (true)
+            {
+                List<NodeDistance<KDTreeNode<Point3D>>> temp = InputTree.Nearest(new double[] { x, y, startZ }, startRadius).ToList();
+
+                if (temp.Count == 0)
+                {
+                    startZ += diffZ;
+                    if(startZ >= endSearchZ)
+                    {
+                        if(startRadius >= endSearchRadius)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            startRadius += diffRadius;
+                            startZ = startSearchZ;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < temp.Count; j++)
+                    {
+                        Point3D P = new Point3D(temp[j].Node.Position[0], temp[j].Node.Position[1], temp[j].Node.Position[2]);
+                        Output.Add(P);
+                    }
+                    break;
+                }
+            }
+            return Output;
+        }
         /// <summary>
         /// 取得最靠近目標點半徑 Radius 的點雲
         /// </summary>

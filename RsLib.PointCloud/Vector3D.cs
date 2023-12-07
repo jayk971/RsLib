@@ -172,25 +172,25 @@ namespace RsLib.PointCloudLib
             Z = temp.Z;
         }
 
-        public static Vector3D operator +(Vector3D A, Vector3D B)
+        public static Vector3D operator +(Vector3D Va, Vector3D Vb)
         {
-            return new Vector3D(A.X + B.X, A.Y + B.Y, A.Z + B.Z);
+            return new Vector3D(Va.X + Vb.X, Va.Y + Vb.Y, Va.Z + Vb.Z);
         }
-        public static Point3D operator +(Point3D P, Vector3D A)
+        public static Point3D operator +(Point3D P, Vector3D V)
         {
-            return new Point3D(A.X + P.X, A.Y + P.Y, A.Z + P.Z);
+            return new Point3D(V.X + P.X, V.Y + P.Y, V.Z + P.Z);
         }
-        public static Vector3D operator -(Vector3D A, Vector3D B)
+        public static Vector3D operator -(Vector3D Va, Vector3D Vb)
         {
-            return new Vector3D(A.X - B.X, A.Y - B.Y, A.Z - B.Z);
+            return new Vector3D(Va.X - Vb.X, Va.Y - Vb.Y, Va.Z - Vb.Z);
         }
-        public static Vector3D operator *(double A, Vector3D B)
+        public static Vector3D operator *(double A, Vector3D V)
         {
-            return new Vector3D(A * B.X, A* B.Y, A*B.Z);
+            return new Vector3D(A * V.X, A* V.Y, A*V.Z);
         }
-        public static Vector3D operator *(Vector3D A, double B)
+        public static Vector3D operator *(Vector3D V, double B)
         {
-            return new Vector3D(A.X * B, A.Y * B, A.Z * B);
+            return new Vector3D(V.X * B, V.Y * B, V.Z * B);
         }
         /// <summary>
         /// 計算向量A-B

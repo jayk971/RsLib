@@ -61,6 +61,10 @@ namespace RsLib.PointCloudLib
         {
             parseXYZArray(x, y, z);
         }
+        public PointCloud(float[,] mechMindX, float[,] mechMindY, float[,]mechMindZ,bool buildKDTree)
+        {
+            parseXYZArray(mechMindX, mechMindY, mechMindZ, buildKDTree);
+        }
         void parseXYZArray(double[] x, double[] y, double[] z,bool buildKDTree)
         {
             kdTree.Clear();
@@ -86,6 +90,24 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+        void parseXYZArray(float[,] mechMindX, float[,] mechMindY, float[,] mechMindZ, bool buildKDTree)
+        {
+            kdTree.Clear();
+            if (mechMindX.GetTotalLength() == mechMindY.GetTotalLength() && mechMindX.GetTotalLength() == mechMindZ.GetTotalLength())
+            {
+                for (int i = 0; i < mechMindX.GetLength(0); i++)
+                {
+                    for (int j = 0; j < mechMindX.GetLength(1); j++)
+                    {
+                        Point3D p = new Point3D(mechMindX[i,j], mechMindY[i,j], mechMindZ[i,j]);
+                        Points.Add(p);
+                        if (buildKDTree) kdTree.Add(new double[] { mechMindX[i, j], mechMindY[i, j], mechMindZ[i, j] }, Points.Count - 1);
+
+                    }
+                }
+            }
+        }
+
         public PointCloud (float[] floatArr,float ignoreValue,float xPitch,float yPitch,int dataPerRow,bool reverseX,bool reverseY)
         {
             Points.Clear();
@@ -3501,9 +3523,10 @@ namespace RsLib.PointCloudLib
                         else
                         {
                             Point3D avg = searchCloud.Average;
-                            double testDis = Point3D.Distance(avg, p);
-                            Color testColor = cg.GetColorFromGradient(testDis);
+                            Vector3D diffV = new Vector3D(avg, p);
+                            Color testColor = cg.GetColorFromGradient(diffV.L);
                             p.AddOption(new DisplayOption() { Color = testColor });
+                            p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
                             searchNearest = false;
                         }
                     }
@@ -3536,9 +3559,10 @@ namespace RsLib.PointCloudLib
                         else
                         {
                             Point3D avg = searchCloud.Average;
-                            double testDis = Point3D.Distance(avg, p);
-                            Color testColor = cg.GetColorFromGradient(testDis);
+                            Vector3D diffV = new Vector3D(avg, p);
+                            Color testColor = cg.GetColorFromGradient(diffV.L);
                             p.AddOption(new DisplayOption() { Color = testColor });
+                            p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
                             searchNearest = false;
                         }
                     }

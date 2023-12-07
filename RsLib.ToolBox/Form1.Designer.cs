@@ -44,18 +44,20 @@ namespace RsLib.DemoForm
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage_XYZView = new System.Windows.Forms.TabPage();
             this.tabPage_2DView = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage_EJ1500 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button8 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -63,6 +65,9 @@ namespace RsLib.DemoForm
             this.tabPage_2DView.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -70,15 +75,15 @@ namespace RsLib.DemoForm
             this.tabControl1.Controls.Add(this.tabPage_TCPServer);
             this.tabControl1.Controls.Add(this.tabPage_TCPClient);
             this.tabControl1.Controls.Add(this.tabPage_Test);
-            this.tabControl1.Controls.Add(this.tabPage_XYZView);
             this.tabControl1.Controls.Add(this.tabPage_2DView);
             this.tabControl1.Controls.Add(this.tabPage_EJ1500);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(764, 476);
+            this.tabControl1.Size = new System.Drawing.Size(413, 476);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage_TCPServer
@@ -87,7 +92,7 @@ namespace RsLib.DemoForm
             this.tabPage_TCPServer.Location = new System.Drawing.Point(4, 22);
             this.tabPage_TCPServer.Name = "tabPage_TCPServer";
             this.tabPage_TCPServer.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_TCPServer.Size = new System.Drawing.Size(756, 450);
+            this.tabPage_TCPServer.Size = new System.Drawing.Size(405, 450);
             this.tabPage_TCPServer.TabIndex = 0;
             this.tabPage_TCPServer.Text = "TCP Server";
             this.tabPage_TCPServer.UseVisualStyleBackColor = true;
@@ -97,7 +102,7 @@ namespace RsLib.DemoForm
             this.pnl_TCPServer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_TCPServer.Location = new System.Drawing.Point(3, 3);
             this.pnl_TCPServer.Name = "pnl_TCPServer";
-            this.pnl_TCPServer.Size = new System.Drawing.Size(750, 444);
+            this.pnl_TCPServer.Size = new System.Drawing.Size(399, 444);
             this.pnl_TCPServer.TabIndex = 0;
             // 
             // tabPage_TCPClient
@@ -106,7 +111,7 @@ namespace RsLib.DemoForm
             this.tabPage_TCPClient.Location = new System.Drawing.Point(4, 22);
             this.tabPage_TCPClient.Name = "tabPage_TCPClient";
             this.tabPage_TCPClient.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_TCPClient.Size = new System.Drawing.Size(756, 450);
+            this.tabPage_TCPClient.Size = new System.Drawing.Size(405, 450);
             this.tabPage_TCPClient.TabIndex = 1;
             this.tabPage_TCPClient.Text = "TCP Client";
             this.tabPage_TCPClient.UseVisualStyleBackColor = true;
@@ -116,7 +121,7 @@ namespace RsLib.DemoForm
             this.pnl_TCPClient.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_TCPClient.Location = new System.Drawing.Point(3, 3);
             this.pnl_TCPClient.Name = "pnl_TCPClient";
-            this.pnl_TCPClient.Size = new System.Drawing.Size(750, 444);
+            this.pnl_TCPClient.Size = new System.Drawing.Size(399, 444);
             this.pnl_TCPClient.TabIndex = 0;
             // 
             // tabPage_Test
@@ -131,7 +136,7 @@ namespace RsLib.DemoForm
             this.tabPage_Test.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Test.Name = "tabPage_Test";
             this.tabPage_Test.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Test.Size = new System.Drawing.Size(756, 450);
+            this.tabPage_Test.Size = new System.Drawing.Size(405, 450);
             this.tabPage_Test.TabIndex = 2;
             this.tabPage_Test.Text = "Test Page";
             this.tabPage_Test.UseVisualStyleBackColor = true;
@@ -202,23 +207,13 @@ namespace RsLib.DemoForm
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
-            // tabPage_XYZView
-            // 
-            this.tabPage_XYZView.Location = new System.Drawing.Point(4, 22);
-            this.tabPage_XYZView.Name = "tabPage_XYZView";
-            this.tabPage_XYZView.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_XYZView.Size = new System.Drawing.Size(756, 450);
-            this.tabPage_XYZView.TabIndex = 3;
-            this.tabPage_XYZView.Text = "XYZ View";
-            this.tabPage_XYZView.UseVisualStyleBackColor = true;
-            // 
             // tabPage_2DView
             // 
             this.tabPage_2DView.Controls.Add(this.tableLayoutPanel2);
             this.tabPage_2DView.Location = new System.Drawing.Point(4, 22);
             this.tabPage_2DView.Name = "tabPage_2DView";
             this.tabPage_2DView.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_2DView.Size = new System.Drawing.Size(756, 450);
+            this.tabPage_2DView.Size = new System.Drawing.Size(405, 450);
             this.tabPage_2DView.TabIndex = 4;
             this.tabPage_2DView.Text = "2D View";
             this.tabPage_2DView.UseVisualStyleBackColor = true;
@@ -233,7 +228,7 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(750, 444);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(399, 444);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // tabPage_EJ1500
@@ -241,13 +236,14 @@ namespace RsLib.DemoForm
             this.tabPage_EJ1500.Location = new System.Drawing.Point(4, 22);
             this.tabPage_EJ1500.Name = "tabPage_EJ1500";
             this.tabPage_EJ1500.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_EJ1500.Size = new System.Drawing.Size(756, 450);
+            this.tabPage_EJ1500.Size = new System.Drawing.Size(405, 450);
             this.tabPage_EJ1500.TabIndex = 5;
             this.tabPage_EJ1500.Text = "EJ1500";
             this.tabPage_EJ1500.UseVisualStyleBackColor = true;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button8);
             this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.button1);
@@ -256,10 +252,17 @@ namespace RsLib.DemoForm
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(756, 450);
+            this.tabPage1.Size = new System.Drawing.Size(405, 450);
             this.tabPage1.TabIndex = 6;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(6, 204);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(299, 206);
+            this.panel2.TabIndex = 4;
             // 
             // panel1
             // 
@@ -298,6 +301,16 @@ namespace RsLib.DemoForm
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(405, 450);
+            this.tabPage2.TabIndex = 7;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
@@ -309,7 +322,7 @@ namespace RsLib.DemoForm
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.22222F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.77778F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(770, 687);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(419, 687);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // timer1
@@ -318,19 +331,35 @@ namespace RsLib.DemoForm
             this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // panel2
+            // splitContainer1
             // 
-            this.panel2.Location = new System.Drawing.Point(6, 204);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(299, 206);
-            this.panel2.TabIndex = 4;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer1.Size = new System.Drawing.Size(770, 687);
+            this.splitContainer1.SplitterDistance = 419;
+            this.splitContainer1.TabIndex = 2;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(127, 99);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 5;
+            this.button8.Text = "button8";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(770, 687);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "RsLib Tool Box";
@@ -342,6 +371,9 @@ namespace RsLib.DemoForm
             this.tabPage_2DView.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -358,7 +390,6 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TabPage tabPage_XYZView;
         private System.Windows.Forms.TabPage tabPage_2DView;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -373,6 +404,9 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Button button8;
     }
 }
 

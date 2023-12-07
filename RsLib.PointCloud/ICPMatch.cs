@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Open3DSharp;
+using System.ComponentModel;
+
 namespace RsLib.PointCloudLib
 {
     public class ICPMatch
@@ -22,6 +24,7 @@ namespace RsLib.PointCloudLib
 
         GeometryPointCloud AlignedTarget = null;
         public Matrix4x4 AlignMatrix { get; private set; }
+        public ICPSetting Setting { get; set; } = new ICPSetting();
         public ICPMatch()
         {
 
@@ -55,7 +58,17 @@ namespace RsLib.PointCloudLib
         public void SetModel(string filePath)
         {
             Model = ToGeometry(filePath);
-            Model.EstimateNormals();
+            Model.EstimateNormals(5.0);
+        }
+        public void SetModel(PointCloud ptCloud)
+        {
+            Model = ToGeometry(ptCloud);
+            Model.EstimateNormals(5.0);
+        }
+        public bool Match(float[,]mechMindArrayX, float[,] mechMindArrayY, float[,] mechMindArrayZ)
+        {
+            GeometryPointCloud targetGeo = ToGeometry(mechMindArrayX, mechMindArrayY, mechMindArrayZ);
+            return Match(targetGeo);
 
         }
         public bool Match(string targetFilePath)
@@ -81,10 +94,24 @@ namespace RsLib.PointCloudLib
         }
         private bool Match(GeometryPointCloud targetGeo)
         {
-            targetGeo.EstimateNormals();
+            targetGeo.EstimateNormals(5.0);
 
             Registration.Match_ColorPointCloud MatchICP = new Registration.Match_ColorPointCloud();
-            
+            MatchICP.autofinetue_fitness = Setting.autofinetue_fitness;
+            MatchICP.autofinetue_rmse = Setting.autofinetue_rmse;
+            MatchICP.autofinetune_enable = Setting.autofinetune_enable;
+            MatchICP.autofinetune_max_corr_dist = Setting.autofinetune_max_corr_dist;
+            MatchICP.autofinetune_max_iter_per_cycle = Setting.autofinetune_max_iter_per_cycle;
+
+            MatchICP.max_corr_dist = Setting.max_corr_dist;
+            MatchICP.max_cycle_timeout_ms = Setting.max_cycle_timeout_ms;
+            MatchICP.max_iter_per_cycle = Setting.max_iter_per_cycle;
+            MatchICP.max_rmse = Setting.max_rmse;
+            MatchICP.max_rmse_diff = Setting.max_rmse_diff;
+            MatchICP.min_fitness = Setting.min_fitness;
+
+
+
             MatchICP.Match(targetGeo, Model);
             Extrinsic AlignMatirx = new Extrinsic(  MatchICP.result.transform);
 
@@ -161,6 +188,45 @@ namespace RsLib.PointCloudLib
 
             return pcloud;
         }
+        private GeometryPointCloud ToGeometry(float[,] mechMindX, float[,] mechMindY, float[,] mechMindZ)
+        {
+            GeometryPointCloud pcloud;
+
+            if (mechMindX == null || mechMindX.GetTotalLength() == 0)
+            {
+                return new GeometryPointCloud();
+            }
+            if(mechMindX.GetTotalLength() != mechMindY.GetTotalLength() || mechMindX.GetTotalLength() != mechMindZ.GetTotalLength())
+            {
+                return new GeometryPointCloud();
+            }
+            List<int> R = new List<int>();
+            List<int> G = new List<int>();
+            List<int> B = new List<int>();
+            List<double> X = new List<double>();
+            List<double> Y = new List<double>();
+            List<double> Z = new List<double>();
+
+            for (int i = 0; i < mechMindX.GetLength(0); i++)
+            {
+                for (int j = 0; j < mechMindX.GetLength(1); j++)
+                {
+
+                    X.Add(mechMindX[i, j]);
+                    Y.Add(mechMindY[i, j]);
+                    Z.Add(mechMindZ[i, j]);
+
+                    R.Add(255);
+                    G.Add(255);
+                    B.Add(255);
+                }
+            }
+
+            pcloud = new GeometryPointCloud(X.ToArray(), Y.ToArray(), Z.ToArray(), R.ToArray(), G.ToArray(), B.ToArray());
+
+            return pcloud;
+        }
+
         private GeometryPointCloud ToGeometry(PointCloud ptCloud)
         {
             GeometryPointCloud pcloud;
@@ -253,5 +319,45 @@ namespace RsLib.PointCloudLib
             return pcloud;
         }
 
+    }
+    [Serializable]
+    public class ICPSetting
+    {
+        [Category("Normal")]
+        [DisplayName("Max RMSe")]
+        public double max_rmse { get; set; } = 1.75;
+        [Category("Normal")]
+        [DisplayName("Max RMSe Difference")]
+        public double max_rmse_diff { get; set; } = 0.0001;
+        [Category("Normal")]
+        [DisplayName("Min Fitness")]
+        public double min_fitness { get; set; } = 0.7;
+        [Category("Normal")]
+        [DisplayName("Max Iteration Per Cycle")]
+        public int max_iter_per_cycle { get; set; } = 30;
+        [Category("Normal")]
+        [DisplayName("Max Correction Distance")]
+        public double max_corr_dist { get; set; } = 5.0;
+        [Category("Normal")]
+        [DisplayName("Max Cycle Timeout (ms)")]
+        public int max_cycle_timeout_ms { get; set; } = 1000;
+        [Category("Auto Finetune")]
+        [DisplayName("Enable")]
+        public bool autofinetune_enable { get; set; } = false;
+        [Category("Auto Finetune")]
+        [DisplayName("Fitenss")]
+        public double autofinetue_fitness { get; set; } = 0.75;
+        [Category("Auto Finetune")]
+        [DisplayName("RMSe")]
+
+        public double autofinetue_rmse { get; set; } = 1.8;
+        [Category("Auto Finetune")]
+        [DisplayName("Max Iteration Per Cycle")]
+
+        public int autofinetune_max_iter_per_cycle { get; set; } = 30;
+        [Category("Auto Finetune")]
+        [DisplayName("Max Correction Distance")]
+
+        public double autofinetune_max_corr_dist { get; set; } = 2.5;
     }
 }

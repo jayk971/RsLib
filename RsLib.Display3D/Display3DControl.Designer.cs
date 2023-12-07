@@ -31,10 +31,10 @@ namespace RsLib.Display3D
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display3DControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_Edit = new System.Windows.Forms.ToolStripButton();
             this.btn_ClearObject = new System.Windows.Forms.ToolStripButton();
@@ -83,6 +83,12 @@ namespace RsLib.Display3D
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Display = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -140,12 +146,6 @@ namespace RsLib.Display3D
             this.toolBtn_ClearMultipleSelect = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Column_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Display = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Column_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2_Size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column_Color = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -656,6 +656,57 @@ namespace RsLib.Display3D
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.Size = new System.Drawing.Size(290, 322);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // Column_Type
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column_Type.HeaderText = "Type";
+            this.Column_Type.Name = "Column_Type";
+            this.Column_Type.ReadOnly = true;
+            this.Column_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column_Type.Width = 70;
+            // 
+            // Column_Display
+            // 
+            this.Column_Display.HeaderText = "-";
+            this.Column_Display.Name = "Column_Display";
+            this.Column_Display.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column_Display.ToolTipText = "Visible";
+            this.Column_Display.Width = 30;
+            // 
+            // Column_Name
+            // 
+            this.Column_Name.HeaderText = "Name";
+            this.Column_Name.Name = "Column_Name";
+            this.Column_Name.ReadOnly = true;
+            this.Column_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column2_Size
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Column2_Size.HeaderText = "Size";
+            this.Column2_Size.Name = "Column2_Size";
+            this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2_Size.Width = 40;
+            // 
+            // Column_Color
+            // 
+            this.Column_Color.HeaderText = "Color";
+            this.Column_Color.Name = "Column_Color";
+            this.Column_Color.ReadOnly = true;
+            this.Column_Color.Width = 50;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Column1.HeaderText = "ID";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 30;
             // 
             // toolStrip2
             // 
@@ -1305,57 +1356,6 @@ namespace RsLib.Display3D
             // 
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // Column_Type
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column_Type.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Column_Type.HeaderText = "Type";
-            this.Column_Type.Name = "Column_Type";
-            this.Column_Type.ReadOnly = true;
-            this.Column_Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column_Type.Width = 70;
-            // 
-            // Column_Display
-            // 
-            this.Column_Display.HeaderText = "-";
-            this.Column_Display.Name = "Column_Display";
-            this.Column_Display.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column_Display.ToolTipText = "Visible";
-            this.Column_Display.Width = 30;
-            // 
-            // Column_Name
-            // 
-            this.Column_Name.HeaderText = "Name";
-            this.Column_Name.Name = "Column_Name";
-            this.Column_Name.ReadOnly = true;
-            this.Column_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column2_Size
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column2_Size.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Column2_Size.HeaderText = "Size";
-            this.Column2_Size.Name = "Column2_Size";
-            this.Column2_Size.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2_Size.Width = 40;
-            // 
-            // Column_Color
-            // 
-            this.Column_Color.HeaderText = "Color";
-            this.Column_Color.Name = "Column_Color";
-            this.Column_Color.ReadOnly = true;
-            this.Column_Color.Width = 50;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Column1.HeaderText = "ID";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 30;
             // 
             // Display3DControl
             // 

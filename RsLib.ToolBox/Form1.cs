@@ -12,8 +12,11 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+
+using System.Reflection;
+using System.Linq;
 
 namespace RsLib.DemoForm
 {
@@ -22,13 +25,14 @@ namespace RsLib.DemoForm
         TCPServerControl serverControl = new TCPServerControl();
         TCPClientControl clientControl = new TCPClientControl();
         LogControl logControl = new LogControl();
-        Display3DControl displayControl = new Display3DControl(4);
+        Display3DControl displayControl = new Display3DControl(5);
         ZoomImageControl zoomCtrl = new ZoomImageControl();
         ZoomImageControl zoom1Ctrl = new ZoomImageControl();
 
         EJ1500 _EJ1500 = new EJ1500(0);
         EJ1500Control eJ1500Ctrl;
         TransMatrixControl transMatrixControl = new TransMatrixControl();
+        ICPAlignControl icpCtrl = new ICPAlignControl();
         public Form1()
         {
             InitializeComponent();
@@ -45,7 +49,15 @@ namespace RsLib.DemoForm
             pnl_TCPClient.Controls.Add(clientControl);
 
             displayControl.Dock = DockStyle.Fill;
-            tabPage_XYZView.Controls.Add(displayControl);
+            splitContainer1.Panel2.Controls.Add(displayControl);
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.ScanData, "Scan", Color.White, DisplayObjectType.PointCloud, 2.0f) );
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignModel, "AlignModel", Color.Red, DisplayObjectType.PointCloud, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignPath, "AlignPath", Color.Red, DisplayObjectType.Path, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustModel, "AdjustModel", Color.Lime, DisplayObjectType.PointCloud, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustPath, "AdjustPath", Color.Lime, DisplayObjectType.Path, 2.0f));
+
+
+
             logControl.Dock = DockStyle.Fill;
             tableLayoutPanel1.Controls.Add(logControl, 0, 1);
             zoomCtrl.Dock = DockStyle.Fill;
@@ -67,6 +79,8 @@ namespace RsLib.DemoForm
             //ThreadPool.QueueUserWorkItem(infoTd);
             //ThreadPool.QueueUserWorkItem(warnTd);
             //ThreadPool.QueueUserWorkItem(alarmTd);
+            icpCtrl.Dock = DockStyle.Fill;
+            tabPage2.Controls.Add(icpCtrl);
 
             ColorGradient cg = new ColorGradient(0, 3);
             cg.ColorControl.Dock = DockStyle.Fill;
@@ -420,199 +434,44 @@ namespace RsLib.DemoForm
                 if(op.ShowDialog() == DialogResult.OK)
                 {
                     string scandataPath = op.FileName;
-                    icp.SetModel(scandataPath);
-                    if(op.ShowDialog() == DialogResult.OK)
+                    string scanDataRight_Before = scandataPath.Replace(".ply", "_RB.xyz");
+                    string scanDataLeft_Before = scandataPath.Replace(".ply", "_LB.xyz");
+                    string modelAfterAdjust1 = scandataPath.Replace(".ply", "_ModelAdjust1.xyz");
+                    string modelAfterAdjust2= scandataPath.Replace(".ply", "_ModelAdjust2.xyz");
+
+                    string pathAfterAdjust = scandataPath.Replace(".ply", "_PathAdjust.txt");
+                    string pathBeforeAdjust = scandataPath.Replace(".ply", "_PathAlign.txt");
+                    PointCloud scanCloud = new PointCloud();
+                    scanCloud.LoadFromPLY(scandataPath, true);
+                    if (op.ShowDialog() == DialogResult.OK)
                     {
                         string modelPath = op.FileName;
-                        op.Filter = "OPT file|*.opt";
+                        op.Filter = "OPT2 file|*.opt2";
                         if(op.ShowDialog() == DialogResult.OK)
                         {
                             string optFilePath = op.FileName;
+                            displayControl.BuildPointCloud(scanCloud, (int)eDrawItem.ScanData, false, true);
 
                             ObjectGroup og = new ObjectGroup("LoadedPath");
-                            og.LoadMultiPathOPT(optFilePath,false);
+                            og.LoadMultiPathOPT2(optFilePath,false);
+                            displayControl.BuildPath(og, (int)eDrawItem.AlignPath, false, true);
+
+                            PointCloud modelCloud = new PointCloud();
+                            modelCloud.LoadFromPLY(modelPath, true);
+                            displayControl.BuildPointCloud(modelCloud, (int)eDrawItem.AlignModel, false, true);
 
 
-                            PointCloud loadedPCloud = new PointCloud();
-                            loadedPCloud.LoadFromPLY(modelPath, false);
+                            string mainAppDomainName = AppDomain.CurrentDomain.FriendlyName;
+                            Console.WriteLine(mainAppDomainName);
 
 
-                            icp.Match(loadedPCloud);
-                            icp.SaveAlignTarget("d:\\model.xyz");
-                            Matrix4x4 alignModel = icp.AlignMatrix;
-                            icp.SaveTransformMatrix("d:\\AlignModel.m44");
-                            ObjectGroup transformOg = og.Multiply(alignModel);
-                            transformOg.SaveOPT("d:\\alignPath.txt");
-                            PointCloud alignPCloud = icp.GetAlignedPointCloud();
-                            LayerPointCloud lptCloud = new LayerPointCloud(alignPCloud, false, 0.3);
-                            Point3D maxPt = lptCloud.Max;
-                            Point3D minPt = lptCloud.Min;
-                            double xDiff = (maxPt.X + 20) - (minPt.X-20);
-                            double yDiff = (maxPt.Y + 20) - (minPt.Y-20);
-                            double step = 5.0;
+                            Head2ndAlign icpAlign = new Head2ndAlign();
+                            icpAlign.AdjustPath(scanCloud, modelCloud, og);
 
-                            int xStep = (int)(xDiff/ step)+1;
-                            int yStep = (int)(yDiff / step)+1;
+                            displayControl.BuildPath(icpAlign.GetAdjustPath(), (int)eDrawItem.AdjustPath, false, true);
+                            displayControl.BuildPointCloud(icpAlign.GetAdjustModel(), (int)eDrawItem.AdjustModel, false, true);
 
-                            double limit = 0.75 * (maxPt.Y - minPt.Y) + minPt.Y;
-
-                            PointCloud splitY = lptCloud.GetAboveY(limit).ToPointCloud();
-                            Point3D avgPt = splitY.Average;
-
-                            PointCloud splitRight = splitY.GetPointAboveX(avgPt.X-10);
-                            PointCloud splitLeft = splitY.GetPointBelowX(avgPt.X-10);
-
-                            icp.Match(splitRight);
-                            icp.SaveAlignTarget("d:\\splitRight.xyz");
-                            Matrix4x4 alignRight = icp.AlignMatrix;
-                            icp.SaveTransformMatrix("d:\\AlignSplitRight.m44");
-                            Point3D minRight = splitRight.Min;
-                            double maxDsRight = splitRight.GetMaxDistanceAtXY(avgPt);
-                            PointCloud finalRight = CalGradientTransform(splitRight, avgPt, icp.AlignMatrix);
-                            finalRight.Save("d:\\finalRight.xyz");
-
-                            icp.Match(splitLeft);
-                            icp.SaveAlignTarget("d:\\splitLeft.xyz");
-                            Matrix4x4 alignLeft = icp.AlignMatrix;
-                            icp.SaveTransformMatrix("d:\\AlignSplitLeft.m44");
-                            Point3D maxLeft = splitRight.Max;
-                            Point3D minLeft = splitRight.Min;
-                            Point3D rightBottom = new Point3D(maxLeft.X, minLeft.Y, 0.0);
-                            double maxDsLeft = splitLeft.GetMaxDistanceAtXY(avgPt);
-
-                            PointCloud finalLeft = CalGradientTransform(splitLeft, avgPt, icp.AlignMatrix);
-                            finalLeft.Save("d:\\finalLeft.xyz");
-
-
-                            double[,] mapRx = new double[xStep, yStep];
-                            double[,] mapRy = new double[xStep, yStep];
-                            double[,] mapRz = new double[xStep, yStep];
-
-                            double[,] mapTx = new double[xStep, yStep];
-                            double[,] mapTy = new double[xStep, yStep];
-                            double[,] mapTz = new double[xStep, yStep];
-
-
-                            for (int i = 0; i < xStep; i++)
-                            {
-                                for (int j = 0; j < yStep; j++)
-                                {
-                                    double x = i * step + (minPt.X - 20);
-                                    double y = j * step + (minPt.Y - 20);
-                                    if (y >= limit)
-                                    {
-                                        if(x>= avgPt.X)
-                                        {
-                                            Point3D tempPt = new Point3D(x, y, 0);
-                                            double tempDis =  Point3D.DistanceXY(tempPt, avgPt);
-                                            double ratio = tempDis / maxDsRight;
-                                            if (ratio > 1) ratio = 1;
-                                            RotateRigidBody.SolveRzRyRx(alignRight, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
-                                            CoordMatrix.SolveTzTyTx(alignRight, out Shift shift);
-                                            mapRx[i, j] = ratio*rx.RotateAngle;
-                                            mapRy[i, j]= ratio * ry.RotateAngle;
-                                            mapRz[i,j]= ratio * rz.RotateAngle;
-                                            mapTx[i, j] = ratio*shift.X;
-                                            mapTy[i,j]= ratio * shift.Y;
-                                            mapTz[i,j]= ratio * shift.Z;
-
-                                        }
-                                        else
-                                        {
-                                            Point3D tempPt = new Point3D(x, y, 0);
-                                            double tempDis = Point3D.DistanceXY(tempPt, avgPt);
-                                            double ratio = tempDis / maxDsLeft;
-                                            if (ratio > 1) ratio = 1;
-
-                                            RotateRigidBody.SolveRzRyRx(alignLeft, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
-                                            CoordMatrix.SolveTzTyTx(alignLeft, out Shift shift);
-                                            mapRx[i, j] = ratio * rx.RotateAngle;
-                                            mapRy[i, j] = ratio * ry.RotateAngle;
-                                            mapRz[i, j] = ratio * rz.RotateAngle;
-                                            mapTx[i, j] = ratio * shift.X;
-                                            mapTy[i, j] = ratio * shift.Y;
-                                            mapTz[i, j] = ratio * shift.Z;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mapRx[i, j] = 0;
-                                        mapRy[i, j] = 0;
-                                        mapRz[i, j] = 0;
-                                        mapTx[i, j] = 0;
-                                        mapTy[i, j] =0;
-                                        mapTz[i, j] = 0;
-                                    }
-                                }
-                            }
-
-                            for (int i = 1; i < xStep-1; i++)
-                            {
-                                for (int j = 1; j < yStep-1; j++)
-                                {
-                                    mapRx[i, j] = calAvg9(mapRx, i, j);
-                                    mapRy[i, j] = calAvg9(mapRy, i, j);
-                                    mapRz[i, j] = calAvg9(mapRz, i, j);
-                                    mapTx[i, j] = calAvg9(mapTx, i, j);
-                                    mapTy[i, j] = calAvg9(mapTy, i, j);
-                                    mapTz[i, j] = calAvg9(mapTz, i, j);
-                                }
-                            }
-                            PointCloud output = new PointCloud();
-                            for (int i = 0; i < alignPCloud.Count; i++)
-                            {
-                                Point3D pt = alignPCloud.Points[i];
-                                int x =(int)( (pt.X - minPt.X + 20) / step);
-                                int y = (int)( (pt.Y - minPt.Y + 20) / step);
-
-                                CoordMatrix cm = new CoordMatrix();
-                                cm.AddSeq(eRefAxis.Z, eMatrixType.Rotate, mapRz[x, y]/180*Math.PI);
-                                cm.AddSeq(eRefAxis.Y, eMatrixType.Rotate, mapRy[x, y] / 180 * Math.PI);
-                                cm.AddSeq(eRefAxis.X, eMatrixType.Rotate, mapRx[x, y] / 180 * Math.PI);
-
-                                cm.AddSeq(eRefAxis.Z, eMatrixType.Translation, mapTz[x, y]);
-                                cm.AddSeq(eRefAxis.Y, eMatrixType.Translation, mapTy[x, y]);
-                                cm.AddSeq(eRefAxis.X, eMatrixType.Translation, mapTx[x, y]);
-
-                                cm.EndAddMatrix();
-
-                                Point3D newPt = pt.Multiply(cm.FinalMatrix4);
-                                output.Add(newPt);
-                            }
-                            output.Save("d:\\testSmoothOutput.xyz");
-
-
-                            ObjectGroup smoothOg = new ObjectGroup("Smooth111OG");
-                            foreach (var item in transformOg.Objects)
-                            {
-                                if(item.Value is Polyline pl)
-                                {
-                                    Polyline smoothPL = new Polyline();
-                                    for (int i = 0; i < pl.Count; i++)
-                                    {
-                                        Point3D pt = pl.Points[i];
-                                        int x = (int)((pt.X - minPt.X + 20) / step);
-                                        int y = (int)((pt.Y - minPt.Y + 20) / step);
-
-                                        CoordMatrix cm = new CoordMatrix();
-                                        cm.AddSeq(eRefAxis.Z, eMatrixType.Rotate, mapRz[x, y] / 180 * Math.PI);
-                                        cm.AddSeq(eRefAxis.Y, eMatrixType.Rotate, mapRy[x, y] / 180 * Math.PI);
-                                        cm.AddSeq(eRefAxis.X, eMatrixType.Rotate, mapRx[x, y] / 180 * Math.PI);
-
-                                        cm.AddSeq(eRefAxis.Z, eMatrixType.Translation, mapTz[x, y]);
-                                        cm.AddSeq(eRefAxis.Y, eMatrixType.Translation, mapTy[x, y]);
-                                        cm.AddSeq(eRefAxis.X, eMatrixType.Translation, mapTx[x, y]);
-
-                                        cm.EndAddMatrix();
-
-                                        Point3D newPt = pt.Multiply(cm.FinalMatrix4);
-                                        smoothPL.Add(newPt);
-
-                                    }
-                                    smoothOg.Add($"SmoothOg{item.Key}", smoothPL);
-                                }
-                            }
-                            smoothOg.SaveOPT("d:\\testSmoothOPT.txt");
+                            displayControl.UpdateDataGridView();
                         }
                     }
                 }
@@ -621,51 +480,6 @@ namespace RsLib.DemoForm
 
         }
 
-        double calAvg9(double[,] target,int i ,int j)
-        {
-
-            double avg = (target[i - 1, j - 1] +
-                target[i, j - 1] +
-                target[i + 1, j - 1] +
-                target[i - 1, j] +
-                target[i, j] +
-                target[i + 1, j] +
-                target[i - 1, j + 1] +
-                target[i, j + 1] +
-                target[i + 1, j + 1]) / 9;
-            return avg;
-        }
-        private PointCloud CalGradientTransform(PointCloud testCloud,Point3D basePt,Matrix4x4 alignMatrix)
-        {
-            RotateRigidBody.SolveRzRyRx(alignMatrix, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
-            CoordMatrix.SolveTzTyTx(alignMatrix, out Shift shift);
-
-            double maxRight = testCloud.GetMaxDistanceAtXY(basePt);
-            PointCloud finalCloud = new PointCloud();
-            for (int i = 0; i < testCloud.Count; i++)
-            {
-                Point3D pt = testCloud.Points[i];
-                double calD = Point3D.DistanceXY(pt, basePt);
-                double ratio = calD / maxRight;
-
-                if (ratio > 1) ratio = 1.0;
-
-                RotateRigidBody rg = new RotateRigidBody();
-                rg.AddRotateSeq(eRefAxis.Z, ratio * rz.RotateRadian);
-                rg.AddRotateSeq(eRefAxis.Y, ratio * ry.RotateRadian);
-                rg.AddRotateSeq(eRefAxis.X, ratio * rx.RotateRadian);
-
-                rg.AddSeq(eRefAxis.X, eMatrixType.Translation, ratio * shift.X);
-                rg.AddSeq(eRefAxis.Y, eMatrixType.Translation, ratio * shift.Y);
-                rg.AddSeq(eRefAxis.Z, eMatrixType.Translation, ratio * shift.Z);
-
-                rg.EndAddMatrix();
-
-                Point3D finalPt = pt.Multiply(rg.FinalMatrix4);
-                finalCloud.Add(finalPt);
-            }
-            return finalCloud;
-        }
         private void button1_Click(object sender, EventArgs e)
         {
             // Y 90 X -45
@@ -686,5 +500,54 @@ namespace RsLib.DemoForm
 
 
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            AppDomain ad = AppDomain.CreateDomain("DLL unload Test");
+
+            ProxyObject obj = (ProxyObject)ad.CreateInstanceFromAndUnwrap(@"RsLib.ToolBox.exe", "RsLib.DemoForm.ProxyObject");
+            obj.LoadAssembly("D:\\RLib\\bin\\x64\\Debug\\RsLib.ToolDll.dll");
+            obj.Invoke("RsLib.Common.IPlugIn", "run", "Test1");
+            AppDomain.Unload(ad);
+            obj = null;
+        }
     }
+    class ProxyObject : MarshalByRefObject
+    {
+        Assembly assembly = null;
+        public void LoadAssembly(string dllFilePath)
+        {         
+            AssemblyName an = AssemblyName.GetAssemblyName(dllFilePath);
+             assembly = Assembly.Load(an);
+        }
+        public bool Invoke(string fullClassName,string methodName,params object[] args)
+        {
+            if (assembly == null) return false;
+            Type tp = null;
+            Type[] tps = assembly.GetTypes();
+            foreach (Type type in tps)
+            {
+                if (type.IsInterface || type.IsAbstract)
+                    continue;
+
+                else if (type.GetInterfaces().Contains(typeof(RsLib.Common.IPlugIn)))
+                    tp = type;
+            }
+            if (tp == null) return false;
+            MethodInfo method = tp.GetMethod(methodName);
+            if (method == null) return false;
+            object obj = Activator.CreateInstance(tp);
+            method.Invoke(obj, args);
+            return true;
+        }
+    }
+    public enum eDrawItem : int 
+    {
+        ScanData = 2,
+        AlignModel,
+        AlignPath,
+        AdjustModel,
+        AdjustPath,
+    }
+
 }

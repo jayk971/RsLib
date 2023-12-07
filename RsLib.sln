@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.ChangeAssemblyFileVer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.SystemControl", "RsLib.SystemControl\RsLib.SystemControl.csproj", "{1F71EA30-3976-4CAD-8A47-FA222A5E031B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsLib.ToolDll", "RsLib.ToolDll\RsLib.ToolDll.csproj", "{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -231,6 +233,14 @@ Global
 		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x64.Build.0 = Release|x64
 		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x86.ActiveCfg = Release|x86
 		{1F71EA30-3976-4CAD-8A47-FA222A5E031B}.Release|x86.Build.0 = Release|x86
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Debug|x64.ActiveCfg = Debug|x64
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Debug|x64.Build.0 = Debug|x64
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Debug|x86.ActiveCfg = Debug|x86
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Debug|x86.Build.0 = Debug|x86
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Release|x64.ActiveCfg = Release|x64
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Release|x64.Build.0 = Release|x64
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Release|x86.ActiveCfg = Release|x86
+		{DCF8F8DF-55D6-4CD0-A6D9-D5D5B63F19B3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

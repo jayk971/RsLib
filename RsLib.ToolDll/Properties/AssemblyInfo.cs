@@ -1,14 +1,15 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("RsLib.SerialPort")]
+[assembly: AssemblyTitle("RsLib.ToolDll")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("RsLib.SerialPort")]
+[assembly: AssemblyProduct("RsLib.ToolDll")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 下列 GUID 為專案公開 (Expose) 至 COM 時所要使用的 typelib ID
-[assembly: Guid("1debd81e-7d9d-41b7-8771-45c73e3bb54a")]
+[assembly: Guid("dcf8f8df-55d6-4cd0-a6d9-d5d5b63f19b3")]
 
 // 組件的版本資訊由下列四個值所組成: 
 //
