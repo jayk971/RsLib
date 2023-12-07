@@ -540,7 +540,7 @@ namespace RsLib.XYZViewer
             
         }
 
-        private void Fd_AfterShowPressed(int baseIndex, int compareIndex, double min, double max,bool absMode)
+        private void Fd_AfterShowPressed(int baseIndex, int compareIndex, double min, double max,bool absMode,double acceptRatio)
         {
             ColorGradient cg = new ColorGradient(min, max);
             string baseFile = loadedFiles[(DrawItem)(baseIndex + 1)];
@@ -600,8 +600,15 @@ namespace RsLib.XYZViewer
                 }
                 _displayCtrl.SetColorGradientCtrl(cg.ColorControl);
                 _displayCtrl.ShowColorGradientControl(true);
-                cloudBase.CompareOtherCloud(cloudCompare.kdTree, min, max, absMode);
+                cloudBase.CompareOtherCloud(cloudCompare.kdTree, min, max, absMode, acceptRatio);
                 _displayCtrl.BuildPointCloud(cloudBase, baseIndex + 1, false, true);
+                FormCompareCount fcc = new FormCompareCount();
+
+                if (cloudBase.GetOption(typeof(CompareCloudOption)) is CompareCloudOption cloudOption)
+                {
+                    fcc.SetCompareResult(cloudOption);
+                    fcc.Show();
+                }
             }
             catch (Exception ex)
             {

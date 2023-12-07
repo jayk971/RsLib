@@ -13,7 +13,7 @@ namespace RsLib.XYZViewer
 {
     public partial class FormDifference : Form
     {
-        public event Action<int, int, double, double,bool> AfterShowPressed;
+        public event Action<int, int, double, double,bool,double> AfterShowPressed;
         public FormDifference()
         {
             InitializeComponent();
@@ -25,6 +25,7 @@ namespace RsLib.XYZViewer
             double max = 1;
             double.TryParse(tbx_Min.Text, out  min);
             double.TryParse(tbx_Max.Text, out max);
+            double.TryParse(tbx_AcceptRatio.Text, out double acceptRatio);
             double realMin = min < max ? min : max;
             double realMax = max > min ? max : min;
 
@@ -43,7 +44,7 @@ namespace RsLib.XYZViewer
             else if (rbn_Compare4.Checked) cloudCompare = 4;
             else if (rbn_Compare5.Checked) cloudCompare = 5;
 
-            AfterShowPressed?.Invoke(cloudBase, cloudCompare, realMin, realMax,rbn_AbsMode.Checked);
+            AfterShowPressed?.Invoke(cloudBase, cloudCompare, realMin, realMax,rbn_AbsMode.Checked, acceptRatio);
             Hide();
         }
         public void SetFileName(string[] fileNames)
@@ -130,6 +131,11 @@ namespace RsLib.XYZViewer
                 tbx_Min.Text = "0";
             }
 
+        }
+
+        private void tbx_AcceptRatio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
         }
     }
 }

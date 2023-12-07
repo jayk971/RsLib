@@ -3493,102 +3493,121 @@ namespace RsLib.PointCloudLib
             }
         }
 
-        public void CompareOtherCloud(KDTree<int> otherCloudTree, double minDis, double maxDis,bool absMode ,bool enableParallel = true)
+        public void CompareOtherCloud(KDTree<int> otherCloudTree, double minDis, double maxDis, bool absMode,double acceptRatio)
         {
-
+            int i_0_20 = 0;
+            int i_20_40 = 0;
+            int i_40_60 = 0;
+            int i_60_80 = 0;
+            int i_80_100 = 0;
+            int acceptCount = 0;
+            double acceptMin = 0;
+            double acceptMax = 0;
             Point3D centerP = Average;
             double min = minDis <= maxDis ? minDis : maxDis;
-            double max = maxDis >= minDis ? maxDis: minDis;
-            if(absMode)
+            double max = maxDis >= minDis ? maxDis : minDis;
+            if (absMode)
             {
                 double absValue = max - min;
                 min = 0.0;
                 max = absValue;
+                acceptMin = 0;
+                acceptMax = (max - min) * acceptRatio/100 + min;
+
+            }
+            else
+            {
+                acceptMin = (max + min) / 2 - (max - min) * acceptRatio/100 / 2;
+                acceptMax = (max + min) / 2 + (max - min) * acceptRatio/100 / 2;
             }
 
             ColorGradient cg = new ColorGradient(min, max);
 
-            if (enableParallel)
+
+            Parallel.For(0, Count, (int i) =>
             {
-                Parallel.For(0, Count, (int i) =>
+                Point3D p = Points[i];
+                double searchR = 0.5;
+                bool searchNearest = true;
+                while (searchNearest)
                 {
-                    Point3D p = Points[i];
-                    double searchR = 0.5;
-                    bool searchNearest = true;
-                    while (searchNearest)
+                    PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
+                    if (searchCloud.Count == 0)
                     {
-                        PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
-                        if (searchCloud.Count == 0)
+                        if (searchR >= (max - min))
                         {
-                            if (searchR >= (max-min))
-                            {
-                                Color testColor = cg.GetColorFromGradient(min);
-                                p.AddOption(new DisplayOption() { Color = testColor });
-                                searchNearest = false;
-                            }
-                            else
-                            {
-                                searchR += 0.5;
-                            }
+                            Color testColor = cg.GetColorFromGradient(min);
+                            p.AddOption(new DisplayOption() { Color = testColor });
+                            searchNearest = false;
                         }
                         else
                         {
-                            Point3D avg = searchCloud.Average;
-                            Vector3D diffV = new Vector3D(p, avg);
-                            Vector3D centerV = new Vector3D(centerP, p);
-                            double dot = Vector3D.Dot(centerV, diffV);
-                            int sign = Math.Sign(dot);
-                            if (absMode) sign = 1;
-                            Color testColor = cg.GetColorFromGradient(sign * diffV.L);
-                            p.AddOption(new DisplayOption() { Color = testColor });
-                            p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
-                            searchNearest = false;
+                            searchR += 0.5;
                         }
                     }
-
-                });
-            }
-            else
-            {
-                for (int i = 0; i < Count; i++)
-                {
-                    Point3D p = Points[i];
-                    double searchR = 0.5;
-                    bool searchNearest = true;
-                    while (searchNearest)
+                    else
                     {
-                        PointCloud searchCloud = PointCloudCommon.GetNearestPointCloud(otherCloudTree, p, searchR);
-                        if (searchCloud.Count == 0)
+                        Point3D avg = searchCloud.Average;
+                        Vector3D diffV = new Vector3D(p, avg);
+                        Vector3D centerV = new Vector3D(centerP, p);
+                        double dot = Vector3D.Dot(centerV, diffV);
+                        int sign = Math.Sign(dot);
+                        if (absMode)
                         {
-                            if (searchR >= (max-min))
-                            {
-                                Color testColor = cg.GetColorFromGradient(maxDis);
-                                p.AddOption(new DisplayOption() { Color = testColor });
-                                searchNearest = false;
-                            }
-                            else
-                            {
-                                searchR += 0.5;
-                            }
+                            sign = 1;
+                        }
+                        double finalLength = sign * diffV.L;
+                        double ratio = (finalLength - min) / (max - min) * 100;
+
+                        if (finalLength >= acceptMin && finalLength <= acceptMax) acceptCount++;
+
+                        if (ratio <= 20)
+                        {
+                            i_0_20++;
+                        }
+                        else if (ratio > 20 && ratio <= 40)
+                        {
+                            i_20_40++;
+                        }
+                        else if (ratio > 40 && ratio <= 60)
+                        {
+                            i_40_60++;
+                        }
+                        else if (ratio > 60 && ratio <= 80)
+                        {
+                            i_60_80++;
                         }
                         else
                         {
-                            Point3D avg = searchCloud.Average;
-                            Vector3D diffV = new Vector3D(avg, p);
-                            Vector3D centerV = new Vector3D(centerP, p);
-                            double dot = Vector3D.Dot(centerV, diffV);
-                            int sign = Math.Sign(dot);
-                            if (absMode) sign = 1;
-                            Color testColor = cg.GetColorFromGradient(sign * diffV.L);
-                            p.AddOption(new DisplayOption() { Color = testColor });
-                            p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
-                            searchNearest = false;
+                            i_80_100++;
                         }
+                        Color testColor = cg.GetColorFromGradient(finalLength);
+
+                        p.AddOption(new DisplayOption() { Color = testColor });
+                        p.AddOption(new DiffOption() { DiffVector = diffV.DeepClone() });
+                        searchNearest = false;
                     }
                 }
-            }
 
+            });
+
+            CompareCloudOption compareOption = new CompareCloudOption()
+            {
+                _0_20 = i_0_20,
+                _20_40 = i_20_40,
+                _40_60 = i_40_60,
+                _60_80 = i_60_80,
+                _80_100 = i_80_100,
+                Base20 = Math.Round((max - min) * 0.2 + min, 1),
+                Base40 = Math.Round((max - min) * 0.4 + min, 1),
+                Base60 = Math.Round((max - min) * 0.6 + min, 1),
+                Base80 = Math.Round((max - min) * 0.8 + min, 1),
+                Base100 = Math.Round((max - min), 1),
+                AcceptCount = acceptCount,
+            };
+            Options.Add(compareOption);
         }
+
     }
 
     public enum DigitFormat : int

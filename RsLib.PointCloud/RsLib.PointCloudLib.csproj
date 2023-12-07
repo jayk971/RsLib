@@ -75,6 +75,12 @@
     <Reference Include="Open3DSharp">
       <HintPath>..\..\..\..\..\RLib\Lib\Open3DSharp.dll</HintPath>
     </Reference>
+    <Reference Include="OxyPlot">
+      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms">
+      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

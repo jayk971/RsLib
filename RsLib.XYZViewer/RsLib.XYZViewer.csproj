@@ -79,6 +79,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\RLib\Lib\Accord.Statistics.dll</HintPath>
     </Reference>
+    <Reference Include="OxyPlot">
+      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms">
+      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -98,6 +104,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormCompareCount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCompareCount.Designer.cs">
+      <DependentUpon>FormCompareCount.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormDifference.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,10 +122,14 @@
     <Compile Include="FormIntersection.Designer.cs">
       <DependentUpon>FormIntersection.cs</DependentUpon>
     </Compile>
+    <Compile Include="OxyPlotUtility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCompareCount.resx">
+      <DependentUpon>FormCompareCount.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDifference.resx">
       <DependentUpon>FormDifference.cs</DependentUpon>
@@ -172,6 +188,10 @@
     <ProjectReference Include="..\RsLib.Display3D\RsLib.Display3D.csproj">
       <Project>{06d831f7-418c-409f-881e-1650a4e44834}</Project>
       <Name>RsLib.Display3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RsLib.ToolControl\RsLib.ToolControl.csproj">
+      <Project>{a16412d0-8f82-4573-8481-70cb7ef027d8}</Project>
+      <Name>RsLib.ToolControl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
