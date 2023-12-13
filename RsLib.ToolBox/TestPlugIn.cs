@@ -3,6 +3,7 @@ using RsLib.Display3D;
 using RsLib.PointCloudLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +16,9 @@ namespace RsLib.DemoForm
         ICPMatch icp = new ICPMatch();
         PointCloud _adjustModel = null;
         ObjectGroup _adjustPath = null;
-        Head2ndAlignParameter Para = new Head2ndAlignParameter();
-        PropertyGrid _propertyGrid = new PropertyGrid();
+        public Head2ndAlignParameter Para = new Head2ndAlignParameter();
         public Head2ndAlign() 
         {
-            _propertyGrid.SelectedObject = Para;
         }
         public bool AdjustPath(PointCloud scanCloud, PointCloud modelCloud, ObjectGroup sipingPath)
         {
@@ -44,8 +43,8 @@ namespace RsLib.DemoForm
             PointCloud splitY = lptCloud.GetAboveY(limit).ToPointCloud();
             Point3D avgPt = splitY.Average;
 
-            PointCloud splitRight = splitY.GetPointAboveX(avgPt.X - Para.HeadSplitOverlap);
-            PointCloud splitLeft = splitY.GetPointBelowX(avgPt.X + Para.HeadSplitOverlap);
+            PointCloud splitRight = splitY.GetPointAboveX(avgPt.X);
+            PointCloud splitLeft = splitY.GetPointBelowX(avgPt.X);
 
             icp.Match(splitRight);
             Matrix4x4 alignRight = icp.AlignMatrix;
@@ -61,7 +60,7 @@ namespace RsLib.DemoForm
             double circleLeft = maxLeft.X - minLeft.X >= maxLeft.Y - minLeft.Y ? maxLeft.Y - minLeft.Y : maxLeft.X - minLeft.X;
 
             Point3D rightBottom = new Point3D(maxLeft.X, minLeft.Y, 0.0);
-            double maxDsLeft = splitLeft.GetMaxDistanceAtXY(maxLeft);
+            double maxDsLeft = splitLeft.GetMaxDistanceAtXY(rightBottom);
 
             double[,] mapRx = new double[xStep, yStep];
             double[,] mapRy = new double[xStep, yStep];
@@ -79,6 +78,8 @@ namespace RsLib.DemoForm
                             Vector3D[,,] volumnVector = new Vector3D[xStep, yStep, zStep];
 #endif
 
+            double minRatioR = double.MaxValue;
+            double minRatioL = double.MaxValue;
             for (int i = 0; i < xStep; i++)
             {
                 for (int j = 0; j < yStep; j++)
@@ -87,42 +88,45 @@ namespace RsLib.DemoForm
                     double y = j * step + (minPt.Y - Para.MapExtendLength);
                     if (y >= limit)
                     {
-                        if (x >= avgPt.X - Para.HeadSplitOverlap)
+                        if (x >= avgPt.X)
                         {
                             Point3D tempPt = new Point3D(x, y, 0);
                             double tempDis = Point3D.DistanceXY(tempPt, minRight);
                             double ratio = tempDis / maxDsRight;
 
                             if (ratio > 1) ratio = 1;
-
+                            if(minRatioR >ratio) 
+                                minRatioR = ratio;
                             RotateRigidBody.SolveRzRyRx(alignRight, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
                             CoordMatrix.SolveTzTyTx(alignRight, out Shift shift);
-                            mapRx[i, j] = ratio * rx.RotateAngle;
-                            mapRy[i, j] = ratio * ry.RotateAngle;
-                            mapRz[i, j] = ratio * rz.RotateAngle;
+                            mapRx[i, j] =Math.Round( ratio * rx.RotateAngle,2);
+                            mapRy[i, j] = Math.Round(ratio * ry.RotateAngle,2);
+                            mapRz[i, j] = Math.Round(ratio * rz.RotateAngle,2);
 
-                            mapTx[i, j] = ratio * shift.X;
-                            mapTy[i, j] = ratio * shift.Y;
-                            mapTz[i, j] = ratio * shift.Z;
+                            mapTx[i, j] = Math.Round(ratio * shift.X, 2);
+                            mapTy[i, j] = Math.Round(ratio * shift.Y, 2);
+                            mapTz[i, j] = Math.Round(ratio * shift.Z, 2);
 
                         }
                         else
                         {
                             Point3D tempPt = new Point3D(x, y, 0);
-                            double tempDis = Point3D.DistanceXY(tempPt, maxLeft);
+                            double tempDis = Point3D.DistanceXY(tempPt, rightBottom);
                             double ratio = tempDis / maxDsLeft;
 
                             if (ratio > 1) ratio = 1;
+                            if (minRatioL > ratio) 
+                                minRatioL = ratio;
 
                             RotateRigidBody.SolveRzRyRx(alignLeft, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
                             CoordMatrix.SolveTzTyTx(alignLeft, out Shift shift);
-                            mapRx[i, j] = ratio * rx.RotateAngle;
-                            mapRy[i, j] = ratio * ry.RotateAngle;
-                            mapRz[i, j] = ratio * rz.RotateAngle;
+                            mapRx[i, j] = Math.Round(ratio * rx.RotateAngle, 2);
+                            mapRy[i, j] = Math.Round(ratio * ry.RotateAngle, 2);
+                            mapRz[i, j] = Math.Round(ratio * rz.RotateAngle, 2);
 
-                            mapTx[i, j] = ratio * shift.X;
-                            mapTy[i, j] = ratio * shift.Y;
-                            mapTz[i, j] = ratio * shift.Z;
+                            mapTx[i, j] = Math.Round(ratio * shift.X, 2);
+                            mapTy[i, j] = Math.Round(ratio * shift.Y, 2);
+                            mapTz[i, j] = Math.Round(ratio * shift.Z, 2);
                         }
                     }
                     else
@@ -135,6 +139,8 @@ namespace RsLib.DemoForm
                         mapTz[i, j] = 0;
 
                     }
+
+
 #if m
                                     for (int k = 0; k < zStep; k++)
                                     {
@@ -162,7 +168,12 @@ namespace RsLib.DemoForm
 #endif
                 }
             }
-
+            WriteMap("d:\\Rx.txt", mapRx);
+            WriteMap("d:\\Ry.txt", mapRy);
+            WriteMap("d:\\Rz.txt", mapRz);
+            WriteMap("d:\\Tx.txt", mapTx);
+            WriteMap("d:\\Ty.txt", mapTy);
+            WriteMap("d:\\Tz.txt", mapTz);
 
 
             double[,] mask9 = new double[,]
@@ -180,18 +191,28 @@ namespace RsLib.DemoForm
                                 { 1.0,1.0,1.0,1.0,1.0},
             };
             int testLength = mask25.GetTotalLength();
-            for (int i = 2; i < xStep - 2; i++)
+
+            for (int k = 0; k < Para.MapSmoothTime; k++)
             {
-                for (int j = 2; j < yStep - 2; j++)
+                for (int i = 2; i < xStep - 2; i++)
                 {
-                    mapRx[i, j] = calAvg25(mapRx, i, j, mask25);
-                    mapRy[i, j] = calAvg25(mapRy, i, j, mask25);
-                    mapRz[i, j] = calAvg25(mapRz, i, j, mask25);
-                    mapTx[i, j] = calAvg25(mapTx, i, j, mask25);
-                    mapTy[i, j] = calAvg25(mapTy, i, j, mask25);
-                    mapTz[i, j] = calAvg25(mapTz, i, j, mask25);
+                    for (int j = 2; j < yStep - 2; j++)
+                    {
+                        mapRx[i, j] = calAvg25(mapRx, i, j, mask25);
+                        mapRy[i, j] = calAvg25(mapRy, i, j, mask25);
+                        mapRz[i, j] = calAvg25(mapRz, i, j, mask25);
+                        mapTx[i, j] = calAvg25(mapTx, i, j, mask25);
+                        mapTy[i, j] = calAvg25(mapTy, i, j, mask25);
+                        mapTz[i, j] = calAvg25(mapTz, i, j, mask25);
+                    }
                 }
             }
+            WriteMap("d:\\Rx2.txt", mapRx);
+            WriteMap("d:\\Ry2.txt", mapRy);
+            WriteMap("d:\\Rz2.txt", mapRz);
+            WriteMap("d:\\Tx2.txt", mapTx);
+            WriteMap("d:\\Ty2.txt", mapTy);
+            WriteMap("d:\\Tz2.txt", mapTz);
 #if m
                             PointCloud output = new PointCloud();
                             for (int i = 0; i < loadedPCloud.Count; i++)
@@ -276,19 +297,40 @@ namespace RsLib.DemoForm
                     int yEnd = (int)((pEnd.Y - minPt.Y + Para.MapExtendLength) / step);
 
                     double maxLengthXY = Point3D.DistanceXY(pStart, pEnd);
+
+                    double diffRz = mapRz[xEnd, yEnd] - mapRz[xStart, yStart];
+                    double diffRy = mapRy[xEnd, yEnd] - mapRy[xStart, yStart];
+                    double diffRx = mapRx[xEnd, yEnd] - mapRx[xStart, yStart];
+                    double diffTz = mapTz[xEnd, yEnd] - mapTz[xStart, yStart];
+                    double diffTy = mapTy[xEnd, yEnd] - mapTy[xStart, yStart];
+                    double diffTx = mapTx[xEnd, yEnd] - mapTx[xStart, yStart];
+                    double startRz =  mapRz[xStart, yStart];
+                    double startRy = mapRy[xStart, yStart];
+                    double startRx = mapRx[xStart, yStart];
+                    double startTz = mapTz[xStart, yStart];
+                    double startTy = mapTy[xStart, yStart];
+                    double startTx = mapTx[xStart, yStart];
                     for (int i = 0; i < pl.Count; i++)
                     {
                         Point3D pt = pl.Points[i];  
-                        int x = (int)((pt.X - minPt.X + Para.MapExtendLength) / step);
-                        int y = (int)((pt.Y - minPt.Y + Para.MapExtendLength) / step);
+                        int x = (int)Math.Round(((pt.X - minPt.X + Para.MapExtendLength) / step),0);
+                        int y = (int)Math.Round(((pt.Y - minPt.Y + Para.MapExtendLength) / step),0);
                         double tempLengthXY = Point3D.DistanceXY(pStart, pt);
+                        double lengthRatio = tempLengthXY / maxLengthXY;
+                        //double rz = lengthRatio * diffRz + startRz;
+                        //double ry = lengthRatio * diffRy + startRy;
+                        //double rx = lengthRatio * diffRx + startRx;
+                        //double tz = lengthRatio * diffTz + startTz;
+                        //double ty = lengthRatio * diffTy + startTy;
+                        //double tx = lengthRatio * diffTx + startTx;
 
-                        double rz = tempLengthXY / maxLengthXY * (mapRz[xEnd, yEnd] - mapRz[xStart, yStart]) + mapRz[xStart, yStart];
-                        double ry = tempLengthXY / maxLengthXY * (mapRy[xEnd, yEnd] - mapRy[xStart, yStart]) + mapRy[xStart, yStart];
-                        double rx = tempLengthXY / maxLengthXY * (mapRx[xEnd, yEnd] - mapRx[xStart, yStart]) + mapRx[xStart, yStart];
-                        double tz = tempLengthXY / maxLengthXY * (mapTz[xEnd, yEnd] - mapTz[xStart, yStart]) + mapTz[xStart, yStart];
-                        double ty = tempLengthXY / maxLengthXY * (mapTy[xEnd, yEnd] - mapTy[xStart, yStart]) + mapTy[xStart, yStart];
-                        double tx = tempLengthXY / maxLengthXY * (mapTx[xEnd, yEnd] - mapTx[xStart, yStart]) + mapTx[xStart, yStart];
+                        double rz = mapRz[x, y];
+                        double ry = mapRy[x, y];
+                        double rx = mapRx[x, y];
+                        double tz = mapTz[x, y];
+                        double ty = mapTy[x, y];
+                        double tx = mapTx[x, y];
+
                         CoordMatrix cm = new CoordMatrix();
                         cm.AddSeq(eRefAxis.Z, eMatrixType.Rotate, rz / 180 * Math.PI);
                         cm.AddSeq(eRefAxis.Y, eMatrixType.Rotate, ry / 180 * Math.PI);
@@ -303,7 +345,7 @@ namespace RsLib.DemoForm
                         smoothPL.Add(newPt);
 
                     }
-                    smoothPL.SmoothPath_3P(true, true, false, 2.0, 1.0, 2.0);
+                    smoothPL.SmoothPath_3P(true, true, true, 1.0, 1.0, 1.0);
                     _adjustPath.Add($"Adjust{item.Key}", smoothPL);
                 }
             }
@@ -395,13 +437,45 @@ namespace RsLib.DemoForm
                 mask[4, 3] +
                 mask[4, 4]
                 );
-            return avg;
+            return Math.Round(avg,2);
         }
+        void WriteMap(string filePath, double[,] map)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            {
+                for (int i = 0; i < map.GetLength(0); i++)
+                {
+                    string row = "";
+                    for (int j = 0; j < map.GetLength(1); j++)
+                    {
+                        if (j != map.GetLength(1) - 1)
+                        {
+                            row += (map[i, j].ToString() + ",");
+                        }
+                        else
+                        {
+                            row += (map[i, j].ToString());
+                        }
+                    }
+                    sw.WriteLine(row);
+                }
+            }
 
-        public Control GetParameterControl() => _propertyGrid;
+        }
     }
     public class Head2ndAlignParameter
     {
+
+        uint _MapSmoothTime = 10;
+        public uint MapSmoothTime
+        {
+            get => _MapSmoothTime;
+            set
+            {
+                if (value <= 0) _MapSmoothTime = 1;
+                else _MapSmoothTime = value;
+            }
+        }
         double _MapExtendLength = 10;
         public double MapExtendLength 
         {

@@ -84,10 +84,19 @@
       <DependentUpon>CompareCloudControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShoeSectionSimilarityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShoeSectionSimilarityControl.Designer.cs">
+      <DependentUpon>ShoeSectionSimilarityControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CompareCloudControl.resx">
       <DependentUpon>CompareCloudControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShoeSectionSimilarityControl.resx">
+      <DependentUpon>ShoeSectionSimilarityControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

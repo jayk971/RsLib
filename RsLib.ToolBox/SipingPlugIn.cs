@@ -14,6 +14,5 @@ namespace RsLib.DemoForm
         ObjectGroup GetAdjustPath();
         bool AdjustPath(PointCloud scanCloud, PointCloud modelCloud, ObjectGroup sipingPath);
 
-        Control GetParameterControl();
     }
 }

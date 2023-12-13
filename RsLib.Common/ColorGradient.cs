@@ -12,20 +12,34 @@ namespace RsLib.Common
         public double Min { get; private set; } = 0;
 
         ColorTupleList _gradient = new ColorTupleList();
+        public bool ReverseColor { get; private set; } = false;
         public ColorGradientControl ColorControl = null;
 
-        public ColorGradient(double min, double max)
+        public ColorGradient(double min, double max, bool reverseColor = false)
         {
             Max = max;
             Min = min;
+            ReverseColor = reverseColor;
             ColorControl = new ColorGradientControl();
             ColorControl.SetMaxMin(max, min);
             _gradient.Clear();
-            _gradient.Add(new ColorTuple(0.0, 0f, 0f, 1f));  //blue
-            _gradient.Add(new ColorTuple(0.25, 0f, 1f, 1f)); // cyan
-            _gradient.Add(new ColorTuple(0.5, 0f, 1f, 0f)); // green
-            _gradient.Add(new ColorTuple(0.75, 1f, 1f, 0f)); // yellow
-            _gradient.Add(new ColorTuple(1.0, 1f, 0f, 0f)); // red
+            if (ReverseColor)
+            {
+                _gradient.Add(new ColorTuple(0.0, 1f, 0f, 0f));  //red
+                _gradient.Add(new ColorTuple(0.25, 1f, 1f, 0f)); // yellow
+                _gradient.Add(new ColorTuple(0.5, 0f, 1f, 0f)); // green
+                _gradient.Add(new ColorTuple(0.75, 0f, 1f, 1f)); // cyan
+                _gradient.Add(new ColorTuple(1.0, 0f, 0f, 1f)); // blue
+
+            }
+            else
+            {
+                _gradient.Add(new ColorTuple(0.0, 0f, 0f, 1f));  //blue
+                _gradient.Add(new ColorTuple(0.25, 0f, 1f, 1f)); // cyan
+                _gradient.Add(new ColorTuple(0.5, 0f, 1f, 0f)); // green
+                _gradient.Add(new ColorTuple(0.75, 1f, 1f, 0f)); // yellow
+                _gradient.Add(new ColorTuple(1.0, 1f, 0f, 0f)); // red
+            }
             ColorControl.SetRatio(_gradient);
         }
 
@@ -64,13 +78,15 @@ namespace RsLib.Common
                 double currentRatio = CurrC.Item1;
                 if (TargetRatio == lastRatio)
                 {
-                    Output = Color.FromArgb(255, 0, 0);
+                    if(ReverseColor) Output = Color.FromArgb(0, 0, 255);
+                    else Output = Color.FromArgb(255, 0, 0);
                     return Output;
 
                 }
                 else if (TargetRatio == firstRation)
                 {
-                    Output = Color.FromArgb(0, 0, 255);
+                    if (ReverseColor) Output = Color.FromArgb(255, 0, 0);
+                    else Output = Color.FromArgb(0, 0, 255);
                     return Output;
                 }
                 else if (TargetRatio < currentRatio)

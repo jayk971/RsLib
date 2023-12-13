@@ -29,6 +29,7 @@ namespace RsLib.XYZViewer
         FormProcessing _processForm;
         FormIntersection fi = new FormIntersection();
         FormDifference fd = new FormDifference();
+        FormCompareCount fcc = new FormCompareCount();
 
         public Form1()
         {
@@ -602,12 +603,26 @@ namespace RsLib.XYZViewer
                 _displayCtrl.ShowColorGradientControl(true);
                 cloudBase.CompareOtherCloud(cloudCompare.kdTree, min, max, absMode, acceptRatio);
                 _displayCtrl.BuildPointCloud(cloudBase, baseIndex + 1, false, true);
-                FormCompareCount fcc = new FormCompareCount();
+
+                if(fcc == null)
+                {
+                    fcc = new FormCompareCount();
+                }
+                if(fcc.IsDisposed)
+                {
+                    fcc = new FormCompareCount();
+                }
 
                 if (cloudBase.GetOption(typeof(CompareCloudOption)) is CompareCloudOption cloudOption)
                 {
                     fcc.SetCompareResult(cloudOption);
-                    fcc.Show();
+
+                    if(cloudBase.GetOption(typeof(CompareSection10Option)) is CompareSection10Option c10Option)
+                    {
+                        fcc.SetCompare10Result(c10Option);
+                    }
+                    if(fcc.Visible == false)
+                        fcc.Show();
                 }
             }
             catch (Exception ex)

@@ -30,9 +30,18 @@ namespace RsLib.ToolControl
 
         public void SetCompareResult(CompareCloudOption option)
         {
-            plotView.Model = CreateBarSeries(option);
-            plotView.Controller = GetPlotController();
-            lbl_Similarity.Text = option.Similarity.ToString();
+            if (InvokeRequired)
+            {
+                Action<CompareCloudOption> action = new Action<CompareCloudOption>(SetCompareResult);
+                Invoke(action,option);
+            }
+            else
+            {
+                plotView.Model = CreateBarSeries(option);
+                plotView.Controller = GetPlotController();
+                lbl_Similarity.Text = option.Similarity.ToString();
+                groupBox1.Text = $"Score ({option.AcceptLimitMin:F2}~{option.AcceptLimitMax:F2})";
+            }
         }
         PlotController GetPlotController()
         {
@@ -104,15 +113,17 @@ namespace RsLib.ToolControl
                 Title = "Deviation (mm)",
             };
 
-            categoryAxis.Labels.Add(option.Base20.ToString());
-            categoryAxis.Labels.Add(option.Base40.ToString());
-            categoryAxis.Labels.Add(option.Base60.ToString());
-            categoryAxis.Labels.Add(option.Base80.ToString());
-            categoryAxis.Labels.Add(option.Base100.ToString());
+            categoryAxis.Labels.Add($"<{option.Base20:F1}");
+            categoryAxis.Labels.Add($"{option.Base20:F1}-{option.Base40:F1}");
+            categoryAxis.Labels.Add($"{option.Base40:F1}-{option.Base60:F1}");
+            categoryAxis.Labels.Add($"{option.Base60:F1}-{option.Base80:F1}");
+            categoryAxis.Labels.Add($">{option.Base80:F1}");
 
             var valueAxis = new LinearAxis
             {
                 Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = 100,
                 MinimumPadding = 0,
                 MaximumPadding = 0.1,
                 ExtraGridlines = new[] { 0d },

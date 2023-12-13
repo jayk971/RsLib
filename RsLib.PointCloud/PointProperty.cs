@@ -116,6 +116,8 @@ namespace RsLib.PointCloudLib
         public double Base60 = 0;
         public double Base80 = 0;
         public double Base100 = 0;
+        public double AcceptLimitMin = 0;
+        public double AcceptLimitMax = 0;
 
         public int TotalCount => _0_20 + _20_40 + _40_60 + _60_80 + _80_100;
         public double Ratio_20 => Math.Round((double)_0_20 / (double)TotalCount * 100,1);
@@ -166,6 +168,61 @@ namespace RsLib.PointCloudLib
                     _80_100++;
                 }
             }
+        }
+    }
+    public class CompareSection10Option : ObjectOption
+    {
+        public int i_11 = 0;
+        public int i_12 = 0;
+        public int i_13 = 0;
+        public int i_14 = 0;
+        public int i_15 = 0;
+
+        public int i_21 = 0;
+        public int i_22 = 0;
+        public int i_23 = 0;
+        public int i_24 = 0;
+        public int i_25 = 0;
+
+        public int i_11_Total = 0;
+        public int i_12_Total = 0;
+        public int i_13_Total = 0;
+        public int i_14_Total = 0;
+        public int i_15_Total = 0;
+
+        public int i_21_Total = 0;
+        public int i_22_Total = 0;
+        public int i_23_Total = 0;
+        public int i_24_Total = 0;
+        public int i_25_Total = 0;
+
+        public double Percent_11 =>Math.Round( (double)i_11 / (double)i_11_Total * 100.0,1);
+        public double Percent_12 => Math.Round((double)i_12 / (double)i_12_Total * 100.0, 1);
+        public double Percent_13 => Math.Round((double)i_13 / (double)i_13_Total * 100.0, 1);
+        public double Percent_14 => Math.Round((double)i_14 / (double)i_14_Total * 100.0, 1);
+        public double Percent_15 => Math.Round((double)i_15 / (double)i_15_Total * 100.0, 1);
+        public double Percent_21 => Math.Round((double)i_21 / (double)i_21_Total * 100.0, 1);
+        public double Percent_22 => Math.Round((double)i_22 / (double)i_22_Total * 100.0, 1);
+        public double Percent_23 => Math.Round((double)i_23 / (double)i_23_Total * 100.0, 1);
+        public double Percent_24 => Math.Round((double)i_24 / (double)i_24_Total * 100.0, 1);
+        public double Percent_25 => Math.Round((double)i_25 / (double)i_25_Total * 100.0, 1);
+        public CompareSection10Option()
+        {
+
+        }
+        public double GetPercent(int index)
+        {
+            if (index == 0) return Percent_11;
+            else if (index == 1) return Percent_12;
+            else if (index == 2) return Percent_13;
+            else if (index == 3) return Percent_14;
+            else if (index == 4) return Percent_15;
+            else if (index == 5) return Percent_21;
+            else if (index == 6) return Percent_22;
+            else if (index == 7) return Percent_23;
+            else if (index == 8) return Percent_24;
+            else if (index == 9) return Percent_25;
+            else return 0.0;
         }
     }
 

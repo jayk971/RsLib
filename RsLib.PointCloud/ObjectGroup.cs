@@ -27,6 +27,22 @@ namespace RsLib.PointCloudLib
                 return sum;
             }
         }
+        public double TotalPathLength
+        {
+            get
+            {
+                double sum = 0.0;
+                foreach (KeyValuePair<string, Object3D> kvp in Objects)
+                {
+                    if(kvp.Value is Polyline pl)
+                    {
+                        sum += pl.Length;
+                    }
+                }
+                return sum;
+            }
+        }
+
 
         public Point3D Min
         {
@@ -574,13 +590,11 @@ namespace RsLib.PointCloudLib
             {
                 string name = item.Key;
                 Object3D obj = item.Value;
-                Polyline pLine = obj as Polyline;
-                if (pLine != null)
+                if (obj is Polyline pLine)
                 {
                     for (int i = 0; i < pLine.Count; i++)
                     {
-                        PointV3D pV3D = pLine.Points[i] as PointV3D;
-                        if (pV3D != null)
+                        if(pLine.Points[i] is PointV3D pV3D)
                         {
                             ABBPoint abbPt = new ABBPoint(pV3D)
                             {

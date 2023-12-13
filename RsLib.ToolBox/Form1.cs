@@ -33,6 +33,8 @@ namespace RsLib.DemoForm
         EJ1500Control eJ1500Ctrl;
         TransMatrixControl transMatrixControl = new TransMatrixControl();
         ICPAlignControl icpCtrl = new ICPAlignControl();
+        Head2ndAlign icpAlign = new Head2ndAlign();
+
         public Form1()
         {
             InitializeComponent();
@@ -86,6 +88,7 @@ namespace RsLib.DemoForm
             cg.ColorControl.Dock = DockStyle.Fill;
             panel2.Controls.Add(cg.ColorControl);
             Log.Add("Start", MsgLevel.Info);
+            propertyGrid1.SelectedObject = icpAlign.Para;
         }
         void traceTd(object obj)
         {
@@ -424,7 +427,6 @@ namespace RsLib.DemoForm
             Edge.SaveAsOpt("D:\\TestSlice.opt");
             #endregion
         }
-
         private void button7_Click(object sender, EventArgs e)
         {
             ICPMatch icp = new ICPMatch();
@@ -440,7 +442,7 @@ namespace RsLib.DemoForm
                     string modelAfterAdjust2= scandataPath.Replace(".ply", "_ModelAdjust2.xyz");
 
                     string pathAfterAdjust = scandataPath.Replace(".ply", "_PathAdjust.txt");
-                    string pathBeforeAdjust = scandataPath.Replace(".ply", "_PathAlign.txt");
+                    string cloudAfterAdjust = scandataPath.Replace(".ply", "_CloudAdjust.xyz");
                     PointCloud scanCloud = new PointCloud();
                     scanCloud.LoadFromPLY(scandataPath, true);
                     if (op.ShowDialog() == DialogResult.OK)
@@ -465,11 +467,13 @@ namespace RsLib.DemoForm
                             Console.WriteLine(mainAppDomainName);
 
 
-                            Head2ndAlign icpAlign = new Head2ndAlign();
                             icpAlign.AdjustPath(scanCloud, modelCloud, og);
-
-                            displayControl.BuildPath(icpAlign.GetAdjustPath(), (int)eDrawItem.AdjustPath, false, true);
-                            displayControl.BuildPointCloud(icpAlign.GetAdjustModel(), (int)eDrawItem.AdjustModel, false, true);
+                            ObjectGroup adjustPath = icpAlign.GetAdjustPath();
+                            PointCloud adjustCloud = icpAlign.GetAdjustModel();
+                            adjustPath.SaveOPT2(pathAfterAdjust);
+                            adjustCloud.Save(cloudAfterAdjust);
+                            displayControl.BuildPath(adjustPath, (int)eDrawItem.AdjustPath, false, true);
+                            displayControl.BuildPointCloud(adjustCloud, (int)eDrawItem.AdjustModel, false, true);
 
                             displayControl.UpdateDataGridView();
                         }

@@ -3503,6 +3503,41 @@ namespace RsLib.PointCloudLib
             int acceptCount = 0;
             double acceptMin = 0;
             double acceptMax = 0;
+
+            int i_11 = 0;
+            int i_12 = 0;
+            int i_13 = 0;
+            int i_14 = 0;
+            int i_15 = 0;
+
+            int i_21 = 0;
+            int i_22 = 0;
+            int i_23 = 0;
+            int i_24 = 0;
+            int i_25 = 0;
+
+            int i_11_Total = 0;
+            int i_12_Total = 0;
+            int i_13_Total = 0;
+            int i_14_Total = 0;
+            int i_15_Total = 0;
+
+            int i_21_Total = 0;
+            int i_22_Total = 0;
+            int i_23_Total = 0;
+            int i_24_Total = 0;
+            int i_25_Total = 0;
+
+            Point3D cloudMax = Max;
+            Point3D cloudMin = Min;
+
+            double CenterX = (cloudMax.X + cloudMin.X) / 2;
+            double splitY1 = (cloudMax.Y - cloudMin.Y) * 0.2 + cloudMin.Y;
+            double splitY2 = (cloudMax.Y - cloudMin.Y) * 0.4 + cloudMin.Y;
+            double splitY3 = (cloudMax.Y - cloudMin.Y) * 0.6 + cloudMin.Y;
+            double splitY4 = (cloudMax.Y - cloudMin.Y) * 0.8 + cloudMin.Y;
+
+
             Point3D centerP = Average;
             double min = minDis <= maxDis ? minDis : maxDis;
             double max = maxDis >= minDis ? maxDis : minDis;
@@ -3536,9 +3571,57 @@ namespace RsLib.PointCloudLib
                     {
                         if (searchR >= (max - min))
                         {
-                            Color testColor = cg.GetColorFromGradient(min);
+                            i_80_100++;
+                            Color testColor = cg.GetColorFromGradient(max);
                             p.AddOption(new DisplayOption() { Color = testColor });
                             searchNearest = false;
+                            if(p.X>CenterX)
+                            {
+                                if(p.Y >= cloudMin.Y && p.Y < splitY1)
+                                {
+                                    i_25_Total++;
+                                }
+                                else if(p.Y >=splitY1 && p.Y < splitY2)
+                                {
+                                    i_24_Total++;
+                                }
+                                else if(p.Y >=splitY2 && p.Y < splitY3)
+                                {
+                                    i_23_Total++;
+                                }
+                                else if (p.Y >=splitY3 && p.Y < splitY4)
+                                {
+                                    i_22_Total++;
+                                }
+                                else
+                                {
+                                    i_21_Total++;
+                                }
+                            }
+                            else
+                            {
+                                if (p.Y >= cloudMin.Y && p.Y < splitY1)
+                                {
+                                    i_15_Total++;
+                                }
+                                else if (p.Y >= splitY1 && p.Y < splitY2)
+                                {
+                                    i_14_Total++;
+                                }
+                                else if (p.Y >= splitY2 && p.Y < splitY3)
+                                {
+                                    i_13_Total++;
+                                }
+                                else if (p.Y >= splitY3 && p.Y < splitY4)
+                                {
+                                    i_12_Total++;
+                                }
+                                else
+                                {
+                                    i_11_Total++;
+                                }
+
+                            }
                         }
                         else
                         {
@@ -3558,9 +3641,10 @@ namespace RsLib.PointCloudLib
                         }
                         double finalLength = sign * diffV.L;
                         double ratio = (finalLength - min) / (max - min) * 100;
+                        bool isAccept = finalLength >= acceptMin && finalLength <= acceptMax;
 
-                        if (finalLength >= acceptMin && finalLength <= acceptMax) acceptCount++;
-
+                        if (isAccept) acceptCount++;
+                        #region Similarity
                         if (ratio <= 20)
                         {
                             i_0_20++;
@@ -3581,6 +3665,68 @@ namespace RsLib.PointCloudLib
                         {
                             i_80_100++;
                         }
+                        #endregion
+
+                        #region 10 宮格
+                        if (p.X > CenterX)
+                        {
+                            if (p.Y >= cloudMin.Y && p.Y < splitY1)
+                            {
+                                if (isAccept) i_25++;
+                                i_25_Total++;
+                            }
+                            else if (p.Y >= splitY1 && p.Y < splitY2)
+                            {
+                                if (isAccept) i_24++;
+                                i_24_Total++;
+                            }
+                            else if (p.Y >= splitY2 && p.Y < splitY3)
+                            {
+                                if (isAccept) i_23++;
+                                i_23_Total++;
+                            }
+                            else if (p.Y >= splitY3 && p.Y < splitY4)
+                            {
+                                if (isAccept) i_22++;
+                                i_22_Total++;
+                            }
+                            else
+                            {
+                                if (isAccept) i_21++;
+                                i_21_Total++;
+                            }
+                        }
+                        else
+                        {
+                            if (p.Y >= cloudMin.Y && p.Y < splitY1)
+                            {
+                                if (isAccept) i_15++;
+                                i_15_Total++;
+                            }
+                            else if (p.Y >= splitY1 && p.Y < splitY2)
+                            {
+                                if (isAccept) i_14++;
+                                i_14_Total++;
+                            }
+                            else if (p.Y >= splitY2 && p.Y < splitY3)
+                            {
+                                if (isAccept) i_13++;
+                                i_13_Total++;
+                            }
+                            else if (p.Y >= splitY3 && p.Y < splitY4)
+                            {
+                                if (isAccept) i_12++;
+                                i_12_Total++;
+                            }
+                            else
+                            {
+                                if (isAccept) i_11++;
+                                i_11_Total++;
+                            }
+
+                        }
+
+                        #endregion
                         Color testColor = cg.GetColorFromGradient(finalLength);
 
                         p.AddOption(new DisplayOption() { Color = testColor });
@@ -3602,10 +3748,41 @@ namespace RsLib.PointCloudLib
                 Base40 = Math.Round((max - min) * 0.4 + min, 1),
                 Base60 = Math.Round((max - min) * 0.6 + min, 1),
                 Base80 = Math.Round((max - min) * 0.8 + min, 1),
-                Base100 = Math.Round((max - min), 1),
+                Base100 = Math.Round((max - min) + min, 1),
                 AcceptCount = acceptCount,
+                AcceptLimitMin = acceptMin,
+                AcceptLimitMax = acceptMax,
             };
             Options.Add(compareOption);
+
+            CompareSection10Option c10Option = new CompareSection10Option()
+            {
+                i_11 = i_11,
+                i_12 = i_12,
+                i_13 = i_13,
+                i_14 = i_14,
+                i_15 = i_15,
+                i_21 = i_21,
+                i_22 = i_22,
+                i_23 = i_23,
+                i_24 = i_24,
+                i_25 = i_25,
+
+                i_11_Total = i_11_Total,
+                i_12_Total = i_12_Total,
+                i_13_Total = i_13_Total,
+                i_14_Total = i_14_Total,
+                i_15_Total = i_15_Total,
+
+                i_21_Total = i_21_Total,
+                i_22_Total = i_22_Total,
+                i_23_Total = i_23_Total,
+                i_24_Total = i_24_Total,
+                i_25_Total = i_25_Total,
+
+            };
+
+            Options.Add(c10Option);
         }
 
     }
