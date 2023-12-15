@@ -53,7 +53,7 @@ namespace RsLib.DemoForm
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage_ICP = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.button7 = new System.Windows.Forms.Button();
@@ -75,13 +75,13 @@ namespace RsLib.DemoForm
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabPage_ICP);
             this.tabControl1.Controls.Add(this.tabPage_TCPServer);
             this.tabControl1.Controls.Add(this.tabPage_TCPClient);
             this.tabControl1.Controls.Add(this.tabPage_Test);
             this.tabControl1.Controls.Add(this.tabPage_2DView);
             this.tabControl1.Controls.Add(this.tabPage_EJ1500);
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
@@ -304,15 +304,15 @@ namespace RsLib.DemoForm
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // tabPage2
+            // tabPage_ICP
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(405, 450);
-            this.tabPage2.TabIndex = 7;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage_ICP.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_ICP.Name = "tabPage_ICP";
+            this.tabPage_ICP.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_ICP.Size = new System.Drawing.Size(405, 450);
+            this.tabPage_ICP.TabIndex = 7;
+            this.tabPage_ICP.Text = "ICP";
+            this.tabPage_ICP.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -426,7 +426,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage_ICP;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.TabPage tabPage3;

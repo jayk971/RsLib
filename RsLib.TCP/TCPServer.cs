@@ -38,7 +38,6 @@ namespace RsLib.TCP.Server
         {
             LoadYaml();
             IsRun = false;
-            ipe = new IPEndPoint(IPAddress.Any, Option.Port);
         }
         public void Send(string data)
         {
@@ -108,14 +107,19 @@ namespace RsLib.TCP.Server
                 }
             }
         }
+        void setIP()
+        {
+            IPAddress ipa = new IPAddress(Option.IPArr);
+            ipe = new IPEndPoint(ipa, Option.Port);
+            Log.Add($"Set {Option.Name} IP {Option.IP}. Port : {Option.Port}", MsgLevel.Info);
+        }
         // 啟動Server
         public void Start()
         {
             try
             {
+                setIP();
                 mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-
                 mainSocket.Bind(ipe);
                 mainSocket.Listen(4);
                 Log.Add("TCP server start. Wait clients...", MsgLevel.Info);
@@ -264,6 +268,40 @@ namespace RsLib.TCP.Server
         [Category("Server")]
         [DisplayName("Name")]
         public string Name { get; set; } = "TCPServer";
+
+        [Category("Server")]
+        [DisplayName("IP")]
+        public string IP { get; set; } = "192.168.170.16";
+        [YamlIgnore]
+        [Browsable(false)]
+        public byte[] IPArr
+        {
+            get
+            {
+                string[] splitData = IP.Split('.');
+                if(splitData.Length ==4)
+                {
+                    bool parseOK0 =  byte.TryParse(splitData[0], out byte arr0);
+                    bool parseOK1 = byte.TryParse(splitData[1], out byte arr1);
+                    bool parseOK2 = byte.TryParse(splitData[2], out byte arr2);
+                    bool parseOK3 = byte.TryParse(splitData[3], out byte arr3);
+
+                    if(parseOK0 & parseOK1 & parseOK2 & parseOK3)
+                    {
+                        return new byte[] { arr0, arr1, arr2, arr3 };
+                    }
+                    else
+                    {
+                        return new byte[4];
+                    }
+                }
+                else
+                {
+                    return new byte[4];
+                }
+            }
+        }
+
         [Category("Server")]
         [DisplayName("Max Client Count")]
         public ushort MaxClientCount { get; set; } = 4;

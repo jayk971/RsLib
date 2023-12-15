@@ -1579,7 +1579,7 @@ namespace RsLib.PointCloudLib
             }
 
         }
-        public static void SaveMatrix4x4(Matrix4x4 m, string filePath,char splitChar)
+        public static void SaveMatrix4x4(Matrix4x4 m, string filePath,char splitChar = ',')
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
             {

@@ -82,7 +82,9 @@ namespace RsLib.DemoForm
             //ThreadPool.QueueUserWorkItem(warnTd);
             //ThreadPool.QueueUserWorkItem(alarmTd);
             icpCtrl.Dock = DockStyle.Fill;
-            tabPage2.Controls.Add(icpCtrl);
+            tabPage_ICP.Controls.Add(icpCtrl);
+
+            icpCtrl.AfterAligned += IcpCtrl_AfterAligned;
 
             ColorGradient cg = new ColorGradient(0, 3);
             cg.ColorControl.Dock = DockStyle.Fill;
@@ -90,6 +92,22 @@ namespace RsLib.DemoForm
             Log.Add("Start", MsgLevel.Info);
             propertyGrid1.SelectedObject = icpAlign.Para;
         }
+
+        private void IcpCtrl_AfterAligned(PointCloud model, PointCloud aligned)
+        {
+            if (InvokeRequired)
+            {
+                Action<PointCloud, PointCloud> action = new Action<PointCloud, PointCloud>(IcpCtrl_AfterAligned);
+                Invoke(action, model, aligned);
+            }
+            else
+            {
+                displayControl.BuildPointCloud(model, (int)eDrawItem.ScanData, false, true);
+                displayControl.BuildPointCloud(aligned, (int)eDrawItem.AdjustModel, false, true);
+                displayControl.UpdateDataGridView();
+            }
+        }
+
         void traceTd(object obj)
         {
             while (true)

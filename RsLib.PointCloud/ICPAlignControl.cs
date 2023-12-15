@@ -20,6 +20,10 @@ namespace RsLib.PointCloudLib
         System.Windows.Forms.Timer waitAlign = new System.Windows.Forms.Timer();
         bool isTimerRunng = false;
         int count = 0;
+        /// <summary>
+        /// Model cloud, Aligned Cloud
+        /// </summary>
+        public event Action<PointCloud, PointCloud> AfterAligned;
         public ICPAlignControl()
         {
             InitializeComponent();
@@ -98,6 +102,7 @@ namespace RsLib.PointCloudLib
                 waitAlign.Enabled = false;
                 SpinWait.SpinUntil(() => isTimerRunng == false, 500);
                 updateUI();
+                AfterAligned?.Invoke(icpObj.GetModelCloud(), icpObj.GetAlignedPointCloud());
             }
         }
         private void updateUI()

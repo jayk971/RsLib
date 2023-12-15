@@ -39,9 +39,14 @@ namespace RsLib.PointCloudLib
         }
         public void SaveTransformMatrix(string filePath)
         {
-            PointCloudCommon.SaveMatrix4x4(AlignMatrix, filePath,' ');
+            PointCloudCommon.SaveMatrix4x4(AlignMatrix, filePath);
         }
-
+        public PointCloud GetModelCloud()
+        {
+            if (Model == null) return null;
+            Model.GetXYZ(out double[] x, out double[] y, out double[] z);
+            return new PointCloud(x, y, z);
+        }
         public PointCloud GetAlignedPointCloud()
         {
             if (AlignedTarget == null) return null;
