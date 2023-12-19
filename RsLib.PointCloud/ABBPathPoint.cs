@@ -33,6 +33,20 @@ namespace RsLib.PointCloudLib
         {
 
         }
+
+        public ABBPoint(ABBPoint otherPoint)
+        {
+
+            X = otherPoint.X;
+            Y = otherPoint.Y;
+            Z = otherPoint.Z;
+            Rx = otherPoint.Rx;
+            Ry = otherPoint.Ry;
+            Rz = otherPoint.Rz;
+            PtIndex = otherPoint.PtIndex;
+            SegmentIndex = otherPoint.SegmentIndex;
+            LapIndex = otherPoint.LapIndex;
+        }
         public ABBPoint(PointV3D p)
         {
             X = p.X;
@@ -247,7 +261,7 @@ namespace RsLib.PointCloudLib
         {
             Pts.Clear();
         }
-        public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5)
+        public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5,bool reCalculateQ = false)
         {
             List<ABBPoint> output = new List<ABBPoint>();
 
@@ -280,7 +294,7 @@ namespace RsLib.PointCloudLib
 
                 if (index2 < 0)
                     index2 = i;
-                ABBPoint outP = Pts[i].DeepClone();
+                ABBPoint outP =new ABBPoint(Pts[i]);
                 Vector2D vRx = new Vector2D();
                 Vector2D vRy = new Vector2D();
                 Vector2D vRz = new Vector2D();
@@ -294,14 +308,14 @@ namespace RsLib.PointCloudLib
                     if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
                     if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
 
-                    outP.ReCaculateQ();
+                    if(reCalculateQ) outP.ReCaculateQ();
                 }
                 output.Add(outP);
             }
             Pts.Clear();
             Pts.AddRange(output);
         }
-        public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4)
+        public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4,bool reCalculateQ = false)
         {
             List<ABBPoint> output = new List<ABBPoint>();
 
@@ -333,7 +347,7 @@ namespace RsLib.PointCloudLib
 
                 if (index2 < 0)
                     index2 = i;
-                ABBPoint outP = Pts[i].DeepClone();
+                ABBPoint outP = new ABBPoint(Pts[i]);
                 Vector2D vRx = new Vector2D();
                 Vector2D vRy = new Vector2D();
                 Vector2D vRz = new Vector2D();
@@ -347,14 +361,14 @@ namespace RsLib.PointCloudLib
                     if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
                     if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
 
-                    outP.ReCaculateQ();
+                   if(reCalculateQ) outP.ReCaculateQ();
                 }
                 output.Add(outP);
             }
             Pts.Clear();
             Pts.AddRange(output);
         }
-        public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3)
+        public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3,bool reCalculateQ = false)
         {
             List<ABBPoint> output = new List<ABBPoint>();
 
@@ -378,7 +392,7 @@ namespace RsLib.PointCloudLib
                 if (index3 >= Pts.Count)
                     index3 = i;
 
-                ABBPoint outP = Pts[i].DeepClone();
+                ABBPoint outP = new ABBPoint(Pts[i]);
                 Vector2D vRx = new Vector2D();
                 Vector2D vRy = new Vector2D();
                 Vector2D vRz = new Vector2D();
@@ -391,7 +405,7 @@ namespace RsLib.PointCloudLib
                     if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
                     if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
 
-                    outP.ReCaculateQ();
+                     if(reCalculateQ)  outP.ReCaculateQ();
                 }
                 output.Add(outP);
             }

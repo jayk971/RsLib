@@ -189,13 +189,13 @@ namespace RsLib.PointCloudLib
         {
             return p1.X < p2.X & p1.Y < p2.Y & p1.Z < p2.Z;
         }
-        public static bool operator ==(Point3D p1, Point3D p2)
+        public bool Equal(Point3D p2)
         {
-            return p1.X == p2.X & p1.Y == p2.Y & p1.Z == p2.Z;
+            return X == p2.X & Y == p2.Y & Z == p2.Z;
         }
-        public static bool operator !=(Point3D p1, Point3D p2)
+        public bool NotEqual(Point3D p2)
         {
-            return p1.X != p2.X & p1.Y != p2.Y & p1.Z != p2.Z;
+            return X != p2.X & Y != p2.Y & Z != p2.Z;
         }
         public void SetXYZ(Point3D p)
         {
