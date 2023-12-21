@@ -122,7 +122,7 @@ namespace RsLib.TCP.Server
                 mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 mainSocket.Bind(ipe);
                 mainSocket.Listen(4);
-                Log.Add("TCP server start. Wait clients...", MsgLevel.Info);
+                Log.Add($"TCP server {ipe.Address} : {ipe.Port} start. Wait clients...", MsgLevel.Info);
                 IsRun = true;
                 mainSocket.BeginAccept(
                     new AsyncCallback(clientConnected),
@@ -131,7 +131,7 @@ namespace RsLib.TCP.Server
             }
             catch (Exception ex)
             {
-                Log.Add("Start TCP server exceptioon.", MsgLevel.Alarm, ex);
+                Log.Add($"Start TCP server {ipe.Address} : {ipe.Port} exception.", MsgLevel.Alarm, ex);
             }
         }
         void clientConnected(IAsyncResult ar)
