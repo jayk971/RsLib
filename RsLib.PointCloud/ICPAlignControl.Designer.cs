@@ -41,10 +41,10 @@
             this.btn_Align = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.btn_SaveMatrix = new System.Windows.Forms.Button();
+            this.btn_SaveAligned = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.btn_SaveAligned = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -228,6 +228,18 @@
             this.btn_SaveMatrix.UseVisualStyleBackColor = true;
             this.btn_SaveMatrix.Click += new System.EventHandler(this.btn_SaveMatrix_Click);
             // 
+            // btn_SaveAligned
+            // 
+            this.tableLayoutPanel3.SetColumnSpan(this.btn_SaveAligned, 2);
+            this.btn_SaveAligned.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_SaveAligned.Location = new System.Drawing.Point(3, 322);
+            this.btn_SaveAligned.Name = "btn_SaveAligned";
+            this.btn_SaveAligned.Size = new System.Drawing.Size(147, 29);
+            this.btn_SaveAligned.TabIndex = 6;
+            this.btn_SaveAligned.Text = "Save Aligned Cloud";
+            this.btn_SaveAligned.UseVisualStyleBackColor = true;
+            this.btn_SaveAligned.Click += new System.EventHandler(this.btn_SaveAligned_Click);
+            // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 1;
@@ -262,18 +274,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(308, 130);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
-            // 
-            // btn_SaveAligned
-            // 
-            this.tableLayoutPanel3.SetColumnSpan(this.btn_SaveAligned, 2);
-            this.btn_SaveAligned.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_SaveAligned.Location = new System.Drawing.Point(3, 322);
-            this.btn_SaveAligned.Name = "btn_SaveAligned";
-            this.btn_SaveAligned.Size = new System.Drawing.Size(147, 29);
-            this.btn_SaveAligned.TabIndex = 6;
-            this.btn_SaveAligned.Text = "Save Aligned Cloud";
-            this.btn_SaveAligned.UseVisualStyleBackColor = true;
-            this.btn_SaveAligned.Click += new System.EventHandler(this.btn_SaveAligned_Click);
             // 
             // ICPAlignControl
             // 
