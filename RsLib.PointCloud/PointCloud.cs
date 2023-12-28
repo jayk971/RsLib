@@ -3799,6 +3799,13 @@ namespace RsLib.PointCloudLib
         public List<double> ZList = new List<double>();
         public double[] ZArray =>ZList.ToArray();
 
+        public bool IsArrayElementEqual
+        {
+            get
+            {
+                return XList.Count == YList.Count && XList.Count == ZList.Count;
+            }
+        }
 
         public PointCloudTupleArray() 
         {
@@ -3832,6 +3839,19 @@ namespace RsLib.PointCloudLib
         public Tuple<double[], double[], double[]> ToTuple()
         {
             return new Tuple<double[], double[], double[]>(XArray, YArray, ZArray);
+        }
+        public void SaveCloud(string filePath)
+        {
+            if (IsArrayElementEqual == false) return;
+            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            {
+                for (int i = 0; i < XList.Count; i++)
+                {
+                    string msg = $"{XList[i]} {YList[i]} {ZList[i]}";
+                    sw.WriteLine(msg);
+                }
+                sw.Flush();
+            }
         }
     }
 
