@@ -3843,11 +3843,26 @@ namespace RsLib.PointCloudLib
         public void SaveCloud(string filePath)
         {
             if (IsArrayElementEqual == false) return;
+            if (XList.Count == 0) return;
             using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
             {
                 for (int i = 0; i < XList.Count; i++)
                 {
                     string msg = $"{XList[i]} {YList[i]} {ZList[i]}";
+                    sw.WriteLine(msg);
+                }
+                sw.Flush();
+            }
+        }
+        public static void SaveCloud(string filePath,Tuple<double[], double[], double[]> cloud)
+        {
+            if (cloud.Item1.Length != cloud.Item2.Length || cloud.Item1.Length != cloud.Item3.Length) return;
+            if (cloud.Item1.Length == 0) return;
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
+            {
+                for (int i = 0; i < cloud.Item1.Length; i++)
+                {
+                    string msg = $"{cloud.Item1[i]} {cloud.Item2[i]} {cloud.Item3[i]}";
                     sw.WriteLine(msg);
                 }
                 sw.Flush();
