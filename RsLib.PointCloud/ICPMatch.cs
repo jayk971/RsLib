@@ -119,15 +119,46 @@ namespace RsLib.PointCloudLib
 
             MatchICP.Match(targetGeo, Model);
             Extrinsic AlignMatirx = new Extrinsic(  MatchICP.result.transform);
-
+            Matrix4x4 m_Manual = Matrix4x4.Identity;
+            m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateZDeg / 180.0 * Math.PI));
+            m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateYDeg / 180.0 * Math.PI));
+            m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateXDeg / 180.0 * Math.PI));
+            m_Manual = m_Manual * Matrix4x4.CreateTranslation(new Vector3((float)Setting.ShiftX, (float)Setting.ShiftY, (float)Setting.ShiftZ));
+            Extrinsic ManualMatrix = new Extrinsic(flatMatrix4x4(m_Manual));
+             AlignMatirx.Multiply(ManualMatrix);
             AlignedTarget = new GeometryPointCloud(targetGeo);
             AlignedTarget.Transform(AlignMatirx);
-
+            
             Fitness = Math.Round(MatchICP.result.fitness, 2);
             RMS = Math.Round(MatchICP.result.rmse, 2);
             AlignMatrix = PointCloudCommon.ArrayToMatrix4x4(AlignMatirx.GetArray());
             if (Fitness < 0.99) return false;
             return true;
+        }
+        double[] flatMatrix4x4(Matrix4x4 m)
+        {
+            double[] output = new double[16];
+            output[0] = m.V00;
+            output[1] = m.V10;
+            output[2] = m.V20;
+            output[3] = m.V30;
+
+            output[4] = m.V01;
+            output[5] = m.V11;
+            output[6] = m.V21;
+            output[7] = m.V31;
+
+            output[8] = m.V02;
+            output[9] = m.V12;
+            output[10] = m.V22;
+            output[11] = m.V32;
+
+            output[12] = m.V03;
+            output[13] = m.V13;
+            output[14] = m.V23;
+            output[15] = m.V33;
+
+            return output;
         }
         private GeometryPointCloud ToGeometry(string filePath)
         {
@@ -364,5 +395,27 @@ namespace RsLib.PointCloudLib
         [DisplayName("Max Correction Distance")]
 
         public double autofinetune_max_corr_dist { get; set; } = 2.5;
+
+        [Category("Manual Adjust")]
+        [DisplayName("Shift X")]
+        public double ShiftX { get; set; } = 0.0;
+        [Category("Manual Adjust")]
+        [DisplayName("Shift Y")]
+        public double ShiftY { get; set; } = 0.0;
+        [Category("Manual Adjust")]
+        [DisplayName("Shift Z")]
+        public double ShiftZ { get; set; } = 0.0;
+        [Category("Manual Adjust")]
+        [DisplayName("Rotate X (deg)")]
+        public double RotateXDeg { get; set; } = 0.0;
+        [Category("Manual Adjust")]
+        [DisplayName("Rotate Y (deg)")]
+        public double RotateYDeg { get; set; } = 0.0;
+        [Category("Manual Adjust")]
+        [DisplayName("Rotate Z (deg)")]
+        public double RotateZDeg { get; set; } = 0.0;
+
+
+
     }
 }
