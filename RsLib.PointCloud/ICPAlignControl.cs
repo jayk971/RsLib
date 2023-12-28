@@ -132,5 +132,13 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+
+        public void GetScreenPrint()
+        {
+            Bitmap bitmap = new Bitmap(this.Width, this.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+
+            g.CopyFromScreen(Location, new Point(0, 0), new Size(Width, Height));
+        }
     }
 }

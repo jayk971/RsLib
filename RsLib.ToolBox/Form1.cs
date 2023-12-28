@@ -504,23 +504,18 @@ namespace RsLib.DemoForm
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Y 90 X -45
+            CoordMatrix cm = new CoordMatrix();
+            cm.AddSeq(eRefAxis.Z,eMatrixType.Rotate,60.0/180.0*Math.PI);
+            cm.AddSeq(eRefAxis.Y, eMatrixType.Rotate, 30.0 / 180.0 * Math.PI);
+            cm.AddSeq(eRefAxis.X, eMatrixType.Rotate, 40.0 / 180.0 * Math.PI);
+            cm.EndAddMatrix();
+            Matrix4x4 m = cm.FinalMatrix4;
+            Matrix4x4 m_Inverse =  cm.GetMatrixInverse();
 
-            Vector3 vx = new Vector3(0f, 0f, -1f);
-            Vector3 vy = new Vector3(-0.707f, 0.707f, 0f);
-            Vector3 vz = new Vector3(0.707f, 0.707f, 0f);
+            Matrix4x4 m1 = m * m_Inverse;
+            Matrix4x4 m2 = m_Inverse * m;
 
-            RotateAxis r = new RotateAxis(vx,vy,vz);
-
-            //Y -90 X -45
-
-            Vector3 vx2 = new Vector3(0f, 0f, 1f);
-            Vector3 vy2 = new Vector3(0.707f, 0.707f, 0f);
-            Vector3 vz2 = new Vector3(-0.707f, 0.707f, 0f);
-
-            RotateAxis r2 = new RotateAxis(vx2, vy2, vz2);
-
-
+            Matrix4x4 mm = Matrix4x4.CreateRotationZ(0.5f);
         }
 
         private void button8_Click(object sender, EventArgs e)

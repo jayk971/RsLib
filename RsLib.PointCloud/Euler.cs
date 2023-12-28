@@ -6,6 +6,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -387,7 +388,7 @@ namespace RsLib.PointCloudLib
         public Matrix4x4 GetMatrixInverse()
         {
             Matrix4x4 m = Matrix4x4.Identity;
-            for (int i = 0; i < MatrixSequnce.Count; i++)
+            for (int i = MatrixSequnce.Count-1; i >=0; i--)
             {
                 switch (MatrixSequnce[i].MatrixType)
                 {
@@ -796,7 +797,78 @@ namespace RsLib.PointCloudLib
         public RotateRigidBody()
         {
         }
+        public RotateRigidBody(Vector3 vx, Vector3 vy, Vector3 vz)
+        {
+            finalMatrix4 = collectMatricElement(vx, vy, vz);
+            SolveRzRyRx(finalMatrix4, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
+            MatrixSequnce.Add(rz);
+            MatrixSequnce.Add(ry);
+            MatrixSequnce.Add(rx);
+            EndAddMatrix();
+        }
 
+        public RotateRigidBody(Vector3D vx, Vector3D vy, Vector3D vz)
+        {
+            finalMatrix4 = collectMatricElement(vx, vy, vz);
+            SolveRzRyRx(finalMatrix4, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
+            MatrixSequnce.Add(rz);
+            MatrixSequnce.Add(ry);
+            MatrixSequnce.Add(rx);
+            EndAddMatrix();
+        }
+        Matrix4x4 collectMatricElement(Vector3D vx, Vector3D vy, Vector3D vz)
+        {
+            vx.UnitVector();
+            vy.UnitVector();
+            vz.UnitVector();
+            Matrix4x4 matrix = Matrix4x4.Identity;
+            
+            matrix.V00 = (float)vx.X;
+            matrix.V10 = (float)vx.Y;
+            matrix.V20 = (float)vx.Z;
+
+            matrix.V01 = (float)vy.X;
+            matrix.V11 = (float)vy.Y;
+            matrix.V21 = (float)vy.Z;
+
+            matrix.V02 = (float)vz.X;
+            matrix.V12 = (float)vz.Y;
+            matrix.V22 = (float)vz.Z;
+            return matrix;
+        }
+        Matrix4x4 collectMatricElement(Vector3 vx, Vector3 vy, Vector3 vz)
+        {
+            vx.Normalize();
+            vy.Normalize();
+            vz.Normalize();
+            Matrix4x4 matrix = Matrix4x4.Identity;
+            /*
+             Row : Fix body coordinate relate to world coordinate
+            Column : World coordinate relate to fix body coordinate
+             */
+            matrix.V00 = (float)vx.X;
+            matrix.V01 = (float)vx.Y;
+            matrix.V02 = (float)vx.Z;
+
+            matrix.V10 = (float)vy.X;
+            matrix.V11 = (float)vy.Y;
+            matrix.V12 = (float)vy.Z;
+
+            matrix.V20 = (float)vz.X;
+            matrix.V21 = (float)vz.Y;
+            matrix.V22 = (float)vz.Z;
+            return matrix;
+        }
+
+        public void SolveInverseMatrix(Vector3D vx,Vector3D vy,Vector3D vz)
+        {
+            Matrix4x4 M_Inverse = collectMatricElement(vx,vy, vz);
+            SolveRzRyRx(M_Inverse, out RotateUnit rx, out RotateUnit ry, out RotateUnit rz);
+            AddRotateSeq(eRefAxis.X, rx.RotateRadian);
+            AddRotateSeq(eRefAxis.Y, ry.RotateRadian);
+            AddRotateSeq(eRefAxis.Z, rz.RotateRadian);
+            EndAddMatrix();
+        }
         public void AddRotateSeq(eRefAxis rotSeq, double rotateRad)
         {
             RotateUnit rotateEulerUnit = new RotateUnit(rotSeq, eRotateType.RigidBody,rotateRad);

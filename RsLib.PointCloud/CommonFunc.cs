@@ -1355,7 +1355,7 @@ namespace RsLib.PointCloudLib
 
             //Vector3D shift = new Vector3D(i_P, afterP);
 
-            RotateAxis local_rotate_image = new RotateAxis(vx, vy, vz);
+            RotateRigidBody local_rotate_image = new RotateRigidBody(vx, vy, vz);
             local_rotate_image.Name = "local_rotate_image";
             Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
             local_shift_image.Name = "local_shift_image";
@@ -1396,8 +1396,9 @@ namespace RsLib.PointCloudLib
 
             //Vector3D shift = new Vector3D(i_P, afterP);
 
-            RotateAxis local_rotate_image = new RotateAxis(vx, vy, vz);
+            RotateRigidBody local_rotate_image = new RotateRigidBody(vx, vy, vz);
             local_rotate_image.Name = "local_rotate_image";
+
             Shift local_shift_image = new Shift(i_P.X, i_P.Y, i_P.Z);
             local_shift_image.Name = "local_shift_image";
             RotateAxis local_rotate_robot = new RotateAxis(vx_, vy_, vz_);

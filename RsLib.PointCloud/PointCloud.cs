@@ -3787,6 +3787,55 @@ namespace RsLib.PointCloudLib
 
     }
 
+    [Serializable]
+    public partial class PointCloudTupleArray
+    {
+        public List<double> XList = new List<double>();
+        public double[] XArray =>XList.ToArray();
+
+        public List<double> YList = new List<double>();
+        public double[] YArray =>YList.ToArray();
+
+        public List<double> ZList = new List<double>();
+        public double[] ZArray =>ZList.ToArray();
+
+
+        public PointCloudTupleArray() 
+        {
+        }
+        public PointCloudTupleArray(PointCloud pCloud)
+        {
+            for (int i = 0; i < pCloud.Count; i++)
+            {
+                Add(pCloud.Points[i]);
+            }
+        }
+        public void Add(PointCloud pCloud)
+        {
+            for (int i = 0; i < pCloud.Count; i++)
+            {
+                Add(pCloud.Points[i]);
+            }
+        }
+        public void Add(Point3D pt)
+        {
+            XList.Add(pt.X);
+            YList.Add(pt.Y);
+            ZList.Add(pt.Z);
+        }
+        public void Clear()
+        {
+            XList.Clear();
+            YList.Clear();
+            ZList.Clear();
+        }
+        public Tuple<double[], double[], double[]> ToTuple()
+        {
+            return new Tuple<double[], double[], double[]>(XArray, YArray, ZArray);
+        }
+    }
+
+
     public enum DigitFormat : int
     {
         XYZ = 0,
