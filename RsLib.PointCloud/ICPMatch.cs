@@ -121,8 +121,8 @@ namespace RsLib.PointCloudLib
             Extrinsic AlignMatirx = new Extrinsic(  MatchICP.result.transform);
             Matrix4x4 m_Manual = Matrix4x4.Identity;
             m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateZDeg / 180.0 * Math.PI));
-            m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateYDeg / 180.0 * Math.PI));
-            m_Manual = m_Manual * Matrix4x4.CreateRotationZ((float)(Setting.RotateXDeg / 180.0 * Math.PI));
+            m_Manual = m_Manual * Matrix4x4.CreateRotationY((float)(Setting.RotateYDeg / 180.0 * Math.PI));
+            m_Manual = m_Manual * Matrix4x4.CreateRotationX((float)(Setting.RotateXDeg / 180.0 * Math.PI));
             m_Manual = m_Manual * Matrix4x4.CreateTranslation(new Vector3((float)Setting.ShiftX, (float)Setting.ShiftY, (float)Setting.ShiftZ));
             Extrinsic ManualMatrix = new Extrinsic(flatMatrix4x4(m_Manual));
              AlignMatirx.Multiply(ManualMatrix);
