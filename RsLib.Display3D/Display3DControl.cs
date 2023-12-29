@@ -1462,7 +1462,7 @@ namespace RsLib.Display3D
         {
             using (SaveFileDialog sf = new SaveFileDialog())
             {
-                sf.Filter = "Snap Shot Image|*.png";
+                sf.Filter = "Display 3D Screen Shot Image|*.png";
                 if(sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
