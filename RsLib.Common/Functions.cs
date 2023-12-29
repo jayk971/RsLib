@@ -3,6 +3,7 @@ using RsLib.LogMgr;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -10,6 +11,8 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+
 namespace RsLib.Common
 {
     public class FT_StopWatch : Stopwatch
@@ -32,6 +35,50 @@ namespace RsLib.Common
     }
     public class FT_Functions
     {
+        public static Bitmap CaptureScreenshot(Control control)
+        {
+            // Create a bitmap to store the screenshot
+            Bitmap screenshot = new Bitmap(control.Width, control.Height);
+
+            // Create a graphics object from the bitmap
+            using (Graphics graphics = Graphics.FromImage(screenshot))
+            {
+                // Capture the user control into the bitmap
+                graphics.CopyFromScreen(control.PointToScreen(Point.Empty), Point.Empty, control.Size);
+            }
+
+            return screenshot;
+        }
+        // Method to copy the screenshot to the clipboard
+        public static void CopyScreenshotToClipboard(Control control)
+        {
+            // Capture the screenshot
+            Bitmap screenshot = CaptureControlScreenshot(control);
+
+            // Copy the screenshot to the clipboard
+            Clipboard.SetImage(screenshot);
+
+            //MessageBox.Show("Screenshot copied to clipboard.");
+        }
+        public static Bitmap CaptureControlScreenshot(Control control)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
+            }
+
+            // Create a bitmap to store the screenshot
+            Bitmap screenshot = new Bitmap(control.Width, control.Height);
+
+            // Create a graphics object from the bitmap
+            using (Graphics graphics = Graphics.FromImage(screenshot))
+            {
+                // Draw the control onto the bitmap
+                control.DrawToBitmap(screenshot, new Rectangle(Point.Empty, control.Size));
+            }
+
+            return screenshot;
+        }
         public static bool ParseDateTime_yyyyMMdd_HHmmss(string parseStr, out DateTime parsedDateTime)
         {
             bool parseOK = true;

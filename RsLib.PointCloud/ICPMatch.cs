@@ -15,6 +15,7 @@ using System.ComponentModel;
 
 namespace RsLib.PointCloudLib
 {
+    [Serializable]
     public class ICPMatch
     {
         public double RMS { get; private set; }= 0.0;

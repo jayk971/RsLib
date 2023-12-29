@@ -80,6 +80,7 @@
             this.lbl_Similarity.TabIndex = 2;
             this.lbl_Similarity.Text = "100.0";
             this.lbl_Similarity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_Similarity.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lbl_Similarity_MouseDoubleClick);
             // 
             // CompareCloudControl
             // 

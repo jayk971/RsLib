@@ -1466,9 +1466,14 @@ namespace RsLib.Display3D
                 if(sf.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = sf.FileName;
-                    SaveSnapShot(filePath);
+                    SaveScreenShot(filePath);
                 }
             }
+        }
+
+        private void copyImageIntoClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CaptureScreenShotIntoClipboard();
         }
     }
 }

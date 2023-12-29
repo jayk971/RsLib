@@ -1307,19 +1307,29 @@ namespace RsLib.Display3D
 
             GL.End();
         }
-        public void SaveSnapShot(string filePath)
+        public Bitmap CaptureScreenShot()
         {
             Bitmap bmp = new Bitmap(pnl_GLControl.Width, pnl_GLControl.Height);
             BitmapData bitmapData = bmp.LockBits(
                 new Rectangle(0, 0, pnl_GLControl.Width, pnl_GLControl.Height),
                 ImageLockMode.WriteOnly,
                 System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            GL.ReadPixels(0, 0, pnl_GLControl.Width, pnl_GLControl.Height, 
-                OpenTK.Graphics.OpenGL.PixelFormat.Bgr, 
-                PixelType.UnsignedByte, 
+            GL.ReadPixels(0, 0, pnl_GLControl.Width, pnl_GLControl.Height,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgr,
+                PixelType.UnsignedByte,
                 bitmapData.Scan0);
             bmp.UnlockBits(bitmapData);
             bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            return bmp;
+        }
+        public void CaptureScreenShotIntoClipboard()
+        {
+            Bitmap bmp = CaptureScreenShot();
+            Clipboard.SetImage(bmp);
+        }
+        public void SaveScreenShot(string filePath)
+        {
+            Bitmap bmp = CaptureScreenShot();
             bmp.Save(filePath, ImageFormat.Png);
             bmp.Dispose();
         }

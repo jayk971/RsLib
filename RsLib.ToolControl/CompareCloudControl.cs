@@ -141,5 +141,10 @@ namespace RsLib.ToolControl
             return model;
         }
 
+        private void lbl_Similarity_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
     }
 }
