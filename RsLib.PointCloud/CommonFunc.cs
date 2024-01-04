@@ -38,6 +38,39 @@ namespace RsLib.PointCloudLib
         public static Vector3D VoZ = new Vector3D(0, 0, 1);
 
         public static Point3D Po = new Point3D();
+
+        public static PointV3D ProjectToSurface(double targetX,double targetY, double targetZ,KDTree<int> targetTree, double searchRadius = 5.0)
+        {
+            Point3D target = new Point3D(targetX, targetY, targetZ);
+            PointV3D p = new PointV3D();
+            PointCloud surfaceCloud = GetNearestPointCloud(targetTree, target, searchRadius);
+            while (surfaceCloud.Count < 10)
+            {
+                searchRadius++;
+                surfaceCloud = GetNearestPointCloud(targetTree, target, searchRadius);
+                if (searchRadius >= 20) break;
+            }
+            if (surfaceCloud.Count > 10)
+            {
+                try
+                {
+                    PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                    RsPlane plane = new RsPlane(vZ, center);
+                    Point3D projectP = plane.ProjectPOnPlane(target);
+                    p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                    double dot = Vector3D.Dot(vZ, Vector3D.ZAxis);
+                    if (dot < 0) vZ.Reverse();
+                    p.Vz = vZ.GetUnitVector();
+                    return p;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return new PointV3D(target);
+        }
+
         public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath)
         {
             bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);

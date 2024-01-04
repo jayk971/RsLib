@@ -2,6 +2,8 @@
 using Accord.Math;
 using System;
 using System.Collections.Generic;
+using static System.Windows.Forms.AxHost;
+
 namespace RsLib.PointCloudLib
 {
     [Serializable]
@@ -45,6 +47,12 @@ namespace RsLib.PointCloudLib
             Y = Math.Round(endP.Y - startP.Y, 2);
             Z = Math.Round(endP.Z - startP.Z, 2);
         }
+        public Vector3D(Pose startPose,Pose endPose)
+        {
+            X = Math.Round(endPose.X - startPose.X, 2);
+            Y = Math.Round(endPose.Y - startPose.Y, 2);
+            Z = Math.Round(endPose.Z - startPose.Z, 2);
+        }
         public static Vector3D GetRefAxis(eRefAxis refAxis)
         {
             if (refAxis == eRefAxis.X) return XAxis;
@@ -55,6 +63,8 @@ namespace RsLib.PointCloudLib
         {
             return $"{X:F2},{Y:F2},{Z:F2}";
         }
+        public double[] ToArray() => new double[] { X, Y, Z };
+        
         public void CalculateEulerAngle()
         {
             if (!(X == 0 && Y == 0 && Z == 0))

@@ -151,11 +151,11 @@ namespace RsLib.PointCloudLib
                 return projP;
             }
 
-            double t = H / (A * A + B * B + C * C);
+            double t = -H / (A * A + B * B + C * C);
 
-            projP.X = Math.Round(P.X - A * t, 2);
-            projP.Y = Math.Round(P.Y - B * t, 2);
-            projP.Z = Math.Round(P.Z - C * t, 2);
+            projP.X = Math.Round(P.X + A * t, 2);
+            projP.Y = Math.Round(P.Y + B * t, 2);
+            projP.Z = Math.Round(P.Z + C * t, 2);
 
             return projP;
         }

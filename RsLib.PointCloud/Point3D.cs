@@ -1,4 +1,5 @@
 ﻿using Accord.Math;
+using Accord.Collections;
 using RsLib.Common;
 using System;
 using System.Collections.Generic;
@@ -196,6 +197,36 @@ namespace RsLib.PointCloudLib
         public bool NotEqual(Point3D p2)
         {
             return X != p2.X & Y != p2.Y & Z != p2.Z;
+        }
+        public PointV3D ProjectToSurface(KDTree<int> targetTree, double searchRadius = 5.0)
+        {
+            PointV3D p = new PointV3D();
+            PointCloud surfaceCloud = PointCloudCommon.GetNearestPointCloud(targetTree, this, searchRadius);
+            while (surfaceCloud.Count == 0)
+            {
+                searchRadius++;
+                surfaceCloud = PointCloudCommon.GetNearestPointCloud(targetTree, this, searchRadius);
+                if (searchRadius >= 20) break;
+            }
+            if (surfaceCloud.Count > 5)
+            {
+                try
+                {
+                    PointCloudCommon.PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                    RsPlane plane = new RsPlane(vZ, center);
+                    Point3D projectP = plane.ProjectPOnPlane(this);
+                    p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                    double dot = Vector3D.Dot(vZ, Vector3D.ZAxis);
+                    if (dot < 0) vZ.Reverse();
+                    p.Vz = vZ.GetUnitVector();
+                    return p;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return new PointV3D(this);
         }
         public void SetXYZ(Point3D p)
         {
@@ -970,6 +1001,17 @@ namespace RsLib.PointCloudLib
 
             AddOption(src.Options);
 
+        }
+        public PointV3D(Pose src,int ptIndex)
+        {
+            X = src.X;
+            Y = src.Y;
+            Z = src.Z;
+            Vx = src.VectorX;
+            Vy = src.VectorY;
+            Vz = src.VectorZ;
+            LocateIndexOption lo = new LocateIndexOption() { Index = ptIndex };
+            AddOption(lo);
         }
 
         public static PointV3D Multiply(PointV3D pt, List<CoordMatrix> matrics)

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using Accord.Collections;
 using Newtonsoft.Json;
+using RsLib.Common;
+
 namespace RsLib.PointCloudLib
 {
     //using CoordTuple = Tuple<List<double>, List<double>, List<double>>;
@@ -19,6 +22,30 @@ namespace RsLib.PointCloudLib
         public ProjectInfo Project { get; set; }
         public List<SelectionInfo> Selections { get; set; }
 
+        public NikePath() 
+        {
+            
+        }
+        public NikePath(NikePath src)
+        {
+            SchemaVersion = src.SchemaVersion;
+            UID = src.UID;
+            CAD = src.CAD.DeepClone();
+            Machines = src.Machines.DeepClone();
+            Project = src.Project.DeepClone();
+            Selections = src.Selections.DeepClone();
+        }
+        public NikePath(NikePath src,bool enableClonePath)
+        {
+            SchemaVersion = src.SchemaVersion;
+            UID = src.UID;
+            CAD = src.CAD.DeepClone();
+            Machines = src.Machines.DeepClone();
+            Project = src.Project.DeepClone();
+            if (enableClonePath) Selections = src.Selections.DeepClone();
+            else Selections = new List<SelectionInfo>();
+        }
+
         public static NikePath Parse(string path)
         {
             string readData = "";
@@ -29,8 +56,36 @@ namespace RsLib.PointCloudLib
 
             try
             {
-                NikePath temp = JsonConvert.DeserializeObject<NikePath>(readData, new JsonSerializerSettings() { DefaultValueHandling = DefaultValueHandling.Ignore, NullValueHandling = NullValueHandling.Ignore });
+                NikePath temp = JsonConvert.DeserializeObject<NikePath>(readData,
+                    new JsonSerializerSettings() 
+                    { 
+                        DefaultValueHandling = DefaultValueHandling.Ignore, 
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
+                    });
                 return temp;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void SaveJson(string filePath)
+        {
+            try
+            {
+                string writeData = JsonConvert.SerializeObject(this,
+                    new JsonSerializerSettings() 
+                    { 
+                        DefaultValueHandling= DefaultValueHandling.Ignore,
+                        NullValueHandling = NullValueHandling.Ignore, 
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    });
+                using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default,65535))
+                {
+                    sw.WriteLine(writeData);
+                    sw.Flush();
+                }
             }
             catch (Exception ex)
             {
@@ -72,26 +127,44 @@ namespace RsLib.PointCloudLib
     [Serializable]
     public class CADInfo
     {
-        public string Size { get; set; } = "";
-        public string UID { get; set; } = "";
+        public string Size { get; set; } = "1.0";
+        public string UID { get; set; } = "UID";
     }
     [Serializable]
     public class MachinesInfo
     {
-        public string Label { get; set; } = "";
-        public string Type { get; set; } = "";
+        public string Label { get; set; } = "Cutter";
+        public string Type { get; set; } = "Cutter_Z69";
     }
     [Serializable]
     public class ProjectInfo
     {
-        public string Name { get; set; }
-        public string Season { get; set; }
+        public string Name { get; set; } = "Test";
+        public string Season { get; set; } = "TBD";
     }
     [Serializable]
     public class SelectionInfo
     {
-        public string Machine { get; set; }
+        public string Machine { get; set; } = "Cutter_Z69";
         public List<ToolPathInfo> toolPaths { get; set; }
+        [JsonIgnore]
+        public int PoseCount
+        {
+            get
+            {
+                if (toolPaths == null) return 0;
+                else
+                {
+                    int count = 0;
+                    for (int i = 0; i < toolPaths.Count; i++)
+                    {
+                        count += toolPaths[i].PoseCount;
+                    }
+                    return count;
+                }
+            }
+        }
+
 
         public ObjectGroup ToObjectGroup(int selectIndex)
         {
@@ -174,16 +247,68 @@ namespace RsLib.PointCloudLib
         public string StopType { get; set; }
         public string Texture { get; set; }
         public List<Pose> Poses { get; set; }
+
+        [JsonIgnore]
+        public int PoseCount => Poses.Count;
         public Polyline ToPolyline(int lineIndex)
         {
             Polyline poly = new Polyline();
-            LineOption lineOption = new LineOption();
-            lineOption.LineIndex = lineIndex;
+            LineOption lineOption = new LineOption
+            {
+                LineIndex = lineIndex
+            };
             poly.AddOption(lineOption);
             for (int i = 0; i < Poses.Count; i++)
             {
                 Pose p = Poses[i];
-                poly.Add(p.ToPoint3D(lineIndex,i));
+                PointV3D pt = p.ToPoint3D(lineIndex, i);
+                poly.Add(pt);
+            }
+
+            for (int i = 0; i < poly.Count; i++)
+            {
+                if (poly.Points[i] is PointV3D pt)
+                {
+                    if(i == poly.Count-1)
+                    {
+                        if (pt.Vx != null)
+                        {
+                            if (pt.Vx.L == 0) pt.Vx = (poly.Points[i - 1] as PointV3D).Vx.DeepClone();
+                        }
+                        if (pt.Vy != null)
+                        {
+                            if (pt.Vy.L == 0) pt.Vy = (poly.Points[i - 1] as PointV3D).Vy.DeepClone();
+                        }
+                        if (pt.Vz != null)
+                        {
+                            if (pt.Vz.L == 0) pt.Vz = (poly.Points[i - 1] as PointV3D).Vz.DeepClone();
+                        }
+                    }
+                    else
+                    {
+                        if (pt.Vx != null)
+                        {
+                            if (pt.Vx.L == 0) pt.Vx = (poly.Points[i + 1] as PointV3D).Vx.DeepClone();
+                        }
+                        if (pt.Vy != null)
+                        {
+                            if (pt.Vy.L == 0) pt.Vy = (poly.Points[i + 1] as PointV3D).Vy.DeepClone();
+                        }
+                        if (pt.Vz != null)
+                        {
+                            if (pt.Vz.L == 0) pt.Vz = (poly.Points[i + 1] as PointV3D).Vz.DeepClone();
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < poly.Count; i++)
+            {
+                if (poly.Points[i] is PointV3D pt)
+                {
+                    if(pt.Vx == null) pt.Vx = Vector3D.Cross(pt.Vy, pt.Vz);
+                    if(pt.Vy == null) pt.Vy = Vector3D.Cross(pt.Vz,pt.Vx);
+                    if (pt.Vz == null) pt.Vz = Vector3D.Cross(pt.Vx, pt.Vy);
+                }
             }
 
             return poly;
@@ -239,7 +364,33 @@ namespace RsLib.PointCloudLib
 
         //    return new SelectionTuple(tuplePos, tupleVX, tupleVY, tupleVZ,iLi);;
         //}
-
+        public  List<double> ToXVectorLength()
+        {
+            List<double> output = new List<double>();
+            for (int i = 0; i < Poses.Count; i++)
+            {
+                output.Add(Poses[i].XLength);
+            }
+            return output;
+        }
+        public List<double> ToYVectorLength()
+        {
+            List<double> output = new List<double>();
+            for (int i = 0; i < Poses.Count; i++)
+            {
+                output.Add(Poses[i].YLength);
+            }
+            return output;
+        }
+        public List<double> ToZVectorLength()
+        {
+            List<double> output = new List<double>();
+            for (int i = 0; i < Poses.Count; i++)
+            {
+                output.Add(Poses[i].ZLength);
+            }
+            return output;
+        }
         public PoseList ToPoseList(int lineIndex)
         {
             PoseList poseList = new PoseList();
@@ -261,32 +412,170 @@ namespace RsLib.PointCloudLib
         public double Z { get; set; }
         public double[] XAxis { get; set; }
         [JsonIgnore]
-        public Vector3D VectorX => new Vector3D(XAxis[0], XAxis[1], XAxis[2]);
+        public double XLength => GetVectorLength(XAxis);
+        [JsonIgnore]
+        public Vector3D VectorX
+        {
+            get
+            {
+                if (XAxis != null) return new Vector3D(XAxis[0], XAxis[1], XAxis[2]);
+                else return new Vector3D();
+            }
+        }
+
         public double[] YAxis { get; set; }
         [JsonIgnore]
-        public Vector3D VectorY => new Vector3D(YAxis[0], YAxis[1], YAxis[2]);
+        public double YLength => GetVectorLength(YAxis);
+
         [JsonIgnore]
-        public Vector3D VectorZ => Vector3D.Cross(VectorX, VectorY);
+        public Vector3D VectorY
+        {
+            get
+            {
+                if (YAxis != null) return new Vector3D(YAxis[0], YAxis[1], YAxis[2]);
+                else return new Vector3D();
+            }
+        }
+        public double[] ZAxis { get; set; }
         [JsonIgnore]
-        public double[] ZAxis => new double[] { VectorZ.X, VectorZ.Y, VectorZ.Z };
-        public PointV3D ToPoint3D(int lineIndex, int ptIndex)
+        public double ZLength => GetVectorLength(ZAxis);
+
+        [JsonIgnore]
+        public Vector3D VectorZ
+        {
+            get
+            {
+                if (ZAxis != null) return new Vector3D(ZAxis[0], ZAxis[1], ZAxis[2]);
+                else return new Vector3D();
+            }
+        }
+        public Pose()
         {
 
-            PointV3D p = new PointV3D();
-            p.X = X;
-            p.Y = Y;
-            p.Z = Z;
-            p.Vx = new Vector3D(XAxis[0], XAxis[1], XAxis[2]);
-            p.Vy = new Vector3D(YAxis[0], YAxis[1], YAxis[2]);
-            p.Vz = Vector3D.Cross(p.Vx, p.Vy);
-            LineOption lineOption = new LineOption();
-            lineOption.LineIndex = lineIndex;
-            LocateIndexOption locateIndexOption = new LocateIndexOption();
-            locateIndexOption.Index = ptIndex;
+        }
+        public Pose(Pose src)
+        {
+            X = src.X;
+            Y = src.Y;
+            Z = src.Z;
+            XAxis = src.XAxis;
+            YAxis = src.YAxis;
+            ZAxis = src.ZAxis;
+        }
+        public PointV3D ToPoint3D(int lineIndex, int ptIndex)
+        {            
+            PointV3D p = new PointV3D
+            {
+                X = X,
+                Y = Y,
+                Z = Z
+            };
+            if (XAxis != null) p.Vx = VectorX;
+            else p.Vx = null;
+
+            if (YAxis != null) p.Vy = VectorY;
+            else p.Vy = null;
+
+            if (ZAxis != null)p.Vz = VectorZ;
+            else p.Vz = null;
+
+            LineOption lineOption = new LineOption
+            {
+                LineIndex = lineIndex
+            };
+            LocateIndexOption locateIndexOption = new LocateIndexOption
+            {
+                Index = ptIndex
+            };
             p.AddOption(lineOption);
             p.AddOption(locateIndexOption);
 
             return p;
+        }
+        public static double GetVectorLength(double[] arr)
+        {
+            if (arr == null) return 0;
+            else  return Math.Sqrt(Math.Pow(arr[0], 2) + Math.Pow(arr[1], 2) + Math.Pow(arr[2], 2));
+        }
+        public Pose ProjectToSurface(KDTree<int> targetTree,bool useSurfaceNormal = false)
+        {
+            PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z, targetTree,2);
+            Pose p = new Pose()
+            {
+                X = projectedP.X,
+                Y = projectedP.Y,
+                Z = projectedP.Z,
+
+            };
+            if (useSurfaceNormal)
+            {
+                p.XAxis = projectedP.Vx.ToArray();
+                p.YAxis = projectedP.Vy.ToArray();
+                p.ZAxis = projectedP.Vz.ToArray();
+            }
+            else
+            {
+                p.XAxis = XAxis;
+                p.YAxis = YAxis;
+                p.ZAxis = ZAxis;
+            }
+            return p;
+        }
+        public static Pose operator +(Pose pose1,Pose pose2)
+        {
+            Pose p = new Pose(pose1);
+            p.X = pose1.X + pose2.X;
+            p.Y = pose1.Y + pose2.Y;
+            p.Z = pose1.Z + pose2.Z;
+            return p;
+        }
+        public static Pose operator +(Pose pose1, Vector3D vector)
+        {
+            Pose p = new Pose(pose1);
+            p.X = pose1.X + vector.X;
+            p.Y = pose1.Y + vector.Y;
+            p.Z = pose1.Z + vector.Z;
+            return p;
+        }
+        public Pose GetExtendPose(eRefAxis refAxis, double extendLength)
+        {
+            Vector3D targetV = new Vector3D();
+            switch (refAxis)
+            {
+                case eRefAxis.X:
+                    if (XAxis == null) targetV = new Vector3D();
+                    else
+                    {
+                        if (XLength != 0) targetV = VectorX.GetUnitVector();
+                        else targetV = VectorX;
+                    }
+                    break;
+
+                case eRefAxis.Y:
+                    if (YAxis == null) targetV = new Vector3D();
+                    else
+                    {
+                        if (YLength != 0) targetV = VectorY.GetUnitVector();
+                        else targetV = VectorY;
+                    }
+                    break;
+
+                case eRefAxis.Z:
+                    if (ZAxis == null) targetV = new Vector3D();
+                    else
+                    {
+                        if (ZLength != 0) targetV = VectorZ.GetUnitVector();
+                        else targetV = VectorZ;
+                    }
+                    break;
+
+                default:
+
+                    break;
+            }
+            Pose output = new Pose(this);
+            output= this + targetV * extendLength;
+            return output;
         }
     }
 
@@ -499,7 +788,20 @@ namespace RsLib.PointCloudLib
             else
                 return null;
         }
+        public Pose ToPose(int index)
+        {
+            Pose output = new Pose
+            {
+                X = X[index],
+                Y = Y[index],
+                Z = Z[index],
+                XAxis = new double[] { Xx[index], Xy[index], Xz[index] },
+                YAxis = new double[] { Yx[index], Yy[index], Yz[index] },
+                ZAxis = new double[] { Zx[index], Zy[index], Zz[index] },
 
+            };
+            return output;
+        }
     }
 }
 
