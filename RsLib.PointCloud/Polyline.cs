@@ -1367,7 +1367,16 @@ namespace RsLib.PointCloudLib
                     outP = new Point3D(Points[i]);
                 }
 
-                if (i > 0)
+                if(i == 0)
+                {
+                    output.Add(outP);
+
+                }
+                else if (i == Points.Count-1)
+                {
+                    output.Add(outP);
+                }
+                else
                 {
                     if (sum > 0)
                     {
@@ -1375,8 +1384,8 @@ namespace RsLib.PointCloudLib
                         if (enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r + Points[index4].Y * p4r + Points[index5].Y * p5r) / (sum);
                         if (enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r + Points[index4].Z * p4r + Points[index5].Z * p5r) / (sum);
                     }
+                    output.Add(outP);
                 }
-                output.Add(outP);
             }
             Points.Clear();
             Points.AddRange(output);
@@ -1422,7 +1431,17 @@ namespace RsLib.PointCloudLib
                 {
                     outP = new Point3D(Points[i]);
                 }
-                if (i > 0)
+
+                if (i == 0)
+                {
+                    output.Add(outP);
+
+                }
+                else if (i == Points.Count - 1)
+                {
+                    output.Add(outP);
+                }
+                else
                 {
                     if (sum > 0)
                     {
@@ -1430,8 +1449,8 @@ namespace RsLib.PointCloudLib
                         if (enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r + Points[index4].Y * p4r) / (sum);
                         if (enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r + Points[index4].Z * p4r) / (sum);
                     }
+                    output.Add(outP);
                 }
-                output.Add(outP);
             }
             Points.Clear();
             Points.AddRange(output);
@@ -1451,12 +1470,6 @@ namespace RsLib.PointCloudLib
                 int index2 = i ;
                 int index3 = i + 1;
 
-                if (index3 >= Points.Count)
-                    index3 = i;
-
-                if (index1 < 0)
-                    index1 = i;
-
                 Point3D outP;
                 if (Points[i] is PointV3D p1)
                 {
@@ -1466,7 +1479,17 @@ namespace RsLib.PointCloudLib
                 {
                     outP = new Point3D(Points[i]);
                 }
-                if (i > 0)
+
+                if (i == 0)
+                {
+                    output.Add(outP);
+
+                }
+                else if(i  == Points.Count-1)
+                {
+                    output.Add(outP);
+                }
+                else
                 {
                     if (sum > 0)
                     {
@@ -1474,8 +1497,8 @@ namespace RsLib.PointCloudLib
                         if (enableSmoothY) outP.Y = (Points[index1].Y * p1r + Points[index2].Y * p2r + Points[index3].Y * p3r) / (sum);
                         if (enableSmoothZ) outP.Z = (Points[index1].Z * p1r + Points[index2].Z * p2r + Points[index3].Z * p3r) / (sum);
                     }
+                    output.Add(outP);
                 }
-                output.Add(outP);
             }
             Points.Clear();
             Points.AddRange(output);
