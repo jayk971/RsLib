@@ -38,7 +38,7 @@ namespace RsLib.PointCloudLib
         public static Vector3D VoZ = new Vector3D(0, 0, 1);
 
         public static Point3D Po = new Point3D();
-
+#if m
         public static PointV3D ProjectToSurface(double targetX,double targetY, double targetZ,KDTree<int> targetTree, double searchRadius = 5.0)
         {
             Point3D target = new Point3D(targetX, targetY, targetZ);
@@ -70,7 +70,120 @@ namespace RsLib.PointCloudLib
             }
             else return new PointV3D(target);
         }
-
+#endif
+        public static PointV3D ProjectToSurface(double targetX, double targetY, double targetZ, KDTree<int> targetTree,int searchCloudCount, double searchStartRadius,double searchEndRadius)
+        {
+            Point3D target = new Point3D(targetX, targetY, targetZ);
+            PointV3D p = new PointV3D();
+            PointCloud surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+            while (surfaceCloud.Count < searchCloudCount)
+            {
+                searchStartRadius++;
+                surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+                if (searchStartRadius >= searchEndRadius) break;
+            }
+            if (surfaceCloud.Count >= searchCloudCount)
+            {
+                try
+                {
+                    PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                    RsPlane plane = new RsPlane(vZ, center);
+                    Point3D projectP = plane.ProjectPOnPlane(target);
+                    p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                    double dot = Vector3D.Dot(vZ, Vector3D.ZAxis);
+                    if (dot < 0) vZ.Reverse();
+                    p.Vz = vZ.GetUnitVector();
+                    return p;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return new PointV3D(target);
+        }
+        public static PointV3D ProjectToSurface(double targetX, double targetY, double targetZ, 
+            double normalX,double normalY,double normalZ,
+            KDTree<int> targetTree, 
+            int searchCloudCount, double searchStartRadius, double searchEndRadius)
+        {
+            Point3D target = new Point3D(targetX, targetY, targetZ);
+            PointV3D p = new PointV3D();
+            PointCloud surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+            while (surfaceCloud.Count < searchCloudCount)
+            {
+                searchStartRadius++;
+                surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+                if (searchStartRadius >= searchEndRadius) break;
+            }
+            if (surfaceCloud.Count >= searchCloudCount)
+            {
+                try
+                {
+                    PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                    Vector3D surfaceNormal = new Vector3D(normalX, normalY, normalZ);
+                    if (surfaceNormal.L == 0) surfaceNormal = vZ;
+                    RsPlane plane = new RsPlane(surfaceNormal, center);
+                    Point3D projectP = plane.ProjectPOnPlane(target);
+                    p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                    double dot = Vector3D.Dot(vZ, Vector3D.ZAxis);
+                    if (dot < 0) vZ.Reverse();
+                    p.Vz = vZ.GetUnitVector();
+                    return p;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return new PointV3D(target);
+        }
+        public static PointV3D ProjectToSurface(double targetX, double targetY, double targetZ,
+            List<Vector3D> candidateVector,
+            KDTree<int> targetTree,
+            int searchCloudCount, double searchStartRadius, double searchEndRadius)
+        {
+            Point3D target = new Point3D(targetX, targetY, targetZ);
+            PointV3D p = new PointV3D();
+            PointCloud surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+            while (surfaceCloud.Count < searchCloudCount)
+            {
+                searchStartRadius++;
+                surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+                if (searchStartRadius >= searchEndRadius) break;
+            }
+            if (surfaceCloud.Count >= searchCloudCount)
+            {
+                try
+                {
+                    PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                    RsPlane plane = new RsPlane(vZ, center);
+                    double minDis = double.MaxValue;
+                    for (int i = 0; i < candidateVector.Count; i++)
+                    {
+                        Point3D projectP = plane.ProjectPOnPlane(target,candidateVector[i]);
+                        if(projectP != null)
+                        {
+                            double calDis = Point3D.Distance(target, projectP);
+                            if(calDis <=minDis)
+                            {
+                                minDis = calDis;
+                                p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                            }
+                        }
+                    }
+                    double dot = Vector3D.Dot(vZ, Vector3D.ZAxis);
+                    if (dot < 0) vZ.Reverse();
+                    p.Vz = vZ.GetUnitVector();
+                    return p;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return new PointV3D(target);
+        }
         public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath)
         {
             bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);
@@ -122,6 +235,45 @@ namespace RsLib.PointCloudLib
             yArr = yList.ToArray();
             zArr = zList.ToArray();
         }
+        public static void LoadXYZToArray(string filePath, char cplitChar, out double[] xArr, out double[] yArr, out double[] zArr,out KDTree<int> tree)
+        {
+            List<double> xList = new List<double>();
+            List<double> yList = new List<double>();
+            List<double> zList = new List<double>();
+
+            xArr = new double[0];
+            yArr = new double[0];
+            zArr = new double[0];
+
+            int count = 0;
+            tree = new KDTree<int>(3);
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string readData = sr.ReadLine();
+                    string[] splitData = readData.Split(cplitChar);
+                    if (splitData.Length >= 3)
+                    {
+                        if (double.TryParse(splitData[0], out double x) == false) continue;
+                        if (double.TryParse(splitData[1], out double y) == false) continue;
+                        if (double.TryParse(splitData[2], out double z) == false) continue;
+
+                        xList.Add(x);
+                        yList.Add(y);
+                        zList.Add(z);
+                        tree.Add(new double[] { x, y, z }, count);
+
+                        count++;
+                    }
+                }
+            }
+
+            xArr = xList.ToArray();
+            yArr = yList.ToArray();
+            zArr = zList.ToArray();
+        }
+
         public static void LoadXYZToArray(string filePath, char cplitChar, int downSample,out double[] xArr, out double[] yArr, out double[] zArr)
         {
             List<double> xList = new List<double>();

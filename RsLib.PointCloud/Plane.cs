@@ -159,6 +159,34 @@ namespace RsLib.PointCloudLib
 
             return projP;
         }
+        public Point3D ProjectPOnPlane(Point3D P,Vector3D v)
+        {
+            if (A == 0 && B == 0 && C == 0)  return null;
+            if (P == null) return null;
+            if (v == null)  return null;
+            if (v.L == 0) return null;
+            v.UnitVector();
+
+            Point3D projP = new Point3D();
+            double H = A * P.X + B * P.Y + C * P.Z + D;
+            if (H == 0)
+            {
+                projP.X = Math.Round(P.X, 2);
+                projP.Y = Math.Round(P.Y, 2);
+                projP.Z = Math.Round(P.Z, 2);
+                return projP;
+            }
+            double h = A * v.X + B * v.Y + C * v.Z;
+            if (h == 0) return null;
+
+            double t = -H / h;
+
+            projP.X = Math.Round(P.X + v.X * t, 2);
+            projP.Y = Math.Round(P.Y + v.Y * t, 2);
+            projP.Z = Math.Round(P.Z + v.Z * t, 2);
+
+            return projP;
+        }
 
         public bool VectorAndPlaneIntersecPoint(Point3D start, Vector3D vec, out Point3D intersecpoint)
         {

@@ -74,6 +74,7 @@ namespace RsLib.PointCloudLib
         {
             try
             {
+                if (Directory.Exists(Path.GetDirectoryName(filePath)) == false) Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 string writeData = JsonConvert.SerializeObject(this,
                     new JsonSerializerSettings() 
                     { 
@@ -247,7 +248,19 @@ namespace RsLib.PointCloudLib
         public string StopType { get; set; }
         public string Texture { get; set; }
         public List<Pose> Poses { get; set; }
-
+        [JsonIgnore]
+        public Pose LastPose
+        {
+            get
+            {
+                if (Poses == null) return null;
+                else
+                {
+                    if (Poses.Count == 0) return null;
+                    else return Poses[PoseCount - 1];
+                }
+            }
+        }
         [JsonIgnore]
         public int PoseCount => Poses.Count;
         public Polyline ToPolyline(int lineIndex)
@@ -402,7 +415,65 @@ namespace RsLib.PointCloudLib
             }
             return poseList;
         }
+        /// <summary>
+        /// 有序3D點重取樣插補，忽略原有的點以完全重新取樣
+        /// </summary>
+        public void ReSample_SkipOriginalPoint(double ExpectedSampleDistance, bool IsClosed, bool isKeepLast = false)
+        {
+            // 資料點不足
+            if (Poses.Count < 3) return ;
+            List<Pose> output = new List<Pose>();
+            output.Add(Poses[0]);
+            int i = 1;
+            while (i < Poses.Count - 1)
+            {
+                Pose lastPt = output[output.Count - 1];
 
+                Pose testPt = Poses[i];
+                Vector3D testV = new Vector3D(lastPt, testPt);
+
+                Pose nextTestPt = Poses[i + 1];
+                Vector3D nextTestV = new Vector3D(testPt, nextTestPt);
+
+                if (testV.L < ExpectedSampleDistance)
+                {
+                    double t = 0.0;
+                    while (t <= 1)
+                    {
+                        double testL = Math.Pow(testV.X + nextTestV.X * t, 2) + Math.Pow(testV.Y + nextTestV.Y * t, 2) + Math.Pow(testV.Z + nextTestV.Z * t, 2);
+                        double powSampleDis = Math.Pow(ExpectedSampleDistance, 2);
+                        if (testL >= powSampleDis)
+                        {
+                            Pose p = testPt + nextTestV * t;
+                            output.Add(p);
+                            i++;
+                            break;
+                        }
+                        else t += 0.001;
+                        if (t > 1)
+                        {
+                            i++;
+                        }
+                    }
+                }
+                else if (testV.L == ExpectedSampleDistance)
+                {
+                    output.Add(testPt);
+                    i++;
+                }
+                else
+                {
+                    Pose insertPt = lastPt + testV.GetUnitVector() * ExpectedSampleDistance;
+                    output.Add(insertPt);
+                }
+            }
+
+            Vector3D endV = new Vector3D(output[output.Count-1], LastPose);
+            if (endV.L >= 0.1) output.Add(LastPose);
+
+            Poses.Clear();
+            Poses.AddRange(output);
+        }
     }
     [Serializable]
     public class Pose
@@ -422,7 +493,8 @@ namespace RsLib.PointCloudLib
                 else return new Vector3D();
             }
         }
-
+            
+        
         public double[] YAxis { get; set; }
         [JsonIgnore]
         public double YLength => GetVectorLength(YAxis);
@@ -449,6 +521,10 @@ namespace RsLib.PointCloudLib
                 else return new Vector3D();
             }
         }
+        public Vector3D VectorXY => VectorX + VectorY;
+        public Vector3D VectorXZ => VectorX + VectorZ;
+        public Vector3D VectorYZ => VectorY + VectorZ;
+
         public Pose()
         {
 
@@ -497,9 +573,10 @@ namespace RsLib.PointCloudLib
             if (arr == null) return 0;
             else  return Math.Sqrt(Math.Pow(arr[0], 2) + Math.Pow(arr[1], 2) + Math.Pow(arr[2], 2));
         }
-        public Pose ProjectToSurface(KDTree<int> targetTree,bool useSurfaceNormal = false)
+        public Pose ProjectToSurface(KDTree<int> targetTree,out Vector3D normalV,bool useSurfaceNormal,int searchCloudLimit,double searchStartRad,double seachEndRad)
         {
-            PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z, targetTree,2);
+            PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z, targetTree, searchCloudLimit, searchStartRad, seachEndRad);
+            normalV = projectedP.Vz;
             Pose p = new Pose()
             {
                 X = projectedP.X,
@@ -519,6 +596,55 @@ namespace RsLib.PointCloudLib
                 p.YAxis = YAxis;
                 p.ZAxis = ZAxis;
             }
+            return p;
+        }
+        public Pose ProjectToSurfaceWithFixNormal(KDTree<int> targetTree, out Vector3D normalV, bool useSurfaceNormal, int searchCloudLimit, double searchStartRad, double seachEndRad)
+        {
+            PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z,
+                ZAxis[0],ZAxis[1],ZAxis[2],
+                targetTree,
+                searchCloudLimit, searchStartRad, seachEndRad);
+            normalV = projectedP.Vz;
+            Pose p = new Pose()
+            {
+                X = projectedP.X,
+                Y = projectedP.Y,
+                Z = projectedP.Z,
+
+            };
+            if (useSurfaceNormal)
+            {
+                p.XAxis = projectedP.Vx.ToArray();
+                p.YAxis = projectedP.Vy.ToArray();
+                p.ZAxis = projectedP.Vz.ToArray();
+            }
+            else
+            {
+                p.XAxis = XAxis;
+                p.YAxis = YAxis;
+                p.ZAxis = ZAxis;
+            }
+            return p;
+        }
+        public Pose ProjectToSurface(KDTree<int> targetTree, out Vector3D normalV, List<Vector3D> candidateVector, int searchCloudLimit, double searchStartRad, double seachEndRad)
+        {
+            PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z,
+                candidateVector,
+                targetTree,
+                searchCloudLimit, searchStartRad, seachEndRad);
+            normalV = projectedP.Vz;
+            Pose p = new Pose()
+            {
+                X = projectedP.X,
+                Y = projectedP.Y,
+                Z = projectedP.Z,
+
+            };
+
+            p.XAxis = XAxis;
+            p.YAxis = YAxis;
+            p.ZAxis = ZAxis;
+            
             return p;
         }
         public static Pose operator +(Pose pose1,Pose pose2)

@@ -67,20 +67,20 @@ namespace RsLib.PointCloudLib
         }
         void parseXYZArray(double[] x, double[] y, double[] z,bool buildKDTree)
         {
-            kdTree.Clear();
+            Clear();
             if (x.Length == y.Length && x.Length == z.Length)
             {
                 for (int i = 0; i < x.Length; i++)
                 {
                     Point3D p = new Point3D(x[i], y[i], z[i]);
                     Points.Add(p);
-                    if(buildKDTree) kdTree.Add(new double[] { x[i], y[i], z[i] }, Points.Count - 1);
+                    if(buildKDTree) kdTree.Add(new double[] { x[i], y[i], z[i] }, i);
                 }
             }
         }
         void parseXYZArray(double[] x, double[] y, double[] z)
         {
-            kdTree.Clear();
+            Clear();
             if (x.Length == y.Length && x.Length == z.Length)
             {
                 for (int i = 0; i < x.Length; i++)
@@ -92,7 +92,8 @@ namespace RsLib.PointCloudLib
         }
         void parseXYZArray(float[,] mechMindX, float[,] mechMindY, float[,] mechMindZ, bool buildKDTree)
         {
-            kdTree.Clear();
+            Clear();
+
             if (mechMindX.GetTotalLength() == mechMindY.GetTotalLength() && mechMindX.GetTotalLength() == mechMindZ.GetTotalLength())
             {
                 for (int i = 0; i < mechMindX.GetLength(0); i++)
@@ -101,7 +102,7 @@ namespace RsLib.PointCloudLib
                     {
                         Point3D p = new Point3D(mechMindX[i,j], mechMindY[i,j], mechMindZ[i,j]);
                         Points.Add(p);
-                        if (buildKDTree) kdTree.Add(new double[] { mechMindX[i, j], mechMindY[i, j], mechMindZ[i, j] }, Points.Count - 1);
+                        if (buildKDTree) kdTree.Add(new double[] { mechMindX[i, j], mechMindY[i, j], mechMindZ[i, j] }, i);
 
                     }
                 }
@@ -110,7 +111,7 @@ namespace RsLib.PointCloudLib
 
         public PointCloud (float[] floatArr,float ignoreValue,float xPitch,float yPitch,int dataPerRow,bool reverseX,bool reverseY)
         {
-            Points.Clear();
+            Clear();
             for (int i = 0; i < floatArr.Length; i++)
             {
                 int x = i % dataPerRow;
@@ -1823,7 +1824,9 @@ namespace RsLib.PointCloudLib
         public void Clear()
         {
             Points.Clear();
+            Points = new List<Point3D>();
             kdTree.Clear();
+            kdTree = new KDTree<int>(3);
         }
         public void Add(LayerPointCloud Clouds)
         {

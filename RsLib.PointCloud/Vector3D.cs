@@ -167,19 +167,33 @@ namespace RsLib.PointCloudLib
         // 回傳單位向量
         public Vector3D GetUnitVector()
         {
-            Vector3 temp = new Vector3((float)X, (float)Y, (float)Z);
-            temp.Normalize();
-            Vector3D v_unit = new Vector3D(temp.X, temp.Y, temp.Z);
-            return v_unit;
+            if (L == 0.0)
+            {
+                return new Vector3D();
+            }
+            else
+            {
+                Vector3 temp = new Vector3((float)X, (float)Y, (float)Z);
+                temp.Normalize();
+                Vector3D v_unit = new Vector3D(temp.X, temp.Y, temp.Z);
+                return v_unit;
+            }
         }
         public void UnitVector()
         {
-            Vector3 temp = new Vector3((float)X, (float)Y, (float)Z);
-            temp.Normalize();
+            if (L == 0.0)
+            {
+                
+            }
+            else
+            {
+                Vector3 temp = new Vector3((float)X, (float)Y, (float)Z);
+                temp.Normalize();
 
-            X = temp.X;
-            Y = temp.Y;
-            Z = temp.Z;
+                X = temp.X;
+                Y = temp.Y;
+                Z = temp.Z;
+            }
         }
 
         public static Vector3D operator +(Vector3D Va, Vector3D Vb)
@@ -188,7 +202,26 @@ namespace RsLib.PointCloudLib
         }
         public static Point3D operator +(Point3D P, Vector3D V)
         {
-            return new Point3D(V.X + P.X, V.Y + P.Y, V.Z + P.Z);
+            if (P.GetType() == typeof(Point3D))
+            {
+                Point3D output = new Point3D(P);
+                output.X = V.X + P.X;
+                output.Y = V.Y + P.Y;
+                output.Z = V.Z + P.Z;
+                return output;
+            }
+            else if (P.GetType() == typeof(PointV3D))
+            {
+                PointV3D output = new PointV3D(P as PointV3D);
+                output.X = V.X + P.X;
+                output.Y = V.Y + P.Y;
+                output.Z = V.Z + P.Z;
+                return output;
+            }
+            else
+            {
+                return null;
+            }
         }
         public static Vector3D operator -(Vector3D Va, Vector3D Vb)
         {
