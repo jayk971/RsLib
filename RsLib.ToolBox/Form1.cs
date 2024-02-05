@@ -528,6 +528,11 @@ namespace RsLib.DemoForm
             AppDomain.Unload(ad);
             obj = null;
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Log.Add("Test", MsgLevel.Alarm,new Exception("123456789"));
+        }
     }
     class ProxyObject : MarshalByRefObject
     {

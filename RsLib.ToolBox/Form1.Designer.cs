@@ -32,6 +32,7 @@ namespace RsLib.DemoForm
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage_ICP = new System.Windows.Forms.TabPage();
             this.tabPage_TCPServer = new System.Windows.Forms.TabPage();
             this.pnl_TCPServer = new System.Windows.Forms.Panel();
             this.tabPage_TCPClient = new System.Windows.Forms.TabPage();
@@ -53,13 +54,13 @@ namespace RsLib.DemoForm
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.tabPage_ICP = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.button7 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button9 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage_TCPServer.SuspendLayout();
             this.tabPage_TCPClient.SuspendLayout();
@@ -89,6 +90,16 @@ namespace RsLib.DemoForm
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(413, 476);
             this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage_ICP
+            // 
+            this.tabPage_ICP.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_ICP.Name = "tabPage_ICP";
+            this.tabPage_ICP.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_ICP.Size = new System.Drawing.Size(405, 450);
+            this.tabPage_ICP.TabIndex = 7;
+            this.tabPage_ICP.Text = "ICP";
+            this.tabPage_ICP.UseVisualStyleBackColor = true;
             // 
             // tabPage_TCPServer
             // 
@@ -247,6 +258,7 @@ namespace RsLib.DemoForm
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button9);
             this.tabPage1.Controls.Add(this.button8);
             this.tabPage1.Controls.Add(this.panel2);
             this.tabPage1.Controls.Add(this.panel1);
@@ -303,16 +315,6 @@ namespace RsLib.DemoForm
             this.button6.Text = "button6";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // tabPage_ICP
-            // 
-            this.tabPage_ICP.Location = new System.Drawing.Point(4, 22);
-            this.tabPage_ICP.Name = "tabPage_ICP";
-            this.tabPage_ICP.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_ICP.Size = new System.Drawing.Size(405, 450);
-            this.tabPage_ICP.TabIndex = 7;
-            this.tabPage_ICP.Text = "ICP";
-            this.tabPage_ICP.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -376,6 +378,16 @@ namespace RsLib.DemoForm
             this.splitContainer1.SplitterDistance = 419;
             this.splitContainer1.TabIndex = 2;
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(106, 155);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 6;
+            this.button9.Text = "button9";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -432,6 +444,7 @@ namespace RsLib.DemoForm
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button9;
     }
 }
 

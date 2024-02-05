@@ -116,7 +116,8 @@ namespace RsLib.LogMgr
                             {
                                 m_Log.Error(tempMsg.ToString() + "\t" + tempMsg.Ex.Message);
                                 m_FatalLog.Fatal(tempMsg.Ex);
-                                MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                ThreadPool.QueueUserWorkItem(showMsgBoxTd, tempMsg);
+                                //MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                             }
                             break;
@@ -133,6 +134,16 @@ namespace RsLib.LogMgr
                 }
             }
             IsTdRunning = false;
+        }
+        static void showMsgBoxTd(object obj)
+        {
+            showMsgBox((LogMsg)obj);
+        }
+
+        static void showMsgBox(LogMsg tempMsg)
+        {
+            MessageBox.Show(tempMsg.Text + "\n" + tempMsg.Ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
         }
     }
 

@@ -105,15 +105,15 @@ namespace RsLib.XYZViewer
             _displayCtrl.AddDisplayOption(vxVectorOptions);
             _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, DisplayObjectType.Path, 2.0f) { IsShowAtDataGrid = true});
 
-            createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3");
-            createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2");
-            createButton(optButtons, DrawItem.OPT1Path, PathOptions[0].DrawColor,"Path 1");
+            createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3", "Path3");
+            createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2", "Path2");
+            createButton(optButtons, DrawItem.OPT1Path, PathOptions[0].DrawColor,"Path 1", "Path1");
 
-            createButton(xyzButtons, DrawItem.XYZ5, XYZOptions[4].DrawColor,"Point Cloud 5");
-            createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor, "Point Cloud 4");
-            createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor, "Point Cloud 3");
-            createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor, "Point Cloud 2");
-            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor, "Point Cloud 1");
+            createButton(xyzButtons, DrawItem.XYZ5, XYZOptions[4].DrawColor,"Point Cloud 5", "PointCloud5");
+            createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor, "Point Cloud 4", "PointCloud4");
+            createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor, "Point Cloud 3", "PointCloud3");
+            createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor, "Point Cloud 2", "PointCloud2");
+            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor, "Point Cloud 1", "Point1Cloud1");
 
             loadedFiles.Add(DrawItem.XYZ1, "");
             loadedFiles.Add(DrawItem.XYZ2, "");
@@ -126,11 +126,12 @@ namespace RsLib.XYZViewer
 
         }
 
-        void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor,string displayText)
+        void createButton(Dictionary<DrawItem, Button> dic, DrawItem drawItem, Color backColor,string displayText,string name)
         {
             Button btn = new Button();
             btn.BackColor = backColor;
             btn.Text = displayText;
+            btn.Name = name;
             btn.Dock = DockStyle.Top;
             btn.Height = 50;
             btn.AllowDrop = true;
@@ -296,14 +297,14 @@ namespace RsLib.XYZViewer
         }
         DrawItem getPressedButton(Button btn)
         {
-            string text = btn.Text;
+            string name = btn.Name;
             foreach (var item in xyzButtons)
             {
-                if (item.Value.Text == text) return item.Key;
+                if (item.Value.Name == name) return item.Key;
             }
             foreach (var item in optButtons)
             {
-                if (item.Value.Text == text) return item.Key;
+                if (item.Value.Name == name) return item.Key;
             }
             return DrawItem.None;
         }
