@@ -130,21 +130,39 @@ namespace RsLib.Display3D
         {
             TreeNode name = new TreeNode()
             {
-                Name = this.Name,
-                Text = this.Name,
+                Name = Name,
+                Text = Name,
+                Checked = true
             };
+            if(Name.Contains(":"))
+            {
+                string[] splitData = Name.Split(':');
+                name.Text = splitData[splitData.Length - 1];
+            }
+
             foreach (var item in SubOptions)
             {
+
                 eDisplayObjectType subType = item.Key;
                 DisplayObjectOption option = item.Value;
-                name.Nodes.Add(subType.ToString(), subType.ToString());
+                TreeNode subTreeNode = new TreeNode()
+                {
+                    Name = subType.ToString(),
+                    Text = subType.ToString()
+
+                };
+                if (subType == eDisplayObjectType.PointCloud || subType == eDisplayObjectType.Path)
+                    subTreeNode.Checked = true;
+                name.Nodes.Add(subTreeNode);
+                //name.Nodes.Add(subType.ToString(), subType.ToString());
             }
             if (SubItemOptions.Count > 0)
             {
                 TreeNode subItem = new TreeNode()
                 {
                     Name = "SubItems",
-                    Text = "SubItems"
+                    Text = "SubItems",
+                    Checked = true
                 };
                 foreach (var item in SubItemOptions)
                 {
