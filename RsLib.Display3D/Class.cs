@@ -117,7 +117,7 @@ namespace RsLib.Display3D
             DisplayObjectOption[] output = new DisplayObjectOption[count];
             for (int i = 0; i < output.Length; i++)
             {
-                output[i] = new DisplayObjectOption(startID, defaultType, defaultSize, Color.White, isSelectable);
+                output[i] = new DisplayObjectOption(startID+i, defaultType, defaultSize, Color.White, isSelectable);
             }
             return output;
         }

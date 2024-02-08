@@ -1399,7 +1399,11 @@ namespace RsLib.Display3D
 
         private void tvw_DrawItem_AfterCheck(object sender, TreeViewEventArgs e)
         {
-
+            TreeNode selectedNode = e.Node;
+            if(selectedNode.Level == 0)
+            {
+                _displayObject
+            }
         }
     }
 }
