@@ -52,11 +52,11 @@ namespace RsLib.DemoForm
 
             displayControl.Dock = DockStyle.Fill;
             splitContainer1.Panel2.Controls.Add(displayControl);
-            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.ScanData, "Scan", Color.White, DisplayObjectType.PointCloud, 2.0f) );
-            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignModel, "AlignModel", Color.Red, DisplayObjectType.PointCloud, 2.0f));
-            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignPath, "AlignPath", Color.Red, DisplayObjectType.Path, 2.0f));
-            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustModel, "AdjustModel", Color.Lime, DisplayObjectType.PointCloud, 2.0f));
-            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustPath, "AdjustPath", Color.Lime, DisplayObjectType.Path, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.ScanData, "Scan", Color.White, eDisplayObjectType.PointCloud, 2.0f) );
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignModel, "AlignModel", Color.Red, eDisplayObjectType.PointCloud, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AlignPath, "AlignPath", Color.Red, eDisplayObjectType.Path, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustModel, "AdjustModel", Color.Lime, eDisplayObjectType.PointCloud, 2.0f));
+            displayControl.AddDisplayOption(new DisplayObjectOption((int)eDrawItem.AdjustPath, "AdjustPath", Color.Lime, eDisplayObjectType.Path, 2.0f));
 
 
 

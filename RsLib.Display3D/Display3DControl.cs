@@ -77,6 +77,8 @@ namespace RsLib.Display3D
             dataGridView1.CellMouseMove += DataGridView1_CellMouseMove;
             dataGridView1.CellMouseLeave += DataGridView1_CellMouseLeave;
             dataGridView1.CellValidating += DataGridView1_CellValidating;
+
+            treeview_DisplayItem.AfterCheck += Treeview_DisplayItem_AfterCheck;
             //GlControl_Load(null, null);
             splitContainer1.Panel1Collapsed = true;
             splitContainer2.Panel2Collapsed = true;
@@ -88,6 +90,11 @@ namespace RsLib.Display3D
             Log.Start();
             trackBar_RotateSensitivity.Value = (int)(Settings.Default.Sensitivity * 10);
             pnl_ColorGradient.Visible = false;
+        }
+
+        private void Treeview_DisplayItem_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         public void ShowColorGradientControl(bool show)
@@ -170,38 +177,38 @@ namespace RsLib.Display3D
 
                     switch (option.DisplayType)
                     {
-                        case DisplayObjectType.PointCloud:
+                        case eDisplayObjectType.PointCloud:
                             if (objectType == typeof(ObjectGroup))
                                 BuildPointCloud((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(PointCloud))
                                 BuildPointCloud((PointCloud)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_z:
+                        case eDisplayObjectType.Vector_z:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_y:
+                        case eDisplayObjectType.Vector_y:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Vector_x:
+                        case eDisplayObjectType.Vector_x:
                             if (objectType == typeof(ObjectGroup))
                                 BuildVector((ObjectGroup)_displayObject[id], id, false, false);
                             else if (objectType == typeof(Polyline))
                                 BuildVector((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Path:
+                        case eDisplayObjectType.Path:
                             if (objectType == typeof(ObjectGroup))
                                 BuildPath((ObjectGroup)_displayObject[id], id, false, false);
 
                             else if (objectType == typeof(Polyline))
                                 BuildPath((Polyline)_displayObject[id], id, false, false);
                             break;
-                        case DisplayObjectType.Point:
+                        case eDisplayObjectType.Point:
                             BuildPoint((Point3D)_displayObject[id], id, false, false);
                             break;
                         default:
@@ -463,10 +470,10 @@ namespace RsLib.Display3D
 
         public void UpdateDataGridView()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 Action action = new Action(UpdateDataGridView);
-                this.Invoke(action);
+                Invoke(action);
             }
             else
             {
@@ -496,9 +503,47 @@ namespace RsLib.Display3D
                 _CurrentSelectObjectIndex = -1;
                 _CurrentSelectLineIndex = -1;
                 UpdateLineIndexComboBox();
+                UpdateTreeView();
             }
         }
+        public void UpdateTreeView()
+        {
+            if (InvokeRequired)
+            {
+                Action action = new Action(UpdateTreeView);
+                Invoke(action);
+            }
+            else
+            {
 
+                treeview_DisplayItem.Nodes.Clear();
+                foreach (var item in _displayOption)
+                {
+                    DisplayObjectOption option = item.Value;
+                    if (_displayObject.ContainsKey(option.ID) == false) continue;
+                    if (option.IsShowAtDataGrid)
+                    {
+                        if (option.Name != "")
+                        {
+                            treeview_DisplayItem.Nodes.Add(option.ToTreeNode());
+                            //dataGridView1.Rows.Add(option.ToDataGridRowObject());
+                            //int currentIndex = dataGridView1.Rows.Count - 1;
+                            //DataGridViewButtonCell btn = dataGridView1.Rows[currentIndex].Cells[_colorIndex] as DataGridViewButtonCell;
+                            //btn.FlatStyle = FlatStyle.Flat;
+                            //btn.Style.BackColor = option.DrawColor;
+
+                            if (option.IsSelectable == false)
+                            {
+                                //dataGridView1.Rows[currentIndex].DefaultCellStyle.BackColor = Color.Gray;
+                            }
+                        }
+                    }
+                }
+                _CurrentSelectObjectIndex = -1;
+                _CurrentSelectLineIndex = -1;
+                UpdateLineIndexComboBox();
+            }
+        }
 
         private void Form_FormClosed(object sender, FormClosedEventArgs e)
         {

@@ -64,12 +64,12 @@ namespace RsLib.XYZViewer
 
         void init()
         {
-            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, DisplayObjectType.PointCloud, 2.0f, true);
-            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, DisplayObjectType.Path, 2.0f, false);
-            DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 5.0f, true);
-            DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
-            DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, DisplayObjectType.Vector_y, 1.0f, false);
-            DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, DisplayObjectType.Vector_x, 1.0f, false);
+            DisplayObjectOption[] XYZOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.XYZ1, 5, eDisplayObjectType.PointCloud, 2.0f, true);
+            DisplayObjectOption[] PathOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Path, 3, eDisplayObjectType.Path, 2.0f, false);
+            //DisplayObjectOption[] PointOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1Point, 3, DisplayObjectType.PointCloud, 5.0f, true);
+            //DisplayObjectOption[] vzVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vzVector, 3, DisplayObjectType.Vector_z, 1.0f, false);
+            //DisplayObjectOption[] vyVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vyVector, 3, DisplayObjectType.Vector_y, 1.0f, false);
+            //DisplayObjectOption[] vxVectorOptions = DisplayObjectOption.CreateDisplayOptionArray((int)DrawItem.OPT1vxVector, 3, DisplayObjectType.Vector_x, 1.0f, false);
 
             XYZOptions[0].DrawColor = Color.Gray;
             XYZOptions[1].DrawColor = Color.DarkGray;
@@ -81,29 +81,29 @@ namespace RsLib.XYZViewer
             PathOptions[1].DrawColor = Color.SteelBlue;
             PathOptions[2].DrawColor = Color.DarkOrchid;
 
-            PointOptions[0].DrawColor = Color.DarkOrange;
-            PointOptions[1].DrawColor = Color.SteelBlue;
-            PointOptions[2].DrawColor = Color.DarkOrchid;
+            //PointOptions[0].DrawColor = Color.DarkOrange;
+            //PointOptions[1].DrawColor = Color.SteelBlue;
+            //PointOptions[2].DrawColor = Color.DarkOrchid;
 
-            vzVectorOptions[0].DrawColor = Color.Blue;
-            vzVectorOptions[1].DrawColor = Color.Blue;
-            vzVectorOptions[2].DrawColor = Color.Blue;
+            //vzVectorOptions[0].DrawColor = Color.Blue;
+            //vzVectorOptions[1].DrawColor = Color.Blue;
+            //vzVectorOptions[2].DrawColor = Color.Blue;
 
-            vyVectorOptions[0].DrawColor = Color.LimeGreen;
-            vyVectorOptions[1].DrawColor = Color.LimeGreen;
-            vyVectorOptions[2].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[0].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[1].DrawColor = Color.LimeGreen;
+            //vyVectorOptions[2].DrawColor = Color.LimeGreen;
 
-            vxVectorOptions[0].DrawColor = Color.Red;
-            vxVectorOptions[1].DrawColor = Color.Red;
-            vxVectorOptions[2].DrawColor = Color.Red;
+            //vxVectorOptions[0].DrawColor = Color.Red;
+            //vxVectorOptions[1].DrawColor = Color.Red;
+            //vxVectorOptions[2].DrawColor = Color.Red;
 
             _displayCtrl.AddDisplayOption(XYZOptions);
             _displayCtrl.AddDisplayOption(PathOptions);
-            _displayCtrl.AddDisplayOption(PointOptions);
-            _displayCtrl.AddDisplayOption(vzVectorOptions);
-            _displayCtrl.AddDisplayOption(vyVectorOptions);
-            _displayCtrl.AddDisplayOption(vxVectorOptions);
-            _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, DisplayObjectType.Path, 2.0f) { IsShowAtDataGrid = true});
+            //_displayCtrl.AddDisplayOption(PointOptions);
+            //_displayCtrl.AddDisplayOption(vzVectorOptions);
+            //_displayCtrl.AddDisplayOption(vyVectorOptions);
+            //_displayCtrl.AddDisplayOption(vxVectorOptions);
+            _displayCtrl.AddDisplayOption(new DisplayObjectOption((int)DrawItem.VzIntersection, "IntersectVz", Color.Cyan, eDisplayObjectType.Path, 2.0f) { IsShowAtDataGrid = true});
 
             createButton(optButtons, DrawItem.OPT3Path, PathOptions[2].DrawColor,"Path 3", "Path3");
             createButton(optButtons, DrawItem.OPT2Path, PathOptions[1].DrawColor,"Path 2", "Path2");
@@ -272,6 +272,18 @@ namespace RsLib.XYZViewer
                     }));
             }
             _displayCtrl.UpdateDataGridView();
+        }
+        private void drawObjectGroup2(ObjectGroup group, DrawItem drawItem, string fileName)
+        {
+            DisplayObjectOption dispOption = _displayCtrl.GetDisplayObjectOption((int)drawItem);
+            dispOption.Name = fileName;
+            _displayCtrl.BuildPath(group, (int)drawItem, true, true);
+            _displayCtrl.BuildPointCloud(group, (int)drawItem, false, true);
+            ???
+            _displayCtrl.BuildVector(group, (int)drawItem, false, true);
+            _displayCtrl.BuildVector(group, (int)drawItem, false, true);
+            _displayCtrl.BuildVector(group, (int)drawItem, false, true);
+
         }
 
         private void drawObjectGroup(ObjectGroup group,DrawItem drawItem,string fileName)
@@ -644,23 +656,23 @@ namespace RsLib.XYZViewer
         OPT1Path,
         OPT2Path,
         OPT3Path,
-
-        OPT1Point,
+        /*
+        OPT1Point, // OPT1Path+100
         OPT2Point,
         OPT3Point,
 
-        OPT1vzVector,
+        OPT1vzVector,// OPT1Path+200
         OPT2vzVector,
         OPT3vzVector,
 
-        OPT1vyVector,
+        OPT1vyVector,// OPT1Path+300
         OPT2vyVector,
         OPT3vyVector,
 
-        OPT1vxVector,
+        OPT1vxVector,// OPT1Path+400
         OPT2vxVector,
         OPT3vxVector,
-
+        */
         VzIntersection,
     }
 }

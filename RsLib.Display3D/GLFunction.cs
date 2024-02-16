@@ -87,7 +87,7 @@ namespace RsLib.Display3D
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             GL.Enable(EnableCap.DepthTest);
             //GL.Disable(EnableCap.Lighting);
-            _headList = GL.GenLists(_maxDisplayList);
+            //_headList = GL.GenLists(_maxDisplayList);
             BuildAxis();
             timer1.Enabled = true;
         }
@@ -675,8 +675,8 @@ namespace RsLib.Display3D
             if (_displayObject.ContainsKey(_CurrentSelectObjectIndex) == false) return false;
             if (_displayOption.ContainsKey(_CurrentSelectObjectIndex) == false) return false;
 
-            DisplayObjectType displayObjectType = _displayOption[_CurrentSelectObjectIndex].DisplayType;
-            if (displayObjectType == DisplayObjectType.None) return false;
+            eDisplayObjectType displayObjectType = _displayOption[_CurrentSelectObjectIndex].DisplayType;
+            if (displayObjectType == eDisplayObjectType.None) return false;
             //DisplayObjectOption objectOption = _displayOption[_CurrentSelectObjectIndex];
             //if (objectOption.IsDisplay == false) return false;
 
@@ -888,7 +888,7 @@ namespace RsLib.Display3D
 
             drawPolyline(_SelectPath, Settings.Default.Size_SelectPath, Settings.Default.Color_SelectPath, false);
             drawPointCloud(_SelectPath, Settings.Default.Size_SelectPath*2, Settings.Default.Color_SelectPath, false);
-            drawVector(_SelectPath, Settings.Default.Size_SelectPath, Color.Blue, false, DisplayObjectType.Vector_z);
+            drawVector(_SelectPath, Settings.Default.Size_SelectPath, Color.Blue, false, eDisplayObjectType.Vector_z);
             drawCone(pos, 7, dir, 2, Settings.Default.Color_SelectPath);
 
         }
@@ -1341,7 +1341,7 @@ namespace RsLib.Display3D
                 throw new Exception($"Build point fail. Display option doesn't contain ID {id}.");
             }
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.Point) return;
+            if (option.DisplayType != eDisplayObjectType.Point) return;
 
             if (_displayObject.ContainsKey(option.ID))
             {
@@ -1387,7 +1387,7 @@ namespace RsLib.Display3D
             }
 
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+            if (option.DisplayType != eDisplayObjectType.PointCloud) return;
             if (_displayObject.ContainsKey(option.ID))
             {
                 if (isUpdateObject)
@@ -1415,7 +1415,7 @@ namespace RsLib.Display3D
             }
 
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+            if (option.DisplayType != eDisplayObjectType.PointCloud) return;
 
             if (_displayObject.ContainsKey(option.ID))
             {
@@ -1429,11 +1429,10 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, group);
             }
-            GL.NewList(id, ListMode.Compile);
+            GL.NewList(option.ID, ListMode.Compile);
             foreach (var item in group.Objects)
             {
-                Polyline line = item.Value as Polyline;
-                if (line != null) drawPointCloud(line, option.DrawSize, option.DrawColor, checkMaxMin);
+                if (item.Value is Polyline line) drawPointCloud(line, option.DrawSize, option.DrawColor, checkMaxMin);
             }
             GL.EndList();
             //updateDataGridView();
@@ -1468,7 +1467,7 @@ namespace RsLib.Display3D
                 throw new Exception($"Build path fail. Display option doesn't contain ID {id}.");
             }
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.Path) return;
+            if (option.DisplayType != eDisplayObjectType.Path) return;
             if (polyLine.Count < 2) return;
 
             if (_displayObject.ContainsKey(option.ID))
@@ -1497,7 +1496,7 @@ namespace RsLib.Display3D
                 throw new Exception($"Build path fail. Display option doesn't contain ID {id}.");
             }
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.Path) return;
+            if (option.DisplayType != eDisplayObjectType.Path) return;
 
             if (_displayObject.ContainsKey(option.ID))
             {
@@ -1511,7 +1510,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLines);
             }
-            GL.NewList(id, ListMode.Compile);
+            GL.NewList(option.ID, ListMode.Compile);
             foreach (var item in polyLines.Objects)
             {
                 Polyline line = item.Value as Polyline;
@@ -1550,7 +1549,7 @@ namespace RsLib.Display3D
             }
         }
 
-        void drawVector(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin, DisplayObjectType objectType)
+        void drawVector(Polyline polyLine, float drawSize, Color drawColor, bool checkMaxMin, eDisplayObjectType objectType)
         {
             GL.LineWidth(drawSize);
             GL.Color4(drawColor);
@@ -1564,17 +1563,17 @@ namespace RsLib.Display3D
                 {
                     checkMaxMinPoint(p);
                 }
-                if (objectType == DisplayObjectType.Vector_z)
+                if (objectType == eDisplayObjectType.Vector_z)
                 {
                     GL.Vertex3(p.PArray);
                     GL.Vertex3(p.GetVzExtendPoint(10).PArray);
                 }
-                else if (objectType == DisplayObjectType.Vector_y)
+                else if (objectType == eDisplayObjectType.Vector_y)
                 {
                     GL.Vertex3(p.PArray);
                     GL.Vertex3(p.GetVyExtendPoint(10).PArray);
                 }
-                else if (objectType == DisplayObjectType.Vector_x)
+                else if (objectType == eDisplayObjectType.Vector_x)
                 {
                     GL.Vertex3(p.PArray);
                     GL.Vertex3(p.GetVxExtendPoint(10).PArray);
@@ -1592,7 +1591,7 @@ namespace RsLib.Display3D
 
             DisplayObjectOption option = _displayOption[id];
 
-            if (option.DisplayType < DisplayObjectType.Vector_z || option.DisplayType > DisplayObjectType.Vector_x) return;
+            if (option.DisplayType < eDisplayObjectType.Vector_z || option.DisplayType > eDisplayObjectType.Vector_x) return;
             if (polyLine.Count == 0) return;
             if (polyLine.Points[0].GetType() != typeof(PointV3D)) return;
 
@@ -1623,7 +1622,7 @@ namespace RsLib.Display3D
 
             DisplayObjectOption option = _displayOption[id];
 
-            if (option.DisplayType < DisplayObjectType.Vector_z || option.DisplayType > DisplayObjectType.Vector_x) return;
+            if (option.DisplayType < eDisplayObjectType.Vector_z || option.DisplayType > eDisplayObjectType.Vector_x) return;
             if (polyLines.DataCount == 0) return;
 
             if (_displayObject.ContainsKey(option.ID))
@@ -1638,7 +1637,7 @@ namespace RsLib.Display3D
             {
                 _displayObject.Add(option.ID, polyLines);
             }
-            GL.NewList(id, ListMode.Compile);
+            GL.NewList(option.ID, ListMode.Compile);
             foreach (var item in polyLines.Objects)
             {
                 Polyline line = item.Value as Polyline;
@@ -1685,7 +1684,7 @@ namespace RsLib.Display3D
             }
             if (cloud.Count < 4) return;
             DisplayObjectOption option = _displayOption[id];
-            if (option.DisplayType != DisplayObjectType.PointCloud) return;
+            if (option.DisplayType != eDisplayObjectType.PointCloud) return;
 
             if (_displayObject.ContainsKey(option.ID))
             {
@@ -1704,6 +1703,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
+#if m
         void drawGroup(ObjectGroup group, DisplayObjectOption option, bool checkMaxMin)
         {
             foreach (var item in group.Objects)
@@ -1786,7 +1786,7 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
-
+#endif
         #endregion
     }
 
@@ -1796,7 +1796,7 @@ namespace RsLib.Display3D
         public int ID = 0;
         public string Name = "";
         public Color DrawColor = Color.White;
-        public DisplayObjectType DisplayType = DisplayObjectType.None;
+        public eDisplayObjectType DisplayType = eDisplayObjectType.None;
         float _drawSize = 5f;
         public float DrawSize
         {
@@ -1809,12 +1809,12 @@ namespace RsLib.Display3D
         }
         public bool IsShowAtDataGrid = true;
         public bool IsSelectable = false;
-        public Dictionary<string, DisplayObjectOption> SubOptions = new Dictionary<string, DisplayObjectOption>();
+        public Dictionary<int, DisplayObjectOption> SubOptions = new Dictionary<int, DisplayObjectOption>();
         public DisplayObjectOption()
         {
 
         }
-        public DisplayObjectOption(int id, string name, Color drawColor, DisplayObjectType displayType, float drawSize, bool isShowDataGrid = true)
+        public DisplayObjectOption(int id, string name, Color drawColor, eDisplayObjectType displayType, float drawSize, bool isShowDataGrid = true)
         {
             ID = id;
             Name = name;
@@ -1823,7 +1823,7 @@ namespace RsLib.Display3D
             DrawSize = drawSize;
             IsShowAtDataGrid = isShowDataGrid;
         }
-        public static DisplayObjectOption[] CreateDisplayOptionArray(int startID, int count, DisplayObjectType defaultType, float defaultSize, bool isSelectable)
+        public static DisplayObjectOption[] CreateDisplayOptionArray(int startID, int count, eDisplayObjectType defaultType, float defaultSize, bool isSelectable)
         {
             DisplayObjectOption[] output = new DisplayObjectOption[count];
             for (int i = 0; i < output.Length; i++)
@@ -1833,6 +1833,13 @@ namespace RsLib.Display3D
                 output[i].DisplayType = defaultType;
                 output[i].DrawSize = defaultSize;
                 output[i].IsSelectable = isSelectable;
+                if(defaultType == eDisplayObjectType.Path)
+                {
+                    output[i].AddSubOption(eDisplayObjectType.PointCloud);
+                    output[i].AddSubOption(eDisplayObjectType.Vector_z);
+                    output[i].AddSubOption(eDisplayObjectType.Vector_y);
+                    output[i].AddSubOption(eDisplayObjectType.Vector_x);
+                }
             }
             return output;
         }
@@ -1840,10 +1847,75 @@ namespace RsLib.Display3D
         {
             return new object[] { DisplayType, IsDisplay, Name, DrawSize,"", ID, };
         }
+        public void AddSubOption(eDisplayObjectType eDisplayObjectType)
+        {
+            switch (eDisplayObjectType)
+            {
+                case eDisplayObjectType.PointCloud:
+                    SubOptions.Add(ID + 100, new DisplayObjectOption()
+                    {
+                        DisplayType = eDisplayObjectType.PointCloud,
+                        DrawSize = 5.0f,
+                        DrawColor = DrawColor,
+                        IsDisplay = true,
+                    });
+                    break;
 
+                case eDisplayObjectType.Vector_z:
+                    SubOptions.Add(ID + 200, new DisplayObjectOption()
+                    {
+                        DisplayType = eDisplayObjectType.Vector_z,
+                        DrawSize = 1.0f,
+                        DrawColor = Color.Blue,
+                        IsDisplay = false,
+                    });
+                    break;
 
+                case eDisplayObjectType.Vector_y:
+                    SubOptions.Add(ID + 300, new DisplayObjectOption()
+                    {
+                        DisplayType = eDisplayObjectType.Vector_y,
+                        DrawSize = 1.0f,
+                        DrawColor = Color.LimeGreen,
+                        IsDisplay = false,
+                    });
+                    break;
+
+                case eDisplayObjectType.Vector_x:
+                    SubOptions.Add(ID + 400, new DisplayObjectOption()
+                    {
+                        DisplayType = eDisplayObjectType.Vector_x,
+                        DrawSize = 1.0f,
+                        DrawColor = Color.Red,
+                        IsDisplay = false,
+                    });
+                    break;
+
+                default:
+
+                    break;
+            
+            }
+
+        }
+        public TreeNode ToTreeNode()
+        {
+            TreeNode output = new TreeNode()
+            {
+                Name = ID.ToString(),
+                Text = Name
+            };
+            foreach(var item in SubOptions)
+            {
+                int subID = item.Key;
+                DisplayObjectOption subOption = item.Value;
+                output.Nodes.Add(subOption.ToTreeNode());
+            }
+
+            return output;
+        }
     }
-    public enum DisplayObjectType : int
+    public enum eDisplayObjectType : int
     {
         None = 0,
         PointCloud,
