@@ -335,6 +335,100 @@ namespace RsLib.PointCloudLib
             }
             return Output;
         }
+
+        public void VoxelGridDownsampling(double leafSize)
+        {
+            if (leafSize <= 0) leafSize = 0.1;
+            // Create a dictionary to store points based on their voxel indices
+            Dictionary<Tuple<int, int, int>, Point3D> voxelGrid = new Dictionary<Tuple<int, int, int>, Point3D>();
+            // Iterate through all points in the point cloud
+            foreach (var point in Points)
+            {
+                // Calculate the voxel indices for the current point
+                int xIndex = (int)Math.Floor(point.X / leafSize);
+                int yIndex = (int)Math.Floor(point.Y / leafSize);
+                int zIndex = (int)Math.Floor(point.Z / leafSize);
+
+                // Create a tuple representing the voxel indices
+                var voxelIndex = Tuple.Create(xIndex, yIndex, zIndex);
+
+                // Add the point to the voxel grid, or replace if already exists (keeping only one point per voxel)
+                voxelGrid[voxelIndex] = point;
+            }
+
+            // Extract the downsampled point cloud from the voxel grid
+            List<Point3D> downsampledPointCloud = voxelGrid.Values.ToList();
+            Points.Clear();
+            Points.AddRange(downsampledPointCloud);
+        }
+
+        public void StatisticalOutlierRemoval( int k, double stdDevMulThresh)
+        {
+            List<Point3D> cleanedPointCloud = new List<Point3D>();
+
+            foreach (var point in Points)
+            {
+                // Calculate distances to k nearest neighbors
+                List<double> distances = new List<double>();
+
+                PointCloud nearK = PointCloudCommon.GetNearestPointCloud(kdTree, point, k);
+                foreach (var neighborPoint in nearK.Points)
+                {
+                    distances.Add(Point3D.Distance(point, neighborPoint));
+                }
+
+                // Sort distances
+                distances.Sort();
+
+                // Calculate mean and standard deviation
+                double mean = distances.Average();
+                double stdDev = Math.Sqrt(distances.Select(d => (d - mean) * (d - mean)).Sum() / k);
+
+                // Check if the distance of the point to its k-th nearest neighbor exceeds the threshold
+                if (distances[k-1] > mean + stdDevMulThresh * stdDev)
+                    continue; // Skip outlier points
+
+                // Add point to cleaned point cloud
+                cleanedPointCloud.Add(point);
+            }
+            Points.Clear();
+            Points.AddRange(cleanedPointCloud);
+        }
+        public void RadiusOutlierRemoval(double radius, int minNeighbors)
+        {
+            List<Point3D> cleanedPointCloud = new List<Point3D>();
+
+            foreach (var point in Points)
+            {
+                // Count neighbors within the radius
+                PointCloud nearK = PointCloudCommon.GetNearestPointCloud(kdTree, point, radius);
+
+                // Add point to cleaned point cloud if it has sufficient neighbors
+                if (nearK.Count >= minNeighbors)
+                    cleanedPointCloud.Add(point);
+            }
+            Points.Clear();
+            Points.AddRange(cleanedPointCloud);
+        }
+
+        public void RandomSampling( double downsamplingRatio)
+        {
+            if (downsamplingRatio <= 0) downsamplingRatio = 0.1;
+            else if (downsamplingRatio >= 1) downsamplingRatio = 1.0;
+
+            // Calculate the number of points to keep based on the downsampling ratio
+            int numPointsToKeep = (int)Math.Round(Count * downsamplingRatio);
+
+            // Shuffle the point cloud to randomize the selection
+            Random rng = new Random();
+            List<Point3D> shuffledPointCloud = Points.OrderBy(p => rng.Next()).ToList();
+
+            // Take the first numPointsToKeep points from the shuffled point cloud
+            List<Point3D> downsampledPointCloud = shuffledPointCloud.Take(numPointsToKeep).ToList();
+
+            Points.Clear();
+            Points.AddRange(downsampledPointCloud);
+        }
         public List<Point3D> GetXValuesMax2Min()
         {
             List<Point3D> SortedX = Points.OrderByDescending(T => T.X).ToList();

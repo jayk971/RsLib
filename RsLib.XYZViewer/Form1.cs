@@ -113,7 +113,7 @@ namespace RsLib.XYZViewer
             createButton(xyzButtons, DrawItem.XYZ4, XYZOptions[3].DrawColor, "Point Cloud 4", "PointCloud4");
             createButton(xyzButtons, DrawItem.XYZ3, XYZOptions[2].DrawColor, "Point Cloud 3", "PointCloud3");
             createButton(xyzButtons, DrawItem.XYZ2, XYZOptions[1].DrawColor, "Point Cloud 2", "PointCloud2");
-            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor, "Point Cloud 1", "Point1Cloud1");
+            createButton(xyzButtons, DrawItem.XYZ1, XYZOptions[0].DrawColor, "Point Cloud 1", "PointCloud1");
 
             loadedFiles.Add(DrawItem.XYZ1, "");
             loadedFiles.Add(DrawItem.XYZ2, "");
@@ -168,6 +168,10 @@ namespace RsLib.XYZViewer
                     case ".xyz":
                         PointCloud cloud = new PointCloud();
                         cloud.LoadFromFile(filePath, true);
+                        //cloud.VoxelGridDownsampling(1.0);
+                        //cloud.StatisticalOutlierRemoval(3, 1.0);
+                        //cloud.RadiusOutlierRemoval(2.0, 15);
+                        cloud.RandomSampling(0.5);
                         _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                         _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
                         break;
