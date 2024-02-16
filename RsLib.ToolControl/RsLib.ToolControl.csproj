@@ -51,16 +51,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord">
-      <HintPath>..\..\..\..\..\RLib\Lib\Accord.dll</HintPath>
+      <HintPath>D:\RLib\Lib\Accord.dll</HintPath>
     </Reference>
     <Reference Include="Accord.Math">
-      <HintPath>..\..\..\..\..\RLib\Lib\Accord.Math.dll</HintPath>
+      <HintPath>D:\RLib\Lib\Accord.Math.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot">
-      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.dll</HintPath>
+      <HintPath>D:\RLib\Lib\OxyPlot.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot.WindowsForms">
-      <HintPath>..\..\..\..\..\RLib\Lib\OxyPlot.WindowsForms.dll</HintPath>
+      <HintPath>D:\RLib\Lib\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

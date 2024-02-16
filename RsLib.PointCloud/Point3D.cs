@@ -909,7 +909,14 @@ namespace RsLib.PointCloudLib
 
             return Coord;
         }
-
+        public double[] ToArray()
+        {
+            return new double[] { X, Y, Z };
+        }
+        public float[] ToArrayFloat()
+        {
+            return new float[] { (float)X, (float)Y, (float)Z };
+        }
     }
     [Serializable]
     public partial class PointV3D : Point3D

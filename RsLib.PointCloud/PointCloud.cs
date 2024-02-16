@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using MathNet.Numerics.LinearAlgebra;
 namespace RsLib.PointCloudLib
 {
 
@@ -360,6 +362,8 @@ namespace RsLib.PointCloudLib
             List<Point3D> downsampledPointCloud = voxelGrid.Values.ToList();
             Points.Clear();
             Points.AddRange(downsampledPointCloud);
+            RebuildKDTree();
+
         }
 
         public void StatisticalOutlierRemoval( int k, double stdDevMulThresh)
@@ -393,6 +397,8 @@ namespace RsLib.PointCloudLib
             }
             Points.Clear();
             Points.AddRange(cleanedPointCloud);
+            RebuildKDTree();
+
         }
         public void RadiusOutlierRemoval(double radius, int minNeighbors)
         {
@@ -409,6 +415,8 @@ namespace RsLib.PointCloudLib
             }
             Points.Clear();
             Points.AddRange(cleanedPointCloud);
+            RebuildKDTree();
+
         }
 
         public void RandomSampling( double downsamplingRatio)
@@ -428,6 +436,17 @@ namespace RsLib.PointCloudLib
 
             Points.Clear();
             Points.AddRange(downsampledPointCloud);
+            RebuildKDTree();
+        }
+
+
+        public void RebuildKDTree()
+        {
+            kdTree.Clear();
+            for (int i = 0; i < Points.Count; i++)
+            {
+                kdTree.Add(Points[i].ToArray(), i);
+            }
         }
         public List<Point3D> GetXValuesMax2Min()
         {
