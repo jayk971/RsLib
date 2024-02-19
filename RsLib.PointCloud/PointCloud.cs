@@ -2718,55 +2718,63 @@ namespace RsLib.PointCloudLib
         }
         public bool LoadFromPLY(string FilePath, bool buildKDTree,int ResampleCount = 0)
         {
-            Points.Clear();
-            kdTree.Clear();
-            if (!File.Exists(FilePath)) return false;
-            //List<string> stringList = ReadAllLines(FilePath);
-            using (StreamReader sr = new StreamReader(FilePath, Encoding.Default))
+
+            try
             {
-                string readData = "";
-                int pointCount = 0;
-                int i = 0;
-                while (!sr.EndOfStream)
+                Points.Clear();
+                kdTree.Clear();
+                if (!File.Exists(FilePath)) return false;
+                //List<string> stringList = ReadAllLines(FilePath);
+                using (StreamReader sr = new StreamReader(FilePath, Encoding.Default))
                 {
-                    readData = sr.ReadLine();
-                    if (readData.Contains("element vertex"))
+                    string readData = "";
+                    int pointCount = 0;
+                    int i = 0;
+                    while (!sr.EndOfStream)
                     {
-                        string[] splitData = readData.Split(' ');
-                        pointCount = int.Parse(splitData[2]);
-                    }
-                    if (readData == "end_header") break;
-                }
-                while (!sr.EndOfStream)
-                {
-                    readData = sr.ReadLine();
-
-                    if (readData != "")
-                    {
-                        string[] SplitData = readData.Split(' ');
-                        if (SplitData.Length >= 3)
+                        readData = sr.ReadLine();
+                        if (readData.Contains("element vertex"))
                         {
-                            double x = 0;
-                            double y = 0;
-                            double z = 0;
+                            string[] splitData = readData.Split(' ');
+                            pointCount = int.Parse(splitData[2]);
+                        }
+                        if (readData == "end_header") break;
+                    }
+                    while (!sr.EndOfStream)
+                    {
+                        readData = sr.ReadLine();
 
-                            if (ResampleCount != 0)
-                                if (i % ResampleCount != 0) continue;
+                        if (readData != "")
+                        {
+                            string[] SplitData = readData.Split(' ');
+                            if (SplitData.Length >= 3)
+                            {
+                                double x = 0;
+                                double y = 0;
+                                double z = 0;
 
-                            ConvertXYZ(DigitFormat.XYZ, SplitData[0], SplitData[1], SplitData[2], out x, out y, out z);
+                                if (ResampleCount != 0)
+                                    if (i % ResampleCount != 0) continue;
 
-                            Point3D point = new Point3D(x, y, z);
-                            Points.Add(point);
-                            if(buildKDTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
-                            i++;
+                                ConvertXYZ(DigitFormat.XYZ, SplitData[0], SplitData[1], SplitData[2], out x, out y, out z);
+
+                                Point3D point = new Point3D(x, y, z);
+                                Points.Add(point);
+                                if (buildKDTree) kdTree.Add(new double[] { point.X, point.Y, point.Z }, Points.Count - 1);
+                                i++;
+                            }
                         }
                     }
+                    sr.Close();
                 }
-                sr.Close();
+                return true;
             }
-            return true;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
-        private bool ConvertXYZ(DigitFormat Format, string str1, string str2, string str3, out double x, out double y, out double z, int RoundDigit = 2)
+            private bool ConvertXYZ(DigitFormat Format, string str1, string str2, string str3, out double x, out double y, out double z, int RoundDigit = 2)
         {
             string strX, strY, strZ = "";
             x = -9999;

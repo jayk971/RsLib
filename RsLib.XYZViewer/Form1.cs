@@ -168,10 +168,10 @@ namespace RsLib.XYZViewer
                     case ".xyz":
                         PointCloud cloud = new PointCloud();
                         cloud.LoadFromFile(filePath, true);
-                        //cloud.VoxelGridDownsampling(1.0);
+                        //cloud.VoxelGridDownsampling(5.0);
                         //cloud.StatisticalOutlierRemoval(3, 1.0);
                         //cloud.RadiusOutlierRemoval(2.0, 15);
-                        cloud.RandomSampling(0.5);
+                        //cloud.RandomSampling(0.5);
                         _displayCtrl.GetDisplayObjectOption((int)drawItem).Name = fileName;
                         _displayCtrl.BuildPointCloud(cloud, (int)drawItem, true, true);
                         break;
