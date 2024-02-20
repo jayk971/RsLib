@@ -1,162 +1,273 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Factorization;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.IO;
 namespace RsLib.PointCloudLib
 {
     public class Mesh
     {
-        static void Main(PointCloud downsampleCloud)
+        public List<Point3D> Vertices { get; private set; } = new List<Point3D>();
+        public List<int> Indices { get; private set; } = new List<int>();
+
+        public void ExportMeshToPLY(string filePath)
         {
-
-
-            // Compute the gradient field
-            // Replace "ComputeGradientField" with your method to compute the gradient field
-            Matrix<double> gradientField = ComputeGradientField(downsampleCloud,5.0);
-
-            // Solve the Poisson equation
-            // Replace "SolvePoissonEquation" with your method to solve the Poisson equation
-            Matrix<double> phi = SolvePoissonEquation(gradientField);
-
-            // Extract iso-surface
-            // Replace "ExtractIsoSurface" with your method to extract the iso-surface
-            Mesh mesh = ExtractIsoSurface(phi);
-
-            // Export mesh
-            ExportMesh(mesh, "output_mesh.obj");
-
-            Console.WriteLine("Mesh generation completed.");
-        }
-        static Matrix<double>[,,] ComputeGradientField3D(Matrix<double>[,,] pointCloud)
-        {
-            int width = pointCloud.GetLength(0);
-            int height = pointCloud.GetLength(1);
-            int depth = pointCloud.GetLength(2);
-
-            var gradientField = new Matrix<double>[width, height, depth];
-
-            for (int x = 0; x < width; x++)
+            using (StreamWriter writer = new StreamWriter(filePath))
             {
-                for (int y = 0; y < height; y++)
-                {
-                    for (int z = 0; z < depth; z++)
-                    {
-                        double dx = (pointCloud[Math.Min(x + 1, width - 1), y, z] - pointCloud[Math.Max(x - 1, 0), y, z]) / 2.0;
-                        double dy = (pointCloud[x, Math.Min(y + 1, height - 1), z] - pointCloud[x, Math.Max(y - 1, 0), z]) / 2.0;
-                        double dz = (pointCloud[x, y, Math.Min(z + 1, depth - 1)] - pointCloud[x, y, Math.Max(z - 1, 0)]) / 2.0;
+                // Write header
+                writer.WriteLine("ply");
+                writer.WriteLine("format ascii 1.0");
+                writer.WriteLine($"element vertex {Vertices.Count}");
+                writer.WriteLine("property float x");
+                writer.WriteLine("property float y");
+                writer.WriteLine("property float z");
+                writer.WriteLine($"element face {Vertices.Count / 3}");
+                writer.WriteLine("property list uchar int vertex_index");
+                writer.WriteLine("end_header");
 
-                        gradientField[x, y, z] = Vector<double>.Build.DenseOfArray(new double[] { dx, dy, dz });
-                    }
+                // Write vertices
+                foreach (Point3D vertex in Vertices)
+                {
+                    writer.WriteLine($"{vertex.X} {vertex.Y} {vertex.Z}");
+                }
+
+                // Write faces (triangles)
+                for (int i = 0; i < Indices.Count; i += 3)
+                {
+                    writer.WriteLine($"3 {Indices[i]} {Indices[i + 1]} {Indices[i + 2]}");
+                }
+            }
+        }
+        public void BuildMeshFromPointCloud(PointCloud pointCloud, float epsilon)
+        {
+            // Step 1: Find the convex hull of the point cloud
+            PointCloud convexHull = FindConvexHull(pointCloud);
+
+            // Step 2: Triangulate the convex hull
+            Triangulate(convexHull, epsilon);
+        }
+
+        private void Triangulate(PointCloud convexHull, float epsilon)
+        {
+            // Iterate over each triangle in the convex hull
+            for (int i = 0; i < convexHull.Count; i++)
+            {
+                Point3D p0 = convexHull.Points[i];
+                Point3D p1 = convexHull.Points[(i + 1) % convexHull.Count];
+                Point3D p2 = convexHull.Points[(i + 2) % convexHull.Count];
+                Vector3D v1 = new Vector3D(p0, p1);
+                Vector3D v2 = new Vector3D(p0, p2);
+                // Calculate normal of the triangle
+                Vector3D normal = Vector3D.Cross(v1,v2);
+
+                // Find the farthest point from the plane of the triangle
+                Point3D farthestPoint = FindFarthestPoint(convexHull, normal, p0, p1, p2);
+
+                // If the farthest point is within epsilon distance from the plane, skip it
+                Vector3D testV = new Vector3D(p0, farthestPoint);
+                if (Vector3D.Dot(normal, testV) < epsilon)
+                    continue;
+
+                // Add vertices to the mesh
+                // Add vertices to the mesh
+                Vertices.Add(p0);
+                Vertices.Add(p1);
+                Vertices.Add(p2);
+
+                // Add indices for the triangle
+                Indices.Add(Vertices.Count - 3);
+                Indices.Add(Vertices.Count - 2);
+                Indices.Add(Vertices.Count - 1);
+            }
+        }
+
+        private Point3D FindFarthestPoint(PointCloud pointCloud, Vector3D normal, Point3D p0, Point3D p1, Point3D p2)
+        {
+            float maxDistance = float.MinValue;
+            Point3D farthestPoint = new Point3D();
+
+            foreach (Point3D point in pointCloud.Points)
+            {
+                if (point == p0 || point == p1 || point == p2)
+                    continue;
+
+                Vector3D testV = new Vector3D(p0, point);
+                float distance = (float)Vector3D.Dot(normal, testV);
+
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    farthestPoint = point;
                 }
             }
 
-            return gradientField;
+            return farthestPoint;
         }
-
-        static Matrix<double> ComputeCovarianceMatrix3D(Matrix<double>[,,] gradientField, int x, int y, int z, int radius)
+        public PointCloud FindConvexHull(PointCloud cloud)
         {
-            int dimension = 3;
-            int count = 0;
-            var mean = Vector<double>.Build.DenseOfArray(new double[dimension]);
-            var covarianceMatrix = Matrix<double>.Build.Dense(dimension, dimension);
+            if (cloud.Count < 4)
+                return cloud;
 
-            for (int i = Math.Max(x - radius, 0); i <= Math.Min(x + radius, gradientField.GetLength(0) - 1); i++)
+            List<Point3D> hull = new List<Point3D>();
+
+            // Find leftmost and rightmost points
+            int minIndex = 0, maxIndex = 0;
+            for (int i = 1; i < cloud.Count; i++)
             {
-                for (int j = Math.Max(y - radius, 0); j <= Math.Min(y + radius, gradientField.GetLength(1) - 1); j++)
+                if (cloud.Points[i].X < cloud.Points[minIndex].X)
+                    minIndex = i;
+                if (cloud.Points[i].X > cloud.Points[maxIndex].X)
+                    maxIndex = i;
+            }
+
+            Point3D A = cloud.Points[minIndex];
+            Point3D B = cloud.Points[maxIndex];
+            hull.Add(A);
+            hull.Add(B);
+            cloud.Points.RemoveAt(minIndex);
+            cloud.Points.RemoveAt(maxIndex > minIndex ? maxIndex - 1 : maxIndex);
+
+            List<Point3D> leftSet = new List<Point3D>();
+            List<Point3D> rightSet = new List<Point3D>();
+
+            // Split points into two sets
+            for (int i = 0; i < cloud.Count; i++)
+            {
+                Point3D p = cloud.Points[i];
+                if (PointLocation(A, B, p) == 1)
+                    leftSet.Add(p);
+                else if (PointLocation(A, B, p) == -1)
+                    rightSet.Add(p);
+            }
+
+            // Recursively find the convex hull for each set
+            HullSet(A, B, rightSet, hull);
+            HullSet(B, A, leftSet, hull);
+
+            PointCloud output = new PointCloud();
+            output.Points.AddRange(hull);
+            return output;
+        }
+        private void HullSet(Point3D A, Point3D B, List<Point3D> set, List<Point3D> hull)
+        {
+            if (set.Count == 0) return;
+
+            // Find the point farthest from the line AB
+            double maxDistance = double.MinValue;
+            Point3D P = null;
+            foreach (Point3D point in set)
+            {
+                Vector3D v1 = new Vector3D(A, B);
+                Vector3D v2 = new Vector3D(A, point);
+                double distance = Vector3D.Cross(v1, v2).L;
+                if (distance > maxDistance)
                 {
-                    for (int k = Math.Max(z - radius, 0); k <= Math.Min(z + radius, gradientField.GetLength(2) - 1); k++)
-                    {
-                        mean += gradientField[i, j, k];
-                        count++;
-                    }
+                    maxDistance = distance;
+                    P = point;
                 }
             }
 
-            mean /= count;
+            if (P == null) return;
 
-            for (int i = Math.Max(x - radius, 0); i <= Math.Min(x + radius, gradientField.GetLength(0) - 1); i++)
+            // Extract the farthest point from the set
+            set.Remove(P);
+            hull.Add(P);
+
+            // Partition the set into points on the left and right of line AB
+            List<Point3D> leftSet = new List<Point3D>();
+            List<Point3D> rightSet = new List<Point3D>();
+            foreach (Point3D point in set)
             {
-                for (int j = Math.Max(y - radius, 0); j <= Math.Min(y + radius, gradientField.GetLength(1) - 1); j++)
+                int location = PointLocation(A, P, point);
+                if (location > 0)
+                    leftSet.Add(point);
+                else if (location < 0)
+                    rightSet.Add(point);
+            }
+
+            // Recursively call HullSet for the subsets
+            HullSet(A, P, leftSet, hull);
+            HullSet(P, B, rightSet, hull);
+        }
+#if m
+        private void HullSet(Point3D A, Point3D B, List<Point3D> set, List<Point3D> hull)
+        {
+            int insertPosition = hull.IndexOf(B);
+            if (set.Count == 0) return;
+            if (set.Count == 1)
+            {
+                Point3D p = set[0];
+                set.RemoveAt(0);
+                hull.Insert(insertPosition, p);
+                return;
+            }
+
+            float dist = float.MinValue;
+            int furthestPoint = -1;
+            for (int i = 0; i < set.Count; i++)
+            {
+                Point3D p = set[i];
+                float distance = SignedDistance(A, B, p);
+                if (distance > dist)
                 {
-                    for (int k = Math.Max(z - radius, 0); k <= Math.Min(z + radius, gradientField.GetLength(2) - 1); k++)
-                    {
-                        var deviation = gradientField[i, j, k] - mean;
-                        covarianceMatrix += deviation.OuterProduct(deviation);
-                    }
+                    dist = distance;
+                    furthestPoint = i;
                 }
             }
 
-            return covarianceMatrix / (count - 1); // Unbiased estimator
-        }
+            Point3D P = set[furthestPoint];
+            set.RemoveAt(furthestPoint);
+            hull.Insert(insertPosition, P);
 
-        static Matrix<double>[,,] SolvePoissonEquation3D(Matrix<double>[,,] gradientField)
-        {
-            int width = gradientField.GetLength(0);
-            int height = gradientField.GetLength(1);
-            int depth = gradientField.GetLength(2);
-            var potentialField = new Matrix<double>[width, height, depth];
-
-            for (int x = 0; x < width; x++)
+            // Determine which side of AP the other points are on
+            List<Point3D> leftSetAP = new List<Point3D>();
+            for (int i = 0; i < set.Count; i++)
             {
-                for (int y = 0; y < height; y++)
+                Point3D M = set[i];
+                if (PointLocation(A, P, M) == 1)
                 {
-                    for (int z = 0; z < depth; z++)
-                    {
-                        potentialField[x, y, z] = gradientField[x, y, z] * (-1.0);
-                    }
+                    leftSetAP.Add(M);
                 }
             }
 
-            return potentialField;
-        }
-
-        static List<Triangle> ExtractIsoSurface3D(Matrix<double>[,,] scalarField, double isoValue)
-        {
-            List<Triangle> triangles = new List<Triangle>();
-
-            for (int x = 0; x < scalarField.GetLength(0) - 1; x++)
+            // Determine which side of PB the other points are on
+            List<Point3D> leftSetPB = new List<Point3D>();
+            for (int i = 0; i < set.Count; i++)
             {
-                for (int y = 0; y < scalarField.GetLength(1) - 1; y++)
+                Point3D M = set[i];
+                if (PointLocation(P, B, M) == 1)
                 {
-                    for (int z = 0; z < scalarField.GetLength(2) - 1; z++)
-                    {
-                        double v0 = scalarField[x, y, z][0];
-                        double v1 = scalarField[x + 1, y, z][0];
-                        double v2 = scalarField[x + 1, y + 1, z][0];
-                        double v3 = scalarField[x, y + 1, z][0];
-                        double v4 = scalarField[x, y, z + 1][0];
-                        double v5 = scalarField[x + 1, y, z + 1][0];
-                        double v6 = scalarField[x + 1, y + 1, z + 1][0];
-                        double v7 = scalarField[x, y + 1, z + 1][0];
-
-                        int cellConfig = GetCellConfiguration3D(v0, v1, v2, v3, v4, v5, v6, v7, isoValue);
-
-                        foreach (var triangle in MarchingCubesTables.TriangulationTable[cellConfig])
-                        {
-                            triangles.Add(triangle);
-                        }
-                    }
+                    leftSetPB.Add(M);
                 }
             }
 
-            return triangles;
+            HullSet(A, P, leftSetAP, hull);
+            HullSet(P, B, leftSetPB, hull);
+        }
+#endif
+        private int PointLocation(Point3D A, Point3D B, Point3D P)
+        {
+            double val = (P.Y - A.Y) * (B.X - A.X) - (B.Y - A.Y) * (P.X - A.X);
+            if (val > 0)
+                return 1; // Left side
+            else if (val < 0)
+                return -1; // Right side
+            else
+                return 0; // On the line
         }
 
-        static int GetCellConfiguration3D(double v0, double v1, double v2, double v3, double v4, double v5, double v6, double v7, double isoValue)
+        private float SignedDistance(Point3D A, Point3D B, Point3D P)
         {
-            int index = 0;
-            if (v0 < isoValue) index |= 1;
-            if (v1 < isoValue) index |= 2;
-            if (v2 < isoValue) index |= 4;
-            if (v3 < isoValue) index |= 8;
-            if (v4 < isoValue) index |= 16;
-            if (v5 < isoValue) index |= 32;
-            if (v6 < isoValue) index |= 64;
-            if (v7 < isoValue) index |= 128;
-            return index;
+            Vector3D vB = new Vector3D(B.X, B.Y, B.Z);
+            Vector3D vA = new Vector3D(A.X, A.Y, A.Z);
+            Vector3D vP = new Vector3D(P.X, P.Y, P.Z);
+
+
+            return (float)Vector3D.Cross(vB - vA, vP - vA).L;
         }
     }
 }
