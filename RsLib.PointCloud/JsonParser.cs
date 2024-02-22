@@ -603,7 +603,7 @@ namespace RsLib.PointCloudLib
             if (arr == null) return 0;
             else  return Math.Sqrt(Math.Pow(arr[0], 2) + Math.Pow(arr[1], 2) + Math.Pow(arr[2], 2));
         }
-        public Pose ProjectToSurface(KDTree<int> targetTree,out Vector3D normalV,bool useSurfaceNormal,int searchCloudLimit,double searchStartRad,double seachEndRad)
+        public Pose ProjectToSurface(KDTree<int> targetTree,out Vector3D normalV,int searchCloudLimit,double searchStartRad,double seachEndRad)
         {
             PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z, targetTree, searchCloudLimit, searchStartRad, seachEndRad);
             normalV = projectedP.Vz;
@@ -614,21 +614,14 @@ namespace RsLib.PointCloudLib
                 Z = projectedP.Z,
 
             };
-            if (useSurfaceNormal)
-            {
-                p.XAxis = projectedP.Vx.ToArray();
-                p.YAxis = projectedP.Vy.ToArray();
-                p.ZAxis = projectedP.Vz.ToArray();
-            }
-            else
-            {
+
                 p.XAxis = XAxis;
                 p.YAxis = YAxis;
                 p.ZAxis = ZAxis;
-            }
+            
             return p;
         }
-        public Pose ProjectToSurfaceWithFixNormal(KDTree<int> targetTree, out Vector3D normalV, bool useSurfaceNormal, int searchCloudLimit, double searchStartRad, double seachEndRad)
+        public Pose ProjectToSurfaceWithDesiredZ(KDTree<int> targetTree, out Vector3D normalV, int searchCloudLimit, double searchStartRad, double seachEndRad)
         {
             PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z,
                 ZAxis[0],ZAxis[1],ZAxis[2],
@@ -642,18 +635,11 @@ namespace RsLib.PointCloudLib
                 Z = projectedP.Z,
 
             };
-            if (useSurfaceNormal)
-            {
-                p.XAxis = projectedP.Vx.ToArray();
-                p.YAxis = projectedP.Vy.ToArray();
-                p.ZAxis = projectedP.Vz.ToArray();
-            }
-            else
-            {
+
                 p.XAxis = XAxis;
                 p.YAxis = YAxis;
                 p.ZAxis = ZAxis;
-            }
+            
             return p;
         }
         public Pose ProjectToSurface(KDTree<int> targetTree, out Vector3D normalV, List<Vector3D> candidateVector, int searchCloudLimit, double searchStartRad, double seachEndRad)
