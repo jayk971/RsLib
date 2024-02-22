@@ -105,7 +105,12 @@ namespace RsLib.PointCloudLib
 
             return selection.ToPoseList();
         }
+        public PoseList ToPoseList(int enumType)
+        {
+            SelectionInfo selection = Selections[0];
 
+            return selection.ToPoseList(enumType);
+        }
         public List<ObjectGroup> ToObjectGroups()
         {
             try
@@ -239,7 +244,18 @@ namespace RsLib.PointCloudLib
             }
             return pl;
         }
+        public PoseList ToPoseList(int enumType)
+        {
+            PoseList pl = new PoseList();
+            for (int i = 0; i < toolPaths.Count; i++)
+            {
+                ToolPathInfo toolPathInfo = toolPaths[i];
+                PoseList tuple = toolPathInfo.ToPoseList(i, enumType);
+                pl.Add(tuple);
 
+            }
+            return pl;
+        }
     }
     [Serializable]
     public class ToolPathInfo
@@ -412,6 +428,17 @@ namespace RsLib.PointCloudLib
                 Pose p = Poses[i];
 
                 poseList.Add(p, lineIndex);
+            }
+            return poseList;
+        }
+        public PoseList ToPoseList(int lineIndex,int enumType)
+        {
+            PoseList poseList = new PoseList();
+            for (int i = 0; i < Poses.Count; i++)
+            {
+                Pose p = Poses[i];
+
+                poseList.Add(p, lineIndex, enumType);
             }
             return poseList;
         }
@@ -746,9 +773,66 @@ namespace RsLib.PointCloudLib
         public List<int> Index = new List<int>();
         public int[] ArrayIndex => Index.ToArray();
         public int Count => Index.Count;
+
+        public List<int> EnumType = new List<int>();
         public PoseList()
         {
 
+        }
+        public PoseList(ObjectGroup og)
+        {
+            foreach (var item in og.Objects)
+            {
+                if(item.Value is Polyline pl)
+                {
+                    if (pl.GetOption(typeof(LineOption)) is LineOption lo)
+                    {
+                        for (int i = 0; i < pl.Count; i++)
+                        {
+                            if(pl.Points[i] is PointV3D ptV3D)
+                            {
+                                X.Add(ptV3D.X);
+                                Y.Add(ptV3D.Y);
+                                Z.Add(ptV3D.Z);
+
+                                Xx.Add(ptV3D.Vx.X);
+                                Xy.Add(ptV3D.Vx.Y);
+                                Xz.Add(ptV3D.Vx.Z);
+
+                                Yx.Add(ptV3D.Vy.X);
+                                Yy.Add(ptV3D.Vy.Y);
+                                Yz.Add(ptV3D.Vy.Z);
+
+                                Zx.Add(ptV3D.Vz.X);
+                                Zy.Add(ptV3D.Vz.Y);
+                                Zz.Add(ptV3D.Vz.Z);
+
+                                Index.Add(lo.LineIndex);
+                            }
+                            else if(pl.Points[i] is Point3D pt)
+                            {
+                                X.Add(pt.X);
+                                Y.Add(pt.Y);
+                                Z.Add(pt.Z);
+
+                                Xx.Add(0.0);
+                                Xy.Add(0.0);
+                                Xz.Add(0.0);
+
+                                Yx.Add(0.0);
+                                Yy.Add(0.0);
+                                Yz.Add(0.0);
+
+                                Zx.Add(0.0);
+                                Zy.Add(0.0);
+                                Zz.Add(0.0);
+
+                                Index.Add(lo.LineIndex);
+                            }
+                        }
+                    }
+                }
+            }
         }
         public PoseList(List<double> x,
     List<double> y,
@@ -776,6 +860,17 @@ namespace RsLib.PointCloudLib
             AddVector(pt.VectorY, eRefAxis.Y);
             AddVector(pt.VectorZ, eRefAxis.Z);
             Index.Add(index);
+        }
+        public void Add(Pose pt, int index,int enumType)
+        {
+            X.Add(pt.X);
+            Y.Add(pt.Y);
+            Z.Add(pt.Z);
+            AddVector(pt.VectorX, eRefAxis.X);
+            AddVector(pt.VectorY, eRefAxis.Y);
+            AddVector(pt.VectorZ, eRefAxis.Z);
+            Index.Add(index);
+            EnumType.Add(enumType);
         }
         public void Add(PointV3D pt, int index)
         {
@@ -806,6 +901,7 @@ namespace RsLib.PointCloudLib
             Zz.AddRange(otherPoseList.Zz);
 
             Index.AddRange(otherPoseList.Index);
+            EnumType.AddRange(otherPoseList.EnumType);
 
         }
         public void Add(List<double>x, 
@@ -929,6 +1025,45 @@ namespace RsLib.PointCloudLib
                 ZAxis = new double[] { Zx[index], Zy[index], Zz[index] },
 
             };
+            return output;
+        }
+        public ObjectGroup ToObjectGroup(string groupName)
+        {
+            ObjectGroup output = new ObjectGroup(groupName);
+            int lastIndex = Index[0];
+            Polyline pl = new Polyline();
+            for (int i = 0; i < Index.Count; i++)
+            {
+                PointV3D p = new PointV3D()
+                { 
+                    X = X[i], 
+                    Y = Y[i],
+                    Z = Z[i], 
+                    Vx = new Vector3D(Xx[i], Xy[i], Xz[i]),
+                    Vy = new Vector3D(Yx[i], Yy[i], Yz[i]),
+                    Vz = new Vector3D(Zx[i], Zy[i], Zz[i])
+                };
+                if(lastIndex != Index[i])
+                {
+                    pl.AddOption(new LineOption() { LineIndex = lastIndex });
+                    output.Add($"{groupName}_{lastIndex}", pl);
+                    pl = new Polyline();
+                    pl.Add(p);
+                    lastIndex = Index[i];
+                }
+                else
+                {
+                    pl.Add(p);
+                }
+
+                if(i == Index.Count-1)
+                {
+                    pl.AddOption(new LineOption() { LineIndex = lastIndex });
+                    output.Add($"{groupName}_{lastIndex}", pl);
+                }
+            }
+
+
             return output;
         }
     }
