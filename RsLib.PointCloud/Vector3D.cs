@@ -115,6 +115,17 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
+        public static Point3D ShortestPoint(Point3D startP, Point3D endP,Point3D testP)
+        {
+            Vector3D m = new Vector3D(startP, endP);
+            m.UnitVector();
+            double ax = startP.X - testP.X;
+            double ay = startP.Y - testP.Y;
+            double az = startP.Z - testP.Z;
+            double t = -1 * (ax * m.X + ay * m.Y + az * m.Z) / (m.X * m.X + m.Y * m.Y + m.Z * m.Z);
+            Point3D pRatSurface = startP + m * t;
+            return pRatSurface;
+        }
         public Point3D ShortestPoint(Point3D Target, Point3D RefPoint)
         {
             double CalD = 0.0;
