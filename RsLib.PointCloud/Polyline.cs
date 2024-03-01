@@ -2506,6 +2506,22 @@ namespace RsLib.PointCloudLib
             output.SmoothByKDTree(reduceR, true, true, false);
             return output;
         }
+        public Polyline GetIntersectVz(KDTree<int> targetTree, double vzExtendLength, int searchRange, double startSearchR, double EndSearchR, double stepSearchR, bool ignoreZLowerTarget)
+        {
+            Polyline output = new Polyline();
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if (Points[i] is PointV3D pt)
+                {
+                    List<Vector3D> candidateV = new List<Vector3D>() { pt.Vz };
+                    PointV3D pointV3D = PointCloudCommon.ProjectToSurface(pt.X, pt.Y,pt.Z, candidateV, targetTree, 5, startSearchR, EndSearchR);
+                    output.Add(pointV3D);
+                }
+            }
+            return output;
+        }
+
         public Polyline GetIntersectVz(KDTree<int> tree, double vzExtendLength, int searchRange, double startSearchR,double EndSearchR, double stepSearchR,double reduceR, bool ignoreZLowerTarget)
         {
             Polyline output = new Polyline();
@@ -2525,7 +2541,7 @@ namespace RsLib.PointCloudLib
                             PointCloud nearCloud = PointCloudCommon.GetNearestPointCloud(tree, ptVz, tempSearchR);
                             if (nearCloud != null)
                             {
-                                if (nearCloud.Count > 0)
+                                if (nearCloud.Count > 3)
                                 {
                                     Point3D ptAvg = nearCloud.Average;
                                     double t = (ptAvg.Z - pt.Z) / pt.Vz.Z;

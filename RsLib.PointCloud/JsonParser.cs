@@ -555,6 +555,8 @@ namespace RsLib.PointCloudLib
         public Vector3D Vector_YZ => -1*VectorY + VectorZ;
         public Vector3D Vector_Y_Z => -1 * VectorY - VectorZ;
 
+        public double[] PoseArray => new double[] { X, Y, Z };
+        public Point3D PosePt3D => new Point3D(X, Y, Z);
         public Pose()
         {
 

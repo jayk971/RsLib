@@ -184,6 +184,82 @@ namespace RsLib.PointCloudLib
             }
             else return new PointV3D(target);
         }
+        public static Point3D ProjectToSurface(double targetX, double targetY, double targetZ,
+List<Vector3D> candidateVector,
+KDTree<int> targetTree,
+int searchCloudCount, double searchStartRadius, double searchEndRadius, double searchRadiusStep,
+double searchLength, int searchLengthSplitRange)
+        {
+            if (searchLengthSplitRange <= 0) searchLengthSplitRange = 1;
+            if (searchRadiusStep <= 0) searchRadiusStep = 0.1;
+            double minDis = double.MaxValue;
+            Point3D p = new Point3D(targetX, targetY, targetZ);
+            for (int i = 0; i < candidateVector.Count; i++)
+            {
+                for (int j = 0; j < searchLengthSplitRange; j++)
+                {
+                    Vector3D targetV = candidateVector[i].GetUnitVector();
+                    Point3D target = new Point3D(targetX, targetY, targetZ);
+                    Point3D foundTarget = target + targetV * j * (searchLength / searchLengthSplitRange);
+                    PointCloud surfaceCloud = GetNearestPointCloud(targetTree, foundTarget, searchStartRadius);
+                    while (surfaceCloud.Count < searchCloudCount)
+                    {
+                        searchStartRadius += searchRadiusStep;
+                        surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+                        if (searchStartRadius >= searchEndRadius) break;
+                    }
+                    if (surfaceCloud.Count >= searchCloudCount)
+                    {
+                        Point3D avgP = surfaceCloud.Average;
+                        double calD = Point3D.Distance(target, avgP);
+                        if (calD <= minDis)
+                        {
+                            minDis = calD;
+                            p = avgP;
+                        }
+                    }
+                }
+            }
+            return p;
+        }
+        public static Point3D ProjectToNearCloud(double targetX, double targetY, double targetZ,
+    List<Vector3D> candidateVector,
+    KDTree<int> targetTree,
+    int searchCloudCount, double searchStartRadius, double searchEndRadius,double searchRadiusStep,
+    double searchLength, int searchLengthSplitRange)
+        {
+            if (searchLengthSplitRange <= 0) searchLengthSplitRange = 1;
+            if (searchRadiusStep <= 0) searchRadiusStep = 0.1;
+            double minDis = double.MaxValue;
+            Point3D p = new Point3D(targetX, targetY, targetZ);
+            for (int i = 0; i < candidateVector.Count; i++)
+            {
+                for (int j = 0; j < searchLengthSplitRange; j++)
+                {
+                    Vector3D targetV = candidateVector[i].GetUnitVector();
+                    Point3D target = new Point3D(targetX, targetY, targetZ);
+                    Point3D foundTarget = target + targetV * j * (searchLength / searchLengthSplitRange);
+                    PointCloud surfaceCloud = GetNearestPointCloud(targetTree, foundTarget, searchStartRadius);
+                    while (surfaceCloud.Count < searchCloudCount)
+                    {
+                        searchStartRadius+= searchRadiusStep;
+                        surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
+                        if (searchStartRadius >= searchEndRadius) break;
+                    }
+                    if(surfaceCloud.Count >= searchCloudCount)
+                    {
+                        Point3D avgP = surfaceCloud.Average;
+                        double calD = Point3D.Distance(target, avgP);
+                        if(calD <=minDis)
+                        {
+                            minDis = calD;
+                            p = avgP;
+                        }
+                    }
+                }
+            }
+            return p;
+        }
         public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath)
         {
             bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);

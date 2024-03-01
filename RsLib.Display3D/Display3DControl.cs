@@ -688,7 +688,10 @@ namespace RsLib.Display3D
             toolLbl_CurrentPlane.Text = currentPlane.ToString();
             toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
             toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
-
+            toolLblScale.Text = _scale.ToString("F1");
+            toolLbl_RotateRefAxis.Text = $"{_rotateAxis.X:F1} , {_rotateAxis.Y:F1} , {_rotateAxis.Z:F1}";
+            toolLbl_RotateAngle.Text = _angle.ToString("F1");
+            toolLbl_Shift.Text = $"{_translation.X:F1} , {_translation.Y:F1} , {_translation.Z:F1}";
             GC.Collect();
         }
 
@@ -1474,6 +1477,20 @@ namespace RsLib.Display3D
         private void copyImageIntoClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CaptureScreenShotIntoClipboard();
+        }
+
+        private void toolTbx_VectorLength_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            e.Handled = FT_Functions.double_Positive_KeyPress(e.KeyChar);
+        }
+
+        private void toolTbx_VectorLength_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                _VectorLength = double.Parse(toolTbx_VectorLength.Text);
+                ReBuildAll();
+            }
         }
     }
 }

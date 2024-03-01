@@ -55,6 +55,7 @@ namespace RsLib.XYZViewer
 
         private void _displayCtrl_AfterCleared()
         {
+            toolTip1.RemoveAll();
             xyzButtons.Clear();
             optButtons.Clear();
             panel1.Controls.Clear();
@@ -138,6 +139,7 @@ namespace RsLib.XYZViewer
             btn.MouseClick += Btn_MouseClick;
             btn.DragEnter += Btn_DragEnter;
             btn.DragDrop += Btn_DragDrop;
+            
             dic.Add(drawItem, btn);
             panel1.Controls.Add(btn);
         }
@@ -320,7 +322,7 @@ namespace RsLib.XYZViewer
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 DrawItem dropedBtn = getPressedButton((Button)sender);
-
+                toolTip1.SetToolTip((Button)sender, files[0]);
                 loadFile(dropedBtn, files[0]);
                 ((Button)sender).Text = Path.GetFileNameWithoutExtension(files[0]);
                 if (loadedFiles.ContainsKey(dropedBtn) == false)
@@ -495,10 +497,10 @@ namespace RsLib.XYZViewer
                     Object3D obj = item.Value;
                     if (obj is Polyline pl)
                     {
-                        PointCloud pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, searchR, reduceR);
+                        Polyline pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, 0.1, searchR, 0.1, true);
                         lock (lockobj)
                         {
-                            cloudIntersect.Add(pCloud);
+                            groupIntersect.Add($"{objName}Intersect", pCloud);
                         }
                     }
                 }
@@ -511,7 +513,7 @@ namespace RsLib.XYZViewer
                     Object3D obj = o.Value;
                     if (obj is Polyline pl)
                     {
-                        Polyline pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange,0.1, searchR,0.1, reduceR,true);
+                        Polyline pCloud = pl.GetIntersectVz(cloud.kdTree, extendLength, searchRange, 0.1, searchR, 0.1, true);
                         lock (lockobj)
                         {
                             //cloudIntersect.Add(pCloud);

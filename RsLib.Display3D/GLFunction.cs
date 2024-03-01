@@ -67,7 +67,7 @@ namespace RsLib.Display3D
 
         int _MultiSelectPtIndex_Start = -1;
         int _MultiSelectPtIndex_End = -1;
-
+        double _VectorLength = 10.0;
         #region event
 
         private void _glControl_SizeChanged(object sender, EventArgs e)
@@ -631,19 +631,28 @@ namespace RsLib.Display3D
             _lastX = mouseX;
             _lastY = mouseY;
         }
+        float _angle = 0.0f;
+        Vector3 _rotateAxis;
         void rotate(int mouseX, int mouseY)
         {
             if (LockRotate) return;
 
             Vector3 trackballStart = ScreenToTrackball(_lastRotX, _lastRotY);
             Vector3 trackballCurrent = ScreenToTrackball(mouseX, mouseY);
-            Vector3 axis = Vector3.Cross(trackballStart, trackballCurrent);
-            float angle = (float)Math.Acos(Vector3.Dot(trackballStart, trackballCurrent));
-            angle *= Settings.Default.Sensitivity;
+            _rotateAxis = Vector3.Cross(trackballStart, trackballCurrent);
+            _angle = (float)Math.Acos(Vector3.Dot(trackballStart, trackballCurrent));
+            _angle *= Settings.Default.Sensitivity;
+            if (float.IsNaN(_angle)) return;
+            if (float.IsNaN(_rotateAxis.Length)) return;
+            if (_rotateAxis.Length <= float.Epsilon) return;
+            if (_rotateAxis.Length == 0) return;
+
             _lastRotX = mouseX;
             _lastRotY = mouseY;
-            if (axis.Length == 0) return;
-            Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(axis, angle);
+
+
+
+            Matrix4 deltaRotation = Matrix4.CreateFromAxisAngle(_rotateAxis, _angle);
 
             _rotationMatrix *= deltaRotation;
 
@@ -1535,15 +1544,15 @@ namespace RsLib.Display3D
 
                 GL.Color4(Color.DodgerBlue);
                 GL.Vertex3(ptV3D.PArray);
-                GL.Vertex3(ptV3D.GetVzExtendPoint(10).PArray);
+                GL.Vertex3(ptV3D.GetVzExtendPoint(_VectorLength).PArray);
 
                 GL.Color4(Color.LimeGreen);
                 GL.Vertex3(ptV3D.PArray);
-                GL.Vertex3(ptV3D.GetVyExtendPoint(10).PArray);
+                GL.Vertex3(ptV3D.GetVyExtendPoint(_VectorLength).PArray);
 
                 GL.Color4(Color.Red);
                 GL.Vertex3(ptV3D.PArray);
-                GL.Vertex3(ptV3D.GetVxExtendPoint(10).PArray);
+                GL.Vertex3(ptV3D.GetVxExtendPoint(_VectorLength).PArray);
 
 
                 GL.End();
@@ -1567,17 +1576,17 @@ namespace RsLib.Display3D
                 if (objectType == DisplayObjectType.Vector_z)
                 {
                     GL.Vertex3(p.PArray);
-                    GL.Vertex3(p.GetVzExtendPoint(10).PArray);
+                    GL.Vertex3(p.GetVzExtendPoint(_VectorLength).PArray);
                 }
                 else if (objectType == DisplayObjectType.Vector_y)
                 {
                     GL.Vertex3(p.PArray);
-                    GL.Vertex3(p.GetVyExtendPoint(10).PArray);
+                    GL.Vertex3(p.GetVyExtendPoint(_VectorLength).PArray);
                 }
                 else if (objectType == DisplayObjectType.Vector_x)
                 {
                     GL.Vertex3(p.PArray);
-                    GL.Vertex3(p.GetVxExtendPoint(10).PArray);
+                    GL.Vertex3(p.GetVxExtendPoint(_VectorLength).PArray);
                 }
             }
             GL.End();
