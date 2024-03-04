@@ -689,9 +689,6 @@ namespace RsLib.Display3D
             toolStatusLbl_CurrentSelectLineIndex.Text = _CurrentSelectLineIndex.ToString();
             toolStatusLbl_SelectObjectIndex.Text = _CurrentSelectObjectIndex.ToString();
             toolLblScale.Text = _scale.ToString("F1");
-            toolLbl_RotateRefAxis.Text = $"{_rotateAxis.X:F1} , {_rotateAxis.Y:F1} , {_rotateAxis.Z:F1}";
-            toolLbl_RotateAngle.Text = _angle.ToString("F1");
-            toolLbl_Shift.Text = $"{_translation.X:F1} , {_translation.Y:F1} , {_translation.Z:F1}";
             GC.Collect();
         }
 

@@ -194,30 +194,36 @@ double searchLength, int searchLengthSplitRange)
             if (searchRadiusStep <= 0) searchRadiusStep = 0.1;
             double minDis = double.MaxValue;
             Point3D p = new Point3D(targetX, targetY, targetZ);
+            bool foundCloudCountOK = false;
             for (int i = 0; i < candidateVector.Count; i++)
             {
-                for (int j = 0; j < searchLengthSplitRange; j++)
+                foundCloudCountOK = false;
+                minDis = double.MaxValue;
+                while (foundCloudCountOK == false)
                 {
-                    Vector3D targetV = candidateVector[i].GetUnitVector();
-                    Point3D target = new Point3D(targetX, targetY, targetZ);
-                    Point3D foundTarget = target + targetV * j * (searchLength / searchLengthSplitRange);
-                    PointCloud surfaceCloud = GetNearestPointCloud(targetTree, foundTarget, searchStartRadius);
-                    while (surfaceCloud.Count < searchCloudCount)
+                    if (searchStartRadius >= searchEndRadius) break;
+                    for (int j = 0; j < searchLengthSplitRange; j++)
                     {
-                        searchStartRadius += searchRadiusStep;
-                        surfaceCloud = GetNearestPointCloud(targetTree, target, searchStartRadius);
-                        if (searchStartRadius >= searchEndRadius) break;
-                    }
-                    if (surfaceCloud.Count >= searchCloudCount)
-                    {
-                        Point3D avgP = surfaceCloud.Average;
-                        double calD = Point3D.Distance(target, avgP);
-                        if (calD <= minDis)
+                        Vector3D targetV = candidateVector[i].GetUnitVector();
+                        Point3D target = new Point3D(targetX, targetY, targetZ);
+                        Point3D foundTarget = target + targetV * j * (searchLength / searchLengthSplitRange);
+                        PointCloud surfaceCloud = GetNearestPointCloud(targetTree, foundTarget, searchStartRadius);
+
+                        if (surfaceCloud.Count >= searchCloudCount)
                         {
-                            minDis = calD;
-                            p = avgP;
+                            PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                            RsPlane plane = new RsPlane(vZ, center);
+                            Point3D projectP = plane.ProjectPOnPlane(target, targetV);
+                            if(Point3D.Distance(projectP, target) < minDis)
+                            {
+                                p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                                minDis = Point3D.Distance(projectP, target);
+                            }
+                            foundCloudCountOK = true;
                         }
                     }
+                    searchStartRadius += searchRadiusStep;
+
                 }
             }
             return p;
