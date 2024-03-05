@@ -485,7 +485,7 @@ double searchLength, int searchLengthSplitRange)
                 xArr.Length != indexArr.Length) return;
 
             int id = 0;
-            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65525))
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65535))
             {
                 for (int i = 0; i < xArr.Length; i++)
                 {

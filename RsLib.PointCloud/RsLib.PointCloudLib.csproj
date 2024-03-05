@@ -73,7 +73,7 @@
       <HintPath>D:\RLib\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Open3DSharp">
-      <HintPath>..\..\..\..\..\RLib\Lib\Open3DSharp.dll</HintPath>
+      <HintPath>D:\RLib\Lib\Open3DSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -151,12 +151,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Open3DSharpNative.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Open3DSharpNative.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

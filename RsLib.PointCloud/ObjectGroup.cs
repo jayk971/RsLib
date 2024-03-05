@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 namespace RsLib.PointCloudLib
 {
     [Serializable]
@@ -421,8 +422,20 @@ namespace RsLib.PointCloudLib
             Objects.Clear();
             Sequence.Clear();
         }
-        public void SaveXYZ(string filePath)
+        public void SaveXYZ(string filePath, bool useOtherThread = false)
         {
+            if(useOtherThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveXYZ), filePath);
+            }
+            else
+            {
+                saveXYZ(filePath);
+            }
+        }
+        private void saveXYZ(object obj)
+        {
+            string filePath = (string)obj;
             PointCloud total = new PointCloud();
             foreach (var item in Objects)
             {
@@ -437,8 +450,20 @@ namespace RsLib.PointCloudLib
                 throw new Exception("Output cloud data count = 0");
             }
         }
-        public void SaveOPT(string filePath)
+        public void SaveOPT(string filePath, bool useOtherThread = false)
         {
+            if(useOtherThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveOPT), filePath);
+            }
+            else
+            {
+                saveOPT(filePath);
+            }
+        }
+        private void saveOPT(object obj)
+        {
+            string filePath = (string)obj;
             List<string> finalString = new List<string>();
             foreach (var item in Objects)
             {
@@ -456,8 +481,20 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
-        public void SaveOPT2(string filePath)
+        public void SaveOPT2(string filePath,bool useOtherThread = false)
         {
+            if(useOtherThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveOPT2), filePath);
+            }
+            else
+            {
+                saveOPT2(filePath);
+            }
+        }
+        private void saveOPT2(object obj)
+        {
+            string filePath = (string)obj;
             List<string> finalString = new List<string>();
             foreach (var item in Objects)
             {

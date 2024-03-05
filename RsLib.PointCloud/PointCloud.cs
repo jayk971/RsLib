@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 namespace RsLib.PointCloudLib
 {
 
@@ -2872,9 +2873,22 @@ namespace RsLib.PointCloudLib
             }
             return max;
         }
-        public void Save(string FilePath)
+        public void Save(string FilePath,bool useThread = false)
         {
 
+            if(useThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(save), FilePath);
+            }
+            else
+            {
+                save(FilePath);
+            }
+        }
+        private void save(object obj)
+        {
+
+            string FilePath = (string)obj;
             using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
             {
                 string WriteData = "";
@@ -2887,31 +2901,54 @@ namespace RsLib.PointCloudLib
                 sw.Flush();
             }
         }
-        public void Save(string FilePath,bool enableOuptutColor = false)
+        public void Save(string FilePath,bool enableOuptutColor ,bool useThread = false)
         {
 
-            using (StreamWriter sw = new StreamWriter(FilePath, true, Encoding.Default,65535))
+            if(useThread)
+            {
+                if (enableOuptutColor) ThreadPool.QueueUserWorkItem(new WaitCallback(saveWithColor), FilePath);
+                else ThreadPool.QueueUserWorkItem(new WaitCallback(save), FilePath);
+            }
+            else
+            {
+                if (enableOuptutColor) saveWithColor(FilePath);
+                else save(FilePath);
+            }
+        }
+        private void saveWithColor(object obj)
+        {
+
+            string FilePath = (string)obj;
+            using (StreamWriter sw = new StreamWriter(FilePath, true, Encoding.Default, 65535))
             {
                 string WriteData = "";
                 for (int i = 0; i < Points.Count; i++)
                 {
-                    if (enableOuptutColor)
-                    {
-                        WriteData = Points[i].ToStringWithColor(false, false, false);
-                    }
-                    else
-                    {
-                        WriteData = Points[i].ToString(false, false, false);
-                    }
+                    WriteData = Points[i].ToStringWithColor(false, false, false);
                     sw.WriteLine(WriteData);
                 }
                 sw.Flush();
             }
         }
-
-        public void Save(string FilePath, bool WritePointTag, bool WritePointFlag, bool WritePointDt)
+        public void Save(string FilePath, bool WritePointTag, bool WritePointFlag, bool WritePointDt,bool useThread = false)
         {
+            if(useThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveWithTag), new Tuple<string, bool, bool, bool>(FilePath, WritePointTag, WritePointFlag, WritePointDt));
+            }
+            else
+            {
+                saveWithTag(new Tuple<string, bool, bool, bool>(FilePath, WritePointTag, WritePointFlag, WritePointDt));
+            }
 
+        }
+        private void saveWithTag(object obj)
+        {
+            Tuple<string, bool, bool, bool> tupleObj = (Tuple<string, bool, bool, bool>)obj;
+            string FilePath = tupleObj.Item1;
+            bool WritePointTag = tupleObj.Item2;
+            bool WritePointFlag = tupleObj.Item3;
+            bool WritePointDt = tupleObj.Item4;
             using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
             {
                 string WriteData = "";
@@ -2920,11 +2957,10 @@ namespace RsLib.PointCloudLib
                     WriteData = Points[i].ToString(WritePointTag, WritePointFlag, WritePointDt);//string.Format("{0:F2} {1:F2} {2:F2}", Points[i].X, Points[i].Y, Points[i].Z);
                     sw.WriteLine(WriteData);
                 }
-               
+
                 sw.Flush();
             }
         }
-
         public Point3D GetLastPoint()
         {
             return Points[Points.Count - 1];
@@ -2934,8 +2970,20 @@ namespace RsLib.PointCloudLib
         {
             return Points[0];
         }
-        public void SaveOffModel(string FilePath)
+        public void SaveOffModel(string FilePath,bool useThread = false)
         {
+            if(useThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveOffModel), FilePath);
+            }
+            else
+            {
+                saveOffModel(FilePath);
+            }
+        }
+        private void saveOffModel(object obj)
+        {
+            string FilePath = (string)obj;
             using (StreamWriter sw = new StreamWriter(FilePath, false, Encoding.Default))
             {
                 sw.WriteLine("OFF");

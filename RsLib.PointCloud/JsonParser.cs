@@ -8,6 +8,7 @@ using Accord.Collections;
 using Newtonsoft.Json;
 using RsLib.Common;
 
+using System.Threading;
 namespace RsLib.PointCloudLib
 {
     //using CoordTuple = Tuple<List<double>, List<double>, List<double>>;
@@ -70,19 +71,31 @@ namespace RsLib.PointCloudLib
                 throw ex;
             }
         }
-        public void SaveJson(string filePath)
+        public void SaveJson(string filePath,bool useThread = false)
+        {
+            if(useThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(saveJson), filePath);
+            }
+            else
+            {
+                saveJson(filePath);
+            }
+        }
+        private void saveJson(object obj)
         {
             try
             {
+                string filePath = (string)obj;
                 if (Directory.Exists(Path.GetDirectoryName(filePath)) == false) Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 string writeData = JsonConvert.SerializeObject(this,
-                    new JsonSerializerSettings() 
-                    { 
-                        DefaultValueHandling= DefaultValueHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore, 
+                    new JsonSerializerSettings()
+                    {
+                        DefaultValueHandling = DefaultValueHandling.Ignore,
+                        NullValueHandling = NullValueHandling.Ignore,
                         MissingMemberHandling = MissingMemberHandling.Ignore
                     });
-                using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default,65535))
+                using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65535))
                 {
                     sw.WriteLine(writeData);
                     sw.Flush();
