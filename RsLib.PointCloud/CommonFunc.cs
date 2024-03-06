@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 namespace RsLib.PointCloudLib
 {
 
@@ -475,7 +476,7 @@ double searchLength, int searchLengthSplitRange)
     double[] nXArr,
     double[] nYArr,
     double[] nZArr,
-    int[] indexArr)
+    int[] indexArr,bool useThread = false)
         {
             if (xArr.Length != yArr.Length ||
                 xArr.Length != zArr.Length ||
@@ -483,6 +484,34 @@ double searchLength, int searchLengthSplitRange)
                 xArr.Length != nYArr.Length ||
                 xArr.Length != nZArr.Length ||
                 xArr.Length != indexArr.Length) return;
+            Tuple<double[], double[], double[], double[], double[], double[]> arrays = new Tuple<double[], double[], double[], double[], double[], double[]>(xArr, yArr, zArr, nXArr, nYArr, nZArr);
+            Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]> finalTuple = new Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]>(filePath, arrays, indexArr);
+
+            if (useThread)
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(SaveOPTFromXYZIndexNormalArray), finalTuple);
+            }
+            else
+            {
+                SaveOPTFromXYZIndexNormalArray(finalTuple);
+            }
+        }
+        private static void SaveOPTFromXYZIndexNormalArray(object obj)
+        {
+
+            Tuple<string,Tuple<double[], double[], double[], double[], double[], double[]>, int[]> tupleObj = (Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]>)obj;
+            
+            string filePath = tupleObj.Item1;
+
+            double[] xArr = tupleObj.Item2.Item1;
+            double[] yArr = tupleObj.Item2.Item2;
+            double[] zArr = tupleObj.Item2.Item3;
+
+            double[] nXArr = tupleObj.Item2.Item4;
+            double[] nYArr = tupleObj.Item2.Item5;
+            double[] nZArr = tupleObj.Item2.Item6;
+
+            int[] indexArr = tupleObj.Item3;
 
             int id = 0;
             using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65535))

@@ -33,6 +33,12 @@ namespace RsLib.PointCloudLib
             Y = 0.0;
             Z = 0.0;
         }
+        public Vector3D(Vector3D otherVector)
+        {
+            X = otherVector.X;
+            Y = otherVector.Y;
+            Z = otherVector.Z;
+        }
         // 直接指定分量建構
         public Vector3D(double x, double y, double z)
         {

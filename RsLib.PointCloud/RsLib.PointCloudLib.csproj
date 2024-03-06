@@ -158,7 +158,8 @@
     <PostBuildEvent>copy "$(TargetPath)" "D:\RLib\$(OutDir)$(TargetFileName)" /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>set open3DFile ="D:\RLib\Lib\Open3DSharpNative.dll"
+set targetOpen3DFile = "$(TargetDir)Open3DSharpNative.dll"
+</PreBuildEvent>
   </PropertyGroup>
 </Project>
