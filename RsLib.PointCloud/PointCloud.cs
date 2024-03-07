@@ -3997,11 +3997,11 @@ namespace RsLib.PointCloudLib
         {
             if (IsArrayElementEqual == false) return;
             if (XList.Count == 0) return;
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default))
+            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default,65535))
             {
                 for (int i = 0; i < XList.Count; i++)
                 {
-                    string msg = $"{XList[i]} {YList[i]} {ZList[i]}";
+                    string msg = $"{XList[i]:F2} {YList[i]:F2} {ZList[i]:F2}";
                     sw.WriteLine(msg);
                 }
                 sw.Flush();

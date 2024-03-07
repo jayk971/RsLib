@@ -267,23 +267,41 @@ double searchLength, int searchLengthSplitRange)
             }
             return p;
         }
-        public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath)
+        public static void SaveXYZArray(double[] xArr,double[] yArr,double[] zArr,string filePath,bool useThread = false)
         {
             bool arrayEqual = (xArr.Length == yArr.Length) & (xArr.Length == zArr.Length);
             if(arrayEqual)
             {
-                using (StreamWriter sw = new StreamWriter(filePath,true,Encoding.Default,65535))
-                {
-                    for (int i = 0; i < xArr.Length; i++)
-                    {
-                        double x = xArr[i];
-                        double y = yArr[i];
-                        double z = zArr[i];
-                        sw.WriteLine($"{x:F2} {y:F2} {z:F2}");
-                    }
-                }
+                Tuple<string, double[], double[], double[]> tupleObj = new Tuple<string, double[], double[], double[]>(filePath, xArr, yArr, zArr);
+
+                if (useThread)
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(SaveXYZArray), tupleObj);
+                else
+                    SaveXYZArray(tupleObj);
             }
         }
+        private static void SaveXYZArray(object obj)
+        {
+            Tuple<string,double[], double[], double[]> tupleObj = (Tuple<string,double[], double[], double[]>)obj;
+
+            string filePath = tupleObj.Item1;
+            double[] xArr = tupleObj.Item2;
+            double[] yArr = tupleObj.Item3;
+            double[] zArr = tupleObj.Item4;
+
+            using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.Default, 65535))
+            {
+                for (int i = 0; i < xArr.Length; i++)
+                {
+                    double x = xArr[i];
+                    double y = yArr[i];
+                    double z = zArr[i];
+                    sw.WriteLine($"{x:F2} {y:F2} {z:F2}");
+                }
+            }
+            
+        }
+
         public static void LoadXYZToArray(string filePath,char cplitChar,out double[] xArr,out double[] yArr,out double[] zArr)
         {
             List<double> xList = new List<double>();

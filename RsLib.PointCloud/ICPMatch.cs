@@ -71,6 +71,11 @@ namespace RsLib.PointCloudLib
             Model = ToGeometry(ptCloud);
             Model.EstimateNormals(5.0);
         }
+        public void SetModel(Tuple<double[],double[],double[]> ptArray)
+        {
+            Model = ToGeometry(ptArray.Item1, ptArray.Item2, ptArray.Item3);
+            Model.EstimateNormals(5.0);
+        }
         public bool Match(float[,]mechMindArrayX, float[,] mechMindArrayY, float[,] mechMindArrayZ)
         {
             GeometryPointCloud targetGeo = ToGeometry(mechMindArrayX, mechMindArrayY, mechMindArrayZ);
@@ -127,12 +132,15 @@ namespace RsLib.PointCloudLib
             m_Manual = m_Manual * Matrix4x4.CreateTranslation(new Vector3((float)Setting.ShiftX, (float)Setting.ShiftY, (float)Setting.ShiftZ));
             Extrinsic ManualMatrix = new Extrinsic(flatMatrix4x4(m_Manual));
              AlignMatirx.Multiply(ManualMatrix);
-            AlignedTarget = new GeometryPointCloud(targetGeo);
-            AlignedTarget.Transform(AlignMatirx);
+            //AlignedTarget = new GeometryPointCloud(targetGeo);
+            //AlignedTarget.Transform(AlignMatirx);
             
             Fitness = Math.Round(MatchICP.result.fitness, 2);
             RMS = Math.Round(MatchICP.result.rmse, 2);
             AlignMatrix = PointCloudCommon.ArrayToMatrix4x4(AlignMatirx.GetArray());
+            Model = null;
+            AlignedTarget = null;
+            
             if (Fitness < 0.99) return false;
             return true;
         }
@@ -206,21 +214,23 @@ namespace RsLib.PointCloudLib
 
             int[] r, g, b;
 
-            List<int> R = new List<int>();
-            List<int> G = new List<int>();
-            List<int> B = new List<int>();
+            //List<int> R = new List<int>();
+            //List<int> G = new List<int>();
+            //List<int> B = new List<int>();
 
-            for (int i = 0; i < x.Length; i++)
-            {
-                R.Add(Color.White.R);
-                G.Add(Color.White.G);
-                B.Add(Color.White.B);
-            }
+            //for (int i = 0; i < x.Length; i++)
+            //{
+            //    R.Add(Color.White.R);
+            //    G.Add(Color.White.G);
+            //    B.Add(Color.White.B);
+            //}
 
-            r = R.ToArray();
-            g = G.ToArray();
-            b = B.ToArray();
-
+            //r = R.ToArray();
+            //g = G.ToArray();
+            //b = B.ToArray();
+            r = new int[x.Length];
+            g = new int[x.Length];
+            b = new int[x.Length];
             pcloud = new GeometryPointCloud(x, y, z, r, g, b);
 
             return pcloud;
