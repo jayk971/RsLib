@@ -1387,6 +1387,12 @@ namespace RsLib.Display3D
             }
             GL.End();
         }
+        public void BuildPointCloud(Tuple<double[],double[],double[]> cloud, int id, bool checkMaxMin, bool isUpdateObject)
+        {
+            PointCloud p = new PointCloud(cloud);
+            BuildPointCloud(p, id, checkMaxMin, isUpdateObject);
+        }
+
         public void BuildPointCloud(PointCloud cloud, int id, bool checkMaxMin, bool isUpdateObject)
         {
             if (id > _maxDisplayList) return;

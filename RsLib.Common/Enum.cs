@@ -10,7 +10,7 @@
         ZX,
         ZY
     }
-    public enum MachineStatus : int
+    public enum eMachineStatus : int
     {
         NotInitial = 0,      //尚未初始化
         InitialBusy,     //初始化中
@@ -18,13 +18,13 @@
         Auto,            //自動模式
         Run,             //啟動運轉
     }
-    public enum User : int
+    public enum eUser : int
     {
         OP = 0,
         Engineer,
         Administrator,
     }
-    public enum TimeOutType : int
+    public enum eTimeOutType : int
     {
         TimeOut = -2,
         InTime = -1,

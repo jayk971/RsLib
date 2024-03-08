@@ -3989,38 +3989,46 @@ namespace RsLib.PointCloudLib
             YList.Clear();
             ZList.Clear();
         }
-        public Tuple<double[], double[], double[]> ToTuple()
-        {
-            return new Tuple<double[], double[], double[]>(XArray, YArray, ZArray);
-        }
-        public void SaveCloud(string filePath)
+        public Tuple<double[], double[], double[]> ToTuple() =>Tuple.Create(XArray, YArray, ZArray);
+    
+        public void SaveCloud(string filePath,bool useThread = false)
         {
             if (IsArrayElementEqual == false) return;
             if (XList.Count == 0) return;
-            using (StreamWriter sw = new StreamWriter(filePath,false,Encoding.Default,65535))
-            {
-                for (int i = 0; i < XList.Count; i++)
-                {
-                    string msg = $"{XList[i]:F2} {YList[i]:F2} {ZList[i]:F2}";
-                    sw.WriteLine(msg);
-                }
-                sw.Flush();
-            }
+            var tmpTuple = Tuple.Create(filePath, XArray, YArray, ZArray);
+
+            if (useThread) ThreadPool.QueueUserWorkItem(new WaitCallback(SaveCloud), tmpTuple);
+            else SaveCloud(tmpTuple);
+
         }
-        public static void SaveCloud(string filePath,Tuple<double[], double[], double[]> cloud)
+        public static void SaveCloud(string filePath,Tuple<double[], double[], double[]> cloud,bool useThread = false)
         {
             if (cloud.Item1.Length != cloud.Item2.Length || cloud.Item1.Length != cloud.Item3.Length) return;
             if (cloud.Item1.Length == 0) return;
-            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
+
+            var tmpTuple = Tuple.Create(filePath, cloud.Item1, cloud.Item2, cloud.Item3);
+            if (useThread) ThreadPool.QueueUserWorkItem(new WaitCallback(SaveCloud), tmpTuple);
+            else SaveCloud(tmpTuple);
+        }
+        private static void SaveCloud(object obj)
+        {
+            Tuple<string, double[], double[], double[]> tmpObj = (Tuple<string, double[], double[], double[]>)obj;
+            string filePath = tmpObj.Item1;
+            double[] xArr = tmpObj.Item2;
+            double[] yArr = tmpObj.Item3;
+            double[] zArr = tmpObj.Item4;
+
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default,65535))
             {
-                for (int i = 0; i < cloud.Item1.Length; i++)
+                for (int i = 0; i < xArr.Length; i++)
                 {
-                    string msg = $"{cloud.Item1[i]} {cloud.Item2[i]} {cloud.Item3[i]}";
+                    string msg = $"{xArr[i]} {yArr[i]} {zArr[i]}";
                     sw.WriteLine(msg);
                 }
                 sw.Flush();
             }
         }
+
     }
 
 

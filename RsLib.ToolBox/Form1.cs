@@ -275,16 +275,8 @@ namespace RsLib.DemoForm
                     Log.Add("Load Start", MsgLevel.Info);
                     PointCloud pCloud = new PointCloud();
                     pCloud.LoadFromFile(op.FileName,true);
-                    LayerPointCloud lPt = new LayerPointCloud(pCloud, false, 1.0);
-                    Log.Add("Load End", MsgLevel.Info);
-
-                    lPt.Save("D:\\testSlice.xyz");
-                    Log.Add("Save End", MsgLevel.Info);
-                    Log.Add("Find Start", MsgLevel.Info);
-
-                    Test(lPt);
-                    Log.Add("Find END", MsgLevel.Info);
-
+                    pCloud.VoxelGridDownsampling(1.0);
+                    pCloud.Save("d:\\test.xyz");
                 }
             }
 
