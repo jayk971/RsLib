@@ -323,6 +323,26 @@ namespace RsLib.PointCloudLib
 
         public bool IsMatrixCalculated { get; internal set; } = false;
 
+        public double[] Row1 => new double[] { finalMatrix4.V00, finalMatrix4.V01, finalMatrix4.V02, finalMatrix4.V03 };
+        public Vector3D Vx_FinalFromBase => new Vector3D(finalMatrix4.V00, finalMatrix4.V01, finalMatrix4.V02);
+        public double[] Row2 => new double[] { finalMatrix4.V10, finalMatrix4.V11, finalMatrix4.V12, finalMatrix4.V13 };
+        public Vector3D Vy_FinalFromBase => new Vector3D(finalMatrix4.V10, finalMatrix4.V11, finalMatrix4.V12);
+        public double[] Row3 => new double[] { finalMatrix4.V20, finalMatrix4.V21, finalMatrix4.V22, finalMatrix4.V23 };
+        public Vector3D Vz_FinalFromBase => new Vector3D(finalMatrix4.V20, finalMatrix4.V21, finalMatrix4.V22);
+
+        public double[] Row4 => new double[] { finalMatrix4.V30, finalMatrix4.V31, finalMatrix4.V32, finalMatrix4.V33 };
+
+        public double[] Column1 => new double[] { finalMatrix4.V00, finalMatrix4.V10, finalMatrix4.V20, finalMatrix4.V30 };
+        public Vector3D Vx_BaseFromFinal => new Vector3D(finalMatrix4.V00, finalMatrix4.V10, finalMatrix4.V20);
+        public double[] Column2 => new double[] { finalMatrix4.V01, finalMatrix4.V11, finalMatrix4.V21, finalMatrix4.V31 };
+        public Vector3D Vy_BaseFromFinal => new Vector3D(finalMatrix4.V01, finalMatrix4.V11, finalMatrix4.V21);
+
+        public double[] Column3 => new double[] { finalMatrix4.V02, finalMatrix4.V12, finalMatrix4.V22, finalMatrix4.V32 };
+        public Vector3D Vz_BaseFromFinal => new Vector3D(finalMatrix4.V02, finalMatrix4.V12, finalMatrix4.V22);
+
+        public double[] Column4 => new double[] { finalMatrix4.V03, finalMatrix4.V13, finalMatrix4.V23, finalMatrix4.V33 };
+
+        public Vector3D Shift =>new Vector3D(finalMatrix4.V03, finalMatrix4.V13, finalMatrix4.V23);
         public CoordMatrix()
         {
 
@@ -731,6 +751,7 @@ namespace RsLib.PointCloudLib
                 }
             }
         }
+
     }
 
 

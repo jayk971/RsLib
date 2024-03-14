@@ -36,7 +36,7 @@ namespace RsLib.SystemControl
         #endregion
         public static bool IsCalculateBusy = false;
         public static string MachineStatus { get; private set; } = "Not Initial";
-        public static User CurrentUser { get; private set; } = User.OP;
+        public static eUser CurrentUser { get; private set; } = eUser.OP;
         public static int IdleTimeLimit { get; set; } = 60000;
 
         public static bool IsEmo { get; private set; } = false;
@@ -72,8 +72,8 @@ namespace RsLib.SystemControl
         public static event Action BeforeTodayDateChanged;
         public static event Action<bool> AlarmOccured;
         public static event Action<bool> WarningOccured;
-        public static event Action<MachineStatus, MachineStatus> BeforeStatusChanged;
-        public static event Action<MachineStatus> AfterStatusChanged;
+        public static event Action<eMachineStatus, eMachineStatus> BeforeStatusChanged;
+        public static event Action<eMachineStatus> AfterStatusChanged;
         #endregion
 
         static BasicThread _Core = new BasicThread();
@@ -86,15 +86,15 @@ namespace RsLib.SystemControl
             _Core.Start();
             _Core.BeforeStatusChanged += _Core_BeforeStatusChanged;
             _Core.AfterStatusChanged += _Core_AfterStatusChanged;
-            _Core.ChangeSystemStatus(Common.MachineStatus.InitialBusy);
+            _Core.ChangeSystemStatus(eMachineStatus.InitialBusy);
         }
 
-        private static void _Core_BeforeStatusChanged(MachineStatus before, MachineStatus after)
+        private static void _Core_BeforeStatusChanged(eMachineStatus before, eMachineStatus after)
         {
             BeforeStatusChanged?.Invoke(before, after);
         }
 
-        private static void _Core_AfterStatusChanged(MachineStatus current)
+        private static void _Core_AfterStatusChanged(eMachineStatus current)
         {
             AfterStatusChanged?.Invoke(current);
         }
@@ -115,27 +115,27 @@ namespace RsLib.SystemControl
             {
                 switch (_Core.CurrentStatus)
                 {
-                    case Common.MachineStatus.NotInitial:
+                    case eMachineStatus.NotInitial:
                         resetTimer();
                         break;
 
-                    case Common.MachineStatus.InitialBusy:
+                    case eMachineStatus.InitialBusy:
 
                         break;
 
-                    case Common.MachineStatus.Manual:
+                    case eMachineStatus.Manual:
 
                         idleTimeCount();
                         IsCalculateBusy = false;
                         break;
 
-                    case Common.MachineStatus.Auto:
+                    case eMachineStatus.Auto:
 
                         idleTimeCount();
                         IsCalculateBusy = false;
                         break;
 
-                    case Common.MachineStatus.Run:
+                    case eMachineStatus.Run:
 
                         if (IsCalculateBusy == false)
                         {
@@ -181,7 +181,7 @@ namespace RsLib.SystemControl
             {
                 ThisMonth = DateTime.Now.Month;
                 ThisDay = DateTime.Now.Day;
-                if (_Core.CurrentStatus >= Common.MachineStatus.Manual)
+                if (_Core.CurrentStatus >= eMachineStatus.Manual)
                 {
                     BeforeTodayDateChanged?.Invoke();
                     restartTimer();
@@ -237,7 +237,7 @@ namespace RsLib.SystemControl
         }
         static void alarmHandle()
         {
-            if (_Core.CurrentStatus == Common.MachineStatus.Run)
+            if (_Core.CurrentStatus == eMachineStatus.Run)
             {
                 SwitchToAuto();
             }
@@ -248,17 +248,17 @@ namespace RsLib.SystemControl
         }
         public static void SwitchToManual()
         {
-            if(_Core.CurrentStatus == Common.MachineStatus.InitialBusy || _Core.CurrentStatus == Common.MachineStatus.Auto)
-                _Core.ChangeSystemStatus(Common.MachineStatus.Manual);
+            if(_Core.CurrentStatus == eMachineStatus.InitialBusy || _Core.CurrentStatus == eMachineStatus.Auto)
+                _Core.ChangeSystemStatus(eMachineStatus.Manual);
         }
         public static void SwitchToAuto()
         {
-            if(_Core.CurrentStatus == Common.MachineStatus.Manual || _Core.CurrentStatus == Common.MachineStatus.Run)
-                _Core.ChangeSystemStatus(Common.MachineStatus.Auto);
+            if(_Core.CurrentStatus == eMachineStatus.Manual || _Core.CurrentStatus == eMachineStatus.Run)
+                _Core.ChangeSystemStatus(eMachineStatus.Auto);
         }
         public static void SwitchToRun()
         {
-            if (_Core.CurrentStatus != Common.MachineStatus.Auto) return;
+            if (_Core.CurrentStatus != eMachineStatus.Auto) return;
 
             if (IsAlarm)
             {
@@ -266,14 +266,14 @@ namespace RsLib.SystemControl
                 return;
             }
 
-            _Core.ChangeSystemStatus(Common.MachineStatus.Run);
+            _Core.ChangeSystemStatus(eMachineStatus.Run);
             SpinWait.SpinUntil(() => false, 100);
 
         }
 
         public static void Exit()
         {
-            _Core.ChangeSystemStatus(Common.MachineStatus.NotInitial);
+            _Core.ChangeSystemStatus(eMachineStatus.NotInitial);
             _Core.Stop();
         }
     }
@@ -281,7 +281,7 @@ namespace RsLib.SystemControl
 
     public class BasicThread
     {
-        public MachineStatus CurrentStatus { get; private set; } = MachineStatus.NotInitial;
+        public eMachineStatus CurrentStatus { get; private set; } = eMachineStatus.NotInitial;
         public bool IsAlarm { get; set; } = false;
         public bool IsWarning { get; set; } = false;
         public bool IsEMO { get; set; } = false;
@@ -296,8 +296,8 @@ namespace RsLib.SystemControl
         Action AfterLoop = null;
         public uint LoopInterval { get; private set; } = 100;
         public bool IsInitialized { get; private set; } = false;
-        public event Action<MachineStatus,MachineStatus> BeforeStatusChanged;
-        public event Action<MachineStatus> AfterStatusChanged;
+        public event Action<eMachineStatus,eMachineStatus> BeforeStatusChanged;
+        public event Action<eMachineStatus> AfterStatusChanged;
         public void Initial(string name, Action beforeLoop, Action inLoop, Action afterLoop, uint loopInterval)
         {
             Name = name;
@@ -341,7 +341,7 @@ namespace RsLib.SystemControl
             Status = $"Thread {Name} Stopped";
             IsTdRunning = false;
         }
-        public void ChangeSystemStatus(MachineStatus systemStatus)
+        public void ChangeSystemStatus(eMachineStatus systemStatus)
         {
             BeforeStatusChanged?.Invoke(CurrentStatus,systemStatus);
             CurrentStatus = systemStatus;

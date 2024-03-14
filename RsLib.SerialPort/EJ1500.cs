@@ -155,7 +155,7 @@ namespace RsLib.SerialPortLib
             {
                 _rs232.Send("Q\r");
                 int waitTime = FT_Functions.IsTimeOut(2000, () => _rs232.ReadData != "", true);
-                if(waitTime ==(int)TimeOutType.TimeOut)
+                if(waitTime ==(int)eTimeOutType.TimeOut)
                 {
                     Log.Add($"{Setting.PortName} read data time out.", MsgLevel.Warn);
                     _enableGetWeight = false;

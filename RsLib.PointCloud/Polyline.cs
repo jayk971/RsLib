@@ -28,6 +28,13 @@ namespace RsLib.PointCloudLib
             Percent = new List<double>();
 
         }
+        public Polyline(int index)
+        {
+            RangeMax = 0;
+            RangeMin = 0;
+            Percent = new List<double>();
+            Options.Add(new LineOption() { LineIndex = index });
+        }
         public Polyline(double[] x,double[]y,double[]z)
         {
             Points.Clear();

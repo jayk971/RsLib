@@ -68,6 +68,23 @@ namespace RsLib.PointCloudLib
             r.AddRotateSeq(eRefAxis.X, Rx);
             Q = r.Q.DeepClone();
         }
+        public PointV3D ToPointV3D()
+        {
+
+            PointV3D output = new PointV3D(this);
+            
+            Vector3D vx1 =  PointCloudCommon.RodriguesRotateFormula(Vector3D.XAxis, Vector3D.ZAxis, Rz);
+            Vector3D vy1 = PointCloudCommon.RodriguesRotateFormula(Vector3D.YAxis, Vector3D.ZAxis, Rz);
+
+            output.Vx = PointCloudCommon.RodriguesRotateFormula(vx1, vy1, Ry);
+            Vector3D vz1 = PointCloudCommon.RodriguesRotateFormula(Vector3D.ZAxis, vy1, Ry);
+
+            output.Vy = PointCloudCommon.RodriguesRotateFormula(vy1, output.Vx, Rx);
+            output.Vz = PointCloudCommon.RodriguesRotateFormula(vz1, output.Vx, Rx);
+
+
+            return output;
+        }
         public string ToString_XYZRxRyRz() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3}]";
         public string ToString_XYZRxRyRzLapSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3},{LapIndex},{SegmentIndex}]";
         public string ToString_XYZRxRyRzSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3},{SegmentIndex}]";
@@ -245,7 +262,24 @@ namespace RsLib.PointCloudLib
                 item.Value.SmoothEulerAngle_3P(enableSmoothRX, enableSmoothRY, enableSmoothRZ, ratioP1, ratioP2, ratioP3);
             }
         }
+        public ObjectGroup ToObjectGroup()
+        {
+            ObjectGroup output = new ObjectGroup("Abb");
+            foreach (var item in Segments)
+            {
+                int index = item.Key;
+                ABBSegment seg = item.Value;
+                Polyline pl = seg.ToPolyline(index);
+                output.Add($"Segment_{index}", pl);
+            }
+            return output;
+        }
+        public void SaveOPT2(string filePath)
+        {
+            ObjectGroup og = ToObjectGroup();
 
+            og.SaveOPT2(filePath, true);
+        }
     }
     [Serializable]
     public partial class ABBSegment
@@ -412,7 +446,16 @@ namespace RsLib.PointCloudLib
             Pts.Clear();
             Pts.AddRange(output);
         }
-
+        public Polyline ToPolyline(int index)
+        {
+            Polyline pl = new Polyline(index);
+            for (int i = 0; i < Pts.Count; i++)
+            {
+                ABBPoint pt = Pts[i];
+                pl.Add(pt.ToPointV3D());
+            }
+            return pl;
+        }
     }
 
 }

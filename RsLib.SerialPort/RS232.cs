@@ -38,7 +38,7 @@ namespace RsLib.SerialPortLib
             {
                 Send(testCommand);
                 int isTimeOut = FT_Functions.IsTimeOut(waitTime, () => ReadData != "", true);
-                if (isTimeOut == (int)TimeOutType.TimeOut)
+                if (isTimeOut == (int)eTimeOutType.TimeOut)
                 {
                     if (i == 4)
                     {

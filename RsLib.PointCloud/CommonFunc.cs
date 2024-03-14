@@ -1150,7 +1150,7 @@ double searchLength, int searchLengthSplitRange)
 
             return Matrix4x4.CreateFromRotation(temp);
         }
-        private static Vector3D RodriguesRotateFormula(Vector3D RotateVec, Vector3D RefAxis, double Angle)
+        public static Vector3D RodriguesRotateFormula(Vector3D RotateVec, Vector3D RefAxis, double Angle)
         {
             Vector3D Output = new Vector3D();
 
