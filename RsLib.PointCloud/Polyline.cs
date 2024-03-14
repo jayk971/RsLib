@@ -2618,6 +2618,7 @@ namespace RsLib.PointCloudLib
                     List<Vector3D> candidateV = new List<Vector3D>() { pt.Vz };
                     Point3D point3D = PointCloudCommon.ProjectToSurface(pt.X, pt.Y, pt.Z, candidateV, targetTree, 15, startSearchR, EndSearchR, 0.1, vzExtendLength, searchRange);
                     //PointV3D pointV3D = PointCloudCommon.ProjectToSurface(pt.X, pt.Y,pt.Z, candidateV, targetTree, 5, startSearchR, EndSearchR);
+                    if (Point3D.Distance(point3D, pt) > vzExtendLength) continue;
                     output.Add(point3D);
                 }
             }

@@ -1460,17 +1460,15 @@ namespace RsLib.Display3D
             GL.Begin(PrimitiveType.LineStrip);
 
             GL.Vertex3(polyLine.Points[0].PArray);
-            checkMaxMinPoint(polyLine.Points[0]);
+            if (checkMaxMin)  checkMaxMinPoint(polyLine.Points[0]);
             GL.Vertex3(polyLine.Points[1].PArray);
-            checkMaxMinPoint(polyLine.Points[1]);
+            if (checkMaxMin) checkMaxMinPoint(polyLine.Points[1]);
             for (int i = 2; i < polyLine.Count; i++)
             {
 
                 GL.Vertex3(polyLine.Points[i].PArray);
-                if (checkMaxMin)
-                {
-                    checkMaxMinPoint(polyLine.Points[i]);
-                }
+                if (checkMaxMin) checkMaxMinPoint(polyLine.Points[i]);
+                
             }
 
             GL.End();
