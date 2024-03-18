@@ -917,6 +917,11 @@ namespace RsLib.PointCloudLib
         public Vector3D Vx { get; set; }
         public Vector3D Vy { get; set; }
         public Vector3D Vz { get; set; }
+        public Vector3D Vxy => Vx + Vy;
+        public Vector3D Vxz => Vx + Vz;
+        public Vector3D Vyz => Vy + Vz;
+
+        public Vector3D Vxyz => Vx + Vy + Vz;
         public Point3D Position
         {
             get

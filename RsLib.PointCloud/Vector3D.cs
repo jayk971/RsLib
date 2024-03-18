@@ -2,7 +2,6 @@
 using Accord.Math;
 using System;
 using System.Collections.Generic;
-using static System.Windows.Forms.AxHost;
 
 namespace RsLib.PointCloudLib
 {
@@ -107,16 +106,18 @@ namespace RsLib.PointCloudLib
             Vector3D tmpUnit = GetUnitVector();
             Vector3D RefV = new Vector3D(Target, RefPoint);
 
-            Vector3D CrossV = Vector3D.Cross(RefV, tmpUnit);
+            Vector3D CrossV = Cross(RefV, tmpUnit);
             CalD = CrossV.L;
 
-            Vector3D dCross = Vector3D.Cross(tmpUnit, CrossV);
+            Vector3D dCross = Cross(tmpUnit, CrossV);
             dCross.UnitVector();
 
-            Vector3D Output = new Vector3D();
-            Output.X = dCross.X * CalD;
-            Output.Y = dCross.Y * CalD;
-            Output.Z = dCross.Z * CalD;
+            Vector3D Output = new Vector3D
+            {
+                X = dCross.X * CalD,
+                Y = dCross.Y * CalD,
+                Z = dCross.Z * CalD
+            };
 
 
             return Output;
@@ -138,16 +139,18 @@ namespace RsLib.PointCloudLib
             Vector3D tmpUnit = GetUnitVector();
             Vector3D RefV = new Vector3D(Target, RefPoint);
 
-            Vector3D CrossV = Vector3D.Cross(RefV, tmpUnit);
+            Vector3D CrossV = Cross(RefV, tmpUnit);
             CalD = CrossV.L;
 
-            Vector3D dCross = Vector3D.Cross(tmpUnit, CrossV);
+            Vector3D dCross = Cross(tmpUnit, CrossV);
             dCross.UnitVector();
 
-            Point3D Output = new Point3D();
-            Output.X = Target.X + dCross.X * CalD;
-            Output.Y = Target.Y + dCross.Y * CalD;
-            Output.Z = Target.Z + dCross.Z * CalD;
+            Point3D Output = new Point3D
+            {
+                X = Target.X + dCross.X * CalD,
+                Y = Target.Y + dCross.Y * CalD,
+                Z = Target.Z + dCross.Z * CalD
+            };
 
 
             return Output;
@@ -158,7 +161,7 @@ namespace RsLib.PointCloudLib
             Vector3D tmpUnit = GetUnitVector();
             Vector3D RefV = new Vector3D(Target, RefPoint);
 
-            Vector3D CrossV = Vector3D.Cross(RefV, tmpUnit);
+            Vector3D CrossV = Cross(RefV, tmpUnit);
             CalD = CrossV.L;
 
             return CalD;
@@ -169,10 +172,10 @@ namespace RsLib.PointCloudLib
             Vector3D tmpUnit = GetUnitVector();
             Vector3D RefV = new Vector3D(Target, RefPoint);
 
-            Vector3D CrossV = Vector3D.Cross(RefV, tmpUnit);
+            Vector3D CrossV = Cross(RefV, tmpUnit);
             CalD = CrossV.L;
 
-            double DotValue = Vector3D.Dot(RefV, RefDir);
+            double DotValue = Dot(RefV, RefDir);
             if (DotValue < 0)
             {
                 CalD *= -1;
@@ -271,10 +274,12 @@ namespace RsLib.PointCloudLib
         /// <returns>向量</returns>
         public static Vector3D Multiply(Vector3D A, double t)
         {
-            Vector3D v = new Vector3D();
-            v.X = t * A.X;
-            v.Y = t * A.Y;
-            v.Z = t * A.Z;
+            Vector3D v = new Vector3D
+            {
+                X = t * A.X,
+                Y = t * A.Y,
+                Z = t * A.Z
+            };
             return v;
         }
         public Vector3D Multiply(Matrix4x4 matrix)
