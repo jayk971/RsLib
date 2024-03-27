@@ -8,6 +8,7 @@ namespace RsLib.PointCloudLib
     {
         [DefaultValue(0.0)]
         public double Radius { get; set; }
+        public Point3D Center => new Point3D(X, Y, Z);
         /// <summary>
         /// 初始化 ball 類別, 球心為(0,0),半徑為 0
         /// </summary>
@@ -25,6 +26,22 @@ namespace RsLib.PointCloudLib
             X = center.X;
             Y = center.Y;
             Z = center.Z;
+
+            Radius = radius;
+        }
+        public Ball(Pose center, double radius)
+        {
+            X = center.X;
+            Y = center.Y;
+            Z = center.Z;
+
+            Radius = radius;
+        }
+        public Ball(double x ,double y ,double z, double radius)
+        {
+            X = x;
+            Y = y;
+            Z = z;
 
             Radius = radius;
         }
@@ -72,6 +89,34 @@ namespace RsLib.PointCloudLib
                     return true;
                 }
             }
+        }
+
+        public double GetDistanceFromCenter(double x, double y ,double z)
+        {
+            return Distance(this, new Point3D(x, y, z));
+        }
+        public PointCloud ToPointCloud()
+        {
+            PointCloud output = new PointCloud();
+            for (int i = -90; i <= 90; i++)
+            {
+                double radZ = ((double)i) / 180.0 * Math.PI;
+                for (int j = 0; j <= 360; j++)
+                {
+                    double radXY = ((double)j) / 180.0 * Math.PI;
+                    double z = Radius * Math.Sin(radZ) + Z;
+                    double y = Radius * Math.Cos(radZ) * Math.Sin(radXY) + Y;
+                    double x = Radius * Math.Cos(radZ) * Math.Cos(radXY) + X;
+
+                    output.Add(x, y, z, true);
+                }
+            }
+            return output;
+        }
+        public bool IsInside(double x,double y ,double z)
+        {
+            double r = Math.Pow(x - X, 2) + Math.Pow(y - Y, 2) + Math.Pow(z - Z, 2);
+            return r <= Math.Pow(Radius, 2);
         }
     }
 }

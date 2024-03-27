@@ -41,9 +41,15 @@ namespace RsLib.PointCloudLib
         // 直接指定分量建構
         public Vector3D(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            X = x;
+            Y = y;
+            Z = z;
+        }
+        public Vector3D(double[] xyz)
+        {
+            X = xyz[0];
+            Y = xyz[1];
+            Z = xyz[2];
         }
         // 指定起點與終點建構
         public Vector3D(Point3D startP, Point3D endP)
@@ -198,6 +204,12 @@ namespace RsLib.PointCloudLib
                 Vector3D v_unit = new Vector3D(temp.X, temp.Y, temp.Z);
                 return v_unit;
             }
+        }
+        public double GetAngleFromXYPlane()
+        {
+            Vector3D v = GetUnitVector();
+            double rad = Math.Asin(v.Z);
+            return rad / Math.PI * 180.0;
         }
         public void UnitVector()
         {

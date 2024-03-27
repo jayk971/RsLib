@@ -629,10 +629,12 @@ namespace RsLib.PointCloudLib
                 Object3D obj = item.Value;
                 if (obj is Polyline pLine)
                 {
+                    if (pLine.GetOption(typeof(LineOption)) is LineOption lo) segmentIndex = lo.LineIndex;
                     for (int i = 0; i < pLine.Count; i++)
                     {
                         if(pLine.Points[i] is PointV3D pV3D)
                         {
+
                             ABBPoint abbPt = new ABBPoint(pV3D)
                             {
                                 PtIndex = i,

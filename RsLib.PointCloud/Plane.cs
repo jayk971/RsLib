@@ -62,7 +62,12 @@ namespace RsLib.PointCloudLib
             C = 1.0;
             D = 0.0;
         }
-
+        public RsPlane(double[] vector,double[] position)
+        {
+            m_Plane = new AccPlane((float)vector[0], (float)vector[1], (float)vector[2]);
+            m_Plane.Offset = (float)(-m_Plane.A * position[0] - m_Plane.B * position[1] - m_Plane.C * position[2]);
+            m_Plane.Normalize();
+        }
         public RsPlane(Vector3D n, Point3D p)
         {
             m_Plane = new AccPlane(n.V);
@@ -187,7 +192,10 @@ namespace RsLib.PointCloudLib
 
             return projP;
         }
-
+        public bool IsOnPlane(double x,double y, double z)
+        {
+            return A * x + B * y + C * z + D == 0;
+        }
         public bool VectorAndPlaneIntersecPoint(Point3D start, Vector3D vec, out Point3D intersecpoint)
         {
             double scale = -(A * start.X + B * start.Y + C * start.Z + D) / (A * vec.X + B * vec.Y + C * vec.Z);
@@ -206,7 +214,62 @@ namespace RsLib.PointCloudLib
                 return false;
         }
 
+        public PointCloud ToPointCloud(double minX,double maxX,double minY,double maxY,double minZ,double maxZ,double step)
+        {
+            PointCloud output = new PointCloud();
+            for (double x = minX; x < maxX; x+=step)
+            {
+                for (double y = minY; y < maxY; y += step)
+                {
+                    double z = -1 * (A * x + B * y + D) / C;
+                    output.Add(x, y, z, true);
+                }
+            }
+            return output;
+        }
+        public double GetZValue(double x,double y)
+        {
+            return -1 * (A * x + B * y + D) / C;
+        }
+        public PointCloud Intersect(Ball ball,double step)
+        {
+            PointCloud output = new PointCloud();
+            for (double x = ball.X- ball.Radius; x <= ball.X + ball.Radius; x += step)
+            {
+                for (double y = ball.Y - ball.Radius; y <= ball.Y + ball.Radius; y += step)
+                {
+                    double z = -1 * (A * x + B * y + D) / C;
+                    if(ball.IsInside(x,y,z))
+                    {
+                        if(ball.Radius - ball.GetDistanceFromCenter(x,y,z) <=0.05)
+                            output.Add(x, y, z, true);
 
+                    }
+                }
+            }
+            output.SortingPoint3DCW(ball.Center);
+
+            return output;
+        }
+        public Polyline Intersect(Ball ball, double step,double reSampleDis)
+        {
+            PointCloud foundCloud = Intersect(ball, step);
+            Polyline output = new Polyline();
+            for (int i = 0; i < foundCloud.Points.Count; i++)
+            {
+                PointV3D pt = new PointV3D(foundCloud.Points[i]);
+                pt.Vz = Normal;
+                output.Add(pt);
+            }
+            PointV3D pt2 = new PointV3D(foundCloud.Points[0]);
+            pt2.Vz = Normal;
+            output.Add(pt2);
+
+            output.ReSample_SkipOriginalPointAndTestLast(reSampleDis, 0.01);
+            output.CalculatePathDirectionAsVy();
+
+            return output;
+        }
 
         //public void computeCoeByPointAndNormal(Vector3D n, Point3D p)
         //{

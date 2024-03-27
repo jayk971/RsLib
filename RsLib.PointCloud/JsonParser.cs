@@ -303,7 +303,7 @@ namespace RsLib.PointCloudLib
             for (int i = 0; i < Poses.Count; i++)
             {
                 Pose p = Poses[i];
-                PointV3D pt = p.ToPoint3D(lineIndex, i);
+                PointV3D pt = p.ToPointV3D(lineIndex, i);
                 poly.Add(pt);
             }
 
@@ -583,7 +583,19 @@ namespace RsLib.PointCloudLib
             YAxis = src.YAxis;
             ZAxis = src.ZAxis;
         }
-        public PointV3D ToPoint3D(int lineIndex, int ptIndex)
+        public Point3D ToPoint3D()
+        {
+            Point3D p = new Point3D
+            {
+                X = X,
+                Y = Y,
+                Z = Z
+            };
+
+            return p;
+        }
+
+        public PointV3D ToPointV3D(int lineIndex, int ptIndex)
         {            
             PointV3D p = new PointV3D
             {
@@ -733,6 +745,11 @@ namespace RsLib.PointCloudLib
             Pose output = new Pose(this);
             output= this + targetV * extendLength;
             return output;
+        }
+        public static double Distance(Pose p1,Pose p2)
+        {
+            Vector3D v = new Vector3D(p1, p2);
+            return v.L;
         }
     }
 
