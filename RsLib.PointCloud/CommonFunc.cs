@@ -189,6 +189,52 @@ namespace RsLib.PointCloudLib
 List<Vector3D> candidateVector,
 KDTree<int> targetTree,
 int searchCloudCount, double searchStartRadius, double searchEndRadius, double searchRadiusStep,
+double searchLength, int searchLengthSplitRange,out Vector3D normalV)
+        {
+            normalV = new Vector3D();
+            if (searchLengthSplitRange <= 0) searchLengthSplitRange = 1;
+            if (searchRadiusStep <= 0) searchRadiusStep = 0.1;
+            double minDis = double.MaxValue;
+            Point3D p = new Point3D(targetX, targetY, targetZ);
+            bool foundCloudCountOK = false;
+            for (int i = 0; i < candidateVector.Count; i++)
+            {
+                foundCloudCountOK = false;
+                //minDis = double.MaxValue;
+                while (foundCloudCountOK == false)
+                {
+                    if (searchStartRadius >= searchEndRadius) break;
+                    for (int j = 0; j < searchLengthSplitRange; j++)
+                    {
+                        Vector3D targetV = candidateVector[i].GetUnitVector();
+                        Point3D target = new Point3D(targetX, targetY, targetZ);
+                        Point3D foundTarget = target + targetV * j * (searchLength / searchLengthSplitRange);
+                        PointCloud surfaceCloud = GetNearestPointCloud(targetTree, foundTarget, searchStartRadius);
+
+                        if (surfaceCloud.Count >= searchCloudCount)
+                        {
+                            PCA(surfaceCloud, out Vector3D vX, out Vector3D vY, out Vector3D vZ, out Point3D center);
+                            RsPlane plane = new RsPlane(vZ, center);
+                            Point3D projectP = plane.ProjectPOnPlane(target, targetV);
+                            if (Point3D.Distance(projectP, target) < minDis)
+                            {
+                                normalV = vZ;
+                                p.SetXYZ(projectP.X, projectP.Y, projectP.Z);
+                                minDis = Point3D.Distance(projectP, target);
+                            }
+                            foundCloudCountOK = true;
+                        }
+                    }
+                    searchStartRadius += searchRadiusStep;
+
+                }
+            }
+            return p;
+        }
+        public static Point3D ProjectToSurface(double targetX, double targetY, double targetZ,
+List<Vector3D> candidateVector,
+KDTree<int> targetTree,
+int searchCloudCount, double searchStartRadius, double searchEndRadius, double searchRadiusStep,
 double searchLength, int searchLengthSplitRange)
         {
             if (searchLengthSplitRange <= 0) searchLengthSplitRange = 1;
@@ -517,8 +563,8 @@ double searchLength, int searchLengthSplitRange)
         private static void SaveOPTFromXYZIndexNormalArray(object obj)
         {
 
-            Tuple<string,Tuple<double[], double[], double[], double[], double[], double[]>, int[]> tupleObj = (Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]>)obj;
-            
+            Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]> tupleObj = (Tuple<string, Tuple<double[], double[], double[], double[], double[], double[]>, int[]>)obj;
+
             string filePath = tupleObj.Item1;
 
             double[] xArr = tupleObj.Item2.Item1;
@@ -553,6 +599,7 @@ double searchLength, int searchLengthSplitRange)
             }
 
         }
+
         /// <summary>
         /// 使用 PCA 取得坐標系 3 個向量
         /// </summary>

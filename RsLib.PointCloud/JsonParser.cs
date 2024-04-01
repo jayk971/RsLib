@@ -669,6 +669,37 @@ namespace RsLib.PointCloudLib
             
             return p;
         }
+        public Pose ProjectToSurface(KDTree<int> targetTree, 
+            out Vector3D normalV, 
+            List<Vector3D> candidateVector, 
+            int searchCloudLimit, 
+            double searchStartRad, 
+            double seachEndRad,
+            double searchLength,
+            int searchRange,
+            double searchStep)
+        {
+            Point3D point3D = PointCloudCommon.ProjectToSurface(X, Y, Z, 
+                candidateVector, targetTree, 
+                searchCloudLimit, 
+                searchStartRad, seachEndRad, searchStep, 
+                searchLength, searchRange,out normalV);
+
+            Pose p = new Pose()
+            {
+                X = point3D.X,
+                Y = point3D.Y,
+                Z = point3D.Z,
+
+            };
+
+            p.XAxis = XAxis;
+            p.YAxis = YAxis;
+            p.ZAxis = ZAxis;
+
+            return p;
+        }
+
         public Pose ProjectToSurface(KDTree<int> targetTree, out Vector3D normalV, List<Vector3D> candidateVector, int searchCloudLimit, double searchStartRad, double seachEndRad)
         {
             PointV3D projectedP = PointCloudCommon.ProjectToSurface(X, Y, Z,
@@ -751,6 +782,7 @@ namespace RsLib.PointCloudLib
             Vector3D v = new Vector3D(p1, p2);
             return v.L;
         }
+        public override string ToString() => $"{X:F3},{Y:F3},{Z:F3},{ZAxis[0]:F3},{ZAxis[1]:F3},{ZAxis[2]:F3},{YAxis[0]:F3},{YAxis[1]:F3},{YAxis[2]:F3},{XAxis[0]:F3},{XAxis[1]:F3},{XAxis[2]:F3}";
     }
 
     [Serializable]
@@ -1083,6 +1115,44 @@ namespace RsLib.PointCloudLib
 
 
             return output;
+        }
+        public Pose GetPose(int index)
+        {
+            Pose output = new Pose()
+            { 
+                X = ArrayX[index],
+                Y = ArrayY[index],
+                Z = ArrayZ[index],
+                XAxis = new double[] { ArrayXx[index], ArrayXy[index] , ArrayXz[index] },
+                YAxis = new double[] { ArrayYx[index], ArrayYy[index], ArrayYz[index] },
+                ZAxis = new double[] { ArrayZx[index], ArrayZy[index], ArrayZz[index] },
+            };
+            return output;
+        }
+
+        public void SaveOPT2(string filePath)
+        {
+            SaveOPT2(filePath, this);
+        }
+        public static void SaveOPT2(string filePath,PoseList poseList)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(saveOPT2), Tuple.Create(filePath, poseList));
+        }
+        static void saveOPT2(object obj)
+        {
+            Tuple<string, PoseList> tuple = (Tuple<string, PoseList>)obj;
+            string filePath = tuple.Item1;
+            PoseList poseList = tuple.Item2;
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default, 65535))
+            {
+                for (int i = 0; i < poseList.Count; i++)
+                {
+                    Pose p = poseList.GetPose(i);
+                    sw.WriteLine(p.ToString());
+                }
+
+                sw.Flush();
+            }
         }
     }
 }

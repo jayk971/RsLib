@@ -128,14 +128,20 @@ namespace RsLib.PointCloudLib
 
             return Output;
         }
-        public static Point3D ShortestPoint(Point3D startP, Point3D endP,Point3D testP)
+        public static Point3D ShortestPoint(Point3D startP, Point3D endP,Point3D testP,bool insideTheSegment = false)
         {
             Vector3D m = new Vector3D(startP, endP);
-            m.UnitVector();
+            //m.UnitVector();
             double ax = startP.X - testP.X;
             double ay = startP.Y - testP.Y;
             double az = startP.Z - testP.Z;
             double t = -1 * (ax * m.X + ay * m.Y + az * m.Z) / (m.X * m.X + m.Y * m.Y + m.Z * m.Z);
+
+            if(insideTheSegment)
+            {
+                if (t < 0) t = 0;
+                else if (t > 1) t = 1;
+            }
             Point3D pRatSurface = startP + m * t;
             return pRatSurface;
         }

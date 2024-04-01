@@ -2443,6 +2443,112 @@ namespace RsLib.PointCloudLib
             Points.Clear();
             Points.AddRange(output);
         }
+        public void ReSample_SkipOriginalPointAndTestLast(double ExpectedSampleDistance, double lastPtMinDis, double tstep,List<Tuple<Point3D,double>> keepPtRange)
+        {
+            // 資料點不足
+            if (Points.Count < 3) return;
+            Polyline output = new Polyline();
+            output.Add(Points[0]);
+            int i = 1;
+            double powSampleDis = Math.Pow(ExpectedSampleDistance, 2);
+            if (tstep <= 0) tstep = 0.01;
+            while (i < Points.Count - 1)
+            {
+                var lastPt = output.Points[output.Count - 1];
+
+                var testPt = Points[i];
+                bool goNext = false;
+
+                for (int j = 0; j < keepPtRange.Count; j++)
+                {
+                    Point3D keepCenter = keepPtRange[j].Item1;
+                    double keepABSRange = keepPtRange[j].Item2;
+
+                    double calDis = Point3D.Distance(keepCenter, testPt);
+                    if(calDis <=keepABSRange)
+                    {
+                        output.Add(testPt);
+                        i++;
+                        goNext = true;
+                        break;
+                    }
+                    
+                }
+                if (goNext) continue;
+
+                Vector3D testV = new Vector3D(lastPt, testPt);
+
+                var nextTestPt = Points[i + 1];
+                Vector3D nextTestV = new Vector3D(testPt, nextTestPt);
+
+                Vector3D nextFinalV = new Vector3D(lastPt, nextTestPt);
+
+                if (testV.L < ExpectedSampleDistance)
+                {
+                    double t = 0.0;
+                    if (nextFinalV.L <= ExpectedSampleDistance)
+                    {
+                        i++;
+                        continue;
+                    }
+                    else
+                    {
+                        while (t <= 1)
+                        {
+                            double testL = Math.Pow(testV.X + nextTestV.X * t, 2) + Math.Pow(testV.Y + nextTestV.Y * t, 2) + Math.Pow(testV.Z + nextTestV.Z * t, 2);
+                            if (testL >= powSampleDis)
+                            {
+                                var insertPt = nextTestPt.DeepClone();
+                                insertPt = testPt + nextTestV * t;
+                                if (insertPt.GetType() == typeof(PointV3D))
+                                {
+                                    ((PointV3D)insertPt).Vx = new Vector3D(((PointV3D)testPt).Vx);
+                                    ((PointV3D)insertPt).Vy = new Vector3D(((PointV3D)testPt).Vy);
+                                    ((PointV3D)insertPt).Vz = new Vector3D(((PointV3D)testPt).Vz);
+
+                                }
+                                output.Add(insertPt);
+                                i++;
+                                break;
+                            }
+                            else t += tstep;
+                            if (t > 1)
+                            {
+                                i++;
+                            }
+                        }
+                    }
+                }
+                else if (testV.L == ExpectedSampleDistance)
+                {
+                    output.Add(testPt);
+                    i++;
+                }
+                else
+                {
+                    var insertPt = testPt.DeepClone();
+                    insertPt = lastPt + testV.GetUnitVector() * ExpectedSampleDistance;
+                    if (insertPt.GetType() == typeof(PointV3D))
+                    {
+                        ((PointV3D)insertPt).Vx = new Vector3D(((PointV3D)testPt).Vx);
+                        ((PointV3D)insertPt).Vy = new Vector3D(((PointV3D)testPt).Vy);
+                        ((PointV3D)insertPt).Vz = new Vector3D(((PointV3D)testPt).Vz);
+
+                    }
+                    output.Add(insertPt);
+                }
+            }
+
+            Vector3D endV = new Vector3D(output.LastPoint, LastPoint);
+            if (endV.L <= lastPtMinDis)
+            {
+                output.RemoveLast();
+            }
+            output.Add(LastPoint);
+
+            Points.Clear();
+            Points.AddRange(output);
+        }
 
         /// <summary>
         /// 有序3D點重取樣插補。只有距離夠大需要插補的地方才插補，並保留原始點
