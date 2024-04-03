@@ -13,7 +13,6 @@ namespace RsLib.PointCloudLib
     [Serializable]
     public abstract class ObjectOption
     {
-
     }
     [Serializable]
     public abstract class Object3D : IEnumerable<ObjectOption>

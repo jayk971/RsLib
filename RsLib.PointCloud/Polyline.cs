@@ -387,7 +387,23 @@ namespace RsLib.PointCloudLib
         {
             Points.Reverse();
         }
+        public void ReversePathAndVy()
+        {
+            List<PointV3D> output = new List<PointV3D>();
+            for (int i = Points.Count-1; i >=0 ; i--)
+            {
+                if(Points[i] is PointV3D pt)
+                {
 
+                    pt.Vy *= -1;
+                    pt.Vx = Vector3D.Cross(pt.Vy, pt.Vz);
+                    pt.AddOption(new LocateIndexOption() { Index = Points.Count - 1 - i });
+                    output.Add(pt);
+                }
+            }
+            Points.Clear();
+            Points.AddRange(output);
+        }
         public Polyline GetReverse()
         {
             Polyline Output = new Polyline();
@@ -2848,6 +2864,15 @@ namespace RsLib.PointCloudLib
         public int LineIndex { get; set; } = 0;
 
         public LineOption()
+        {
+
+        }
+    }
+    [Serializable]
+    public class NameOption : ObjectOption
+    {
+        public string Name { get; set; } = "";
+        public NameOption()
         {
 
         }

@@ -146,6 +146,28 @@ namespace RsLib.Display3D
             UpdateDataGridView();
             AfterClearButtonPressed?.Invoke();
         }
+        public void Clear(bool resetView ,bool clearOptions = false)
+        {
+            _displayObject.Clear();
+            treeView1.Nodes.Clear();
+            ShowColorGradientControl(false);
+            foreach (var item in _displayOption)
+            {
+                DisplayObjectOption objOption = item.Value;
+                GL.NewList(objOption.ID, ListMode.Compile);
+                GL.EndList();
+            }
+            if (clearOptions)
+            {
+                _displayOption.Clear();
+            }
+            _maxPoint = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+            _minPoint = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+           if(resetView) ResetView();
+            UpdateDataGridView();
+            AfterClearButtonPressed?.Invoke();
+        }
+
         public void ReBuildAll()
         {
             foreach (var item in _displayOption)
