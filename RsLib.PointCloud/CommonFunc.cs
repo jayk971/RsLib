@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 namespace RsLib.PointCloudLib
 {
 
@@ -346,6 +348,43 @@ double searchLength, int searchLengthSplitRange)
                 }
             }
             
+        }
+        [Obsolete("Parallel load massive point cloud doesn't decrease the loading time.")]
+        public static void LoadXYZToArrayParallel(string filePath, char cplitChar, out double[] xArr, out double[] yArr, out double[] zArr)
+        {
+            ConcurrentBag<double> xList = new ConcurrentBag<double>();
+            ConcurrentBag<double> yList = new ConcurrentBag<double>();
+            ConcurrentBag<double> zList = new ConcurrentBag<double>();
+
+            xArr = new double[0];
+            yArr = new double[0];
+            zArr = new double[0];
+
+            string readData = "";
+            using (StreamReader sr = new StreamReader(filePath))
+            { 
+                readData = sr.ReadToEnd();
+                
+            }
+            string[] allLine = readData.Split('\n');
+            Parallel.For(0, allLine.Length, (i, loopstate) =>
+              {
+                  string[] splitData = allLine[i].Split(cplitChar);
+                  if (splitData.Length >= 3)
+                  {
+                      if (double.TryParse(splitData[0], out double x) == false) return;
+                      if (double.TryParse(splitData[1], out double y) == false) return;
+                      if (double.TryParse(splitData[2], out double z) == false) return;
+
+                      xList.Add(x);
+                      yList.Add(y);
+                      zList.Add(z);
+                  }
+              });
+
+            xArr = xList.ToArray();
+            yArr = yList.ToArray();
+            zArr = zList.ToArray();
         }
 
         public static void LoadXYZToArray(string filePath,char cplitChar,out double[] xArr,out double[] yArr,out double[] zArr)

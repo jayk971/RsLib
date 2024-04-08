@@ -266,32 +266,13 @@ namespace RsLib.DemoForm
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Ball b = new Ball(new Point3D(100, 50, 100), 50);
-            b.ToPointCloud().Save("d:\\testBall.xyz");
-            RsPlane pl = new RsPlane(new Vector3D(50, 50, 50), new Point3D(100, 50, 100));
-            PointCloud pp = pl.ToPointCloud(0, 200, 0, 100, 50, 150, 0.5);
-            pp.Save("D:\\testPlane.xyz");
-            PointCloud pppp =  pl.Intersect(b,0.1);
+            Log.Add("test start", MsgLevel.Info);
+            PointCloudCommon.LoadXYZToArray(@"D:\Share Folder\20240326\240326_095206.xyz",' ', out double[] x, out double[] y, out double[] z);
+            Log.Add("normal load end", MsgLevel.Info);
 
-            pppp.SortingPoint3DCW(b.Center);
-            pppp.Save("D:\\intersect.xyz");
+            PointCloudCommon.LoadXYZToArrayParallel(@"D:\Share Folder\20240326\240326_095206.xyz", ' ', out double[] xx, out double[] yy, out double[] zz);
+            Log.Add("parallel load end", MsgLevel.Info);
 
-            Polyline ppl = new Polyline();
-            for (int i = 0; i < pppp.Points.Count; i++)
-            {
-                PointV3D pt = new PointV3D(pppp.Points[i]);
-                pt.Vz = pl.Normal;
-                ppl.Add(pt);
-            }
-            PointV3D pt2 = new PointV3D(pppp.Points[0]);
-            pt2.Vz = pl.Normal;
-
-            ppl.Add(pt2);
-
-            ppl.ReSample_SkipOriginalPointAndTestLast(5.0, 0.01);
-            ppl.CalculatePathDirectionAsVy();
-
-            ppl.SaveAsOpt2("d:\\Polyline.opt2");
         }
         private PointCloud Head = new PointCloud();
         private LayerPointCloud Bodys = new LayerPointCloud();

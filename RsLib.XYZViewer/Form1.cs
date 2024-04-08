@@ -249,7 +249,7 @@ namespace RsLib.XYZViewer
                         _displayCtrl.BuildPointCloud(cloud3, (int)drawItem, true, true);
 
                         break;
-
+                    case ".json2":
                     case ".json":
                         NikePath nike = NikePath.Parse(filePath);
                         List<ObjectGroup> groups = nike.ToObjectGroups();
@@ -375,9 +375,10 @@ namespace RsLib.XYZViewer
                     }
                     if (dropedBtn >= DrawItem.OPT1Path && dropedBtn <= DrawItem.OPT3Path)
                     {
-                        if(ext == ".opt") canDrop = true;
-                        else if(ext == ".json")canDrop = true;
-                        else if(ext == ".opt2") canDrop =true;
+                        if (ext == ".opt") canDrop = true;
+                        else if (ext == ".json") canDrop = true;
+                        else if (ext == ".json2") canDrop = true;
+                        else if (ext == ".opt2") canDrop = true;
                         else canDrop = false;
                     }
 

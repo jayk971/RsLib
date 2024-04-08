@@ -732,7 +732,7 @@ namespace RsLib.Display3D
                 }
                 if (_displayObject.ContainsKey(selectIndex) == false)
                 {
-                    Log.Add($"Select index = {selectIndex}. Display objects didn't contain {selectIndex}.", MsgLevel.Warn);
+                    //Log.Add($"Select index = {selectIndex}. Display objects didn't contain {selectIndex}.", MsgLevel.Warn);
                     return null;
 
                 }
