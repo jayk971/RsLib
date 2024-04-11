@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace RsLib.Display3D
@@ -1260,6 +1261,14 @@ namespace RsLib.Display3D
                 #endregion
             }
         }
+        void drawDashedLine(Point3D start, Point3D end, float lineWidth, Color drawColor, float dashLength)
+        {
+            Vector3 startV = new Vector3((float)start.X, (float)start.Y, (float)start.Z);
+            Vector3 endV = new Vector3((float)end.X, (float)end.Y, (float)end.Z);
+            drawDashedLine(startV, endV, lineWidth, drawColor, dashLength);
+
+        }
+
         void drawDashedLine(Vector3 start, Vector3 end, float lineWidth, Color drawColor, float dashLength)
         {
             float distance = Vector3.Distance(start, end);
@@ -1536,6 +1545,64 @@ namespace RsLib.Display3D
             GL.EndList();
             //updateDataGridView();
         }
+        public void BuildPath(ObjectGroup polyLines, int id, bool checkMaxMin, bool isUpdateObject,bool ConnectEachOther)
+        {
+            if (id > _maxDisplayList) return;
+            if (polyLines.DataCount == 0) return;
+            if (_displayOption.ContainsKey(id) == false)
+            {
+                throw new Exception($"Build path fail. Display option doesn't contain ID {id}.");
+            }
+            DisplayObjectOption option = _displayOption[id];
+            if (option.DisplayType != DisplayObjectType.Path) return;
+
+            if (_displayObject.ContainsKey(option.ID))
+            {
+                if (isUpdateObject)
+                {
+                    _displayObject.Remove(option.ID);
+                    _displayObject.Add(option.ID, polyLines);
+                }
+            }
+            else
+            {
+                _displayObject.Add(option.ID, polyLines);
+            }
+            GL.NewList(id, ListMode.Compile);
+
+            foreach (var item in polyLines.Objects)
+            {
+                Polyline line = item.Value as Polyline;
+                if (line != null)
+                {
+                    drawPolyline(line, option.DrawSize, option.DrawColor, checkMaxMin);
+                }
+            }
+            if (ConnectEachOther)
+            {
+                List<string> keys = polyLines.Objects.Keys.ToList();
+
+                for (int i = 1; i < keys.Count; i++)
+                {
+                    int lastI = i - 1;
+                    int currentI = i;
+
+                    string nameLast = keys[lastI];
+                    string nameCurrent = keys[currentI];
+
+                    Polyline lastLine = polyLines.Objects[nameLast] as Polyline;
+                    Polyline currentLine = polyLines.Objects[nameCurrent] as Polyline;
+                    Point3D lastP = lastLine.LastPoint as Point3D;
+                    Point3D startP = currentLine.FirstPoint as Point3D;
+
+                    drawDashedLine(lastP, startP, option.DrawSize, option.DrawColor, 2.0f);
+
+                }
+            }
+            GL.EndList();
+            //updateDataGridView();
+        }
+
         void drawVector(Point3D pt)
         {
             PointV3D ptV3D = pt as PointV3D;

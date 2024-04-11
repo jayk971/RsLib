@@ -574,7 +574,7 @@ namespace RsLib.PointCloudLib
 
             Points = Output.DeepClone();
             //Point3D CalLastP = this.LastPoint();
-            double LastDis = Point3D.Distance(LastPoint, P_End);
+            double LastDis = Point3D.Distance((Point3D)LastPoint, P_End);
             if (LastDis > 0.5) Points.Add(P_End);
         }
         public void SmoothByCatmullRom(int subdivisions = 10)
@@ -2362,12 +2362,12 @@ namespace RsLib.PointCloudLib
                 }
             }
 
-            Vector3D endV = new Vector3D(output.LastPoint, LastPoint);
+            Vector3D endV = new Vector3D((Point3D)output.LastPoint, (Point3D)LastPoint);
             if (endV.L <= lastPtMinDis)
             {
                 output.RemoveLast();
             }
-            output.Add(LastPoint);
+            output.Add((Point3D)LastPoint);
 
             Points.Clear();
             Points.AddRange(output);
@@ -2449,12 +2449,12 @@ namespace RsLib.PointCloudLib
                 }
             }
 
-            Vector3D endV = new Vector3D(output.LastPoint, LastPoint);
+            Vector3D endV = new Vector3D((Point3D)output.LastPoint, (Point3D)LastPoint);
             if (endV.L <= lastPtMinDis)
             {
                 output.RemoveLast();
             }
-            output.Add(LastPoint);
+            output.Add((Point3D)LastPoint);
 
             Points.Clear();
             Points.AddRange(output);
@@ -2555,12 +2555,12 @@ namespace RsLib.PointCloudLib
                 }
             }
 
-            Vector3D endV = new Vector3D(output.LastPoint, LastPoint);
+            Vector3D endV = new Vector3D((Point3D)output.LastPoint, (Point3D)LastPoint);
             if (endV.L <= lastPtMinDis)
             {
                 output.RemoveLast();
             }
-            output.Add(LastPoint);
+            output.Add((Point3D)LastPoint);
 
             Points.Clear();
             Points.AddRange(output);

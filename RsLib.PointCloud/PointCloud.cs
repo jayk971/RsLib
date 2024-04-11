@@ -27,8 +27,22 @@ namespace RsLib.PointCloudLib
         public Point3D Min { get { return GetMin(); } }
         public Point3D Average { get { return GetAverage(); } }
 
-        public Point3D FirstPoint { get => GetFirstPoint(); }
-        public Point3D LastPoint { get => GetLastPoint(); }
+        public object FirstPoint
+        {
+            get
+            {
+                if (Points.Count > 0) return Points[0];
+                else return null;
+            }
+        }
+        public object LastPoint
+        {
+            get
+            {
+                if (Points.Count > 0) return Points[Points.Count - 1];
+                else return null;
+            }
+        }
 
         #endregion
         //public DisplayUnit Display = new DisplayUnit();
