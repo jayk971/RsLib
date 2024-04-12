@@ -8,7 +8,7 @@ namespace RsLib.PointCloudLib
     {
         [DefaultValue(0.0)]
         public double Radius { get; set; }
-        public Point3D Center => new Point3D(X, Y, Z);
+        public new Point3D Center => new Point3D(X, Y, Z);
         /// <summary>
         /// 初始化 ball 類別, 球心為(0,0),半徑為 0
         /// </summary>

@@ -1123,10 +1123,34 @@ namespace RsLib.PointCloudLib
                 X = ArrayX[index],
                 Y = ArrayY[index],
                 Z = ArrayZ[index],
-                XAxis = new double[] { ArrayXx[index], ArrayXy[index] , ArrayXz[index] },
-                YAxis = new double[] { ArrayYx[index], ArrayYy[index], ArrayYz[index] },
-                ZAxis = new double[] { ArrayZx[index], ArrayZy[index], ArrayZz[index] },
             };
+            if(ArrayXx.Length ==0 || ArrayXx.Length <= index)
+            {
+                output.XAxis = new double[] { 0, 0, 0 };
+            }
+            else
+            {
+                output.XAxis = new double[] { ArrayXx[index], ArrayXy[index], ArrayXz[index] };
+            }
+
+            if (ArrayYx.Length == 0 || ArrayYx.Length <= index)
+            {
+                output.YAxis = new double[] { 0, 0, 0 };
+            }
+            else
+            {
+                output.YAxis = new double[] { ArrayYx[index], ArrayYy[index], ArrayYz[index] };
+
+            }
+
+            if (ArrayZx.Length == 0 || ArrayZx.Length <= index)
+            {
+                output.ZAxis = new double[] { 0, 0, 0 };
+            }
+            else
+            {
+                output.ZAxis = new double[] { ArrayZx[index], ArrayZy[index], ArrayZz[index] };
+            }
             return output;
         }
 
@@ -1148,7 +1172,8 @@ namespace RsLib.PointCloudLib
                 for (int i = 0; i < poseList.Count; i++)
                 {
                     Pose p = poseList.GetPose(i);
-                    sw.WriteLine(p.ToString());
+                    if(p != null)
+                        sw.WriteLine(p.ToString());
                 }
 
                 sw.Flush();

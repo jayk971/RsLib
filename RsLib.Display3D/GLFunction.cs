@@ -802,6 +802,13 @@ namespace RsLib.Display3D
             GL.End();
             GL.PopMatrix();
         }
+        void drawCone(Point3D baseCenter, float height, Vector3D normalDir, float baseRadius, Color drawColor)
+        {
+            Vector3 center = new Vector3((float)baseCenter.X, (float)baseCenter.Y, (float)baseCenter.Z);
+            Vector3 normal = new Vector3((float)normalDir.X, (float)normalDir.Y, (float)normalDir.Z);
+            drawCone(center, height, normal, baseRadius, drawColor);
+        }
+
         Matrix4 getRotationMatrix(Vector3 normal)
         {
             normal.Normalize();
@@ -1582,6 +1589,8 @@ namespace RsLib.Display3D
             {
                 List<string> keys = polyLines.Objects.Keys.ToList();
 
+                double coneHeight = 4.0;
+                double baseRad = 2.0;
                 for (int i = 1; i < keys.Count; i++)
                 {
                     int lastI = i - 1;
@@ -1590,13 +1599,17 @@ namespace RsLib.Display3D
                     string nameLast = keys[lastI];
                     string nameCurrent = keys[currentI];
 
+
                     Polyline lastLine = polyLines.Objects[nameLast] as Polyline;
                     Polyline currentLine = polyLines.Objects[nameCurrent] as Polyline;
                     Point3D lastP = lastLine.LastPoint as Point3D;
                     Point3D startP = currentLine.FirstPoint as Point3D;
-
-                    drawDashedLine(lastP, startP, option.DrawSize, option.DrawColor, 2.0f);
-
+                    Vector3D v = new Vector3D(lastP, startP);
+                    v.UnitVector();
+                    Point3D startPCone = startP - v * coneHeight;
+                    drawDashedLine(lastP, startP, option.DrawSize, option.DrawColor, (float)baseRad);
+                    drawCone(lastP, (float)coneHeight, v, (float)baseRad, option.DrawColor);
+                    drawCone(startPCone, (float)coneHeight, v, (float)baseRad, option.DrawColor);
                 }
             }
             GL.EndList();

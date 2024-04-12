@@ -166,6 +166,10 @@ namespace RsLib.PointCloudLib
         {
             return new Point3D(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
         }
+        public static Point3D operator -(Point3D p1, Vector3D p2)
+        {
+            return new Point3D(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
+        }
         public static Point3D operator /(Point3D p, double t)
         {
             return new Point3D(p.X/t,  p.Y/t, p.Z/t);
