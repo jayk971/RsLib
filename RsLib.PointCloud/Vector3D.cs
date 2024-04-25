@@ -131,7 +131,10 @@ namespace RsLib.PointCloudLib
         public static Point3D ShortestPoint(Point3D startP, Point3D endP,Point3D testP,bool insideTheSegment = false)
         {
             Vector3D m = new Vector3D(startP, endP);
-            //m.UnitVector();
+            if (insideTheSegment == false)
+            {
+                m.UnitVector();
+            }
             double ax = startP.X - testP.X;
             double ay = startP.Y - testP.Y;
             double az = startP.Z - testP.Z;

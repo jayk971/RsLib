@@ -2516,6 +2516,7 @@ namespace RsLib.PointCloudLib
                             {
                                 var insertPt = nextTestPt.DeepClone();
                                 insertPt = testPt + nextTestV * t;
+                                insertPt.Dt = (nextTestPt.Dt - testPt.Dt) * t + testPt.Dt;
                                 if (insertPt.GetType() == typeof(PointV3D))
                                 {
                                     ((PointV3D)insertPt).Vx = new Vector3D(((PointV3D)testPt).Vx);
@@ -2544,6 +2545,7 @@ namespace RsLib.PointCloudLib
                 {
                     var insertPt = testPt.DeepClone();
                     insertPt = lastPt + testV.GetUnitVector() * ExpectedSampleDistance;
+                    insertPt.Dt = (testPt.Dt - lastPt.Dt) / testV.L * ExpectedSampleDistance + lastPt.Dt;
                     if (insertPt.GetType() == typeof(PointV3D))
                     {
                         ((PointV3D)insertPt).Vx = new Vector3D(((PointV3D)testPt).Vx);
