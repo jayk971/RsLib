@@ -27,6 +27,8 @@ namespace RsLib.LogMgr
         private static ConcurrentQueue<LogMsg> _logQ = new ConcurrentQueue<LogMsg>();
         //private static LockQueue<LogMsg> logQ = new LockQueue<LogMsg>();
         public static bool EnableUpdateUI = true;
+
+        public static Thread td = null;
         public static void Add(string Msg, MsgLevel errLevel, Exception ex = null)
         {
             //lock (_lock)
@@ -68,7 +70,10 @@ namespace RsLib.LogMgr
             if (IsTdRunning == false)
             {
                 _enableTd = true;
-                ThreadPool.QueueUserWorkItem(run);
+                td = new Thread(new ThreadStart(run));
+                td.IsBackground = true;
+                td.Start();
+                //ThreadPool.QueueUserWorkItem(run);
             }
         }
         public static void Stop()
@@ -76,7 +81,7 @@ namespace RsLib.LogMgr
             EnableUpdateUI = false;
             _enableTd = false;
         }
-        static void run(object obj)
+        static void run()
         {
             while (_enableTd)
             {
