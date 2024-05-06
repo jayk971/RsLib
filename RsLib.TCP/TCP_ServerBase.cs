@@ -17,16 +17,15 @@ using System.Threading;
 using YamlDotNet.Serialization;
 namespace RsLib.TCP.Server
 {
-    public class TCPServer
+    public class TCP_ServerBase
     {
-        TCP_ServerBase _Server = null; 
         public TCPServerOption Option = new TCPServerOption();
         string _opeionFilePath = AppFolderHandle.Folder_Config + "\\TCPServer.yaml";
-        public bool IsRun { get; private set; } = false;
+        public bool IsRun { get; protected set; } = false;
         public int ClientCount => _clientObj.Count;
-        IPEndPoint ipe = null;
+        public IPEndPoint ipe = null;
         Socket mainSocket;
-        Dictionary<string, StateObject> _clientObj = new Dictionary<string, StateObject>();
+        protected Dictionary<string, StateObject> _clientObj = new Dictionary<string, StateObject>();
         public List<string> ClientsName => _clientObj.Keys.ToList();
         public string Msg { get; private set; }
         //StateObject[] stateObject;
@@ -35,7 +34,7 @@ namespace RsLib.TCP.Server
 
         public event Action<string> ClientAdded;
         ManualResetEvent ReceiveDone = new ManualResetEvent(false);
-        public TCPServer()
+        public TCP_ServerBase()
         {
             LoadYaml();
             IsRun = false;
@@ -71,47 +70,36 @@ namespace RsLib.TCP.Server
 
             DataReceived?.Invoke(name, msg);
             Msg = msg;
-            msgHandle();
+            //msgHandle();
             ReceiveDone.Set();
 
         }
-        void msgHandle()
+        void setIP()
         {
-            string[] splitData = Msg.Split(',');
-            if (splitData.Length < 2) return;
-            string requestName = splitData[0];
-            string act = splitData[1];
-            if (_clientObj.ContainsKey(requestName))
-            {
-                switch (act)
-                {
-                    case Command.Disconnect:
-                        _clientObj[requestName].SendData(Command.ByeBye);
-                        _clientObj[requestName].Disconnect();
-                        _clientObj[requestName].DataReceived -= StateObject_DataReceived;
-                        _clientObj[requestName].DataSended -= StateObject_DataSended;
-
-                        _clientObj.Remove(requestName);
-                        ClientAdded?.Invoke("");
-                        break;
-                    case Command.ByeBye:
-                        _clientObj[requestName].Disconnect();
-                        _clientObj[requestName].DataReceived -= StateObject_DataReceived;
-                        _clientObj[requestName].DataSended -= StateObject_DataSended;
-
-                        _clientObj.Remove(requestName);
-                        ClientAdded?.Invoke("");
-                        break;
-                    default:
-
-                        break;
-                }
-            }
+            IPAddress ipa = new IPAddress(Option.IPArr);
+            ipe = new IPEndPoint(ipa, Option.Port);
+            Log.Add($"Set {Option.Name} IP {Option.IP}. Port : {Option.Port}", MsgLevel.Info);
         }
         // 啟動Server
         public void Start()
         {
-            _Server.Start();
+            try
+            {
+                setIP();
+                mainSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                mainSocket.Bind(ipe);
+                mainSocket.Listen(4);
+                Log.Add($"TCP server {ipe.Address} : {ipe.Port} start. Wait clients...", MsgLevel.Info);
+                IsRun = true;
+                mainSocket.BeginAccept(
+                    new AsyncCallback(clientConnected),
+                    null);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Add($"Start TCP server {ipe.Address} : {ipe.Port} exception.", MsgLevel.Alarm, ex);
+            }
         }
         void clientConnected(IAsyncResult ar)
         {
@@ -140,34 +128,9 @@ namespace RsLib.TCP.Server
 
                 if (isInTime && Msg.Contains(Command.Connect))
                 {
-                    string[] splitData = Msg.Split(',');
-                    if (splitData.Length < 2)
-                    {
-                        Log.Add($"Msg format is wrong. Receive Msg : {Msg}", MsgLevel.Alarm);
-                    }
-                    else
-                    {
-                        string requestName = splitData[0];
-                        if (_clientObj.ContainsKey(requestName) == false)
-                        {
-                            _clientObj.Add(requestName, temp);
-                            Log.Add($"{handler.RemoteEndPoint} connects to {temp.Name} successfully.", MsgLevel.Info);
-                            ClientAdded?.Invoke(requestName);
-                        }
-                        else
-                        {
-                            _clientObj[requestName].DataReceived -= StateObject_DataReceived;
-                            _clientObj[requestName].DataSended -= StateObject_DataSended;
-
-                            _clientObj[requestName].Disconnect();
-                            _clientObj[requestName] = temp;
-                            Log.Add($"{handler.RemoteEndPoint} reconnected.", MsgLevel.Warn);
-                        }
-                    }
-                }
-                else
-                {
-                    Log.Add($"{handler.RemoteEndPoint} connect fail. Timeout : {!isInTime}. Msg : {Msg}", MsgLevel.Alarm);
+                    _clientObj.Add(handler.RemoteEndPoint.ToString(), temp);
+                    Log.Add($"{handler.RemoteEndPoint} connects to {temp.Name} successfully.", MsgLevel.Info);
+                    ClientAdded?.Invoke(handler.RemoteEndPoint.ToString());
                 }
                 if (mainSocket == null) return;
 
@@ -191,8 +154,12 @@ namespace RsLib.TCP.Server
             {
                 foreach (var item in _clientObj)
                 {
-                    item.Value.SendData($"{Name}");
-
+                    ReceiveDone.Reset();
+                    //item.Value.SendServerStop();
+                    //bool isInTime = ReceiveDone.WaitOne(5000);
+                    _clientObj[item.Key].DataReceived -= StateObject_DataReceived;
+                    _clientObj[item.Key].DataSended -= StateObject_DataSended;
+                    _clientObj[item.Key].Disconnect();
 
                 }
                 if (mainSocket.Connected)
@@ -236,6 +203,64 @@ namespace RsLib.TCP.Server
             Option = p.DeepClone();
         }
 
+    }
+    [Serializable]
+    public class TCPServerOption
+    {
+        [Category("Server")]
+        [DisplayName("Name")]
+        public string Name { get; set; } = "TCPServer";
+
+        [Category("Server")]
+        [DisplayName("IP")]
+        public string IP { get; set; } = "192.168.170.16";
+        [YamlIgnore]
+        [Browsable(false)]
+        public byte[] IPArr
+        {
+            get
+            {
+                string[] splitData = IP.Split('.');
+                if(splitData.Length ==4)
+                {
+                    bool parseOK0 =  byte.TryParse(splitData[0], out byte arr0);
+                    bool parseOK1 = byte.TryParse(splitData[1], out byte arr1);
+                    bool parseOK2 = byte.TryParse(splitData[2], out byte arr2);
+                    bool parseOK3 = byte.TryParse(splitData[3], out byte arr3);
+
+                    if(parseOK0 & parseOK1 & parseOK2 & parseOK3)
+                    {
+                        return new byte[] { arr0, arr1, arr2, arr3 };
+                    }
+                    else
+                    {
+                        return new byte[4];
+                    }
+                }
+                else
+                {
+                    return new byte[4];
+                }
+            }
+        }
+
+        [Category("Server")]
+        [DisplayName("Max Client Count")]
+        public ushort MaxClientCount { get; set; } = 4;
+        [Category("Server")]
+        [DisplayName("Port")]
+        public ushort Port { get; set; } = 1000;
+        internal void SaveYaml(string filePath)
+        {
+            using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.Default))
+            {
+                var serializer = new SerializerBuilder()
+                    .Build();
+                var yaml = serializer.Serialize(this);
+                sw.WriteLine(yaml);
+                sw.Flush();
+            }
+        }
     }
 
 }

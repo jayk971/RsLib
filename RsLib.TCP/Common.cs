@@ -20,22 +20,22 @@ namespace RsLib.TCP.Common
         {
             Name = name;
         }
-        public void SendClientConnect()
-        {
-            SendData(Command.Connect);
-        }
-        public void SendClientDisconnect()
-        {
-            SendData(Command.Disconnect);
-        }
-        public void SendServerStop()
-        {
-            SendData(Command.ServerStop);
-        }
+        //public void SendClientConnect()
+        //{
+        //    SendData(Command.Connect);
+        //}
+        //public void SendClientDisconnect()
+        //{
+        //    SendData(Command.Disconnect);
+        //}
+        //public void SendServerStop()
+        //{
+        //    SendData(Command.ServerStop);
+        //}
         public void SendData(string data)
         {
-            string sendData = $"{Name},{data}";
-            byte[] byteData = Encoding.ASCII.GetBytes(sendData);
+            //string sendData = $"{Name},{data}";
+            byte[] byteData = Encoding.ASCII.GetBytes(data);
             WorkSocket.BeginSend(byteData, 0, byteData.Length, 0,
                 new AsyncCallback(SendCallback), WorkSocket);
             DataSended?.Invoke(Name, data);

@@ -51,6 +51,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TCP_ServerBase.cs" />
+    <Compile Include="TCP_ClientBase.cs" />
     <Compile Include="TCPClient.cs" />
     <Compile Include="TCPClientControl.cs">
       <SubType>UserControl</SubType>

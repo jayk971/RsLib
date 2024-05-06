@@ -4,26 +4,25 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using ThreadingTimer = System.Threading.Timer;
-
+using RsLib.TCP;
 namespace RsLib.McProtocol
 {
-    public class CTCPIP
+    public class CTCPIP:TcpClient
     {
         protected string logger_ip = string.Empty;
         public string Name { get; set; }
-        static object lockMe = new object();
         protected bool m_bPassive;
         protected int m_iPortNum = 0;
         protected string m_sIPAddress;
         protected ConState m_enConState = ConState.None;
-        protected Socket m_ServerSocket;
-        protected Socket m_ClientSocket;
+        //protected Socket m_ServerSocket;
+        //protected Socket m_ClientSocket;
         //protected Thread TCPThread;
         protected bool m_bStop = false;
         private IPGlobalProperties properties;
         private TcpConnectionInformation[] connections;
-        public ThreadingTimer tdt_PLC_Connect = null;
+        //public ThreadingTimer tdt_PLC_Connect = null;
+        private Thread td_PLC = null;
         bool tdt_busy = false;
 
         //bool isPLCAlarm = false;
@@ -33,6 +32,7 @@ namespace RsLib.McProtocol
 
         public CTCPIP()
         {
+
         }
         protected bool ClientConnect()
         {
@@ -185,25 +185,6 @@ namespace RsLib.McProtocol
             }
             return num;
         }
-        protected bool ServerListen()
-        {
-            bool flag;
-            try
-            {
-                m_ServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                m_ServerSocket.Bind(new IPEndPoint(IPAddress.Parse(m_sIPAddress), m_iPortNum));
-                m_ServerSocket.Listen(10);
-                flag = true;
-            }
-            catch (Exception e)
-            {
-                m_ServerSocket = null;
-                flag = false;
-                Log.Add($"{logger_ip} server listen exception.", MsgLevel.Alarm, e);
-                PLCAlarm?.Invoke();
-            }
-            return flag;
-        }
         private void test_plc()
         {
             try
@@ -222,7 +203,7 @@ namespace RsLib.McProtocol
                 tdt_busy = false;
             }
         }
-        private void Check_PLC(object objectkey)
+        private void Check_PLC()
         {
             try
             {
@@ -273,8 +254,9 @@ namespace RsLib.McProtocol
                 m_sIPAddress = IPAddress;
                 m_iPortNum = Port;
                 m_bPassive = false;
-                CTCPIP cTCPIP = this;
-                tdt_PLC_Connect = new ThreadingTimer(new TimerCallback(Check_PLC), null, 0, 5000);
+                td_PLC = new Thread(new ThreadStart(Check_PLC));
+                td_PLC.IsBackground = true;
+                td_PLC.Start();
                 Log.Add($"{logger_ip} -Connect to plc", MsgLevel.Info);
                 SpinWait.SpinUntil(() => false, 100);
             }

@@ -59,6 +59,10 @@
       <Project>{2723c5be-d1d7-4db3-a650-45cd7ddc4673}</Project>
       <Name>RsLib.LogMgr</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RsLib.TCP\RsLib.TCP.csproj">
+      <Project>{6f3c8304-db61-4306-8189-374a8abc06d1}</Project>
+      <Name>RsLib.TCP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

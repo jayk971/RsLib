@@ -9,31 +9,21 @@ namespace RsLib.TCP.Client
 {
     public class TCPClient
     {
-        IPEndPoint ipe = null;
-        IPAddress ipa = null;
-        StateObject stateObject;
-
-        ManualResetEvent connectDone = new ManualResetEvent(false);
+        TCP_ClientBase _client = null;
         public event Action<string, string> DataReceived;
-        public string Name { get; private set; }
-        public string Msg { get; private set; }
-        public bool IsConnect => stateObject != null ? stateObject.IsConnect : false;
-        ManualResetEvent ReceiveDone = new ManualResetEvent(false);
+        public string Name => _client.Name;
+        public string Msg => _client.Name;
+        public bool IsConnect => _client.StateObject != null ? _client.StateObject.IsConnect : false;
 
         public TCPClient(string clientName, string ipAddress, int port)
         {
-            Name = clientName;
-            stateObject = new StateObject(Name);
-            ipa = IPAddress.Parse(ipAddress);
-            ipe = new IPEndPoint(ipa, port);
-            stateObject.DataReceived += StateObject_DataReceived;
+            _client = new TCP_ClientBase(clientName, ipAddress,port);
+            _client.StateObject.DataReceived += StateObject_DataReceived;
         }
 
         private void StateObject_DataReceived(string name, string obj)
         {
             DataReceived?.Invoke(name, obj);
-            Msg = obj;
-            ReceiveDone.Set();
             msgHandle();
         }
 
@@ -47,12 +37,16 @@ namespace RsLib.TCP.Client
             {
                 case Command.ServerStop:
                     Send(Command.ByeBye);
-                    stateObject.DataReceived -= StateObject_DataReceived;
-                    stateObject.Disconnect();
+                    _client.StateObject.DataReceived -= StateObject_DataReceived;
+                    _client.StateObject.Disconnect();
                     break;
                 case Command.ByeBye:
-                    stateObject.DataReceived -= StateObject_DataReceived;
-                    stateObject.Disconnect();
+                    _client.StateObject.DataReceived -= StateObject_DataReceived;
+                    _client.StateObject.Disconnect();
+                    break;
+
+                case Command.Welcome:
+                    _client.StateObject.SendData($"{Name},{Command.Connect}");
                     break;
                 default:
 
@@ -63,49 +57,16 @@ namespace RsLib.TCP.Client
         // 中斷連線
         public void Disconnect()
         {
-            stateObject.SendClientDisconnect();
+            _client.StateObject.SendData($"{Name},{Command.Disconnect}");
         }
         public void Connect()
         {
-            try
-            {
-                Socket client = new Socket(ipa.AddressFamily,
-                    SocketType.Stream, ProtocolType.Tcp);
-
-                client.BeginConnect(ipe,
-                    new AsyncCallback(connectCallback), client);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-        }
-        void connectCallback(IAsyncResult ar)
-        {
-            try
-            {
-                Socket client = (Socket)ar.AsyncState;
-                client.EndConnect(ar);
-                stateObject.WorkSocket = client;
-
-                ReceiveDone.Reset();
-                stateObject.Receive();
-                bool isInTime = ReceiveDone.WaitOne(5000);
-                if (Msg.Contains(Command.Welcome) && isInTime)
-                {
-                    stateObject.SendClientConnect();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            _client.Connect();
         }
         public void Send(string data)
         {
             if (IsConnect)
-                stateObject.SendData(data);
+                _client.StateObject.SendData(data);
         }
     }
 }
