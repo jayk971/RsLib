@@ -48,15 +48,21 @@ namespace RsLib.TCP.Server
 
             }
         }
-        public void Send(string name, string data)
+        public void Send(string name, string data,bool showLog = false)
         {
-            if (_clientObj.Count == 0) return;
-            if (_clientObj.ContainsKey(name) == false) return;
-
+            if (_clientObj.Count == 0)
+            {
+                return;
+            }
+            if (_clientObj.ContainsKey(name) == false)
+            {
+                Log.Add($"Client object doesn't contain {name}.", MsgLevel.Warn);
+                return;
+            }
             if (_clientObj[name].WorkSocket != null)
                 if (_clientObj[name].WorkSocket.Connected == true)
                 {
-                    //Log.Add($"TCP server send name : {name} msg : {data}", MsgLevel.Trace);
+                    if(showLog)Log.Add($"TCP server send name : {name} msg : {data}", MsgLevel.Trace);
                     _clientObj[name].SendData(data);
                 }
         }
