@@ -85,10 +85,239 @@ namespace RsLib.PointCloudLib
 
             return output;
         }
+
+        public ABBPoint GetVzExtendPoint(double distance)
+        {
+            PointV3D orig = ToPointV3D();
+            Point3D extended = orig.GetVzExtendPoint(distance);
+            ABBPoint extendABB = new ABBPoint(this);
+            extendABB.X = extended.X;
+            extendABB.Y = extended.Y;
+            extendABB.Z = extended.Z;
+
+            return extendABB;
+
+        }
         public string ToString_XYZRxRyRz() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3}]";
         public string ToString_XYZRxRyRzLapSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3},{LapIndex},{SegmentIndex}]";
         public string ToString_XYZRxRyRzSegment() => $"[{X:F2},{Y:F2},{Z:F2},{Rx:F3},{Ry:F3},{Rz:F3},{SegmentIndex}]";
         public string ToString_RobTarget(string targetName) => $"CONST robtarget {targetName} :=[[{X:F2},{Y:F2},{Z:F2}],[{Q.W:F6},{Q.V.X:F6},{Q.V.Y:F6},{Q.V.Z:F6}],[-1,0,0,0],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];";
+    }
+    [Serializable]
+    public partial class ABBSegment
+    {
+        public string Name = "";
+        public List<ABBPoint> Pts = new List<ABBPoint>();
+        public int Count => Pts.Count;
+        public ABBPoint FirstPoint
+        {
+            get
+            {
+                if (Pts != null)
+                {
+                    if (Count > 0) return Pts[0];
+                    else return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public ABBPoint LastPoint
+        {
+            get
+            {
+                if (Pts != null)
+                {
+                    if (Count > 0) return Pts[Count - 1];
+                    else return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public ABBSegment() { }
+        public ABBSegment(string name)
+        {
+            Name = name;
+        }
+        public void Add(ABBPoint p)
+        {
+            Pts.Add(p);
+        }
+        public void Insert(int index,ABBPoint p)
+        {
+            Pts.Insert(index,p);
+        }
+        public void Clear()
+        {
+            Pts.Clear();
+        }
+        public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5, bool reCalculateQ = false)
+        {
+            List<ABBPoint> output = new List<ABBPoint>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+            double p5r = ratioP5 < 0 ? 0 : ratioP5;
+
+            double sum = p1r + p2r + p3r + p4r + p5r;
+
+
+            for (int i = 0; i < Pts.Count; i++)
+            {
+
+                int index1 = i - 2;
+                int index2 = i - 1;
+                int index3 = i;
+                int index4 = i + 1;
+                int index5 = i + 2;
+
+                if (index5 >= Pts.Count)
+                    index5 = i;
+
+                if (index4 >= Pts.Count)
+                    index4 = i;
+
+                if (index1 < 0)
+                    index1 = i;
+
+                if (index2 < 0)
+                    index2 = i;
+                ABBPoint outP = new ABBPoint(Pts[i]);
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
+
+                if (sum > 0)
+                {
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r + Pts[index5].RxVec * p5r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r + Pts[index5].RyVec * p5r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r + Pts[index5].RzVec * p5r) / (sum);
+                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
+
+                    if (reCalculateQ) outP.ReCaculateQ();
+                }
+                output.Add(outP);
+            }
+            Pts.Clear();
+            Pts.AddRange(output);
+        }
+        public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, bool reCalculateQ = false)
+        {
+            List<ABBPoint> output = new List<ABBPoint>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+            double p4r = ratioP4 < 0 ? 0 : ratioP4;
+
+            double sum = p1r + p2r + p3r + p4r;
+
+
+
+            for (int i = 0; i < Pts.Count; i++)
+            {
+
+                int index1 = i - 2;
+                int index2 = i - 1;
+                int index3 = i + 1;
+                int index4 = i + 2;
+
+                if (index4 >= Pts.Count)
+                    index4 = i;
+
+                if (index3 >= Pts.Count)
+                    index3 = i;
+
+                if (index1 < 0)
+                    index1 = i;
+
+                if (index2 < 0)
+                    index2 = i;
+                ABBPoint outP = new ABBPoint(Pts[i]);
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
+
+                if (sum > 0)
+                {
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r) / (sum);
+                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
+
+                    if (reCalculateQ) outP.ReCaculateQ();
+                }
+                output.Add(outP);
+            }
+            Pts.Clear();
+            Pts.AddRange(output);
+        }
+        public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, bool reCalculateQ = false)
+        {
+            List<ABBPoint> output = new List<ABBPoint>();
+
+            double p1r = ratioP1 < 0 ? 0 : ratioP1;
+            double p2r = ratioP2 < 0 ? 0 : ratioP2;
+            double p3r = ratioP3 < 0 ? 0 : ratioP3;
+
+            double sum = p1r + p2r + p3r;
+
+
+
+            for (int i = 0; i < Pts.Count; i++)
+            {
+                int index1 = i - 1;
+                int index2 = i;
+                int index3 = i + 1;
+
+                if (index1 < 0)
+                    index1 = i;
+
+                if (index3 >= Pts.Count)
+                    index3 = i;
+
+                ABBPoint outP = new ABBPoint(Pts[i]);
+                Vector2D vRx = new Vector2D();
+                Vector2D vRy = new Vector2D();
+                Vector2D vRz = new Vector2D();
+                if (sum > 0)
+                {
+                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r) / (sum);
+                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r) / (sum);
+                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r) / (sum);
+                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
+                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
+                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
+
+                    if (reCalculateQ) outP.ReCaculateQ();
+                }
+                output.Add(outP);
+            }
+            Pts.Clear();
+            Pts.AddRange(output);
+        }
+        public Polyline ToPolyline(int index)
+        {
+            Polyline pl = new Polyline(index);
+            for (int i = 0; i < Pts.Count; i++)
+            {
+                ABBPoint pt = Pts[i];
+                pl.Add(pt.ToPointV3D());
+            }
+            return pl;
+        }
     }
 
     [Serializable]
@@ -112,13 +341,26 @@ namespace RsLib.PointCloudLib
         public void Add(ABBPoint abbPt)
         {
             int index = abbPt.SegmentIndex;
-            if(Segments.ContainsKey(index))
+            if (Segments.ContainsKey(index))
             {
                 Segments[index].Add(abbPt);
             }
             else
             {
                 Segments.Add(index, new ABBSegment());
+                Segments[index].Add(abbPt);
+            }
+        }
+        public void Add(ABBPoint abbPt,string name)
+        {
+            int index = abbPt.SegmentIndex;
+            if (Segments.ContainsKey(index))
+            {
+                Segments[index].Add(abbPt);
+            }
+            else
+            {
+                Segments.Add(index, new ABBSegment(name));
                 Segments[index].Add(abbPt);
             }
         }
@@ -279,182 +521,6 @@ namespace RsLib.PointCloudLib
             ObjectGroup og = ToObjectGroup();
 
             og.SaveOPT2(filePath, true);
-        }
-    }
-    [Serializable]
-    public partial class ABBSegment
-    {
-        public List<ABBPoint> Pts = new List<ABBPoint>();
-        public int Count => Pts.Count;
-        public void Add(ABBPoint p)
-        {
-            Pts.Add(p);
-
-        }
-        public void Clear()
-        {
-            Pts.Clear();
-        }
-        public void SmoothEulerAngle_5P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4, double ratioP5,bool reCalculateQ = false)
-        {
-            List<ABBPoint> output = new List<ABBPoint>();
-
-            double p1r = ratioP1 < 0 ? 0 : ratioP1;
-            double p2r = ratioP2 < 0 ? 0 : ratioP2;
-            double p3r = ratioP3 < 0 ? 0 : ratioP3;
-            double p4r = ratioP4 < 0 ? 0 : ratioP4;
-            double p5r = ratioP5 < 0 ? 0 : ratioP5;
-
-            double sum = p1r + p2r + p3r + p4r + p5r;
-
-
-            for (int i = 0; i < Pts.Count; i++)
-            {
-
-                int index1 = i - 2;
-                int index2 = i - 1;
-                int index3 = i;
-                int index4 = i + 1;
-                int index5 = i + 2;
-
-                if (index5 >= Pts.Count)
-                    index5 = i;
-
-                if (index4 >= Pts.Count)
-                    index4 = i;
-
-                if (index1 < 0)
-                    index1 = i;
-
-                if (index2 < 0)
-                    index2 = i;
-                ABBPoint outP =new ABBPoint(Pts[i]);
-                Vector2D vRx = new Vector2D();
-                Vector2D vRy = new Vector2D();
-                Vector2D vRz = new Vector2D();
-
-                if (sum > 0)
-                {
-                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r + Pts[index5].RxVec * p5r) / (sum);
-                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r + Pts[index5].RyVec * p5r) / (sum);
-                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r + Pts[index5].RzVec * p5r) / (sum);
-                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
-                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
-                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
-
-                    if(reCalculateQ) outP.ReCaculateQ();
-                }
-                output.Add(outP);
-            }
-            Pts.Clear();
-            Pts.AddRange(output);
-        }
-        public void SmoothEulerAngle_4P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3, double ratioP4,bool reCalculateQ = false)
-        {
-            List<ABBPoint> output = new List<ABBPoint>();
-
-            double p1r = ratioP1 < 0 ? 0 : ratioP1;
-            double p2r = ratioP2 < 0 ? 0 : ratioP2;
-            double p3r = ratioP3 < 0 ? 0 : ratioP3;
-            double p4r = ratioP4 < 0 ? 0 : ratioP4;
-
-            double sum = p1r + p2r + p3r + p4r;
-
-
-
-            for (int i = 0; i < Pts.Count; i++)
-            {
-
-                int index1 = i - 2;
-                int index2 = i - 1;
-                int index3 = i + 1;
-                int index4 = i + 2;
-
-                if (index4 >= Pts.Count)
-                    index4 = i;
-
-                if (index3 >= Pts.Count)
-                    index3 = i;
-
-                if (index1 < 0)
-                    index1 = i;
-
-                if (index2 < 0)
-                    index2 = i;
-                ABBPoint outP = new ABBPoint(Pts[i]);
-                Vector2D vRx = new Vector2D();
-                Vector2D vRy = new Vector2D();
-                Vector2D vRz = new Vector2D();
-
-                if (sum > 0)
-                {
-                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r + Pts[index4].RxVec * p4r) / (sum);
-                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r + Pts[index4].RyVec * p4r) / (sum);
-                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r + Pts[index4].RzVec * p4r) / (sum);
-                    if (vRx.GetRadianAngle(out double radX)) outP.Rx = radX / Math.PI * 180;
-                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
-                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
-
-                   if(reCalculateQ) outP.ReCaculateQ();
-                }
-                output.Add(outP);
-            }
-            Pts.Clear();
-            Pts.AddRange(output);
-        }
-        public void SmoothEulerAngle_3P(bool enableSmoothRX, bool enableSmoothRY, bool enableSmoothRZ, double ratioP1, double ratioP2, double ratioP3,bool reCalculateQ = false)
-        {
-            List<ABBPoint> output = new List<ABBPoint>();
-
-            double p1r = ratioP1 < 0 ? 0 : ratioP1;
-            double p2r = ratioP2 < 0 ? 0 : ratioP2;
-            double p3r = ratioP3 < 0 ? 0 : ratioP3;
-
-            double sum = p1r + p2r + p3r;
-
-
-
-            for (int i = 0; i < Pts.Count; i++)
-            {
-                int index1 = i - 1;
-                int index2 = i;
-                int index3 = i + 1;
-
-                if (index1 < 0)
-                    index1 = i;
-
-                if (index3 >= Pts.Count)
-                    index3 = i;
-
-                ABBPoint outP = new ABBPoint(Pts[i]);
-                Vector2D vRx = new Vector2D();
-                Vector2D vRy = new Vector2D();
-                Vector2D vRz = new Vector2D();
-                if (sum > 0)
-                {
-                    if (enableSmoothRX) vRx = (Pts[index1].RxVec * p1r + Pts[index2].RxVec * p2r + Pts[index3].RxVec * p3r) / (sum);
-                    if (enableSmoothRY) vRy = (Pts[index1].RyVec * p1r + Pts[index2].RyVec * p2r + Pts[index3].RyVec * p3r) / (sum);
-                    if (enableSmoothRZ) vRz = (Pts[index1].RzVec * p1r + Pts[index2].RzVec * p2r + Pts[index3].RzVec * p3r) / (sum);
-                    if(vRx.GetRadianAngle(out double radX)) outP.Rx = radX/Math.PI*180;
-                    if (vRy.GetRadianAngle(out double radY)) outP.Ry = radY / Math.PI * 180;
-                    if (vRz.GetRadianAngle(out double radZ)) outP.Rz = radZ / Math.PI * 180;
-
-                     if(reCalculateQ)  outP.ReCaculateQ();
-                }
-                output.Add(outP);
-            }
-            Pts.Clear();
-            Pts.AddRange(output);
-        }
-        public Polyline ToPolyline(int index)
-        {
-            Polyline pl = new Polyline(index);
-            for (int i = 0; i < Pts.Count; i++)
-            {
-                ABBPoint pt = Pts[i];
-                pl.Add(pt.ToPointV3D());
-            }
-            return pl;
         }
     }
 

@@ -626,10 +626,13 @@ namespace RsLib.PointCloudLib
             foreach (var item in Objects)
             {
                 string name = item.Key;
+                string segmentName = "";
                 Object3D obj = item.Value;
                 if (obj is Polyline pLine)
                 {
                     if (pLine.GetOption(typeof(LineOption)) is LineOption lo) segmentIndex = lo.LineIndex;
+                    if (pLine.GetOption(typeof(NameOption)) is NameOption no) segmentName = no.Name;
+
                     for (int i = 0; i < pLine.Count; i++)
                     {
                         if(pLine.Points[i] is PointV3D pV3D)
@@ -641,7 +644,7 @@ namespace RsLib.PointCloudLib
                                 LapIndex = segmentIndex,
                                 SegmentIndex = segmentIndex,
                             };
-                            aBBPath.Add(abbPt);
+                            aBBPath.Add(abbPt, segmentName);
                         }
                     }
                     segmentIndex++;
